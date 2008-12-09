@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmoMonger", "CosmoMonger\CosmoMonger.csproj", "{B853FB8E-E426-4E4F-A117-A6CCAEE0CA7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmoMonger.Tests", "CosmoMonger.Tests\CosmoMonger.Tests.csproj", "{BE6A5AA4-2968-4F4B-8CD9-96602683F431}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B853FB8E-E426-4E4F-A117-A6CCAEE0CA7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B853FB8E-E426-4E4F-A117-A6CCAEE0CA7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B853FB8E-E426-4E4F-A117-A6CCAEE0CA7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B853FB8E-E426-4E4F-A117-A6CCAEE0CA7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE6A5AA4-2968-4F4B-8CD9-96602683F431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE6A5AA4-2968-4F4B-8CD9-96602683F431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE6A5AA4-2968-4F4B-8CD9-96602683F431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE6A5AA4-2968-4F4B-8CD9-96602683F431}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
