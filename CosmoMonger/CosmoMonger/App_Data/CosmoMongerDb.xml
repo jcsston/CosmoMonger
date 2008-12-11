@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.8 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.8.xsd">
+    <changeSet author="Jory (generated)" id="1">
+        <createTable tableName="BaseShip">
+            <column name="BaseShipId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="BaseShip_PK"/>
+            </column>
+            <column name="Model" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BasePrice" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CargoSpace" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="InitialJumpDriveId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="InitialWeaponId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="InitialShieldId" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="2">
+        <createTable tableName="BuddyList">
+            <column name="UserId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FriendId" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="3">
+        <createTable tableName="User">
+            <column name="UserId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="User_PK"/>
+            </column>
+            <column name="Email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UserName" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Password" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="false" name="Validated" type="bit">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="true" name="Active" type="bit">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="false" name="Admin" type="bit">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="4">
+        <createTable tableName="Good">
+            <column name="GoodId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="Good_PK"/>
+            </column>
+            <column name="Name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BasePrice" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Contraband" type="bit">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="5">
+        <createTable tableName="IgnoreList">
+            <column name="UserId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AntiFriendId" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="6">
+        <createTable tableName="InProgressCombat">
+            <column name="AttackerShipId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DefenderShipId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="Turn" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="20" name="TurnPointsLeft" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Surrender" type="bit">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="false" name="JettisonCargo" type="bit">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="7">
+        <createTable tableName="JumpDrive">
+            <column name="JumpDriveId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="JumpDrive_PK"/>
+            </column>
+            <column name="Name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Speed" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Range" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CargoCost" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BasePrice" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="8">
+        <createTable tableName="Message">
+            <column name="MessageId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="Message_PK"/>
+            </column>
+            <column name="RecipientUserId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SenderUserId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Content" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Time" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="false" name="Recieved" type="bit">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="9">
+        <createTable tableName="Npc">
+            <column name="NpcId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="Npc_PK"/>
+            </column>
+            <column name="NpcTypeId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RaceId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ShipId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Credits" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Badness" type="int"/>
+            <column name="Bounty" type="int"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="10">
+        <createTable tableName="NpcType">
+            <column name="NpcTypeId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="NpcType_PK"/>
+            </column>
+            <column name="Name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="11">
+        <createTable tableName="Player">
+            <column name="PlayerId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="Player_PK"/>
+            </column>
+            <column name="UserId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RaceId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Reputation" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ShipId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BankCredits" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CashCredits" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TimePlayed" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LastPlayed" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="NetWorth" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="BountyTotal" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="HighestBounty" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="ShipsDestroyed" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="ForcedSurrenders" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="ForcedFlees" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="CargoLootedWorth" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="ShipsLost" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="SurrenderCount" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="FleeCount" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="CargoLostWorth" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueBoolean="true" name="Alive" type="bit">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="12">
+        <createTable tableName="Race">
+            <column name="RaceId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="Race_PK"/>
+            </column>
+            <column name="Name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Weapons" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Shields" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Engine" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="13">
+        <createTable tableName="Shield">
+            <column name="ShieldId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="Shield_PK"/>
+            </column>
+            <column name="Name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Strength" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BasePrice" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="14">
+        <createTable tableName="Ship">
+            <column name="ShipId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="Ship_PK"/>
+            </column>
+            <column name="BaseShipId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SystemId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="WeaponId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JumpDriveId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ShieldId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DamageEngine" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DamageWeapon" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DamageShield" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DamageHull" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TargetSystemId" type="int"/>
+            <column name="CurrentJumpDriveCharge" type="int"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="15">
+        <createTable tableName="ShipGood">
+            <column name="ShipId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="GoodId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="16">
+        <createTable tableName="System">
+            <column name="SystemId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="System_PK"/>
+            </column>
+            <column name="Name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PositionX" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PositionY" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="HasBank" type="bit">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="17">
+        <createTable tableName="SystemGood">
+            <column name="SystemId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="GoodId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PriceMultiplier" type="float(15,0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="18">
+        <createTable tableName="SystemJumpDriveUpgrade">
+            <column name="SystemId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JumpDriveId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PriceMultiplier" type="float(15,0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="19">
+        <createTable tableName="SystemShieldUpgrade">
+            <column name="SystemId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ShieldId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PriceMultiplier" type="float(15,0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="20">
+        <createTable tableName="SystemShip">
+            <column name="SystemId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BaseShipId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PriceMultiplier" type="float(15,0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="21">
+        <createTable tableName="SystemWeaponUpgrade">
+            <column name="SystemId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="WeaponId" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PriceMultiplier" type="float(15,0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="22">
+        <createTable tableName="Weapon">
+            <column name="WeaponId" type="int">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="Weapon_PK"/>
+            </column>
+            <column name="Name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="Power" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TurnCost" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CargoCost" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BasePrice" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="23">
+        <addPrimaryKey columnNames="UserId, FriendId" constraintName="BuddyList_PK" tableName="BuddyList"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="24">
+        <addPrimaryKey columnNames="UserId, AntiFriendId" constraintName="IgnoreList_PK" tableName="IgnoreList"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="25">
+        <addPrimaryKey columnNames="AttackerShipId, DefenderShipId" constraintName="InProgressCombat_PK" tableName="InProgressCombat"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="26">
+        <addPrimaryKey columnNames="GoodId, ShipId" constraintName="ShipGood_PK" tableName="ShipGood"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="27">
+        <addPrimaryKey columnNames="GoodId, SystemId" constraintName="SystemGood_PK" tableName="SystemGood"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="28">
+        <addPrimaryKey columnNames="JumpDriveId, SystemId" constraintName="SystemJumpDriveUpgrade_PK" tableName="SystemJumpDriveUpgrade"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="29">
+        <addPrimaryKey columnNames="ShieldId, SystemId" constraintName="SystemShieldUpgrade_PK" tableName="SystemShieldUpgrade"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="30">
+        <addPrimaryKey columnNames="BaseShipId, SystemId" constraintName="SystemShip_PK" tableName="SystemShip"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="31">
+        <addPrimaryKey columnNames="WeaponId, SystemId" constraintName="SystemWeaponUpgrade_PK" tableName="SystemWeaponUpgrade"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="32">
+        <addForeignKeyConstraint baseColumnNames="InitialJumpDriveId" baseTableName="BaseShip" constraintName="JumpDrive_BaseShip_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="JumpDriveId" referencedTableName="JumpDrive"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="33">
+        <addForeignKeyConstraint baseColumnNames="InitialShieldId" baseTableName="BaseShip" constraintName="Shield_BaseShip_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShieldId" referencedTableName="Shield"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="34">
+        <addForeignKeyConstraint baseColumnNames="InitialWeaponId" baseTableName="BaseShip" constraintName="Weapon_BaseShip_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="WeaponId" referencedTableName="Weapon"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="35">
+        <addForeignKeyConstraint baseColumnNames="FriendId" baseTableName="BuddyList" constraintName="User_BuddyList_FK2" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="36">
+        <addForeignKeyConstraint baseColumnNames="UserId" baseTableName="BuddyList" constraintName="User_BuddyList_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="37">
+        <addForeignKeyConstraint baseColumnNames="AntiFriendId" baseTableName="IgnoreList" constraintName="User_IgnoreList_FK2" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="38">
+        <addForeignKeyConstraint baseColumnNames="UserId" baseTableName="IgnoreList" constraintName="User_IgnoreList_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="39">
+        <addForeignKeyConstraint baseColumnNames="AttackerShipId" baseTableName="InProgressCombat" constraintName="Ship_InProgressCombat_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="40">
+        <addForeignKeyConstraint baseColumnNames="DefenderShipId" baseTableName="InProgressCombat" constraintName="Ship_InProgressCombat_FK2" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="41">
+        <addForeignKeyConstraint baseColumnNames="RecipientUserId" baseTableName="Message" constraintName="User_Message_FK2" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="42">
+        <addForeignKeyConstraint baseColumnNames="SenderUserId" baseTableName="Message" constraintName="User_Message_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="43">
+        <addForeignKeyConstraint baseColumnNames="NpcTypeId" baseTableName="Npc" constraintName="NpcType_Npc_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="NpcTypeId" referencedTableName="NpcType"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="44">
+        <addForeignKeyConstraint baseColumnNames="RaceId" baseTableName="Npc" constraintName="Race_Npc_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="RaceId" referencedTableName="Race"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="45">
+        <addForeignKeyConstraint baseColumnNames="ShipId" baseTableName="Npc" constraintName="Ship_Npc_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="46">
+        <addForeignKeyConstraint baseColumnNames="RaceId" baseTableName="Player" constraintName="Race_Player_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="RaceId" referencedTableName="Race"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="47">
+        <addForeignKeyConstraint baseColumnNames="ShipId" baseTableName="Player" constraintName="Ship_Player_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="48">
+        <addForeignKeyConstraint baseColumnNames="UserId" baseTableName="Player" constraintName="User_Player_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="49">
+        <addForeignKeyConstraint baseColumnNames="BaseShipId" baseTableName="Ship" constraintName="BaseShip_Ship_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="BaseShipId" referencedTableName="BaseShip"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="50">
+        <addForeignKeyConstraint baseColumnNames="JumpDriveId" baseTableName="Ship" constraintName="JumpDrive_Ship_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="JumpDriveId" referencedTableName="JumpDrive"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="51">
+        <addForeignKeyConstraint baseColumnNames="ShieldId" baseTableName="Ship" constraintName="Shield_Ship_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShieldId" referencedTableName="Shield"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="52">
+        <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="Ship" constraintName="System_Ship_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="53">
+        <addForeignKeyConstraint baseColumnNames="WeaponId" baseTableName="Ship" constraintName="Weapon_Ship_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="WeaponId" referencedTableName="Weapon"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="54">
+        <addForeignKeyConstraint baseColumnNames="GoodId" baseTableName="ShipGood" constraintName="Good_ShipGood_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="GoodId" referencedTableName="Good"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="55">
+        <addForeignKeyConstraint baseColumnNames="ShipId" baseTableName="ShipGood" constraintName="Ship_ShipGood_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="56">
+        <addForeignKeyConstraint baseColumnNames="GoodId" baseTableName="SystemGood" constraintName="Good_SystemGood_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="GoodId" referencedTableName="Good"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="57">
+        <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="SystemGood" constraintName="System_SystemGood_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="58">
+        <addForeignKeyConstraint baseColumnNames="JumpDriveId" baseTableName="SystemJumpDriveUpgrade" constraintName="JumpDrive_SystemJumpDriveUpgrade_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="JumpDriveId" referencedTableName="JumpDrive"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="59">
+        <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="SystemJumpDriveUpgrade" constraintName="System_SystemJumpDriveUpgrade_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="60">
+        <addForeignKeyConstraint baseColumnNames="ShieldId" baseTableName="SystemShieldUpgrade" constraintName="Shield_SystemShieldUpgrade_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShieldId" referencedTableName="Shield"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="61">
+        <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="SystemShieldUpgrade" constraintName="System_SystemShieldUpgrade_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="62">
+        <addForeignKeyConstraint baseColumnNames="BaseShipId" baseTableName="SystemShip" constraintName="BaseShip_SystemShip_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="BaseShipId" referencedTableName="BaseShip"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="63">
+        <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="SystemShip" constraintName="System_SystemShip_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="64">
+        <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="SystemWeaponUpgrade" constraintName="System_SystemWeaponUpgrade_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    </changeSet>
+    <changeSet author="Jory (generated)" id="65">
+        <addForeignKeyConstraint baseColumnNames="WeaponId" baseTableName="SystemWeaponUpgrade" constraintName="Weapon_SystemWeaponUpgrade_FK1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="WeaponId" referencedTableName="Weapon"/>
+    </changeSet>
+    <changeSet author="Jory Stone" id="66">
+		<comment>Changing the Password column on the User table to a varbinary so we can store the hash directly instead of converting to a string for storage</comment>
+		<dropColumn tableName="User" columnName="Password" />
+		<addColumn tableName="User">
+		    <column name="Password" type="varbinary(32)">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,2 @@
+liquibase.bat update
+pause
