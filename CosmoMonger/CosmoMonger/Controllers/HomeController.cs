@@ -12,15 +12,15 @@ namespace CosmoMonger.Controllers
     {
         public ActionResult Index()
         {
-            ViewData["Title"] = "Home Page";
-            ViewData["Message"] = "Welcome to ASP.NET MVC!";
+			ViewData["Title"] = "CosmoMonger";
+            ViewData["Message"] = "Own the Cosmos!";
 
             return View();
         }
 
         public ActionResult About()
         {
-            ViewData["Title"] = "About Page";
+			ViewData["Title"] = "About CosmoMonger";
 
             return View();
         }

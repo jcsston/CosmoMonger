@@ -9,8 +9,10 @@ namespace CosmoMonger.Models
     using System;
     using System.Collections.Generic;
     using System.Linq;
+	using System.Text;
     using System.Web;
     using System.Web.Security;
+	using System.Security.Cryptography;
 
     /// <summary>
     /// This is an implementation of the System.Web.Security.MembershipProvider class and will be used by the AccountController
@@ -57,12 +59,12 @@ namespace CosmoMonger.Models
 
         public override int PasswordAttemptWindow
         {
-            get { throw new NotImplementedException(); }
+            get { return 15; }
         }
 
         public override MembershipPasswordFormat PasswordFormat
         {
-            get { throw new NotImplementedException(); }
+            get { return MembershipPasswordFormat.Hashed; }
         }
 
         public override string PasswordStrengthRegularExpression
@@ -72,30 +74,95 @@ namespace CosmoMonger.Models
 
         public override bool RequiresQuestionAndAnswer
         {
-            get { throw new NotImplementedException(); }
+            get { return false; }
         }
 
         public override bool RequiresUniqueEmail
         {
-            get { throw new NotImplementedException(); }
+            get { return true; }
         }
+
+		private byte [] HashPassword(string password)
+		{
+			// We need to convert the password string to a byte string for encoding
+			byte[] passwordBytes = Encoding.Default.GetBytes(password);
+			SHA1 hasher = SHA1.Create();
+			return hasher.ComputeHash(passwordBytes);
+		}
+
+		private MembershipUser DatabaseUserToMembershipUser(User u)
+		{
+			return new MembershipUser("CosmoMongerMembershipProvider", u.UserName, null, u.Email, null, null, u.Validated, u.Active, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now);
+		}
+
+		public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
+		{
+			CosmoMongerDbDataContext db = new CosmoMongerDbDataContext();
+
+			// Check for an existing user
+			bool matchingUsername = (from u in db.Users where u.UserName == username select u).Any();
+			if (matchingUsername)
+			{
+				status = MembershipCreateStatus.DuplicateUserName;
+				return null;
+			}
+			bool matchingEmail = (from u in db.Users where u.Email == email select u).Any();
+			if (matchingEmail)
+			{
+				status = MembershipCreateStatus.DuplicateEmail;
+				return null;
+			}
+
+			// Create the new user
+			User user = new User();
+			user.UserName = username;
+			user.Email = email;
+			user.Password = HashPassword(password);
+			user.Active = isApproved;
+
+			// Insert the user record into the database
+			db.Users.InsertOnSubmit(user);
+			db.SubmitChanges();
+
+			status = MembershipCreateStatus.Success;
+
+			return DatabaseUserToMembershipUser(user);
+		}
+
+		public override bool ValidateUser(string username, string password)
+		{
+			CosmoMongerDbDataContext db = new CosmoMongerDbDataContext();
+			bool validLogin = (from u in db.Users 
+							   where u.UserName == username 
+							   && u.Password == HashPassword(password) 
+							   && u.Validated && u.Active select u).Any();
+			return validLogin;
+		}
+
+		public override bool DeleteUser(string username, bool deleteAllRelatedData)
+		{
+			throw new NotImplementedException();
+		}
 
         public override bool ChangePassword(string username, string oldPassword, string newPassword)
         {
-            throw new NotImplementedException();
+			CosmoMongerDbDataContext db = new CosmoMongerDbDataContext();
+			// Find the user in the database and verify the current password
+			User currentUser = (from u in db.Users
+							   where u.UserName == username
+							   && u.Password == HashPassword(oldPassword)
+							   select u).First();
+			if (currentUser != null)
+			{
+				// Update the users password
+				currentUser.Password = HashPassword(newPassword);
+				db.SubmitChanges();
+				return true;
+			}
+			return false;
         }
 
         public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool DeleteUser(string username, bool deleteAllRelatedData)
         {
             throw new NotImplementedException();
         }
@@ -127,7 +194,7 @@ namespace CosmoMonger.Models
 
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
-            throw new NotImplementedException();
+			throw new NotImplementedException();
         }
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
@@ -151,11 +218,6 @@ namespace CosmoMonger.Models
         }
 
         public override void UpdateUser(MembershipUser user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool ValidateUser(string username, string password)
         {
             throw new NotImplementedException();
         }

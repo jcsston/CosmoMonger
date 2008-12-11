@@ -84,11 +84,10 @@ namespace CosmoMonger.Controllers
             if (ModelState.IsValid)
             {
                 // Attempt to change password
-                MembershipUser currentUser = Provider.GetUser(User.Identity.Name, true /* userIsOnline */);
                 bool changeSuccessful = false;
                 try
                 {
-                    changeSuccessful = currentUser.ChangePassword(currentPassword, newPassword);
+                    changeSuccessful = Provider.ChangePassword(User.Identity.Name, currentPassword, newPassword);
                 }
                 catch
                 {
