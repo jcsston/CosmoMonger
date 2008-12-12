@@ -3,7 +3,7 @@
   <Connection Mode="WebSettings" ConnectionString="Data Source=win2k3.stone.local;Initial Catalog=CosmoMonger;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="CosmoMongerConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.BaseShip" Member="BaseShips">
     <Type Name="BaseShip">
-      <Column Name="BaseShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BaseShipId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Model" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="BasePrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="CargoSpace" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -19,7 +19,7 @@
   </Table>
   <Table Name="dbo.Weapon" Member="Weapons">
     <Type Name="Weapon">
-      <Column Name="WeaponId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WeaponId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Power" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TurnCost" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -40,7 +40,7 @@
   </Table>
   <Table Name="dbo.Good" Member="Goods">
     <Type Name="Good">
-      <Column Name="GoodId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="GoodId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="BasePrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Contraband" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
@@ -70,7 +70,7 @@
   </Table>
   <Table Name="dbo.JumpDrive" Member="JumpDrives">
     <Type Name="JumpDrive">
-      <Column Name="JumpDriveId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="JumpDriveId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Speed" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Range" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -83,7 +83,7 @@
   </Table>
   <Table Name="dbo.Message" Member="Messages">
     <Type Name="Message">
-      <Column Name="MessageId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MessageId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="RecipientUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="SenderUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Content" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
@@ -95,7 +95,7 @@
   </Table>
   <Table Name="dbo.Npc" Member="Npcs">
     <Type Name="Npc">
-      <Column Name="NpcId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="NpcId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="NpcTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="RaceId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -110,14 +110,14 @@
   </Table>
   <Table Name="dbo.NpcType" Member="NpcTypes">
     <Type Name="NpcType">
-      <Column Name="NpcTypeId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="NpcTypeId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Association Name="NpcType_Npc" Member="Npcs" OtherKey="NpcTypeId" Type="Npc" />
     </Type>
   </Table>
   <Table Name="dbo.Player" Member="Players">
     <Type Name="Player">
-      <Column Name="PlayerId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PlayerId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="RaceId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -146,7 +146,7 @@
   </Table>
   <Table Name="dbo.Race" Member="Races">
     <Type Name="Race">
-      <Column Name="RaceId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RaceId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Weapons" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Shields" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -157,7 +157,7 @@
   </Table>
   <Table Name="dbo.Shield" Member="Shields">
     <Type Name="Shield">
-      <Column Name="ShieldId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ShieldId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Strength" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="BasePrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -168,7 +168,7 @@
   </Table>
   <Table Name="dbo.Ship" Member="Ships">
     <Type Name="Ship">
-      <Column Name="ShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ShipId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="BaseShipId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="SystemId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="WeaponId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -203,7 +203,7 @@
   </Table>
   <Table Name="dbo.System" Member="CosmoSystems">
     <Type Name="CosmoSystem">
-      <Column Name="SystemId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SystemId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="PositionX" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PositionY" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -268,7 +268,7 @@
   </Table>
   <Table Name="dbo.[User]" Member="Users">
     <Type Name="User">
-      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UserId" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Email" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="UserName" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Password" Type="System.Byte[]" DbType="VarBinary(32) NOT NULL" CanBeNull="false" />

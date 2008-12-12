@@ -365,7 +365,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_BaseShipId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_BaseShipId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int BaseShipId
 		{
 			get
@@ -740,7 +740,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_WeaponId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_WeaponId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int WeaponId
 		{
 			get
@@ -1163,7 +1163,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_GoodId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_GoodId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int GoodId
 		{
 			get
@@ -1796,7 +1796,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_JumpDriveId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_JumpDriveId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int JumpDriveId
 		{
 			get
@@ -2059,7 +2059,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_MessageId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_MessageId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int MessageId
 		{
 			get
@@ -2334,7 +2334,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_NpcId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_NpcId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int NpcId
 		{
 			get
@@ -2657,7 +2657,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_NpcTypeId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_NpcTypeId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int NpcTypeId
 		{
 			get
@@ -2857,7 +2857,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_PlayerId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_PlayerId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int PlayerId
 		{
 			get
@@ -3475,7 +3475,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_RaceId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_RaceId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int RaceId
 		{
 			get
@@ -3688,7 +3688,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_ShieldId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_ShieldId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int ShieldId
 		{
 			get
@@ -3959,7 +3959,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_ShipId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_ShipId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int ShipId
 		{
 			get
@@ -4782,7 +4782,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_SystemId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_SystemId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int SystemId
 		{
 			get
@@ -6199,7 +6199,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_UserId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_UserId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int UserId
 		{
 			get
