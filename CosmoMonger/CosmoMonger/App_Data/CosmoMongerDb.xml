@@ -486,4 +486,10 @@
       </column>
     </addColumn>
   </changeSet>
+  <changeSet author="Jory Stone" id="6">
+    <comment>Added a TargetSystemArrivalTime column to the Ship table</comment>
+    <addColumn tableName="Ship">
+      <column name="TargetSystemArrivalTime" type="datetime" />
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

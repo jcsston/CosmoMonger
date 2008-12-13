@@ -3891,6 +3891,8 @@ namespace CosmoMonger.Models
 		
 		private System.Nullable<int> _CurrentJumpDriveCharge;
 		
+		private System.Nullable<System.DateTime> _TargetSystemArrivalTime;
+		
 		private EntitySet<InProgressCombat> _InProgressCombats;
 		
 		private EntitySet<InProgressCombat> _InProgressCombats1;
@@ -3939,6 +3941,8 @@ namespace CosmoMonger.Models
     partial void OnTargetSystemIdChanged();
     partial void OnCurrentJumpDriveChargeChanging(System.Nullable<int> value);
     partial void OnCurrentJumpDriveChargeChanged();
+    partial void OnTargetSystemArrivalTimeChanging(System.Nullable<System.DateTime> value);
+    partial void OnTargetSystemArrivalTimeChanged();
     #endregion
 		
 		public Ship()
@@ -4212,6 +4216,26 @@ namespace CosmoMonger.Models
 					this._CurrentJumpDriveCharge = value;
 					this.SendPropertyChanged("CurrentJumpDriveCharge");
 					this.OnCurrentJumpDriveChargeChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_TargetSystemArrivalTime", DbType="datetime")]
+		public System.Nullable<System.DateTime> TargetSystemArrivalTime
+		{
+			get
+			{
+				return this._TargetSystemArrivalTime;
+			}
+			set
+			{
+				if ((this._TargetSystemArrivalTime != value))
+				{
+					this.OnTargetSystemArrivalTimeChanging(value);
+					this.SendPropertyChanging();
+					this._TargetSystemArrivalTime = value;
+					this.SendPropertyChanged("TargetSystemArrivalTime");
+					this.OnTargetSystemArrivalTimeChanged();
 				}
 			}
 		}

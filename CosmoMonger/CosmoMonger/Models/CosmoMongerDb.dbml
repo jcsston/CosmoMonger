@@ -181,6 +181,7 @@
       <Column Name="DamageHull" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TargetSystemId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="CurrentJumpDriveCharge" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TargetSystemArrivalTime" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
       <Association Name="Ship_InProgressCombat" Member="InProgressCombats" OtherKey="AttackerShipId" Type="InProgressCombat" />
       <Association Name="Ship_InProgressCombat1" Member="InProgressCombats1" OtherKey="DefenderShipId" Type="InProgressCombat" />
       <Association Name="Ship_Npc" Member="Npcs" OtherKey="ShipId" Type="Npc" />
