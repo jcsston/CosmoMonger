@@ -8,13 +8,13 @@ namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
 	using System.Text;
     using System.Web;
     using System.Web.Security;
 	using System.Security.Cryptography;
 	using Microsoft.Practices.EnterpriseLibrary.Logging;
-	using System.Diagnostics;
 
     /// <summary>
     /// This is an implementation of the System.Web.Security.MembershipProvider class and will be used by the AccountController
@@ -22,9 +22,9 @@ namespace CosmoMonger.Models
     public class CosmoMongerMembershipProvider : MembershipProvider
     {
 		/// <summary>
-		/// The name of the application using the custom membership provider.
+		/// Gets the name of the application using the custom membership provider.
 		/// </summary>
-		/// <value>CosmoMonger</value>
+		/// <value>The string CosmoMonger</value>
 		/// <returns>The name of the application using the custom membership provider.</returns>
         public override string ApplicationName
         {

@@ -77,7 +77,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Gets the current code version. Ex. Subversion Revision number
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Revision number of running code</returns>
         public static int GetCodeVersion()
         {
             return Assembly.GetExecutingAssembly().GetName().Version.Revision;
@@ -86,7 +86,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Gets the database version. Ex. The liquibase changelog number
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Database version of connected database</returns>
         public static int GetDatabaseVersion()
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();

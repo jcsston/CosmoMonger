@@ -1,3 +1,9 @@
+//-----------------------------------------------------------------------
+// <copyright file="User.cs" company="CosmoMonger">
+//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
 namespace CosmoMonger.Models
 {
     using System;
@@ -49,12 +55,14 @@ namespace CosmoMonger.Models
         public void UpdateProfile(string username, string email)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
+
             // Check that the username/email doesn't already exist on other user
             bool matchingUsername = (from u in db.Users where u.UserName == username && u != this select u).Any();
             if (matchingUsername)
             {
                 throw new ArgumentException("Another user has the same username", "username");
             }
+
             bool matchingEmail = (from u in db.Users where u.Email == email && u != this select u).Any();
             if (matchingEmail)
             {
@@ -63,6 +71,7 @@ namespace CosmoMonger.Models
 
             this.UserName = username;
             this.Email = email;
+
             // Save changes
             db.SubmitChanges();
         }
@@ -110,6 +119,7 @@ namespace CosmoMonger.Models
             {
                 throw new ArgumentException("User is not in the buddy list", "buddy");
             }
+
             this.BuddyLists.Remove(buddyToRemove);
             db.SubmitChanges();
         }
@@ -155,6 +165,7 @@ namespace CosmoMonger.Models
             {
                 throw new ArgumentException("User is not in the buddy list", "buddy");
             }
+
             this.IgnoreLists.Remove(antiFriendToRemove);
             db.SubmitChanges();
         }
@@ -177,12 +188,14 @@ namespace CosmoMonger.Models
         public void SendMessage(User fromUser, string message)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
+
             // Build the message
             Message msg = new Message();
             msg.RecipientUser = this;
             msg.SenderUser = fromUser;
             msg.Content = message;
             msg.Time = DateTime.Now;
+
             // Add the message to this user
             this.Messages.Add(msg);
 
@@ -197,6 +210,5 @@ namespace CosmoMonger.Models
         {
             this.Active = false;
         }
-
     }
 }
