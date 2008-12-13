@@ -365,7 +365,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_BaseShipId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_BaseShipId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int BaseShipId
 		{
 			get
@@ -740,7 +740,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_WeaponId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_WeaponId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int WeaponId
 		{
 			get
@@ -966,9 +966,9 @@ namespace CosmoMonger.Models
 		
 		private int _FriendId;
 		
-		private EntityRef<User> _User;
+		private EntityRef<User> _Friend;
 		
-		private EntityRef<User> _User1;
+		private EntityRef<User> _User;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -982,8 +982,8 @@ namespace CosmoMonger.Models
 		
 		public BuddyList()
 		{
+			this._Friend = default(EntityRef<User>);
 			this._User = default(EntityRef<User>);
-			this._User1 = default(EntityRef<User>);
 			OnCreated();
 		}
 		
@@ -1022,15 +1022,40 @@ namespace CosmoMonger.Models
 			{
 				if ((this._FriendId != value))
 				{
-					if (this._User1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnFriendIdChanging(value);
 					this.SendPropertyChanging();
 					this._FriendId = value;
 					this.SendPropertyChanged("FriendId");
 					this.OnFriendIdChanged();
+				}
+			}
+		}
+		
+		[Association(Name="BuddyList_User", Storage="_Friend", ThisKey="FriendId", IsUnique=true, IsForeignKey=false)]
+		public User Friend
+		{
+			get
+			{
+				return this._Friend.Entity;
+			}
+			set
+			{
+				User previousValue = this._Friend.Entity;
+				if (((previousValue != value) 
+							|| (this._Friend.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Friend.Entity = null;
+						previousValue.OnBuddyLists = null;
+					}
+					this._Friend.Entity = value;
+					if ((value != null))
+					{
+						value.OnBuddyLists = this;
+					}
+					this.SendPropertyChanged("Friend");
 				}
 			}
 		}
@@ -1065,40 +1090,6 @@ namespace CosmoMonger.Models
 						this._UserId = default(int);
 					}
 					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
-		[Association(Name="User_BuddyList1", Storage="_User1", ThisKey="FriendId", IsForeignKey=true)]
-		public User User1
-		{
-			get
-			{
-				return this._User1.Entity;
-			}
-			set
-			{
-				User previousValue = this._User1.Entity;
-				if (((previousValue != value) 
-							|| (this._User1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User1.Entity = null;
-						previousValue.BuddyLists1.Remove(this);
-					}
-					this._User1.Entity = value;
-					if ((value != null))
-					{
-						value.BuddyLists1.Add(this);
-						this._FriendId = value.UserId;
-					}
-					else
-					{
-						this._FriendId = default(int);
-					}
-					this.SendPropertyChanged("User1");
 				}
 			}
 		}
@@ -1163,7 +1154,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_GoodId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_GoodId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int GoodId
 		{
 			get
@@ -1324,9 +1315,9 @@ namespace CosmoMonger.Models
 		
 		private int _AntiFriendId;
 		
-		private EntityRef<User> _User;
+		private EntityRef<User> _AntiFriend;
 		
-		private EntityRef<User> _User1;
+		private EntityRef<User> _User;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1340,8 +1331,8 @@ namespace CosmoMonger.Models
 		
 		public IgnoreList()
 		{
+			this._AntiFriend = default(EntityRef<User>);
 			this._User = default(EntityRef<User>);
-			this._User1 = default(EntityRef<User>);
 			OnCreated();
 		}
 		
@@ -1380,15 +1371,40 @@ namespace CosmoMonger.Models
 			{
 				if ((this._AntiFriendId != value))
 				{
-					if (this._User1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnAntiFriendIdChanging(value);
 					this.SendPropertyChanging();
 					this._AntiFriendId = value;
 					this.SendPropertyChanged("AntiFriendId");
 					this.OnAntiFriendIdChanged();
+				}
+			}
+		}
+		
+		[Association(Name="IgnoreList_User", Storage="_AntiFriend", ThisKey="AntiFriendId", IsUnique=true, IsForeignKey=false)]
+		public User AntiFriend
+		{
+			get
+			{
+				return this._AntiFriend.Entity;
+			}
+			set
+			{
+				User previousValue = this._AntiFriend.Entity;
+				if (((previousValue != value) 
+							|| (this._AntiFriend.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._AntiFriend.Entity = null;
+						previousValue.OnIgnoreLists = null;
+					}
+					this._AntiFriend.Entity = value;
+					if ((value != null))
+					{
+						value.OnIgnoreLists = this;
+					}
+					this.SendPropertyChanged("AntiFriend");
 				}
 			}
 		}
@@ -1423,40 +1439,6 @@ namespace CosmoMonger.Models
 						this._UserId = default(int);
 					}
 					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
-		[Association(Name="User_IgnoreList1", Storage="_User1", ThisKey="AntiFriendId", IsForeignKey=true)]
-		public User User1
-		{
-			get
-			{
-				return this._User1.Entity;
-			}
-			set
-			{
-				User previousValue = this._User1.Entity;
-				if (((previousValue != value) 
-							|| (this._User1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User1.Entity = null;
-						previousValue.IgnoreLists1.Remove(this);
-					}
-					this._User1.Entity = value;
-					if ((value != null))
-					{
-						value.IgnoreLists1.Add(this);
-						this._AntiFriendId = value.UserId;
-					}
-					else
-					{
-						this._AntiFriendId = default(int);
-					}
-					this.SendPropertyChanged("User1");
 				}
 			}
 		}
@@ -1796,7 +1778,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_JumpDriveId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_JumpDriveId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int JumpDriveId
 		{
 			get
@@ -2030,7 +2012,7 @@ namespace CosmoMonger.Models
 		
 		private bool _Read;
 		
-		private EntityRef<User> _User;
+		private EntityRef<User> _SenderUser;
 		
 		private EntityRef<User> _User1;
 		
@@ -2054,12 +2036,12 @@ namespace CosmoMonger.Models
 		
 		public Message()
 		{
-			this._User = default(EntityRef<User>);
+			this._SenderUser = default(EntityRef<User>);
 			this._User1 = default(EntityRef<User>);
 			OnCreated();
 		}
 		
-		[Column(Storage="_MessageId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_MessageId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int MessageId
 		{
 			get
@@ -2114,10 +2096,6 @@ namespace CosmoMonger.Models
 			{
 				if ((this._SenderUserId != value))
 				{
-					if (this._User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnSenderUserIdChanging(value);
 					this.SendPropertyChanging();
 					this._SenderUserId = value;
@@ -2187,42 +2165,37 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Association(Name="User_Message", Storage="_User", ThisKey="SenderUserId", IsForeignKey=true)]
-		public User User
+		[Association(Name="Message_User", Storage="_SenderUser", ThisKey="SenderUserId", IsUnique=true, IsForeignKey=false)]
+		public User SenderUser
 		{
 			get
 			{
-				return this._User.Entity;
+				return this._SenderUser.Entity;
 			}
 			set
 			{
-				User previousValue = this._User.Entity;
+				User previousValue = this._SenderUser.Entity;
 				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
+							|| (this._SenderUser.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._User.Entity = null;
-						previousValue.Messages.Remove(this);
+						this._SenderUser.Entity = null;
+						previousValue.SentMessages = null;
 					}
-					this._User.Entity = value;
+					this._SenderUser.Entity = value;
 					if ((value != null))
 					{
-						value.Messages.Add(this);
-						this._SenderUserId = value.UserId;
+						value.SentMessages = this;
 					}
-					else
-					{
-						this._SenderUserId = default(int);
-					}
-					this.SendPropertyChanged("User");
+					this.SendPropertyChanged("SenderUser");
 				}
 			}
 		}
 		
 		[Association(Name="User_Message1", Storage="_User1", ThisKey="RecipientUserId", IsForeignKey=true)]
-		public User User1
+		public User RecipientUser
 		{
 			get
 			{
@@ -2238,19 +2211,19 @@ namespace CosmoMonger.Models
 					if ((previousValue != null))
 					{
 						this._User1.Entity = null;
-						previousValue.Messages1.Remove(this);
+						previousValue.Messages.Remove(this);
 					}
 					this._User1.Entity = value;
 					if ((value != null))
 					{
-						value.Messages1.Add(this);
+						value.Messages.Add(this);
 						this._RecipientUserId = value.UserId;
 					}
 					else
 					{
 						this._RecipientUserId = default(int);
 					}
-					this.SendPropertyChanged("User1");
+					this.SendPropertyChanged("RecipientUser");
 				}
 			}
 		}
@@ -2334,7 +2307,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_NpcId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_NpcId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int NpcId
 		{
 			get
@@ -2657,7 +2630,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_NpcTypeId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_NpcTypeId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int NpcTypeId
 		{
 			get
@@ -2857,7 +2830,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_PlayerId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_PlayerId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int PlayerId
 		{
 			get
@@ -3475,7 +3448,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_RaceId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_RaceId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int RaceId
 		{
 			get
@@ -3688,7 +3661,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_ShieldId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_ShieldId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int ShieldId
 		{
 			get
@@ -3959,7 +3932,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_ShipId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_ShipId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int ShipId
 		{
 			get
@@ -4782,7 +4755,7 @@ namespace CosmoMonger.Models
 			OnCreated();
 		}
 		
-		[Column(Storage="_SystemId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_SystemId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int SystemId
 		{
 			get
@@ -6155,17 +6128,17 @@ namespace CosmoMonger.Models
 		
 		private EntitySet<BuddyList> _BuddyLists;
 		
-		private EntitySet<BuddyList> _BuddyLists1;
-		
 		private EntitySet<IgnoreList> _IgnoreLists;
-		
-		private EntitySet<IgnoreList> _IgnoreLists1;
-		
-		private EntitySet<Message> _Messages;
 		
 		private EntitySet<Message> _Messages1;
 		
 		private EntitySet<Player> _Players;
+		
+		private EntityRef<BuddyList> _OnBuddyLists;
+		
+		private EntityRef<IgnoreList> _OnIgnoreLists;
+		
+		private EntityRef<Message> _SentMessages;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -6190,16 +6163,16 @@ namespace CosmoMonger.Models
 		public User()
 		{
 			this._BuddyLists = new EntitySet<BuddyList>(new Action<BuddyList>(this.attach_BuddyLists), new Action<BuddyList>(this.detach_BuddyLists));
-			this._BuddyLists1 = new EntitySet<BuddyList>(new Action<BuddyList>(this.attach_BuddyLists1), new Action<BuddyList>(this.detach_BuddyLists1));
 			this._IgnoreLists = new EntitySet<IgnoreList>(new Action<IgnoreList>(this.attach_IgnoreLists), new Action<IgnoreList>(this.detach_IgnoreLists));
-			this._IgnoreLists1 = new EntitySet<IgnoreList>(new Action<IgnoreList>(this.attach_IgnoreLists1), new Action<IgnoreList>(this.detach_IgnoreLists1));
-			this._Messages = new EntitySet<Message>(new Action<Message>(this.attach_Messages), new Action<Message>(this.detach_Messages));
 			this._Messages1 = new EntitySet<Message>(new Action<Message>(this.attach_Messages1), new Action<Message>(this.detach_Messages1));
 			this._Players = new EntitySet<Player>(new Action<Player>(this.attach_Players), new Action<Player>(this.detach_Players));
+			this._OnBuddyLists = default(EntityRef<BuddyList>);
+			this._OnIgnoreLists = default(EntityRef<IgnoreList>);
+			this._SentMessages = default(EntityRef<Message>);
 			OnCreated();
 		}
 		
-		[Column(Storage="_UserId", DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		[Column(Storage="_UserId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int UserId
 		{
 			get
@@ -6210,6 +6183,10 @@ namespace CosmoMonger.Models
 			{
 				if ((this._UserId != value))
 				{
+					if (this._OnBuddyLists.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnUserIdChanging(value);
 					this.SendPropertyChanging();
 					this._UserId = value;
@@ -6352,19 +6329,6 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Association(Name="User_BuddyList1", Storage="_BuddyLists1", OtherKey="FriendId")]
-		public EntitySet<BuddyList> BuddyLists1
-		{
-			get
-			{
-				return this._BuddyLists1;
-			}
-			set
-			{
-				this._BuddyLists1.Assign(value);
-			}
-		}
-		
 		[Association(Name="User_IgnoreList", Storage="_IgnoreLists", OtherKey="UserId")]
 		public EntitySet<IgnoreList> IgnoreLists
 		{
@@ -6378,34 +6342,8 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Association(Name="User_IgnoreList1", Storage="_IgnoreLists1", OtherKey="AntiFriendId")]
-		public EntitySet<IgnoreList> IgnoreLists1
-		{
-			get
-			{
-				return this._IgnoreLists1;
-			}
-			set
-			{
-				this._IgnoreLists1.Assign(value);
-			}
-		}
-		
-		[Association(Name="User_Message", Storage="_Messages", OtherKey="SenderUserId")]
-		public EntitySet<Message> Messages
-		{
-			get
-			{
-				return this._Messages;
-			}
-			set
-			{
-				this._Messages.Assign(value);
-			}
-		}
-		
 		[Association(Name="User_Message1", Storage="_Messages1", OtherKey="RecipientUserId")]
-		public EntitySet<Message> Messages1
+		public EntitySet<Message> Messages
 		{
 			get
 			{
@@ -6427,6 +6365,108 @@ namespace CosmoMonger.Models
 			set
 			{
 				this._Players.Assign(value);
+			}
+		}
+		
+		[Association(Name="BuddyList_User", Storage="_OnBuddyLists", ThisKey="UserId", OtherKey="FriendId", IsForeignKey=true)]
+		internal BuddyList OnBuddyLists
+		{
+			get
+			{
+				return this._OnBuddyLists.Entity;
+			}
+			set
+			{
+				BuddyList previousValue = this._OnBuddyLists.Entity;
+				if (((previousValue != value) 
+							|| (this._OnBuddyLists.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._OnBuddyLists.Entity = null;
+						previousValue.Friend = null;
+					}
+					this._OnBuddyLists.Entity = value;
+					if ((value != null))
+					{
+						value.Friend = this;
+						this._UserId = value.FriendId;
+					}
+					else
+					{
+						this._UserId = default(int);
+					}
+					this.SendPropertyChanged("OnBuddyLists");
+				}
+			}
+		}
+		
+		[Association(Name="IgnoreList_User", Storage="_OnIgnoreLists", ThisKey="UserId", OtherKey="AntiFriendId", IsForeignKey=true)]
+		internal IgnoreList OnIgnoreLists
+		{
+			get
+			{
+				return this._OnIgnoreLists.Entity;
+			}
+			set
+			{
+				IgnoreList previousValue = this._OnIgnoreLists.Entity;
+				if (((previousValue != value) 
+							|| (this._OnIgnoreLists.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._OnIgnoreLists.Entity = null;
+						previousValue.AntiFriend = null;
+					}
+					this._OnIgnoreLists.Entity = value;
+					if ((value != null))
+					{
+						value.AntiFriend = this;
+						this._UserId = value.AntiFriendId;
+					}
+					else
+					{
+						this._UserId = default(int);
+					}
+					this.SendPropertyChanged("OnIgnoreLists");
+				}
+			}
+		}
+		
+		[Association(Name="Message_User", Storage="_SentMessages", ThisKey="UserId", OtherKey="SenderUserId", IsForeignKey=true)]
+		internal Message SentMessages
+		{
+			get
+			{
+				return this._SentMessages.Entity;
+			}
+			set
+			{
+				Message previousValue = this._SentMessages.Entity;
+				if (((previousValue != value) 
+							|| (this._SentMessages.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._SentMessages.Entity = null;
+						previousValue.SenderUser = null;
+					}
+					this._SentMessages.Entity = value;
+					if ((value != null))
+					{
+						value.SenderUser = this;
+						this._UserId = value.SenderUserId;
+					}
+					else
+					{
+						this._UserId = default(int);
+					}
+					this.SendPropertyChanged("SentMessages");
+				}
 			}
 		}
 		
@@ -6462,18 +6502,6 @@ namespace CosmoMonger.Models
 			entity.User = null;
 		}
 		
-		private void attach_BuddyLists1(BuddyList entity)
-		{
-			this.SendPropertyChanging();
-			entity.User1 = this;
-		}
-		
-		private void detach_BuddyLists1(BuddyList entity)
-		{
-			this.SendPropertyChanging();
-			entity.User1 = null;
-		}
-		
 		private void attach_IgnoreLists(IgnoreList entity)
 		{
 			this.SendPropertyChanging();
@@ -6486,40 +6514,16 @@ namespace CosmoMonger.Models
 			entity.User = null;
 		}
 		
-		private void attach_IgnoreLists1(IgnoreList entity)
-		{
-			this.SendPropertyChanging();
-			entity.User1 = this;
-		}
-		
-		private void detach_IgnoreLists1(IgnoreList entity)
-		{
-			this.SendPropertyChanging();
-			entity.User1 = null;
-		}
-		
-		private void attach_Messages(Message entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_Messages(Message entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
-		}
-		
 		private void attach_Messages1(Message entity)
 		{
 			this.SendPropertyChanging();
-			entity.User1 = this;
+			entity.RecipientUser = this;
 		}
 		
 		private void detach_Messages1(Message entity)
 		{
 			this.SendPropertyChanging();
-			entity.User1 = null;
+			entity.RecipientUser = null;
 		}
 		
 		private void attach_Players(Player entity)
