@@ -197,6 +197,7 @@ namespace CosmoMonger.Models
 			user.Email = email;
 			user.Password = HashPassword(password);
 			user.Active = isApproved;
+            user.Validated = true;
 
 			// Insert the user record into the database
 			db.Users.InsertOnSubmit(user);

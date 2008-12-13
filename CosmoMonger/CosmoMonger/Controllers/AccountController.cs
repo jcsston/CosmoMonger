@@ -1,33 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Security.Principal;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-using System.Web.UI;
-
-namespace CosmoMonger.Controllers
+﻿namespace CosmoMonger.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Security.Principal;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Security;
+    using System.Web.UI;
 
     [HandleError]
     [OutputCache(Location = OutputCacheLocation.None)]
     public class AccountController : Controller
     {
-
-        // This constructor is used by the MVC framework to instantiate the controller using
-        // the default forms authentication and membership providers.
-
+        /// <summary>
+        /// This constructor is used by the MVC framework to instantiate the controller using
+        /// the default forms authentication and membership providers.
+        /// </summary>
         public AccountController()
             : this(null, null)
         {
         }
 
-        // This constructor is not used by the MVC framework but is instead provided for ease
-        // of unit testing this type. See the comments at the end of this file for more
-        // information.
-
+        /// <summary>
+        /// This constructor is not used by the MVC framework but is instead provided for ease
+        /// of unit testing this type. See the comments at the end of this file for more
+        /// information.
+        /// </summary>
         public AccountController(IFormsAuthentication formsAuth, MembershipProvider provider)
         {
             FormsAuth = formsAuth ?? new FormsAuthenticationWrapper();
@@ -60,7 +60,6 @@ namespace CosmoMonger.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
         {
-
             ViewData["Title"] = "Change Password";
             ViewData["PasswordLength"] = Provider.MinRequiredPasswordLength;
 
