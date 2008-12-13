@@ -11,6 +11,7 @@ namespace CosmoMonger.Models
     using System.Configuration;
     using System.Diagnostics;    
     using System.Linq;
+    using System.Reflection;
     using System.Web;
     using System.Web.Security;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
@@ -70,7 +71,26 @@ namespace CosmoMonger.Models
         /// <returns>LINQ CosmoMongerDbDataContext object</returns>
         public static CosmoMongerDbDataContext GetDbContext()
         {
-            return new CosmoMongerDbDataContext(ConfigurationManager.ConnectionStrings["CosmoMongerConnectionString"].ConnectionString);
+            return Utility.DataContextFactory.GetScopedDataContext<CosmoMongerDbDataContext>("CosmoMonger", ConfigurationManager.ConnectionStrings["CosmoMongerConnectionString"].ConnectionString);
+        }
+
+        /// <summary>
+        /// Gets the current code version. Ex. Subversion Revision number
+        /// </summary>
+        /// <returns></returns>
+        public static int GetCodeVersion()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version.Revision;
+        }
+
+        /// <summary>
+        /// Gets the database version. Ex. The liquibase changelog number
+        /// </summary>
+        /// <returns></returns>
+        public static int GetDatabaseVersion()
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            return int.Parse(db.ExecuteQuery<string>("SELECT MAX([ID]) FROM [DATABASECHANGELOG]").Single());
         }
 
         /// <summary>

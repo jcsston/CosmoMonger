@@ -87,6 +87,7 @@
     <Compile Include="Models\CosmoMongerMembershipProvider.cs" />
     <Compile Include="Models\GameManager.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Utility\DataContextFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Account\ChangePassword.aspx.cs">
       <DependentUpon>ChangePassword.aspx</DependentUpon>
@@ -219,5 +220,6 @@
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
+    <PreBuildEvent>SubWCRev ..\.. "$(ProjectDir)Properties\AssemblyInfo.template.cs" "$(ProjectDir)Properties\AssemblyInfo.cs"</PreBuildEvent>
   </PropertyGroup>
 </Project>
