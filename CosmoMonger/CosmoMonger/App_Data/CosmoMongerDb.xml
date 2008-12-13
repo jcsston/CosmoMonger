@@ -478,4 +478,12 @@
       </column>
     </addColumn>
   </changeSet>
+  <changeSet author="Jory Stone" id="5">
+    <comment>Added a CargoCost column to the Shield table</comment>
+    <addColumn tableName="Shield">
+      <column name="CargoCost" type="int">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

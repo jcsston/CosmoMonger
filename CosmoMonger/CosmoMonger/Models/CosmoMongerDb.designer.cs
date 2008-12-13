@@ -2194,7 +2194,7 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Association(Name="User_Message1", Storage="_User1", ThisKey="RecipientUserId", IsForeignKey=true)]
+		[Association(Name="User_Message", Storage="_User1", ThisKey="RecipientUserId", IsForeignKey=true)]
 		public User RecipientUser
 		{
 			get
@@ -3633,6 +3633,8 @@ namespace CosmoMonger.Models
 		
 		private int _BasePrice;
 		
+		private int _CargoCost;
+		
 		private EntitySet<BaseShip> _BaseShips;
 		
 		private EntitySet<Ship> _Ships;
@@ -3651,6 +3653,8 @@ namespace CosmoMonger.Models
     partial void OnStrengthChanged();
     partial void OnBasePriceChanging(int value);
     partial void OnBasePriceChanged();
+    partial void OnCargoCostChanging(int value);
+    partial void OnCargoCostChanged();
     #endregion
 		
 		public Shield()
@@ -3737,6 +3741,26 @@ namespace CosmoMonger.Models
 					this._BasePrice = value;
 					this.SendPropertyChanged("BasePrice");
 					this.OnBasePriceChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_CargoCost", DbType="int NOT NULL")]
+		public int CargoCost
+		{
+			get
+			{
+				return this._CargoCost;
+			}
+			set
+			{
+				if ((this._CargoCost != value))
+				{
+					this.OnCargoCostChanging(value);
+					this.SendPropertyChanging();
+					this._CargoCost = value;
+					this.SendPropertyChanged("CargoCost");
+					this.OnCargoCostChanged();
 				}
 			}
 		}
@@ -6342,7 +6366,7 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Association(Name="User_Message1", Storage="_Messages1", OtherKey="RecipientUserId")]
+		[Association(Name="User_Message", Storage="_Messages1", OtherKey="RecipientUserId")]
 		public EntitySet<Message> Messages
 		{
 			get

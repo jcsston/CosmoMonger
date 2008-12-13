@@ -90,7 +90,7 @@
       <Column Name="Time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="[Read]" Member="Read" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="Message_User" Member="SenderUser" ThisKey="SenderUserId" OtherKey="UserId" Type="User" Cardinality="One" />
-      <Association Name="User_Message1" Member="RecipientUser" Storage="_User1" ThisKey="RecipientUserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_Message" Member="RecipientUser" Storage="_User1" ThisKey="RecipientUserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Npc" Member="Npcs">
@@ -161,6 +161,7 @@
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Strength" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="BasePrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CargoCost" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
       <Association Name="Shield_BaseShip" Member="BaseShips" OtherKey="InitialShieldId" Type="BaseShip" />
       <Association Name="Shield_Ship" Member="Ships" OtherKey="ShieldId" Type="Ship" />
       <Association Name="Shield_SystemShieldUpgrade" Member="SystemShieldUpgrades" OtherKey="ShieldId" Type="SystemShieldUpgrade" />
@@ -277,7 +278,7 @@
       <Column Name="Admin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="User_BuddyList" Member="BuddyLists" OtherKey="UserId" Type="BuddyList" />
       <Association Name="User_IgnoreList" Member="IgnoreLists" OtherKey="UserId" Type="IgnoreList" />
-      <Association Name="User_Message1" Member="Messages" Storage="_Messages1" OtherKey="RecipientUserId" Type="Message" />
+      <Association Name="User_Message" Member="Messages" Storage="_Messages1" OtherKey="RecipientUserId" Type="Message" />
       <Association Name="User_Player" Member="Players" OtherKey="UserId" Type="Player" />
       <Association Name="BuddyList_User" Member="OnBuddyLists" AccessModifier="Internal" ThisKey="UserId" OtherKey="FriendId" Type="BuddyList" IsForeignKey="true" />
       <Association Name="IgnoreList_User" Member="OnIgnoreLists" AccessModifier="Internal" ThisKey="UserId" OtherKey="AntiFriendId" Type="IgnoreList" IsForeignKey="true" />
