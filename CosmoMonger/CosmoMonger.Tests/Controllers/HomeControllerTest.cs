@@ -26,8 +26,8 @@ namespace CosmoMonger.Tests.Controllers
 
             // Assert
             ViewDataDictionary viewData = result.ViewData;
-            Assert.AreEqual("Home Page", viewData["Title"]);
-            Assert.AreEqual("Welcome to ASP.NET MVC!", viewData["Message"]);
+            Assert.AreEqual("CosmoMonger", viewData["Title"]);
+            Assert.AreEqual("Own the Cosmos!", viewData["Message"]);
         }
 
         [TestMethod]
@@ -41,7 +41,7 @@ namespace CosmoMonger.Tests.Controllers
 
             // Assert
             ViewDataDictionary viewData = result.ViewData;
-            Assert.AreEqual("About Page", viewData["Title"]);
+            Assert.AreEqual("About CosmoMonger", viewData["Title"]);
         }
     }
 }
