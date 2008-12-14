@@ -161,8 +161,12 @@ namespace CosmoMonger.Models
             // Find all systems within range of the JumpDrive
             var systems = (from s in db.CosmoSystems
                            where s != this.CosmoSystem
-                           && Math.Abs(this.CosmoSystem.PositionX - s.PositionX) < this.JumpDrive.Range
-                           && Math.Abs(this.CosmoSystem.PositionY - s.PositionY) < this.JumpDrive.Range
+                           // Use the distance formula
+                           // sqrt((x2 - x1)^2 + (y2 - y1)^2)
+                           && Math.Sqrt(
+                                Math.Pow(this.CosmoSystem.PositionX - s.PositionX, 2) 
+                                + Math.Pow(this.CosmoSystem.PositionY - s.PositionY, 2)
+                              ) < this.JumpDrive.Range
                            select s);
 
             return systems.ToArray();
