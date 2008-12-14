@@ -496,4 +496,80 @@
     <comment>Renamed Recieved column on the Message table to Received.</comment>
     <renameColumn tableName="Message" oldColumnName="Recieved" newColumnName="Received" />
   </changeSet>
+  <!--
+  <changeSet author="Jory Stone" id="8">
+    <comment>Dropping Foreign Key Constraints to recreate with cascade</comment>
+    <dropForeignKeyConstraint baseTableName="BaseShip" constraintName="FK_JumpDrive_BaseShip" />
+    <dropForeignKeyConstraint baseTableName="BaseShip" constraintName="FK_Shield_BaseShip" />
+    <dropForeignKeyConstraint baseTableName="BaseShip" constraintName="FK_Weapon_BaseShip" />
+    <dropForeignKeyConstraint baseTableName="BuddyList" constraintName="FK_User_BuddyList_2" />
+    <dropForeignKeyConstraint baseTableName="BuddyList" constraintName="FK_User_BuddyList_1" />
+    <dropForeignKeyConstraint baseTableName="IgnoreList" constraintName="FK_User_IgnoreList_2" />
+    <dropForeignKeyConstraint baseTableName="IgnoreList" constraintName="FK_User_IgnoreList_1" />
+    <dropForeignKeyConstraint baseTableName="InProgressCombat" constraintName="FK_Ship_InProgressCombat_1" />
+    <dropForeignKeyConstraint baseTableName="InProgressCombat" constraintName="FK_Ship_InProgressCombat_2" />
+    <dropForeignKeyConstraint baseTableName="Message" constraintName="FK_User_Message_2" />
+    <dropForeignKeyConstraint baseTableName="Message" constraintName="FK_User_Message_1" />
+    <dropForeignKeyConstraint baseTableName="Npc" constraintName="FK_NpcType_Npc" />
+    <dropForeignKeyConstraint baseTableName="Npc" constraintName="FK_Race_Npc" />
+    <dropForeignKeyConstraint baseTableName="Npc" constraintName="FK_Ship_Npc" />
+    <dropForeignKeyConstraint baseTableName="Player" constraintName="FK_Race_Player" />
+    <dropForeignKeyConstraint baseTableName="Player" constraintName="FK_Ship_Player" />
+    <dropForeignKeyConstraint baseTableName="Player" constraintName="FK_User_Player" />
+    <dropForeignKeyConstraint baseTableName="Ship" constraintName="FK_BaseShip_Ship" />
+    <dropForeignKeyConstraint baseTableName="Ship" constraintName="FK_JumpDrive_Ship" />
+    <dropForeignKeyConstraint baseTableName="Ship" constraintName="FK_Shield_Ship" />
+    <dropForeignKeyConstraint baseTableName="Ship" constraintName="FK_System_Ship" />
+    <dropForeignKeyConstraint baseTableName="Ship" constraintName="FK_Weapon_Ship" />
+    <dropForeignKeyConstraint baseTableName="ShipGood" constraintName="FK_Good_ShipGood" />
+    <dropForeignKeyConstraint baseTableName="ShipGood" constraintName="FK_Ship_ShipGood" />
+    <dropForeignKeyConstraint baseTableName="SystemGood" constraintName="FK_Good_SystemGood" />
+    <dropForeignKeyConstraint baseTableName="SystemGood" constraintName="FK_System_SystemGood" />
+    <dropForeignKeyConstraint baseTableName="SystemJumpDriveUpgrade" constraintName="FK_JumpDrive_SystemJumpDriveUpgrade" />
+    <dropForeignKeyConstraint baseTableName="SystemJumpDriveUpgrade" constraintName="FK_System_SystemJumpDriveUpgrade" />
+    <dropForeignKeyConstraint baseTableName="SystemShieldUpgrade" constraintName="FK_Shield_SystemShieldUpgrade" />
+    <dropForeignKeyConstraint baseTableName="SystemShieldUpgrade" constraintName="FK_System_SystemShieldUpgrade" />
+    <dropForeignKeyConstraint baseTableName="SystemShip" constraintName="FK_BaseShip_SystemShip" />
+    <dropForeignKeyConstraint baseTableName="SystemShip" constraintName="FK_System_SystemShip" />
+    <dropForeignKeyConstraint baseTableName="SystemWeaponUpgrade" constraintName="FK_System_SystemWeaponUpgrade" />
+    <dropForeignKeyConstraint baseTableName="SystemWeaponUpgrade" constraintName="FK_Weapon_SystemWeaponUpgrade" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="9">
+    <comment>Recreating Foreign Key Constraints with cascade</comment>
+    <addForeignKeyConstraint baseColumnNames="InitialJumpDriveId" baseTableName="BaseShip" constraintName="FK_JumpDrive_BaseShip" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="JumpDriveId" referencedTableName="JumpDrive"/>
+    <addForeignKeyConstraint baseColumnNames="InitialShieldId" baseTableName="BaseShip" constraintName="FK_Shield_BaseShip" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShieldId" referencedTableName="Shield"/>
+    <addForeignKeyConstraint baseColumnNames="InitialWeaponId" baseTableName="BaseShip" constraintName="FK_Weapon_BaseShip" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="WeaponId" referencedTableName="Weapon"/>
+    <addForeignKeyConstraint baseColumnNames="FriendId" baseTableName="BuddyList" constraintName="FK_User_BuddyList_2" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    <addForeignKeyConstraint baseColumnNames="UserId" baseTableName="BuddyList" constraintName="FK_User_BuddyList_1" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    <addForeignKeyConstraint baseColumnNames="AntiFriendId" baseTableName="IgnoreList" constraintName="FK_User_IgnoreList_2" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    <addForeignKeyConstraint baseColumnNames="UserId" baseTableName="IgnoreList" constraintName="FK_User_IgnoreList_1" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    <addForeignKeyConstraint baseColumnNames="AttackerShipId" baseTableName="InProgressCombat" constraintName="FK_Ship_InProgressCombat_1" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+    <addForeignKeyConstraint baseColumnNames="DefenderShipId" baseTableName="InProgressCombat" constraintName="FK_Ship_InProgressCombat_2" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+    <addForeignKeyConstraint baseColumnNames="RecipientUserId" baseTableName="Message" constraintName="FK_User_Message_2" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    <addForeignKeyConstraint baseColumnNames="SenderUserId" baseTableName="Message" constraintName="FK_User_Message_1" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    <addForeignKeyConstraint baseColumnNames="NpcTypeId" baseTableName="Npc" constraintName="FK_NpcType_Npc" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="NpcTypeId" referencedTableName="NpcType"/>
+    <addForeignKeyConstraint baseColumnNames="RaceId" baseTableName="Npc" constraintName="FK_Race_Npc" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="RaceId" referencedTableName="Race"/>
+    <addForeignKeyConstraint baseColumnNames="ShipId" baseTableName="Npc" constraintName="FK_Ship_Npc" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+    <addForeignKeyConstraint baseColumnNames="RaceId" baseTableName="Player" constraintName="FK_Race_Player" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="RaceId" referencedTableName="Race"/>
+    <addForeignKeyConstraint baseColumnNames="ShipId" baseTableName="Player" constraintName="FK_Ship_Player" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+    <addForeignKeyConstraint baseColumnNames="UserId" baseTableName="Player" constraintName="FK_User_Player" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="UserId" referencedTableName="User"/>
+    <addForeignKeyConstraint baseColumnNames="BaseShipId" baseTableName="Ship" constraintName="FK_BaseShip_Ship" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="BaseShipId" referencedTableName="BaseShip"/>
+    <addForeignKeyConstraint baseColumnNames="JumpDriveId" baseTableName="Ship" constraintName="FK_JumpDrive_Ship" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="JumpDriveId" referencedTableName="JumpDrive"/>
+    <addForeignKeyConstraint baseColumnNames="ShieldId" baseTableName="Ship" constraintName="FK_Shield_Ship" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShieldId" referencedTableName="Shield"/>
+    <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="Ship" constraintName="FK_System_Ship" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    <addForeignKeyConstraint baseColumnNames="WeaponId" baseTableName="Ship" constraintName="FK_Weapon_Ship" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="WeaponId" referencedTableName="Weapon"/>
+    <addForeignKeyConstraint baseColumnNames="GoodId" baseTableName="ShipGood" constraintName="FK_Good_ShipGood" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="GoodId" referencedTableName="Good"/>
+    <addForeignKeyConstraint baseColumnNames="ShipId" baseTableName="ShipGood" constraintName="FK_Ship_ShipGood" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+    <addForeignKeyConstraint baseColumnNames="GoodId" baseTableName="SystemGood" constraintName="FK_Good_SystemGood" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="GoodId" referencedTableName="Good"/>
+    <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="SystemGood" constraintName="FK_System_SystemGood" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    <addForeignKeyConstraint baseColumnNames="JumpDriveId" baseTableName="SystemJumpDriveUpgrade" constraintName="FK_JumpDrive_SystemJumpDriveUpgrade" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="JumpDriveId" referencedTableName="JumpDrive"/>
+    <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="SystemJumpDriveUpgrade" constraintName="FK_System_SystemJumpDriveUpgrade" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    <addForeignKeyConstraint baseColumnNames="ShieldId" baseTableName="SystemShieldUpgrade" constraintName="FK_Shield_SystemShieldUpgrade" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShieldId" referencedTableName="Shield"/>
+    <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="SystemShieldUpgrade" constraintName="FK_System_SystemShieldUpgrade" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    <addForeignKeyConstraint baseColumnNames="BaseShipId" baseTableName="SystemShip" constraintName="FK_BaseShip_SystemShip" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="BaseShipId" referencedTableName="BaseShip"/>
+    <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="SystemShip" constraintName="FK_System_SystemShip" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    <addForeignKeyConstraint baseColumnNames="SystemId" baseTableName="SystemWeaponUpgrade" constraintName="FK_System_SystemWeaponUpgrade" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    <addForeignKeyConstraint baseColumnNames="WeaponId" baseTableName="SystemWeaponUpgrade" constraintName="FK_Weapon_SystemWeaponUpgrade" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="WeaponId" referencedTableName="Weapon"/>
+  </changeSet>
+  -->
 </databaseChangeLog>

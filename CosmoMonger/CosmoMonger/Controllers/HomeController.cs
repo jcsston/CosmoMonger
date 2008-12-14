@@ -15,7 +15,7 @@
 
         public ActionResult Index()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User != null && User.Identity.IsAuthenticated)
             {
                 gameManager = new GameManager(User.Identity.Name);
             }

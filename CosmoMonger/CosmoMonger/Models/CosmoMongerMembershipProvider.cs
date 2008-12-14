@@ -13,14 +13,14 @@ namespace CosmoMonger.Models
 	using System.Text;
     using System.Web;
     using System.Web.Security;
-	using System.Security.Cryptography;
-	using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
     /// This is an implementation of the System.Web.Security.MembershipProvider class and will be used by the AccountController
     /// </summary>
     public class CosmoMongerMembershipProvider : MembershipProvider
     {
+        private UserManager userManager = new UserManager();
+
 		/// <summary>
 		/// Gets the name of the application using the custom membership provider.
 		/// </summary>
@@ -134,26 +134,6 @@ namespace CosmoMonger.Models
             get { return true; }
         }
 
-		/// <summary>
-		/// Hashes the password using SHA1
-		/// </summary>
-		/// <param name="password">The password to hash.</param>
-		/// <returns>byte array containing the SHA1 hash.</returns>
-		private byte [] HashPassword(string password)
-		{
-			Logger.Write("Hashing Password: " + password, "Business Object", 1, 1000, TraceEventType.Verbose);
-			// We need to convert the password string to a byte string for encoding
-			byte[] passwordBytes = Encoding.Default.GetBytes("CosmoMonger" + password);
-			SHA1 hasher = SHA1Managed.Create();
-			// Hash the password multiple times to make brute force attacks harder
-			for (int i = 0; i < 1000; i++)
-			{
-				passwordBytes = hasher.ComputeHash(passwordBytes);
-			}
-			Logger.Write("Hashed Password to: " + passwordBytes.ToString(), "Business Object", 1, 1001, TraceEventType.Verbose);
-			return passwordBytes;
-		}
-
 		private MembershipUser DatabaseUserToMembershipUser(User u)
 		{
 			return new MembershipUser("CosmoMongerMembershipProvider", u.UserName, null, u.Email, null, null, u.Validated, u.Active, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now);
@@ -175,37 +155,35 @@ namespace CosmoMonger.Models
 		/// </returns>
 		public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
 		{
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            try
+            {
+                // Create the new user
+                User user = userManager.CreateUser(username, password, email);
 
-			// Check for an existing user
-			bool matchingUsername = (from u in db.Users where u.UserName == username select u).Any();
-			if (matchingUsername)
-			{
-				status = MembershipCreateStatus.DuplicateUserName;
-				return null;
-			}
-            bool matchingEmail = (GetUserNameByEmail(email) != "");
-			if (matchingEmail)
-			{
-				status = MembershipCreateStatus.DuplicateEmail;
-				return null;
-			}
-
-			// Create the new user
-			User user = new User();
-			user.UserName = username;
-			user.Email = email;
-			user.Password = HashPassword(password);
-			user.Active = isApproved;
-            user.Validated = true;
-
-			// Insert the user record into the database
-			db.Users.InsertOnSubmit(user);
-			db.SubmitChanges();
-
-			status = MembershipCreateStatus.Success;
-
-			return DatabaseUserToMembershipUser(user);
+                status = MembershipCreateStatus.Success;
+                return DatabaseUserToMembershipUser(user);
+            }
+            catch (ArgumentException ex)
+            {
+                if (ex.ParamName == "username")
+                {
+                    status = MembershipCreateStatus.DuplicateUserName;
+                }
+                else if (ex.ParamName == "email")
+                {
+                    status = MembershipCreateStatus.DuplicateEmail;
+                }
+                else if (ex.ParamName == "password")
+                {
+                    status = MembershipCreateStatus.InvalidPassword;
+                }
+                else
+                {
+                    // We don't know how to handle this error
+                    status = MembershipCreateStatus.ProviderError;
+                }
+                return null;
+            }
 		}
 
 		/// <summary>
@@ -218,12 +196,7 @@ namespace CosmoMonger.Models
 		/// </returns>
 		public override bool ValidateUser(string username, string password)
 		{
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
-			bool validLogin = (from u in db.Users 
-							   where u.UserName == username 
-							   && u.Password == HashPassword(password) 
-							   && u.Validated && u.Active select u).Any();
-			return validLogin;
+			return userManager.ValidateUser(username, password);
 		}
 
 		public override bool DeleteUser(string username, bool deleteAllRelatedData)
@@ -242,20 +215,7 @@ namespace CosmoMonger.Models
 		/// </returns>
         public override bool ChangePassword(string username, string oldPassword, string newPassword)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
-			// Find the user in the database and verify the current password
-			User currentUser = (from u in db.Users
-							   where u.UserName == username
-							   && u.Password == HashPassword(oldPassword)
-							   select u).First();
-			if (currentUser != null)
-			{
-				// Update the users password
-				currentUser.Password = HashPassword(newPassword);
-				db.SubmitChanges();
-				return true;
-			}
-			return false;
+			return userManager.ChangePassword(username, oldPassword, newPassword);
         }
 
         public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
@@ -308,10 +268,7 @@ namespace CosmoMonger.Models
 		/// </returns>
         public override string GetUserNameByEmail(string email)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
-			User matchingUser = (from u in db.Users
-								 where u.Email == email
-								 select u).First();
+			User matchingUser = userManager.GetUserByEmail(email);
 			if (matchingUser != null)
 			{
 				return matchingUser.UserName;

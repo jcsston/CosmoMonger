@@ -1,24 +1,27 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CosmoMonger.Models;
-using System.Web.Security;
-
-namespace CosmoMonger.Tests.Models
+﻿namespace CosmoMonger.Tests.Models
 {
+    using System;
+    using System.Text;
+    using System.Collections.Generic;
+    using System.Linq;
+    using CosmoMonger.Models;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    
+
     /// <summary>
     /// Summary description for UserTest
     /// </summary>
     [TestClass]
     public class UserTest
     {
+        private string baseTestUsername;
+        private string baseTestEmail;
+
         public UserTest()
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            string postFix = DateTime.Now.ToBinary().ToString();
+            baseTestUsername = "testUser_" + postFix;
+            baseTestEmail = "testUser_" + postFix + "@cosmomonger.com";
         }
 
         private TestContext testContextInstance;
@@ -64,54 +67,87 @@ namespace CosmoMonger.Tests.Models
         [TestMethod]
         public void TestCreatePlayer()
         {
-            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
-            MembershipCreateStatus status;
-            MembershipUser user = provider.CreateUser("testUser", "test1000", "test@cosmomonger.com", null, null, true, null, out status);
-            Assert.AreEqual(MembershipCreateStatus.Success, status, "Test User is created");
+            UserManager userManager = new UserManager();
+            User testUser = userManager.CreateUser("create" + this.baseTestUsername, "test1000", "create" + this.baseTestEmail);
+            Assert.IsNotNull(testUser, "Test User is created");
+            Assert.AreEqual(testUser.UserName, "create" + this.baseTestUsername, "Test User has correct username");
+            Assert.AreEqual(testUser.Email, "create" + this.baseTestEmail, "Test User has correct e-mail");
 
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            User testUser = (from u in db.Users where u.UserName == "testUser" select u).SingleOrDefault();
+            testUser = userManager.GetUserByUserName("create"+ this.baseTestUsername);
             Assert.IsNotNull(testUser, "Test User exists in the database");
+            Assert.AreEqual(testUser.UserName, "create" + this.baseTestUsername, "Test User has correct username");
+            Assert.AreEqual(testUser.Email, "create" + this.baseTestEmail, "Test User has correct e-mail");
+
         }
 
         [TestMethod]
         public void TestUpdateProfile()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            User testUser = (from u in db.Users where u.UserName == "testUser" select u).SingleOrDefault();
+            UserManager userManager = new UserManager();
+            User testUser = userManager.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail);
             Assert.IsNotNull(testUser, "Test User exists in the database");
+            Assert.AreEqual(testUser.UserName, this.baseTestUsername, "Test User has correct username");
+            Assert.AreEqual(testUser.Email, this.baseTestEmail, "Test User has correct e-mail");
 
-            testUser.UpdateProfile("testUser1", "test1@cosmomonger.com");
+            // Test the updating of just the username
+            testUser.UpdateProfile("update"+baseTestUsername, testUser.Email);
 
-            User testUser1 = (from u in db.Users where u.UserName == "testUser1" select u).SingleOrDefault();
-            Assert.IsNotNull(testUser1, "Updated Test User exists in the database");
+            testUser = userManager.GetUserByUserName("update" + this.baseTestUsername);
+            Assert.IsNotNull(testUser, "Test User with updated username exists in the database");
+            Assert.AreEqual(testUser.UserName, "update" + this.baseTestUsername, "Test User actually has updated username");
+            Assert.AreEqual(testUser.Email, this.baseTestEmail, "Test User actually has orignal e-mail");
 
-            testUser1.UpdateProfile("testUser", "test@cosmomonger.com");
 
-            User testUser2 = (from u in db.Users where u.UserName == "testUser" select u).SingleOrDefault();
-            Assert.IsNotNull(testUser1, "Reverted Test User exists in the database");
+            // Test the updating of the e-mail
+            testUser.UpdateProfile(testUser.UserName, "update" + this.baseTestEmail);
+
+            testUser = userManager.GetUserByEmail("update" + this.baseTestEmail);
+            Assert.IsNotNull(testUser, "Test User with updated e-mail exists in the database");
+            Assert.AreEqual(testUser.UserName, "update" + this.baseTestUsername, "Test User actually has updated username");
+            Assert.AreEqual(testUser.Email, "update" + this.baseTestEmail, "Test User actually has updated e-mail");
+
+
+            // Test the updating of both username and the e-mail
+            testUser.UpdateProfile("update" + this.baseTestUsername, "update" + this.baseTestEmail);
+
+            testUser = userManager.GetUserByEmail("update" + this.baseTestEmail);
+            Assert.IsNotNull(testUser, "Test User with updated e-mail exists in the database");
+            Assert.AreEqual(testUser.UserName, "update" + this.baseTestUsername, "Test User actually has updated username");
+            Assert.AreEqual(testUser.Email, "update" + this.baseTestEmail, "Test User actually has updated e-mail");
+
+
+            // Test updating back to the orignal profile values
+            testUser.UpdateProfile(this.baseTestUsername, this.baseTestEmail);
+
+            testUser = userManager.GetUserByUserName(this.baseTestUsername);
+            Assert.IsNotNull(testUser, "Reverted Test User exists in the database");
+            Assert.AreEqual(testUser.UserName, this.baseTestUsername, "Test User actually has orignal username");
+            Assert.AreEqual(testUser.Email, this.baseTestEmail, "Test User actually has orignal e-mail");
         }
 
+        /// <summary>
+        /// Tests the send message.
+        /// </summary>
         [TestMethod]
         public void TestSendMessage()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            User testUser = (from u in db.Users where u.UserName == "testUser" select u).SingleOrDefault();
-            Assert.IsNotNull(testUser, "Test User exists in the database");
+            UserManager userManager = new UserManager();
+            User testUser1 = userManager.CreateUser("msg1" + this.baseTestUsername, "test1000", "msg1" + this.baseTestEmail);
+            Assert.IsNotNull(testUser1, "Test User 1 is created");
 
-            User testUser1 = (from u in db.Users where u.UserName == "testUser1" select u).SingleOrDefault();
-            Assert.IsNotNull(testUser1, "Updated Test User exists in the database");
+            User testUser2 = userManager.CreateUser("msg2" + this.baseTestUsername, "test1000", "msg2" + this.baseTestEmail);
+            Assert.IsNotNull(testUser2, "Test User 2 is created");
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10; i++)
             {
-                testUser.SendMessage(testUser1, "Hello world!");
+                testUser1.SendMessage(testUser2, "Hello world!");
             }
 
-            Message [] messages = testUser.FetchUnreadMessages();
+            Message [] messages = testUser1.FetchUnreadMessages();
             foreach (Message msg in messages)
             {
-                Assert.AreEqual(msg.RecipientUserId, testUser.UserId, "Recipient user should match the user the message is stored under");
-                Assert.AreEqual(msg.SenderUserId, testUser1.UserId, "Sender user should match the user the message from");
+                Assert.AreEqual(msg.RecipientUserId, testUser1.UserId, "Recipient user should match the user the message is stored under");
+                Assert.AreEqual(msg.SenderUserId, testUser2.UserId, "Sender user should match the user the message from");
                 Assert.AreEqual(msg.Content, "Hello world!", "Message should match what we sent");
                 Assert.IsFalse(msg.Received, "This message should not be read yet.");
                 msg.MarkAsReceived();
