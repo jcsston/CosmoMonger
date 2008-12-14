@@ -7,16 +7,10 @@
 namespace CosmoMonger.Models
 {
     using System;
-    using System.Data;
     using System.Configuration;
+    using System.Data;
+    using System.Diagnostics;
     using System.Linq;
-    using System.Web;
-    using System.Web.Security;
-    using System.Web.UI;
-    using System.Web.UI.HtmlControls;
-    using System.Web.UI.WebControls;
-    using System.Web.UI.WebControls.WebParts;
-    using System.Xml.Linq;
 
     /// <summary>
     /// Extension of the partial LINQ class Ship
@@ -53,6 +47,33 @@ namespace CosmoMonger.Models
             }
         }
 
+
+        /// <summary>
+        /// Gets the current trade-in value for this ship.
+        /// Calculated by looking in the current system and seeing what a matching ship is selling for, if that is not found then
+        /// the BaseShip.BasePrice is taken.
+        /// </summary>
+        public int TradeInValue
+        {
+            get
+            {
+                // Starting value is the base price
+                int shipValue = BaseShip.BasePrice;
+
+                // If the same ship is for sell in the current system, that price replaces shipValue
+                SystemShip matchingShip = (from ss in this.CosmoSystem.SystemShips
+                                           where ss.BaseShip == this.BaseShip
+                                           select ss).SingleOrDefault();
+                if (matchingShip != null)
+                {
+                    shipValue = matchingShip.Price;
+                }
+
+                // Take 20% off the face value of the ship to account for wear and tear
+                return (int)(shipValue * 0.80);
+            }
+        }
+
         /// <summary>
         /// Starts the ship traveling to the target system.
         /// If the ship is already in the target system an InvalidOperationException is thrown.
@@ -70,7 +91,7 @@ namespace CosmoMonger.Models
             }
 
             // Check that the system is within range
-            CosmoSystem[] inRangeSystems = GetInRangeSystems();
+            CosmoSystem[] inRangeSystems = this.GetInRangeSystems();
             if (!inRangeSystems.Contains(targetSystem))
             {
                 throw new ArgumentOutOfRangeException("Target system is out of JumpDrive range", "targetSystem");
@@ -93,6 +114,40 @@ namespace CosmoMonger.Models
             db.SubmitChanges();
 
             return travelTime;
+        }
+
+        /// <summary>
+        /// Checks if ship is currently traveling.
+        /// </summary>
+        /// <returns>true if traveling, false if no longer traveling</returns>
+        public bool CheckIfTraveling()
+        {
+            // Do we have an arrival time?
+            if (this.TargetSystemArrivalTime != null)
+            {
+                // Assert that there also is a target system id (should never happen)
+                Debug.Assert(this.TargetSystemId.HasValue, "There also should be a target system");
+
+                // Has the arrival time passed?
+                if (this.TargetSystemArrivalTime < DateTime.Now)
+                {
+                    // The ship has arrived, change the location of the ship and clear out the travel fields
+                    this.SystemId = this.TargetSystemId.Value;
+                    this.TargetSystemId = null;
+                    this.TargetSystemArrivalTime = null;
+
+                    // Send changes to the database
+                    CosmoMongerDbDataContext db = GameManager.GetDbContext();
+                    db.SubmitChanges();
+                }
+                else
+                {
+                    // Ship is still traveling
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
