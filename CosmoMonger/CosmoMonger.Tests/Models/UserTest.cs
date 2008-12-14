@@ -62,7 +62,7 @@ namespace CosmoMonger.Tests.Models
         #endregion
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestCreatePlayer()
         {
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
@@ -72,13 +72,51 @@ namespace CosmoMonger.Tests.Models
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
             User testUser = (from u in db.Users where u.UserName == "testUser" select u).SingleOrDefault();
             Assert.IsNotNull(testUser, "Test User exists in the database");
+        }
+
+        [TestMethod]
+        public void TestUpdateProfile()
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            User testUser = (from u in db.Users where u.UserName == "testUser" select u).SingleOrDefault();
+            Assert.IsNotNull(testUser, "Test User exists in the database");
 
             testUser.UpdateProfile("testUser1", "test1@cosmomonger.com");
 
             User testUser1 = (from u in db.Users where u.UserName == "testUser1" select u).SingleOrDefault();
-            Assert.IsNotNull(testUser1, "Test User exists in the database");
+            Assert.IsNotNull(testUser1, "Updated Test User exists in the database");
 
-            provider.DeleteUser("testUser1", false);
+            testUser1.UpdateProfile("testUser", "test@cosmomonger.com");
+
+            User testUser2 = (from u in db.Users where u.UserName == "testUser" select u).SingleOrDefault();
+            Assert.IsNotNull(testUser1, "Reverted Test User exists in the database");
+        }
+
+        [TestMethod]
+        public void TestSendMessage()
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            User testUser = (from u in db.Users where u.UserName == "testUser" select u).SingleOrDefault();
+            Assert.IsNotNull(testUser, "Test User exists in the database");
+
+            User testUser1 = (from u in db.Users where u.UserName == "testUser1" select u).SingleOrDefault();
+            Assert.IsNotNull(testUser1, "Updated Test User exists in the database");
+
+            for (int i = 0; i < 100; i++)
+            {
+                testUser.SendMessage(testUser1, "Hello world!");
+            }
+
+            Message [] messages = testUser.FetchUnreadMessages();
+            foreach (Message msg in messages)
+            {
+                Assert.AreEqual(msg.RecipientUserId, testUser.UserId, "Recipient user should match the user the message is stored under");
+                Assert.AreEqual(msg.SenderUserId, testUser1.UserId, "Sender user should match the user the message from");
+                Assert.AreEqual(msg.Content, "Hello world!", "Message should match what we sent");
+                Assert.IsFalse(msg.Received, "This message should not be read yet.");
+                msg.MarkAsReceived();
+                Assert.IsTrue(msg.Received, "This message should now be read.");
+            }
         }
     }
 }

@@ -966,8 +966,6 @@ namespace CosmoMonger.Models
 		
 		private int _FriendId;
 		
-		private EntityRef<User> _Friend;
-		
 		private EntityRef<User> _User;
 		
     #region Extensibility Method Definitions
@@ -982,7 +980,6 @@ namespace CosmoMonger.Models
 		
 		public BuddyList()
 		{
-			this._Friend = default(EntityRef<User>);
 			this._User = default(EntityRef<User>);
 			OnCreated();
 		}
@@ -1027,35 +1024,6 @@ namespace CosmoMonger.Models
 					this._FriendId = value;
 					this.SendPropertyChanged("FriendId");
 					this.OnFriendIdChanged();
-				}
-			}
-		}
-		
-		[Association(Name="BuddyList_User", Storage="_Friend", ThisKey="FriendId", IsUnique=true, IsForeignKey=false)]
-		public User Friend
-		{
-			get
-			{
-				return this._Friend.Entity;
-			}
-			set
-			{
-				User previousValue = this._Friend.Entity;
-				if (((previousValue != value) 
-							|| (this._Friend.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Friend.Entity = null;
-						previousValue.OnBuddyLists = null;
-					}
-					this._Friend.Entity = value;
-					if ((value != null))
-					{
-						value.OnBuddyLists = this;
-					}
-					this.SendPropertyChanged("Friend");
 				}
 			}
 		}
@@ -1315,8 +1283,6 @@ namespace CosmoMonger.Models
 		
 		private int _AntiFriendId;
 		
-		private EntityRef<User> _AntiFriend;
-		
 		private EntityRef<User> _User;
 		
     #region Extensibility Method Definitions
@@ -1331,7 +1297,6 @@ namespace CosmoMonger.Models
 		
 		public IgnoreList()
 		{
-			this._AntiFriend = default(EntityRef<User>);
 			this._User = default(EntityRef<User>);
 			OnCreated();
 		}
@@ -1376,35 +1341,6 @@ namespace CosmoMonger.Models
 					this._AntiFriendId = value;
 					this.SendPropertyChanged("AntiFriendId");
 					this.OnAntiFriendIdChanged();
-				}
-			}
-		}
-		
-		[Association(Name="IgnoreList_User", Storage="_AntiFriend", ThisKey="AntiFriendId", IsUnique=true, IsForeignKey=false)]
-		public User AntiFriend
-		{
-			get
-			{
-				return this._AntiFriend.Entity;
-			}
-			set
-			{
-				User previousValue = this._AntiFriend.Entity;
-				if (((previousValue != value) 
-							|| (this._AntiFriend.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._AntiFriend.Entity = null;
-						previousValue.OnIgnoreLists = null;
-					}
-					this._AntiFriend.Entity = value;
-					if ((value != null))
-					{
-						value.OnIgnoreLists = this;
-					}
-					this.SendPropertyChanged("AntiFriend");
 				}
 			}
 		}
@@ -2012,8 +1948,6 @@ namespace CosmoMonger.Models
 		
 		private bool _Read;
 		
-		private EntityRef<User> _SenderUser;
-		
 		private EntityRef<User> _User1;
 		
     #region Extensibility Method Definitions
@@ -2030,13 +1964,12 @@ namespace CosmoMonger.Models
     partial void OnContentChanged();
     partial void OnTimeChanging(System.DateTime value);
     partial void OnTimeChanged();
-    partial void OnReadChanging(bool value);
-    partial void OnReadChanged();
+    partial void OnReceivedChanging(bool value);
+    partial void OnReceivedChanged();
     #endregion
 		
 		public Message()
 		{
-			this._SenderUser = default(EntityRef<User>);
 			this._User1 = default(EntityRef<User>);
 			OnCreated();
 		}
@@ -2145,8 +2078,8 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Name="[Read]", Storage="_Read", DbType="Bit NOT NULL")]
-		public bool Read
+		[Column(Storage="_Read", DbType="Bit NOT NULL")]
+		public bool Received
 		{
 			get
 			{
@@ -2156,40 +2089,11 @@ namespace CosmoMonger.Models
 			{
 				if ((this._Read != value))
 				{
-					this.OnReadChanging(value);
+					this.OnReceivedChanging(value);
 					this.SendPropertyChanging();
 					this._Read = value;
-					this.SendPropertyChanged("Read");
-					this.OnReadChanged();
-				}
-			}
-		}
-		
-		[Association(Name="Message_User", Storage="_SenderUser", ThisKey="SenderUserId", IsUnique=true, IsForeignKey=false)]
-		public User SenderUser
-		{
-			get
-			{
-				return this._SenderUser.Entity;
-			}
-			set
-			{
-				User previousValue = this._SenderUser.Entity;
-				if (((previousValue != value) 
-							|| (this._SenderUser.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._SenderUser.Entity = null;
-						previousValue.SentMessages = null;
-					}
-					this._SenderUser.Entity = value;
-					if ((value != null))
-					{
-						value.SentMessages = this;
-					}
-					this.SendPropertyChanged("SenderUser");
+					this.SendPropertyChanged("Received");
+					this.OnReceivedChanged();
 				}
 			}
 		}
@@ -6182,12 +6086,6 @@ namespace CosmoMonger.Models
 		
 		private EntitySet<Player> _Players;
 		
-		private EntityRef<BuddyList> _OnBuddyLists;
-		
-		private EntityRef<IgnoreList> _OnIgnoreLists;
-		
-		private EntityRef<Message> _SentMessages;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -6214,9 +6112,6 @@ namespace CosmoMonger.Models
 			this._IgnoreLists = new EntitySet<IgnoreList>(new Action<IgnoreList>(this.attach_IgnoreLists), new Action<IgnoreList>(this.detach_IgnoreLists));
 			this._Messages1 = new EntitySet<Message>(new Action<Message>(this.attach_Messages1), new Action<Message>(this.detach_Messages1));
 			this._Players = new EntitySet<Player>(new Action<Player>(this.attach_Players), new Action<Player>(this.detach_Players));
-			this._OnBuddyLists = default(EntityRef<BuddyList>);
-			this._OnIgnoreLists = default(EntityRef<IgnoreList>);
-			this._SentMessages = default(EntityRef<Message>);
 			OnCreated();
 		}
 		
@@ -6231,10 +6126,6 @@ namespace CosmoMonger.Models
 			{
 				if ((this._UserId != value))
 				{
-					if (this._OnBuddyLists.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnUserIdChanging(value);
 					this.SendPropertyChanging();
 					this._UserId = value;
@@ -6413,108 +6304,6 @@ namespace CosmoMonger.Models
 			set
 			{
 				this._Players.Assign(value);
-			}
-		}
-		
-		[Association(Name="BuddyList_User", Storage="_OnBuddyLists", ThisKey="UserId", OtherKey="FriendId", IsForeignKey=true)]
-		internal BuddyList OnBuddyLists
-		{
-			get
-			{
-				return this._OnBuddyLists.Entity;
-			}
-			set
-			{
-				BuddyList previousValue = this._OnBuddyLists.Entity;
-				if (((previousValue != value) 
-							|| (this._OnBuddyLists.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._OnBuddyLists.Entity = null;
-						previousValue.Friend = null;
-					}
-					this._OnBuddyLists.Entity = value;
-					if ((value != null))
-					{
-						value.Friend = this;
-						this._UserId = value.FriendId;
-					}
-					else
-					{
-						this._UserId = default(int);
-					}
-					this.SendPropertyChanged("OnBuddyLists");
-				}
-			}
-		}
-		
-		[Association(Name="IgnoreList_User", Storage="_OnIgnoreLists", ThisKey="UserId", OtherKey="AntiFriendId", IsForeignKey=true)]
-		internal IgnoreList OnIgnoreLists
-		{
-			get
-			{
-				return this._OnIgnoreLists.Entity;
-			}
-			set
-			{
-				IgnoreList previousValue = this._OnIgnoreLists.Entity;
-				if (((previousValue != value) 
-							|| (this._OnIgnoreLists.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._OnIgnoreLists.Entity = null;
-						previousValue.AntiFriend = null;
-					}
-					this._OnIgnoreLists.Entity = value;
-					if ((value != null))
-					{
-						value.AntiFriend = this;
-						this._UserId = value.AntiFriendId;
-					}
-					else
-					{
-						this._UserId = default(int);
-					}
-					this.SendPropertyChanged("OnIgnoreLists");
-				}
-			}
-		}
-		
-		[Association(Name="Message_User", Storage="_SentMessages", ThisKey="UserId", OtherKey="SenderUserId", IsForeignKey=true)]
-		internal Message SentMessages
-		{
-			get
-			{
-				return this._SentMessages.Entity;
-			}
-			set
-			{
-				Message previousValue = this._SentMessages.Entity;
-				if (((previousValue != value) 
-							|| (this._SentMessages.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._SentMessages.Entity = null;
-						previousValue.SenderUser = null;
-					}
-					this._SentMessages.Entity = value;
-					if ((value != null))
-					{
-						value.SenderUser = this;
-						this._UserId = value.SenderUserId;
-					}
-					else
-					{
-						this._UserId = default(int);
-					}
-					this.SendPropertyChanged("SentMessages");
-				}
 			}
 		}
 		

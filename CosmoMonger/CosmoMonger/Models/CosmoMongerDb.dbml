@@ -34,7 +34,6 @@
     <Type Name="BuddyList">
       <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="FriendId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="BuddyList_User" Member="Friend" ThisKey="FriendId" OtherKey="UserId" Type="User" Cardinality="One" />
       <Association Name="User_BuddyList" Member="User" ThisKey="UserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
@@ -52,7 +51,6 @@
     <Type Name="IgnoreList">
       <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="AntiFriendId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="IgnoreList_User" Member="AntiFriend" ThisKey="AntiFriendId" OtherKey="UserId" Type="User" Cardinality="One" />
       <Association Name="User_IgnoreList" Member="User" ThisKey="UserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
@@ -88,8 +86,7 @@
       <Column Name="SenderUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Content" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Column Name="Time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="[Read]" Member="Read" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="Message_User" Member="SenderUser" ThisKey="SenderUserId" OtherKey="UserId" Type="User" Cardinality="One" />
+      <Column Name="Received" Storage="_Read" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="User_Message" Member="RecipientUser" Storage="_User1" ThisKey="RecipientUserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
@@ -281,9 +278,6 @@
       <Association Name="User_IgnoreList" Member="IgnoreLists" OtherKey="UserId" Type="IgnoreList" />
       <Association Name="User_Message" Member="Messages" Storage="_Messages1" OtherKey="RecipientUserId" Type="Message" />
       <Association Name="User_Player" Member="Players" OtherKey="UserId" Type="Player" />
-      <Association Name="BuddyList_User" Member="OnBuddyLists" AccessModifier="Internal" ThisKey="UserId" OtherKey="FriendId" Type="BuddyList" IsForeignKey="true" />
-      <Association Name="IgnoreList_User" Member="OnIgnoreLists" AccessModifier="Internal" ThisKey="UserId" OtherKey="AntiFriendId" Type="IgnoreList" IsForeignKey="true" />
-      <Association Name="Message_User" Member="SentMessages" AccessModifier="Internal" ThisKey="UserId" OtherKey="SenderUserId" Type="Message" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

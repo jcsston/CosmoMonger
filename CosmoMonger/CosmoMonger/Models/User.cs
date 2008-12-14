@@ -93,7 +93,7 @@ namespace CosmoMonger.Models
         public void AddBuddy(User buddy)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            bool matchingBuddy = (from bl in this.BuddyLists where bl.Friend == buddy select bl).Any();
+            bool matchingBuddy = (from bl in this.BuddyLists where bl.FriendId == buddy.UserId select bl).Any();
             if (matchingBuddy)
             {
                 throw new ArgumentException("User is already in the buddy list", "buddy");
@@ -101,7 +101,7 @@ namespace CosmoMonger.Models
 
             BuddyList buddyEntry = new BuddyList();
             buddyEntry.User = this;
-            buddyEntry.Friend = buddy;
+            buddyEntry.FriendId = buddy.UserId;
             this.BuddyLists.Add(buddyEntry);
             db.SubmitChanges();
         }
@@ -114,7 +114,7 @@ namespace CosmoMonger.Models
         public void RemoveBuddy(User buddy)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            BuddyList buddyToRemove = (from bl in this.BuddyLists where bl.Friend == buddy select bl).SingleOrDefault();
+            BuddyList buddyToRemove = (from bl in this.BuddyLists where bl.FriendId == buddy.UserId select bl).SingleOrDefault();
             if (buddyToRemove == null)
             {
                 throw new ArgumentException("User is not in the buddy list", "buddy");
@@ -140,7 +140,7 @@ namespace CosmoMonger.Models
         public void AddIgnore(User ignoreUser)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            bool matchingAntiFriend = (from il in this.IgnoreLists where il.AntiFriend == ignoreUser select il).Any();
+            bool matchingAntiFriend = (from il in this.IgnoreLists where il.AntiFriendId == ignoreUser.UserId select il).Any();
             if (matchingAntiFriend)
             {
                 throw new ArgumentException("User is already in the ignore list", "ignoreUser");
@@ -148,7 +148,7 @@ namespace CosmoMonger.Models
 
             IgnoreList ignoreEntry = new IgnoreList();
             ignoreEntry.User = this;
-            ignoreEntry.AntiFriend = ignoreUser;
+            ignoreEntry.AntiFriendId = ignoreUser.UserId;
             this.IgnoreLists.Add(ignoreEntry);
             db.SubmitChanges();
         }
@@ -160,7 +160,7 @@ namespace CosmoMonger.Models
         public void RemoveIgnore(User ignoreUser)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            IgnoreList antiFriendToRemove = (from il in this.IgnoreLists where il.AntiFriend == ignoreUser select il).SingleOrDefault();
+            IgnoreList antiFriendToRemove = (from il in this.IgnoreLists where il.AntiFriendId == ignoreUser.UserId select il).SingleOrDefault();
             if (antiFriendToRemove == null)
             {
                 throw new ArgumentException("User is not in the buddy list", "buddy");
@@ -177,7 +177,7 @@ namespace CosmoMonger.Models
         /// <returns>Array of Message objects</returns>
         public Message[] FetchUnreadMessages()
         {
-            return (from m in Messages where !m.Read select m).ToArray();
+            return (from m in Messages where !m.Received select m).ToArray();
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace CosmoMonger.Models
             // Build the message
             Message msg = new Message();
             msg.RecipientUser = this;
-            msg.SenderUser = fromUser;
+            msg.SenderUserId = fromUser.UserId;
             msg.Content = message;
             msg.Time = DateTime.Now;
 

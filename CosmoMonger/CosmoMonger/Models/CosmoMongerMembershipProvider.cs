@@ -184,7 +184,7 @@ namespace CosmoMonger.Models
 				status = MembershipCreateStatus.DuplicateUserName;
 				return null;
 			}
-			bool matchingEmail = (from u in db.Users where u.Email == email select u).Any();
+            bool matchingEmail = (GetUserNameByEmail(email) != "");
 			if (matchingEmail)
 			{
 				status = MembershipCreateStatus.DuplicateEmail;
@@ -303,7 +303,8 @@ namespace CosmoMonger.Models
 		/// </summary>
 		/// <param name="email">The e-mail address to search for.</param>
 		/// <returns>
-		/// The user name associated with the specified e-mail address. If no match is found, return null.
+		/// The user name associated with the specified e-mail address. 
+        /// If no match is found, return empty string.
 		/// </returns>
         public override string GetUserNameByEmail(string email)
         {
@@ -316,7 +317,7 @@ namespace CosmoMonger.Models
 				return matchingUser.UserName;
 			}
 
-			return null;
+			return "";
         }
 
         public override string ResetPassword(string username, string answer)

@@ -47,7 +47,6 @@ namespace CosmoMonger.Models
             }
         }
 
-
         /// <summary>
         /// Gets the current trade-in value for this ship.
         /// Calculated by looking in the current system and seeing what a matching ship is selling for, if that is not found then
@@ -58,7 +57,7 @@ namespace CosmoMonger.Models
             get
             {
                 // Starting value is the base price
-                int shipValue = BaseShip.BasePrice;
+                int shipValue = this.BaseShip.BasePrice;
 
                 // If the same ship is for sell in the current system, that price replaces shipValue
                 SystemShip matchingShip = (from ss in this.CosmoSystem.SystemShips
@@ -159,10 +158,9 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
             
             // Find all systems within range of the JumpDrive
+            // We use the distance formula, sqrt((x2 - x1)^2 + (y2 - y1)^2)
             var systems = (from s in db.CosmoSystems
                            where s != this.CosmoSystem
-                           // Use the distance formula
-                           // sqrt((x2 - x1)^2 + (y2 - y1)^2)
                            && Math.Sqrt(
                                 Math.Pow(this.CosmoSystem.PositionX - s.PositionX, 2) 
                                 + Math.Pow(this.CosmoSystem.PositionY - s.PositionY, 2)

@@ -492,4 +492,8 @@
       <column name="TargetSystemArrivalTime" type="datetime" />
     </addColumn>
   </changeSet>
+  <changeSet author="Jory Stone" id="7">
+    <comment>Renamed Recieved column on the Message table to Received.</comment>
+    <renameColumn tableName="Message" oldColumnName="Recieved" newColumnName="Received" />
+  </changeSet>
 </databaseChangeLog>
