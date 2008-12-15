@@ -67,17 +67,27 @@
         [TestMethod]
         public void TestCreatePlayer()
         {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+
             UserManager userManager = new UserManager();
             User testUser = userManager.CreateUser("create" + this.baseTestUsername, "test1000", "create" + this.baseTestEmail);
             Assert.IsNotNull(testUser, "Test User is created");
-            Assert.AreEqual(testUser.UserName, "create" + this.baseTestUsername, "Test User has correct username");
-            Assert.AreEqual(testUser.Email, "create" + this.baseTestEmail, "Test User has correct e-mail");
+            Assert.AreEqual("create" + this.baseTestUsername, testUser.UserName, "Test User has correct username");
+            Assert.AreEqual("create" + this.baseTestEmail, testUser.Email, "Test User has correct e-mail");
 
             testUser = userManager.GetUserByUserName("create"+ this.baseTestUsername);
             Assert.IsNotNull(testUser, "Test User exists in the database");
-            Assert.AreEqual(testUser.UserName, "create" + this.baseTestUsername, "Test User has correct username");
-            Assert.AreEqual(testUser.Email, "create" + this.baseTestEmail, "Test User has correct e-mail");
+            Assert.AreEqual("create" + this.baseTestUsername, testUser.UserName, "Test User has correct username");
+            Assert.AreEqual("create" + this.baseTestEmail, testUser.Email, "Test User has correct e-mail");
 
+            Race humanRace = (from r in db.Races
+                              where r.Name == "Human"
+                              select r).SingleOrDefault();
+            Assert.IsNotNull(humanRace, "Human Race exists in database");
+            Player testPlayer = testUser.CreatePlayer("player" + this.baseTestUsername, humanRace);
+            Assert.IsNotNull(testPlayer, "Test Player is created");
+            Assert.AreEqual(true, testPlayer.Alive, "Test Player is alive");
+            Assert.AreEqual("player" + this.baseTestUsername, testPlayer.Name, "Test Player has correct name");
         }
 
         [TestMethod]

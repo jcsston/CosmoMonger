@@ -40,6 +40,7 @@ namespace CosmoMonger.Models
             player.User = this;
             player.Name = name;
             player.Race = race;
+            player.LastPlayed = DateTime.Now;
             db.Players.InsertOnSubmit(player);
             db.SubmitChanges();
 
