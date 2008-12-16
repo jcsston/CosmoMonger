@@ -169,7 +169,6 @@
 
         public ActionResult Logout()
         {
-
             FormsAuth.SignOut();
 
             return RedirectToAction("Index", "Home");
@@ -238,6 +237,17 @@
             }
 
             // If we got this far, something failed, redisplay form
+            return View();
+        }
+
+        public ActionResult VerifyEmail()
+        {
+            return View();
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult VerifyEmail(string verificationCode)
+        {
             return View();
         }
 

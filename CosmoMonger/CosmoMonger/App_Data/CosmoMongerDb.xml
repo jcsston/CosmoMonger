@@ -496,6 +496,16 @@
     <comment>Renamed Recieved column on the Message table to Received.</comment>
     <renameColumn tableName="Message" oldColumnName="Recieved" newColumnName="Received" />
   </changeSet>
+  <changeSet author="Jory Stone" id="8">
+    <comment>Adding VerificationCode, LastLogin, and LoginAttemptCount columns to the User table</comment>
+    <addColumn tableName="User">
+      <column name="VerificationCode" type="varchar(32)" />
+      <column name="LastLogin" type="datetime" />
+      <column name="LoginAttemptCount" type="int" defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>      
+    </addColumn>
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="8">
     <comment>Dropping Foreign Key Constraints to recreate with cascade</comment>

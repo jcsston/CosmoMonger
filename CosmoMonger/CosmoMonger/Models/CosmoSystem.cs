@@ -40,10 +40,11 @@
         }
 
         /// <summary>
-        /// Fetches the SystemGood object for the passed in systemGood id. If the SystemGood doesn't exist, null is returned.
+        /// Fetches the SystemGood object for the passed in systemGood id. 
+        /// If the SystemGood doesn't exist, null is returned.
         /// </summary>
-        /// <param name="systemGoodId">The system good id.</param>
-        /// <returns>Matching Good object</returns>
+        /// <param name="systemGoodId">The good id of the SystemGood object to get.</param>
+        /// <returns>Matching SystemGood object</returns>
         public SystemGood GetGood(int systemGoodId)
         {
             return (from sg in this.SystemGoods

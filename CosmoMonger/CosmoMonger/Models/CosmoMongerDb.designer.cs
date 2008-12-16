@@ -544,7 +544,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Weapon_BaseShip", Storage="_Weapon", ThisKey="InitialWeaponId", IsForeignKey=true)]
-		public Weapon Weapon
+		public Weapon InitialWeapon
 		{
 			get
 			{
@@ -572,13 +572,13 @@ namespace CosmoMonger.Models
 					{
 						this._InitialWeaponId = default(int);
 					}
-					this.SendPropertyChanged("Weapon");
+					this.SendPropertyChanged("InitialWeapon");
 				}
 			}
 		}
 		
 		[Association(Name="JumpDrive_BaseShip", Storage="_JumpDrive", ThisKey="InitialJumpDriveId", IsForeignKey=true)]
-		public JumpDrive JumpDrive
+		public JumpDrive InitialJumpDrive
 		{
 			get
 			{
@@ -606,13 +606,13 @@ namespace CosmoMonger.Models
 					{
 						this._InitialJumpDriveId = default(int);
 					}
-					this.SendPropertyChanged("JumpDrive");
+					this.SendPropertyChanged("InitialJumpDrive");
 				}
 			}
 		}
 		
 		[Association(Name="Shield_BaseShip", Storage="_Shield", ThisKey="InitialShieldId", IsForeignKey=true)]
-		public Shield Shield
+		public Shield InitialShield
 		{
 			get
 			{
@@ -640,7 +640,7 @@ namespace CosmoMonger.Models
 					{
 						this._InitialShieldId = default(int);
 					}
-					this.SendPropertyChanged("Shield");
+					this.SendPropertyChanged("InitialShield");
 				}
 			}
 		}
@@ -922,13 +922,13 @@ namespace CosmoMonger.Models
 		private void attach_BaseShips(BaseShip entity)
 		{
 			this.SendPropertyChanging();
-			entity.Weapon = this;
+			entity.InitialWeapon = this;
 		}
 		
 		private void detach_BaseShips(BaseShip entity)
 		{
 			this.SendPropertyChanging();
-			entity.Weapon = null;
+			entity.InitialWeapon = null;
 		}
 		
 		private void attach_Ships(Ship entity)
@@ -1896,13 +1896,13 @@ namespace CosmoMonger.Models
 		private void attach_BaseShips(BaseShip entity)
 		{
 			this.SendPropertyChanging();
-			entity.JumpDrive = this;
+			entity.InitialJumpDrive = this;
 		}
 		
 		private void detach_BaseShips(BaseShip entity)
 		{
 			this.SendPropertyChanging();
-			entity.JumpDrive = null;
+			entity.InitialJumpDrive = null;
 		}
 		
 		private void attach_Ships(Ship entity)
@@ -3731,13 +3731,13 @@ namespace CosmoMonger.Models
 		private void attach_BaseShips(BaseShip entity)
 		{
 			this.SendPropertyChanging();
-			entity.Shield = this;
+			entity.InitialShield = this;
 		}
 		
 		private void detach_BaseShips(BaseShip entity)
 		{
 			this.SendPropertyChanging();
-			entity.Shield = null;
+			entity.InitialShield = null;
 		}
 		
 		private void attach_Ships(Ship entity)
@@ -6078,6 +6078,12 @@ namespace CosmoMonger.Models
 		
 		private bool _Admin;
 		
+		private string _VerificationCode;
+		
+		private System.Nullable<System.DateTime> _LastLogin;
+		
+		private int _LoginAttemptCount;
+		
 		private EntitySet<BuddyList> _BuddyLists;
 		
 		private EntitySet<IgnoreList> _IgnoreLists;
@@ -6104,6 +6110,12 @@ namespace CosmoMonger.Models
     partial void OnActiveChanged();
     partial void OnAdminChanging(bool value);
     partial void OnAdminChanged();
+    partial void OnVerificationCodeChanging(string value);
+    partial void OnVerificationCodeChanged();
+    partial void OnLastLoginChanging(System.Nullable<System.DateTime> value);
+    partial void OnLastLoginChanged();
+    partial void OnLoginAttemptCountChanging(int value);
+    partial void OnLoginAttemptCountChanged();
     #endregion
 		
 		public User()
@@ -6251,6 +6263,66 @@ namespace CosmoMonger.Models
 					this._Admin = value;
 					this.SendPropertyChanged("Admin");
 					this.OnAdminChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_VerificationCode", DbType="varchar(32)")]
+		public string VerificationCode
+		{
+			get
+			{
+				return this._VerificationCode;
+			}
+			set
+			{
+				if ((this._VerificationCode != value))
+				{
+					this.OnVerificationCodeChanging(value);
+					this.SendPropertyChanging();
+					this._VerificationCode = value;
+					this.SendPropertyChanged("VerificationCode");
+					this.OnVerificationCodeChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_LastLogin", DbType="datetime")]
+		public System.Nullable<System.DateTime> LastLogin
+		{
+			get
+			{
+				return this._LastLogin;
+			}
+			set
+			{
+				if ((this._LastLogin != value))
+				{
+					this.OnLastLoginChanging(value);
+					this.SendPropertyChanging();
+					this._LastLogin = value;
+					this.SendPropertyChanged("LastLogin");
+					this.OnLastLoginChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_LoginAttemptCount", DbType="int NOT NULL")]
+		public int LoginAttemptCount
+		{
+			get
+			{
+				return this._LoginAttemptCount;
+			}
+			set
+			{
+				if ((this._LoginAttemptCount != value))
+				{
+					this.OnLoginAttemptCountChanging(value);
+					this.SendPropertyChanging();
+					this._LoginAttemptCount = value;
+					this.SendPropertyChanged("LoginAttemptCount");
+					this.OnLoginAttemptCountChanged();
 				}
 			}
 		}

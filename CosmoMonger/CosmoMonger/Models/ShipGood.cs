@@ -13,6 +13,7 @@
         /// Sells the specified quantity of goods off the ship.
         /// If the good is not sold in the current system, an InvalidOperationException exception is thrown.
         /// </summary>
+        /// <param name="manager">The current GameManager object.</param>
         /// <param name="quantity">The quantity of goods to sell, if there are not enough goods, an ArgumentOutOfRangeException is thrown.</param>
         public void Sell(GameManager manager, int quantity)
         {

@@ -79,12 +79,29 @@
         public bool ValidateUser(string username, string password)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            bool validLogin = (from u in db.Users
-                               where u.UserName == username
-                               && u.Password == HashPassword(password)
-                               && u.Validated && u.Active
-                               select u).Any();
-            return validLogin;
+            User loginUser = GetUserByUserName(username);
+            if (loginUser == null)
+            {
+                return false;
+            }
+            else if (loginUser.Password != HashPassword(password))
+            {
+                loginUser.LoginAttemptCount += 1;
+                // Disable the account if login attempts pass 5 times
+                if (loginUser.LoginAttemptCount > 5)
+                {
+                    loginUser.Active = false;
+                }
+                db.SubmitChanges();
+                return false;
+            }
+            else
+            {
+                loginUser.LoginAttemptCount = 0;
+                loginUser.LastLogin = DateTime.Now;
+                db.SubmitChanges();
+                return (loginUser.Validated && loginUser.Active);
+            }
         }
 
         /// <summary>

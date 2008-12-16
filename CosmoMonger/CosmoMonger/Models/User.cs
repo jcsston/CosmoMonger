@@ -40,7 +40,45 @@ namespace CosmoMonger.Models
             player.User = this;
             player.Name = name;
             player.Race = race;
+            player.Alive = true;
             player.LastPlayed = DateTime.Now;
+
+            // Starting credits is 2000
+            player.CashCredits = 2000;
+
+            // Create a new ship for this player
+            Ship playerShip = new Ship();
+
+            // Assign the default base ship type
+            BaseShip baseShip = (from bs in db.BaseShips
+                                 where bs.Model == "Glorified Trash Can"
+                                 select bs).SingleOrDefault();
+            if (baseShip == null)
+            {
+                Logger.Write("Unable to load player starting base ship from database", "Model", 9999, 3, TraceEventType.Critical);
+                return null;
+            }
+            playerShip.BaseShip = baseShip;
+
+            // Assign the default starting location
+            CosmoSystem startingSystem = (from s in db.CosmoSystems
+                                          where s.Name == "Sol"
+                                          select s).SingleOrDefault();
+            if (startingSystem == null)
+            {
+                Logger.Write("Unable to load player starting system from database", "Model", 9999, 4, TraceEventType.Critical);
+                return null;
+            }
+            playerShip.CosmoSystem = startingSystem;
+
+            // Setup default upgrades
+            playerShip.JumpDrive = playerShip.BaseShip.InitialJumpDrive;
+            playerShip.Shield = playerShip.BaseShip.InitialShield;
+            playerShip.Weapon = playerShip.BaseShip.InitialWeapon;
+
+            db.Ships.InsertOnSubmit(playerShip);
+            player.Ship = playerShip;
+
             db.Players.InsertOnSubmit(player);
             db.SubmitChanges();
 

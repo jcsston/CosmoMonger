@@ -24,6 +24,7 @@
         /// <summary>
         /// Buys the specified quantity of goods from the system.
         /// </summary>
+        /// <param name="manager">The current GameManager object.</param>
         /// <param name="quantity">The quantity of the good to buy.</param>
         public void Buy(GameManager manager, int quantity)
         {

@@ -12,9 +12,9 @@
       <Column Name="InitialShieldId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="BaseShip_Ship" Member="Ships" OtherKey="BaseShipId" Type="Ship" />
       <Association Name="BaseShip_SystemShip" Member="SystemShips" OtherKey="BaseShipId" Type="SystemShip" />
-      <Association Name="Weapon_BaseShip" Member="Weapon" ThisKey="InitialWeaponId" Type="Weapon" IsForeignKey="true" />
-      <Association Name="JumpDrive_BaseShip" Member="JumpDrive" ThisKey="InitialJumpDriveId" Type="JumpDrive" IsForeignKey="true" />
-      <Association Name="Shield_BaseShip" Member="Shield" ThisKey="InitialShieldId" Type="Shield" IsForeignKey="true" />
+      <Association Name="Weapon_BaseShip" Member="InitialWeapon" Storage="_Weapon" ThisKey="InitialWeaponId" Type="Weapon" IsForeignKey="true" />
+      <Association Name="JumpDrive_BaseShip" Member="InitialJumpDrive" Storage="_JumpDrive" ThisKey="InitialJumpDriveId" Type="JumpDrive" IsForeignKey="true" />
+      <Association Name="Shield_BaseShip" Member="InitialShield" Storage="_Shield" ThisKey="InitialShieldId" Type="Shield" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Weapon" Member="Weapons">
@@ -274,6 +274,9 @@
       <Column Name="Validated" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="Active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="Admin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="VerificationCode" Type="System.String" DbType="varchar(32)" CanBeNull="true" />
+      <Column Name="LastLogin" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
+      <Column Name="LoginAttemptCount" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
       <Association Name="User_BuddyList" Member="BuddyLists" OtherKey="UserId" Type="BuddyList" />
       <Association Name="User_IgnoreList" Member="IgnoreLists" OtherKey="UserId" Type="IgnoreList" />
       <Association Name="User_Message" Member="Messages" Storage="_Messages1" OtherKey="RecipientUserId" Type="Message" />
