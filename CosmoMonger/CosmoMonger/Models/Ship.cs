@@ -130,13 +130,16 @@ namespace CosmoMonger.Models
                 // Has the arrival time passed?
                 if (this.TargetSystemArrivalTime < DateTime.Now)
                 {
+                    CosmoMongerDbDataContext db = GameManager.GetDbContext();
+
                     // The ship has arrived, change the location of the ship and clear out the travel fields
-                    this.SystemId = this.TargetSystemId.Value;
+                    this.CosmoSystem = (from s in db.CosmoSystems 
+                                        where s.SystemId == this.TargetSystemId.Value
+                                        select s).Single();
                     this.TargetSystemId = null;
                     this.TargetSystemArrivalTime = null;
 
                     // Send changes to the database
-                    CosmoMongerDbDataContext db = GameManager.GetDbContext();
                     db.SubmitChanges();
                 }
                 else

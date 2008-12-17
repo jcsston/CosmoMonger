@@ -506,6 +506,10 @@
       </column>      
     </addColumn>
   </changeSet>
+  <changeSet author="Jory Stone" id="9">
+    <comment>Removed VerificationCode column from the User table. No need, for verification the user id would do.</comment>
+    <dropColumn tableName="User" columnName="VerificationCode" />
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="8">
     <comment>Dropping Foreign Key Constraints to recreate with cascade</comment>
