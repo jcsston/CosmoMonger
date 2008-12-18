@@ -142,23 +142,40 @@
             if (ViewData.ModelState.IsValid)
             {
                 // Attempt to login
-                bool loginSuccessful = Provider.ValidateUser(username, password);
-
-                if (loginSuccessful)
+                MembershipUser user = Provider.GetUser(username, false);
+                if (user != null)
                 {
-                    FormsAuth.SetAuthCookie(username, rememberMe);
-                    if (!String.IsNullOrEmpty(returnUrl))
+
+                    bool loginSuccessful = Provider.ValidateUser(username, password);
+
+                    if (loginSuccessful)
                     {
-                        return Redirect(returnUrl);
+                        FormsAuth.SetAuthCookie(username, rememberMe);
+                        if (!String.IsNullOrEmpty(returnUrl))
+                        {
+                            return Redirect(returnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                    }
+                    else if (!user.IsApproved)
+                    {
+                        ModelState.AddModelError("_FORM", "The username provided has not been verified. Check your e-mail for the verification e-mail.");
+                    }
+                    else if (user.IsLockedOut)
+                    {
+                        ModelState.AddModelError("_FORM", "The username provided has been locked. Contact the administrator.");
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        ModelState.AddModelError("_FORM", "The username or password provided is incorrect.");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("_FORM", "The username or password provided is incorrect.");
+                    ModelState.AddModelError("_FORM", "The username provided is incorrect.");
                 }
             }
 

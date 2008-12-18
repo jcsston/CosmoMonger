@@ -6078,8 +6078,6 @@ namespace CosmoMonger.Models
 		
 		private bool _Admin;
 		
-		private string _VerificationCode;
-		
 		private System.Nullable<System.DateTime> _LastLogin;
 		
 		private int _LoginAttemptCount;
@@ -6110,8 +6108,6 @@ namespace CosmoMonger.Models
     partial void OnActiveChanged();
     partial void OnAdminChanging(bool value);
     partial void OnAdminChanged();
-    partial void OnVerificationCodeChanging(string value);
-    partial void OnVerificationCodeChanged();
     partial void OnLastLoginChanging(System.Nullable<System.DateTime> value);
     partial void OnLastLoginChanged();
     partial void OnLoginAttemptCountChanging(int value);
@@ -6263,26 +6259,6 @@ namespace CosmoMonger.Models
 					this._Admin = value;
 					this.SendPropertyChanged("Admin");
 					this.OnAdminChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_VerificationCode", DbType="varchar(32)")]
-		public string VerificationCode
-		{
-			get
-			{
-				return this._VerificationCode;
-			}
-			set
-			{
-				if ((this._VerificationCode != value))
-				{
-					this.OnVerificationCodeChanging(value);
-					this.SendPropertyChanging();
-					this._VerificationCode = value;
-					this.SendPropertyChanged("VerificationCode");
-					this.OnVerificationCodeChanged();
 				}
 			}
 		}

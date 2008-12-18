@@ -73,7 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -87,6 +89,7 @@
       <DependentUpon>CosmoMongerDb.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\CosmoMongerMembershipProvider.cs" />
+    <Compile Include="Models\CosmoMongerMembershipUser.cs" />
     <Compile Include="Models\CosmoSystem.cs" />
     <Compile Include="Models\GameManager.cs" />
     <Compile Include="Models\Messsage.cs" />
@@ -141,6 +144,27 @@
     <Compile Include="Views\Home\Index.aspx.designer.cs">
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Player\CreatePlayer.aspx.cs">
+      <DependentUpon>CreatePlayer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Player\CreatePlayer.aspx.designer.cs">
+      <DependentUpon>CreatePlayer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Player\EditProfile.aspx.cs">
+      <DependentUpon>EditProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Player\EditProfile.aspx.designer.cs">
+      <DependentUpon>EditProfile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Player\ViewProfile.aspx.cs">
+      <DependentUpon>ViewProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Player\ViewProfile.aspx.designer.cs">
+      <DependentUpon>ViewProfile.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Shared\Error.aspx.cs">
       <DependentUpon>Error.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -167,6 +191,9 @@
     <Content Include="App_Data\CosmoMongerDb.xml" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Views\Player\CreatePlayer.aspx" />
+    <Content Include="Views\Player\EditProfile.aspx" />
+    <Content Include="Views\Player\ViewProfile.aspx" />
     <Content Include="Web.config" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery-1.2.6.js" />

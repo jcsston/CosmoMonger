@@ -11,7 +11,7 @@
     [HandleError]
     public class HomeController : Controller
     {
-        GameManager gameManager = null;
+        private GameManager gameManager = null;
 
         public ActionResult Index()
         {

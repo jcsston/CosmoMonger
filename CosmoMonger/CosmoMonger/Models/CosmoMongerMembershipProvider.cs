@@ -134,11 +134,6 @@ namespace CosmoMonger.Models
             get { return true; }
         }
 
-		private MembershipUser DatabaseUserToMembershipUser(User u)
-		{
-			return new MembershipUser("CosmoMongerMembershipProvider", u.UserName, null, u.Email, null, null, u.Validated, u.Active, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now);
-		}
-
 		/// <summary>
 		/// Adds a new membership user to the data source.
 		/// </summary>
@@ -161,7 +156,7 @@ namespace CosmoMonger.Models
                 User user = userManager.CreateUser(username, password, email);
 
                 status = MembershipCreateStatus.Success;
-                return DatabaseUserToMembershipUser(user);
+                return new CosmoMongerMembershipUser(user);
             }
             catch (ArgumentException ex)
             {
@@ -250,7 +245,12 @@ namespace CosmoMonger.Models
 
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
-			throw new NotImplementedException();
+            User matchingUser = userManager.GetUserByUserName(username);
+            if (matchingUser != null)
+            {
+                return new CosmoMongerMembershipUser(matchingUser);
+            }
+            return null;
         }
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)

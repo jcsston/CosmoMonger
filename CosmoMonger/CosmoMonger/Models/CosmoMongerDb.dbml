@@ -274,7 +274,6 @@
       <Column Name="Validated" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="Active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="Admin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="VerificationCode" Type="System.String" DbType="varchar(32)" CanBeNull="true" />
       <Column Name="LastLogin" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
       <Column Name="LoginAttemptCount" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
       <Association Name="User_BuddyList" Member="BuddyLists" OtherKey="UserId" Type="BuddyList" />

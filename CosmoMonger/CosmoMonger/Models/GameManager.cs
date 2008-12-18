@@ -61,7 +61,7 @@ namespace CosmoMonger.Models
         {
             get
             {
-                return (from p in currentUser.Players where p.Alive select p).Single();
+                return (from p in currentUser.Players where p.Alive select p).SingleOrDefault();
             }
         }
 
