@@ -7,6 +7,8 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Ajax;
     using CosmoMonger.Models;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using System.Diagnostics;
 
     /// <summary>
     /// This controller deals with all the player related tasks, 
@@ -38,6 +40,7 @@
         /// <returns>Create View</returns>
         public ActionResult CreatePlayer()
         {
+            ViewData["Races"] = this.ControllerGame.GetRaces();
             return View();
         }
 
@@ -91,10 +94,20 @@
             catch (ArgumentException ex)
             {
                 // Problem with the profile data, back to the drawing board
-                return RedirectToAction("EditProfile");
+                if (ex.ParamName == "name")
+                {
+                    ModelState.AddModelError("_FORM", ex.Message);
+                }
+                else
+                {
+                    Logger.Write("Unknown error when Player.UpdateProfile was called with characterName: " + characterName + " Exception Details: " + ex.ToString(), "Controller", 100, 1003, TraceEventType.Error, "ArgumentException in PlayerController.EditProfile");
+                    ModelState.AddModelError("_FORM", "Unknown error");
+                }
+
+                return View();
             }
 
-            return RedirectToAction("ViewProfile", this.ControllerGame.GetPlayer(playerId));
+            return RedirectToAction("ViewProfile", updatePlayer);
         }
     }
 }

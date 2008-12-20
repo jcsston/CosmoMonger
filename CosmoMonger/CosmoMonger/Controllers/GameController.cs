@@ -8,11 +8,19 @@
     using System.Web.Mvc.Ajax;
     using CosmoMonger.Models;
 
+    /// <summary>
+    /// This is the base controller for all game related controllers.
+    /// Any user has to be authorized to access this controller.
+    /// </summary>
     [Authorize]
     public class GameController : Controller
     {
         private GameManager gameManager = null;
 
+        /// <summary>
+        /// Gets the GameManager for the current player in the context of this controller.
+        /// </summary>
+        /// <value>The GameManager object for this controller.</value>
         protected GameManager ControllerGame
         {
             get
@@ -24,12 +32,5 @@
                 return gameManager;
             }
         }
-        /*
-        public ActionResult Index()
-        {
-            // Add action logic here
-            throw new NotImplementedException();
-        }
-        */
     }
 }

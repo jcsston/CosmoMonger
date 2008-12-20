@@ -61,7 +61,7 @@
         #endregion
 
         [TestMethod]
-        public void MaxInvalidPasswordAttemptsTest()
+        public void CosmoMongerMembershipProviderMaxInvalidPasswordAttempts()
         {
             CosmoMongerMembershipProvider target = new CosmoMongerMembershipProvider();
             int actual = target.MaxInvalidPasswordAttempts;

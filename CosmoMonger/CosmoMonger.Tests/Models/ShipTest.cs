@@ -7,6 +7,7 @@
     using System.Linq;
     using CosmoMonger.Models;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.Web.Security;
 
     /// <summary>
     /// Summary description for ShipTest
@@ -63,26 +64,11 @@
         //
         #endregion
 
-        private Player CreateTestPlayer()
-        {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            UserManager userManager = new UserManager();
-            
-            string postFix = DateTime.Now.ToBinary().ToString();
-            string baseTestUsername = "testUser_" + postFix;
-            string baseTestEmail = "testUser_" + postFix + "@cosmomonger.com";
-            User testUser = userManager.CreateUser("ship" + baseTestUsername, "test1000", "ship" + baseTestEmail);
-
-            Race humanRace = (from r in db.Races
-                              where r.Name == "Human"
-                              select r).SingleOrDefault();
-            return testUser.CreatePlayer("ship" + baseTestUsername, humanRace);
-        }
 
         [TestMethod]
-        public void TestTravel()
+        public void ShipTravel()
         {
-            Player testPlayer = CreateTestPlayer();
+            Player testPlayer = PlayerTest.CreateTestPlayer();
             Ship testShip = testPlayer.Ship;
             CosmoSystem startingSystem = testShip.CosmoSystem;
             
@@ -110,28 +96,13 @@
         }
 
         [TestMethod]
-        public void TestTravelThreaded()
+        public void ShipTravelRandom()
         {
-            Thread[] t = new Thread[5];
-            for (int i = 0; i < t.Length; i++)
-            {
-                t[i] = new Thread(new ThreadStart(this.TestTravel));
-                t[i].Start();
-            }
-            for (int i = 0; i < t.Length; i++)
-            {
-                t[i].Join();
-            }
-        }
-
-        [TestMethod]
-        public void TestTravelRandom()
-        {
-            Player testPlayer = CreateTestPlayer();
+            Player testPlayer = PlayerTest.CreateTestPlayer();
             Ship testShip = testPlayer.Ship;
             CosmoSystem startingSystem = testShip.CosmoSystem;
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
                 CosmoSystem[] possibleTargetSystems = testShip.GetInRangeSystems();
                 Assert.AreNotEqual(0, possibleTargetSystems.Length, "Ship should always be within range of at least one system");
@@ -158,12 +129,12 @@
         }
 
         [TestMethod]
-        public void TestTravelRandomThreaded()
+        public void ShipTravelRandomThreaded()
         {
-            Thread[] t = new Thread[5];
+            Thread[] t = new Thread[10];
             for (int i = 0; i < t.Length; i++)
             {
-                t[i] = new Thread(new ThreadStart(this.TestTravelRandom));
+                t[i] = new Thread(new ThreadStart(this.ShipTravelRandom));
                 t[i].Start();
             }
             for (int i = 0; i < t.Length; i++)

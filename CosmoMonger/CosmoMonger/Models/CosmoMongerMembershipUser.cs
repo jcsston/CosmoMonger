@@ -230,5 +230,10 @@ namespace CosmoMonger.Models
             }
             return false;
         }
+
+        public User GetUserModel()
+        {
+            return this.user;
+        }
     }
 }

@@ -189,5 +189,17 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
             return (from s in db.CosmoSystems select s).ToArray();
         }
+
+        public Race[] GetRaces()
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            return (from r in db.Races select r).ToArray();
+        }
+
+        public Race GetRace(int raceId)
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            return (from r in db.Races where r.RaceId == raceId select r).SingleOrDefault();
+        }
     }
 }

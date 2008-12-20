@@ -6,6 +6,8 @@
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using CosmoMonger.Models;
+    using System.Web.Security;
+    using System.Threading;
 
     /// <summary>
     /// Summary description for PlayerTest
@@ -65,18 +67,33 @@
         //
         #endregion
 
-        [TestMethod]
-        public void TestUpdateProfile()
+        static public Player CreateTestPlayer()
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            UserManager userManager = new UserManager();
 
-            // We first need to create a player
-            User testUser = userManager.CreateUser("create" + this.baseTestUsername, "test1000", "create" + this.baseTestEmail);
+            string postFix = DateTime.Now.ToBinary().ToString() + "_thread" + Thread.CurrentThread.ManagedThreadId;
+            string baseTestUsername = "testUser_" + postFix;
+            string baseTestEmail = "testUser_" + postFix + "@cosmomonger.com";
+
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(baseTestUsername, "test1000", baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser, "Test User was created");
+
+            User testUserModel = testUser.GetUserModel();
+            Assert.IsNotNull(testUserModel, "Able to get model object for user");
+
             Race humanRace = (from r in db.Races
                               where r.Name == "Human"
                               select r).SingleOrDefault();
-            Player testPlayer = testUser.CreatePlayer("player" + this.baseTestUsername, humanRace);
+            return testUserModel.CreatePlayer(baseTestUsername, humanRace);
+        }
+
+        [TestMethod]
+        public void PlayerUpdateProfile()
+        {
+            // We first need to create a player
+            Player testPlayer = PlayerTest.CreateTestPlayer();
             
             // Update profile
             testPlayer.UpdateProfile("player2" + this.baseTestUsername);
