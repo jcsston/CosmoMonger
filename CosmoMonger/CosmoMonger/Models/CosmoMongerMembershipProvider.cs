@@ -16,11 +16,10 @@ namespace CosmoMonger.Models
 
     /// <summary>
     /// This is an implementation of the System.Web.Security.MembershipProvider class and will be used by the AccountController
+    /// Nanages user creation and membership
     /// </summary>
     public class CosmoMongerMembershipProvider : MembershipProvider
     {
-        private UserManager userManager = new UserManager();
-
 		/// <summary>
 		/// Gets the name of the application using the custom membership provider.
 		/// </summary>
@@ -153,10 +152,10 @@ namespace CosmoMonger.Models
             try
             {
                 // Create the new user
-                User user = userManager.CreateUser(username, password, email);
+                CosmoMongerMembershipUser user = CosmoMongerMembershipUser.CreateUser(username, password, email);
 
                 status = MembershipCreateStatus.Success;
-                return new CosmoMongerMembershipUser(user);
+                return user;
             }
             catch (ArgumentException ex)
             {
@@ -191,7 +190,14 @@ namespace CosmoMonger.Models
 		/// </returns>
 		public override bool ValidateUser(string username, string password)
 		{
-			return userManager.ValidateUser(username, password);
+            CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.GetUser(username, false);
+            if (user != null)
+            {
+                return user.ValidatePassword(password)
+                    && user.IsApproved 
+                    && !user.IsLockedOut;
+            }
+            return false;
 		}
 
 		public override bool DeleteUser(string username, bool deleteAllRelatedData)
@@ -210,7 +216,12 @@ namespace CosmoMonger.Models
 		/// </returns>
         public override bool ChangePassword(string username, string oldPassword, string newPassword)
         {
-			return userManager.ChangePassword(username, oldPassword, newPassword);
+            CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.GetUser(username, false);
+            if (user != null)
+            {
+                return user.ChangePassword(oldPassword, newPassword);
+            }
+            return false;
         }
 
         public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
@@ -243,9 +254,20 @@ namespace CosmoMonger.Models
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets the user associated with the specified username.
+        /// </summary>
+        /// <param name="username">The username to search for.</param>
+        /// <returns>
+        /// The user associated with the specified username 
+        /// If no match is found, return null.
+        /// </returns>
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
-            User matchingUser = userManager.GetUserByUserName(username);
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            User matchingUser = (from u in db.Users
+                                 where u.UserName == username
+                                 select u).SingleOrDefault();
             if (matchingUser != null)
             {
                 return new CosmoMongerMembershipUser(matchingUser);
@@ -268,7 +290,10 @@ namespace CosmoMonger.Models
 		/// </returns>
         public override string GetUserNameByEmail(string email)
         {
-			User matchingUser = userManager.GetUserByEmail(email);
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            User matchingUser = (from u in db.Users
+                                 where u.Email == email
+                                 select u).SingleOrDefault();
 			if (matchingUser != null)
 			{
 				return matchingUser.UserName;
@@ -291,17 +316,13 @@ namespace CosmoMonger.Models
 		/// </returns>
         public override bool UnlockUser(string userName)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
-			User matchingUser = (from u in db.Users
-								 where u.UserName == userName
-								 select u).First();
-			if (matchingUser != null)
-			{
-				matchingUser.Active = true;
-				db.SubmitChanges();
-				return true;
-			}
-			return false;
+            CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.GetUser(userName, false);
+            if (user != null)
+            {
+                return user.UnlockUser();
+            }
+            return false;
+			
         }
 
         public override void UpdateUser(MembershipUser user)

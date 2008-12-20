@@ -1,4 +1,10 @@
-﻿namespace CosmoMonger.Models
+﻿//-----------------------------------------------------------------------
+// <copyright file="CosmoMongerMembershipUser.cs" company="CosmoMonger">
+//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Models
 {
     using System;
     using System.Data;
@@ -6,6 +12,10 @@
     using System.Linq;
     using System.Web;
     using System.Web.Security;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using System.Security.Cryptography;
+    using System.Diagnostics;
+    using System.Text;
 
     public class CosmoMongerMembershipUser : MembershipUser
     {
@@ -82,104 +92,143 @@
             this.user = u;
         }
 
-        /*
-        // Summary:
-        //     Updates the password for the membership user in the membership data store.
-        //
-        // Parameters:
-        //   oldPassword:
-        //     The current password for the membership user.
-        //
-        //   newPassword:
-        //     The new password for the membership user.
-        //
-        // Returns:
-        //     true if the update was successful; otherwise, false.
-        //
-        // Exceptions:
-        //   System.ArgumentException:
-        //     oldPassword is an empty string.-or-newPassword is an empty string.
-        //
-        //   System.ArgumentNullException:
-        //     oldPassword is null.-or-newPassword is null.
-        public virtual bool ChangePassword(string oldPassword, string newPassword);
-        //
-        // Summary:
-        //     Updates the password question and answer for the membership user in the membership
-        //     data store.
-        //
-        // Parameters:
-        //   password:
-        //     The current password for the membership user.
-        //
-        //   newPasswordQuestion:
-        //     The new password question value for the membership user.
-        //
-        //   newPasswordAnswer:
-        //     The new password answer value for the membership user.
-        //
-        // Returns:
-        //     true if the update was successful; otherwise, false.
-        //
-        // Exceptions:
-        //   System.ArgumentException:
-        //     password is an empty string.-or-newPasswordQuestion is an empty string.-or-newPasswordAnswer
-        //     is an empty string.
-        //
-        //   System.ArgumentNullException:
-        //     password is null.
-        public virtual bool ChangePasswordQuestionAndAnswer(string password, string newPasswordQuestion, string newPasswordAnswer);
-        //
-        // Summary:
-        //     Gets the password for the membership user from the membership data store.
-        //
-        // Returns:
-        //     The password for the membership user.
-        public virtual string GetPassword();
-        //
-        // Summary:
-        //     Gets the password for the membership user from the membership data store.
-        //
-        // Parameters:
-        //   passwordAnswer:
-        //     The password answer for the membership user.
-        //
-        // Returns:
-        //     The password for the membership user.
-        public virtual string GetPassword(string passwordAnswer);
-        //
-        // Summary:
-        //     Resets a user's password to a new, automatically generated password.
-        //
-        // Returns:
-        //     The new password for the membership user.
-        public virtual string ResetPassword();
-        //
-        // Summary:
-        //     Resets a user's password to a new, automatically generated password.
-        //
-        // Parameters:
-        //   passwordAnswer:
-        //     The password answer for the membership user.
-        //
-        // Returns:
-        //     The new password for the membership user.
-        public virtual string ResetPassword(string passwordAnswer);
-        //
-        // Summary:
-        //     Returns the user name for the membership user.
-        //
-        // Returns:
-        //     The System.Web.Security.MembershipUser.UserName for the membership user.
-        public override string ToString();
-        //
-        // Summary:
-        //     Clears the locked-out state of the user so that the membership user can be
-        //     validated.
-        //
-        // Returns:
-        //     true if the membership user was successfully unlocked; otherwise, false.
-        public virtual bool UnlockUser();
-         * */
+        /// <summary>
+        /// Hashes the password using SHA1
+        /// </summary>
+        /// <param name="password">The password to hash.</param>
+        /// <returns>byte array containing the SHA1 hash.</returns>
+        static private byte[] HashPassword(string password)
+        {
+            Logger.Write("Hashing Password: " + password, "Business Object", 1, 1000, TraceEventType.Verbose);
+            // We need to convert the password string to a byte string for encoding
+            byte[] passwordBytes = Encoding.Default.GetBytes("CosmoMonger" + password);
+            SHA1 hasher = SHA1Managed.Create();
+            // Hash the password multiple times to make brute force attacks harder
+            for (int i = 0; i < 1000; i++)
+            {
+                passwordBytes = hasher.ComputeHash(passwordBytes);
+            }
+            Logger.Write("Hashed Password to: " + passwordBytes.ToString(), "Business Object", 1, 1001, TraceEventType.Verbose);
+            return passwordBytes;
+        }
+
+        static public CosmoMongerMembershipUser CreateUser(string username, string password, string email)
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+
+            // Check for an existing user
+            bool matchingUsername = (from u in db.Users where u.UserName == username select u).Any();
+            if (matchingUsername)
+            {
+                throw new ArgumentException("Duplicate username", "username");
+            }
+            bool matchingEmail = (from u in db.Users where u.Email == email select u).Any();
+            if (matchingEmail)
+            {
+                throw new ArgumentException("Duplicate email", "email");
+            }
+
+            // Create the new user
+            User user = new User();
+            user.UserName = username;
+            user.Email = email;
+            user.Password = HashPassword(password);
+            user.Active = true;
+            // TODO: Add e-mail validatation
+            user.Validated = true;
+
+            // Insert the user record into the database
+            db.Users.InsertOnSubmit(user);
+            db.SubmitChanges();
+
+            return new CosmoMongerMembershipUser(user);
+        }
+
+        /// <summary>
+        /// Change the password for a user
+        /// </summary>
+        /// <param name="username">The user to update the password for.</param>
+        /// <param name="oldPassword">The current password for the specified user.</param>
+        /// <param name="newPassword">The new password for the specified user.</param>
+        /// <returns>
+        /// true if the password was updated successfully; otherwise, false.
+        /// </returns>
+        public override bool ChangePassword(string oldPassword, string newPassword)
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            if (user != null && ValidatePassword(oldPassword))
+            {
+                // Update the users password
+                user.Password = HashPassword(newPassword);
+                db.SubmitChanges();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Verifies that the specified password matches this users password.
+        /// </summary>
+        /// <param name="password">The password to check.</param>
+        /// <returns>
+        /// true if the specified password are valid; otherwise, false.
+        /// </returns>
+        public bool ValidatePassword(string password)
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+
+            bool validPassword = true;
+            byte [] hashedPassword = HashPassword(password);
+            byte[] correctPassword = this.user.Password;
+
+            Debug.Assert(hashedPassword.Length == correctPassword.Length, "SHA1 Hashed Passwords should always be the same length");
+            
+            for (int i = 0; i < hashedPassword.Length; i++)
+            {
+                if (hashedPassword[i] != correctPassword[i])
+                {
+                    validPassword = false;
+                    break;
+                }
+            }
+
+            if (validPassword)
+            {
+                this.user.LoginAttemptCount = 0;
+                this.user.LastLogin = DateTime.Now;
+                db.SubmitChanges();
+                return true;
+            }
+            else
+            {
+                this.user.LoginAttemptCount += 1;
+                // Disable the account if login attempts pass 5 times
+                if (this.user.LoginAttemptCount > 5)
+                {
+                    this.user.Active = false;
+                }
+                db.SubmitChanges();
+                return false;
+            }
+        }
+
+        /// <summary>
+        ///  Clears the locked-out state of the user so that the user can login.
+        /// </summary>
+        /// <param name="userName">The membership user whose lock status you want to clear.</param>
+        /// <returns>
+        /// true if the membership user was successfully unlocked; otherwise, false.
+        /// </returns>
+        public override bool UnlockUser()
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            if (this.user != null)
+            {
+                this.user.Active = true;
+                db.SubmitChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }
