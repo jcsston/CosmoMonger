@@ -84,7 +84,21 @@
             {
                 return false;
             }
-            else if (loginUser.Password != HashPassword(password))
+
+            bool validPassword = true;
+            byte [] hashedPassword = HashPassword(password);
+            byte [] correctPassword = loginUser.Password;
+            Debug.Assert(hashedPassword.Length == correctPassword.Length, "SHA1 Hashed Passwords should always be the same length");
+            for (int i = 0; i < hashedPassword.Length; i++)
+            {
+                if (hashedPassword[i] != correctPassword[i])
+                {
+                    validPassword = false;
+                    break;
+                }
+            }
+
+            if (validPassword)
             {
                 loginUser.LoginAttemptCount += 1;
                 // Disable the account if login attempts pass 5 times
