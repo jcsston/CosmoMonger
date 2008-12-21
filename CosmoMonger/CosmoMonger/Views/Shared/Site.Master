@@ -12,32 +12,85 @@
     <div class="page">
 
         <div id="header">
-            <div id="title">
-                <h1>CosmoMonger</h1>
-            </div>
-              
+<!--
             <div id="logindisplay">
                 <% Html.RenderPartial("LoginUserControl"); %>
-            </div> 
-            
-            <div id="menucontainer">
-            
-                <ul id="menu">              
-                    <li><%= Html.ActionLink("Home", "Index", "Home")%></li>
-                    <li><%= Html.ActionLink("Player", "Index", "Player")%></li>
-                    <li><%= Html.ActionLink("About", "About", "Home")%></li>
-                </ul>
-            
             </div>
+    -->        
+            <!-- The following CSS menu is from http://sperling.com/examples/menuh/ -->
+            <div id="menuh-container">
+                <div id="menuh">
+                    <%
+                        if (Request.IsAuthenticated) {
+                    %>
+                    <ul style="width: auto">
+                        <li style="cursor: default">
+                                <div id="menuha">
+                                    Welcome aboard: <b><%= Html.Encode(Page.User.Identity.Name) %></b>&nbsp;
+                                </div>
+                        </li>
+                    </ul>
+                    <ul>	
+	                    <li><%= Html.ActionLink("Player", "Index", "Player")%>
+	                        <ul>
+	                            <li><%= Html.ActionLink("Create Player", "CreatePlayer", "Player")%></li>
+                                <li><%= Html.ActionLink("View Profile", "ViewProfile", "Player")%></li>
+                                <li><%= Html.ActionLink("Edit Profile", "EditProfile", "Player")%></li>
+                            </ul>
+	                    </li>
+                    </ul>
+                    <ul>	
+	                    <li><%= Html.ActionLink("Records", "Index", "PlayerRecord")%>
+	                        <ul>
+	                            <li><%= Html.ActionLink("View Record", "ViewRecord", "PlayerRecord")%></li>
+	                            <li><%= Html.ActionLink("Top Records", "ListRecords", "PlayerRecord")%></li>
+                                
+                            </ul>
+	                    </li>
+                    </ul>
+                    <ul>	
+	                    <li><%= Html.ActionLink("Travel", "Index", "Travel")%>
+	                        <ul>
+	                            <li><%= Html.ActionLink("Travel", "Travel", "Travel")%></li>
+	                            <li><%= Html.ActionLink("Galaxy Map", "GalaxyMap", "Travel")%></li>
+                                
+                            </ul>
+	                    </li>
+                    </ul>
+                    <ul>	
+	                    <li><%= Html.ActionLink("Trade", "Index", "Trade")%>
+	                        <ul>
+	                            <li><%= Html.ActionLink("List Goods", "ListGoods", "Trade")%></li>
+                            </ul>
+	                    </li>
+                    </ul>
+                    <ul>
+                        <li><%= Html.ActionLink("Logout", "Logout", "Account")%></li>
+                    </ul>
+                    <%
+                        }
+                        else 
+                        {
+                    %> 
+                    <ul>
+                        <li>
+                            <%= Html.ActionLink("Login", "Login", "Account") %>
+                        </li>
+                    </ul>
+                    <%
+                        }
+                    %>
+                </div>
+            </div>  
         </div>
-
+        
         <div id="main" class="main">
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
         </div>
         <asp:ContentPlaceHolder ID="FooterContent" runat="server" />
         <div id="footer">
             <p>
-                CosmoMonger &copy; Copyright 2008-2009<br />
+                <%= Html.ActionLink("CosmoMonger", "About", "Home") %> &copy; Copyright 2008-2009<br />
                 rev <%= CosmoMonger.Models.GameManager.GetCodeVersion() %> (db <%= CosmoMonger.Models.GameManager.GetDatabaseVersion() %>)
              </p>
         </div>

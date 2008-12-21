@@ -170,7 +170,8 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Fetches the Player object for the passed in player id. If the player doesn't exist, null is returned.
+        /// Fetches the Player object for the passed in player id. 
+        /// If the player doesn't exist, null is returned.
         /// </summary>
         /// <param name="playerId">The player id.</param>
         /// <returns>Player object, null if the player does not exist.</returns>
@@ -190,12 +191,21 @@ namespace CosmoMonger.Models
             return (from s in db.CosmoSystems select s).ToArray();
         }
 
+        /// <summary>
+        /// Gets all the races avaible.
+        /// </summary>
+        /// <returns>Array of Race objects</returns>
         public Race[] GetRaces()
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
             return (from r in db.Races select r).ToArray();
         }
 
+        /// <summary>
+        /// Gets the race by id number.
+        /// </summary>
+        /// <param name="raceId">The race id.</param>
+        /// <returns>Race oject, null if the race does not exist</returns>
         public Race GetRace(int raceId)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();

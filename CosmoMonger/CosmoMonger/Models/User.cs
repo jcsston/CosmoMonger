@@ -58,6 +58,7 @@ namespace CosmoMonger.Models
                 Logger.Write("Unable to load player starting base ship from database", "Model", 9999, 3, TraceEventType.Critical);
                 return null;
             }
+
             playerShip.BaseShip = baseShip;
 
             // Assign the default starting location
@@ -69,6 +70,7 @@ namespace CosmoMonger.Models
                 Logger.Write("Unable to load player starting system from database", "Model", 9999, 4, TraceEventType.Critical);
                 return null;
             }
+
             playerShip.CosmoSystem = startingSystem;
 
             // Setup default upgrades

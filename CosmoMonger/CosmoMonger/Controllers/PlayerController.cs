@@ -1,14 +1,20 @@
-﻿namespace CosmoMonger.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="PlayerController.cs" company="CosmoMonger">
+//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Mvc.Ajax;
     using CosmoMonger.Models;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
-    using System.Diagnostics;
 
     /// <summary>
     /// This controller deals with all the player related tasks, 
@@ -17,9 +23,13 @@
     public class PlayerController : GameController
     {
         /// <summary>
-        /// Redirects to ViewProfile with the current player id.
+        /// Redirects to CreatePlayer for new players.
+        /// Redirects to ViewProfile for current players.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The CreatePlayer action if the current user has no player. 
+        /// Otherwise the ViewProfile action with the current player id.
+        /// </returns>
         public ActionResult Index()
         {
             if (this.ControllerGame.CurrentPlayer == null)
@@ -30,17 +40,18 @@
             else
             {
                 // Otherwise, show the profile of the current player
-                return RedirectToAction("ViewProfile", this.ControllerGame.CurrentPlayer);
+                return RedirectToAction("ViewProfile", this.ControllerGame.CurrentPlayer.PlayerId);
             }
         }
 
         /// <summary>
         /// Returns the CreatePlayer View for the user to fill out with their requested player details.
         /// </summary>
-        /// <returns>Create View</returns>
+        /// <returns>The CreatePlayer view</returns>
         public ActionResult CreatePlayer()
         {
-            ViewData["Races"] = this.ControllerGame.GetRaces();
+            Race [] races = this.ControllerGame.GetRaces();
+            ViewData["raceId"] = new SelectList(races, "RaceId", "Name");
             return View();
         }
 
@@ -49,19 +60,47 @@
         /// Raises an error if another player with the same name already exists.
         /// Redirects to ViewProfile view if player is successfully created, CreatePlayer view otherwise.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="raceId">The race id.</param>
-        /// <returns></returns>
+        /// <param name="name">The name for the new player.</param>
+        /// <param name="raceId">The race id for the new player.</param>
+        /// <returns>The ViewProfile view if player is created, CreatePlayer view otherwise.</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult CreatePlayer(string name, int raceId)
         {
-            throw new NotImplementedException();
+            Race race = this.ControllerGame.GetRace(raceId);
+            if (race == null)
+            {
+                ModelState.AddModelError("raceId", "Invalid Race selected");
+                return CreatePlayer();
+            }
+
+            Player newPlayer = null;
+            try
+            {
+                newPlayer = this.ControllerGame.CurrentUser.CreatePlayer(name, race);
+            }
+            catch (ArgumentException ex)
+            {
+                if (ex.ParamName == "name")
+                {
+                    ModelState.AddModelError("name", ex.Message);
+                }
+                else
+                {
+                    Logger.Write("Unknown error when User.CreatePlayer was called with name: " + name + " and race: " + race + " Exception Details: " + ex.ToString(), "Controller", 100, 1004, TraceEventType.Error, "ArgumentException in PlayerController.CreatePlayer");
+                    ModelState.AddModelError("_FORM", "Unknown error");
+                }
+
+                return CreatePlayer();
+            }
+
+            return RedirectToAction("ViewProfile", newPlayer.PlayerId);
         }
 
         /// <summary>
         /// Looks up the profile data for the passed in player id and returns the ViewProfile view.
         /// </summary>
-        /// <param name="playerId">The player id.</param>
+        /// <param name="playerId">The id of the player to view.</param>
+        /// <returns>The ViewProfile view with the Player model data.</returns>
         public ActionResult ViewProfile(int playerId)
         {
             return View(this.ControllerGame.GetPlayer(playerId));
@@ -78,11 +117,15 @@
 
         /// <summary>
         /// Saves the edited profile data using the User.UpdateProfile and Player.UpdateProfile methods.
-        /// Returns EditProfile view if there is an error in saving the profile data. 
+        /// Returns EditProfile view if there is an error in saving the profile data.
         /// If no error was found the ViewProfile view is returned.
         /// </summary>
         /// <param name="playerId">The player id to update.</param>
         /// <param name="characterName">The updated character name.</param>
+        /// <returns>
+        /// The ViewProfile action if no error was encountered. 
+        /// The EditProfile view is returned on errors requiring a change of input.
+        /// </returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult EditProfile(int playerId, string characterName)
         {
@@ -107,7 +150,7 @@
                 return View();
             }
 
-            return RedirectToAction("ViewProfile", updatePlayer);
+            return RedirectToAction("ViewProfile", updatePlayer.PlayerId);
         }
     }
 }

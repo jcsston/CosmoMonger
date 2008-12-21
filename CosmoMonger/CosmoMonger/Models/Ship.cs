@@ -164,10 +164,9 @@ namespace CosmoMonger.Models
             // We use the distance formula, sqrt((x2 - x1)^2 + (y2 - y1)^2)
             var systems = (from s in db.CosmoSystems
                            where s != this.CosmoSystem
-                           && Math.Sqrt(
-                                Math.Pow(this.CosmoSystem.PositionX - s.PositionX, 2) 
-                                + Math.Pow(this.CosmoSystem.PositionY - s.PositionY, 2)
-                              ) < this.JumpDrive.Range
+                           && Math.Sqrt(Math.Pow(this.CosmoSystem.PositionX - s.PositionX, 2) 
+                                + Math.Pow(this.CosmoSystem.PositionY - s.PositionY, 2))
+                              < this.JumpDrive.Range
                            select s);
 
             return systems.ToArray();

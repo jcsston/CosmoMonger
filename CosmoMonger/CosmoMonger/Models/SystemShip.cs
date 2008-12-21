@@ -1,4 +1,10 @@
-﻿namespace CosmoMonger.Models
+﻿//-----------------------------------------------------------------------
+// <copyright file="SystemShip.cs" company="CosmoMonger">
+//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
@@ -24,6 +30,7 @@
         /// <summary>
         /// Buys this ship.
         /// </summary>
+        /// <param name="manager">The GameManger object to use for this transaction.</param>
         public void Buy(GameManager manager)
         {
             // Calcuate the total cost to the player

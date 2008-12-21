@@ -15,7 +15,6 @@
     /// at a time, or you can choose to use one of the scoped factory methods that
     /// can scope the DataContext to a WebRequest or a Thread context (in a WinForm app
     /// for example).
-    /// 
     /// Using scoped variants can be more efficient in some scenarios and allows passing
     /// a DataContext across multiple otherwise unrelated components so that the change
     /// context can be shared. 
@@ -24,8 +23,7 @@
     public class DataContextFactory
     {
         /// <summary>
-        /// Creates a new Data Context for a specific DataContext type
-        /// 
+        /// Creates a new Data Context for a specific DataContext type.
         /// Provided merely for compleness sake here - same as new YourDataContext()
         /// </summary>
         /// <typeparam name="TDataContext"></typeparam>
@@ -37,8 +35,7 @@
         }
 
         /// <summary>
-        /// Creates a new Data Context for a specific DataContext type with a connection string
-        /// 
+        /// Creates a new Data Context for a specific DataContext type with a connection string.
         /// Provided merely for compleness sake here - same as new YourDataContext()
         /// </summary>
         /// <typeparam name="TDataContext"></typeparam>
@@ -55,7 +52,6 @@
         /// Creates a ASP.NET Context scoped instance of a DataContext. This static
         /// method creates a single instance and reuses it whenever this method is
         /// called.
-        /// 
         /// This version creates an internal request specific key shared key that is
         /// shared by each caller of this method from the current Web request.
         /// </summary>
@@ -70,7 +66,6 @@
         /// Creates a ASP.NET Context scoped instance of a DataContext. This static
         /// method creates a single instance and reuses it whenever this method is
         /// called.
-        /// 
         /// This version lets you specify a specific key so you can create multiple 'shared'
         /// DataContexts explicitly.
         /// </summary>

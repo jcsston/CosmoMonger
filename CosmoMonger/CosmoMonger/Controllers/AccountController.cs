@@ -10,6 +10,9 @@
     using System.Web.Security;
     using System.Web.UI;
 
+    /// <summary>
+    /// This controller manages user account creation, login, and logout
+    /// </summary>
     [HandleError]
     [OutputCache(Location = OutputCacheLocation.None)]
     public class AccountController : Controller

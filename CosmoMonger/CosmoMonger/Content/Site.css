@@ -5,18 +5,18 @@ to use a different color start by replacing all instances of
 ----------------------------------------------------------*/
 body
 {
-    background-color: #5c87b2;
-    font-size: .75em;
-    font-family: Verdana, Helvetica, Sans-Serif;
-    margin: 0;
-    padding: 0;
-    color: #696969;
-    background-image: url(2153.jpg);
-	position:fixed;
-	height:100%;
-	width:100%;
-	top:-1px;
-	left:-1px;
+	border: 12px outset #808080;
+	background-color: black;
+	font-size: .75em;
+	font-family: Verdana, Helvetica, Sans-Serif;
+	margin: 0;
+	padding: 0;
+	color: white; /*background-image: url(2153.jpg);*/
+	position: fixed;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	top: 0px;
 }
 
 a:link
@@ -104,7 +104,7 @@ page width. Or, you can specify an exact pixel width. */
 {
     position: relative;
     margin-bottom: 0px;
-    color: #000;
+    color: white;
     padding: 0;
 }
 
@@ -113,7 +113,6 @@ page width. Or, you can specify an exact pixel width. */
     font-weight: bold;
     padding: 5px 0;
     margin: 0;
-    color: #fff;
     border: none;
     line-height: 2em;
     font-family: Arial, Helvetica, sans-serif;
@@ -123,73 +122,19 @@ page width. Or, you can specify an exact pixel width. */
 #main
 {
     padding: 30px 30px 15px 30px;
-    background-color: #fff;
+    background-color: black;
     margin-bottom: 30px;
     _height: 1px; /* only IE6 applies CSS properties starting with an underscrore */
 }
 
 #footer
 {
-    color: #999;
-    padding: 10px 0;
-    text-align: center;
-    line-height: normal;
-    margin: 0;
-    font-size: .9em;
-}
-
-/* TAB MENU   
-----------------------------------------------------------*/
-ul#menu
-{
-    border-bottom: 1px #5C87B2 solid;
-    padding: 0 0 2px;
-    position: relative;
-    margin: 0;
-    text-align: right;
-}
-
-ul#menu li
-{
-    display: inline;
-    list-style: none;
-}
-
-ul#menu li#greeting
-{
-    padding: 10px 20px;
-    font-weight: bold;
-    text-decoration: none;
-    line-height: 2.8em;
-    color: #fff;
-}
-
-ul#menu li a
-{
-    padding: 10px 20px;
-    font-weight: bold;
-    text-decoration: none;
-    line-height: 2.8em;
-    background-color: #e8eef4;
-    color: #034af3;
-}
-
-ul#menu li a:hover
-{
-    background-color: #fff;
-    text-decoration: none;
-}
-
-ul#menu li a:active
-{
-    background-color: #a6e2a6;
-    text-decoration: none;
-}
-
-ul#menu li.selected a
-{
-    background-color: #fff;
-    color: #000;
+	color: silver;
+	padding: 10px 0;
+	text-align: center;
+	line-height: normal;
+	margin: 0;
+	font-size: .9em;
 }
 
 /* MISC  
@@ -211,9 +156,9 @@ ul#menu li.selected a
 
 #title
 {
-    display:block;
-    float:left;
-    text-align:left;
+    display: block;
+    float: left;
+    text-align: left;
 }
 
 #logindisplay
@@ -253,3 +198,125 @@ ul#menu li.selected a
     font-weight: bold;
     color: #ff0000;
 }
+
+/* Begin CSS Drop Down Menu 
+----------------------------------------------------------*/
+
+#menuh-container
+{
+	margin: 0px;
+	padding: 0px;
+	position: relative;
+	text-align: center;
+	clear: both;
+}
+
+#menuh
+{
+	font-size: small;
+	width: 100%;
+	margin: 0em;
+}
+
+#menuha
+{
+	text-align: center;
+	display:block;
+	border: 1px solid #555;
+	white-space:nowrap;
+	margin:0;
+	padding: 0.3em;
+	color: white;
+	background-color: royalblue;
+	text-decoration:none;
+}
+	
+#menuh a
+	{
+	text-align: center;
+	display:block;
+	border: 1px solid #555;
+	white-space:nowrap;
+	margin:0;
+	padding: 0.3em;
+	}
+	
+#menuh a:link, #menuh a:visited, #menuh a:active	/* menu at rest */
+	{
+	color: white;
+	background-color: royalblue;
+	text-decoration:none;
+	}
+	
+#menuh a:hover	/* menu at mouse-over  */
+	{
+	color: white;
+	background-color: cornflowerblue;
+	text-decoration:none;
+	}	
+	
+#menuh a.top_parent, #menuh a.top_parent:hover  /* attaches down-arrow to all top-parents */
+	{
+	background-image: url(navdown_white.gif);
+	background-position: right center;
+	background-repeat: no-repeat;
+	}
+	
+#menuh a.parent, #menuh a.parent:hover 	/* attaches side-arrow to all parents */
+	{
+	background-image: url(nav_white.gif);
+	background-position: right center;
+	background-repeat: no-repeat;
+	}
+
+#menuh ul
+	{
+	list-style:none;
+	margin: 0;
+	padding: 0;
+	float:left;
+	width: 10em;	/* width of all menu boxes */
+	}
+
+#menuh li
+	{
+	position:relative;
+    min-height: 1px; 			/* Sophie Dennis contribution for IE7 */
+    vertical-align: bottom; /* Sophie Dennis contribution for IE7 */
+	}
+
+#menuh ul ul
+	{
+	position:absolute;
+	z-index:500;
+	top:auto;
+	display:none;
+	padding: 1em;
+	margin:-1em 0 0 -1em;
+	}
+
+#menuh ul ul ul
+	{
+	top:0;
+	left:100%;
+	}
+
+div#menuh li:hover
+	{
+	cursor:pointer;
+	z-index:100;
+	}
+
+div#menuh li:hover ul ul,
+div#menuh li li:hover ul ul,
+div#menuh li li li:hover ul ul,
+div#menuh li li li li:hover ul ul
+{display:none;}
+
+div#menuh li:hover ul,
+div#menuh li li:hover ul,
+div#menuh li li li:hover ul,
+div#menuh li li li li:hover ul
+{display:block;}
+
+/* End CSS Drop Down Menu */

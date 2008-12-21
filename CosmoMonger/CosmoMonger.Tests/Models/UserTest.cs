@@ -182,23 +182,31 @@
         [TestMethod]
         public void UserSendMessage()
         {
-            UserManager userManager = new UserManager();
-            User testUser1 = userManager.CreateUser("msg1" + this.baseTestUsername, "test1000", "msg1" + this.baseTestEmail);
-            Assert.IsNotNull(testUser1, "Test User 1 is created");
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("msg1" + this.baseTestUsername, "test1000", "msg1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created");
 
-            User testUser2 = userManager.CreateUser("msg2" + this.baseTestUsername, "test1000", "msg2" + this.baseTestEmail);
-            Assert.IsNotNull(testUser2, "Test User 2 is created");
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            CosmoMongerMembershipUser testUser2 = (CosmoMongerMembershipUser)provider.CreateUser("msg2" + this.baseTestUsername, "test1000", "msg2" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser2, "Test User 2 was created");
+
+            User testUserModel2 = testUser2.GetUserModel();
+            Assert.IsNotNull(testUserModel2, "Able to get model object for user 2");
+
 
             for (int i = 0; i < 10; i++)
             {
-                testUser1.SendMessage(testUser2, "Hello world!");
+                testUserModel1.SendMessage(testUserModel2, "Hello world!");
             }
 
-            Message [] messages = testUser1.FetchUnreadMessages();
+            Message[] messages = testUserModel1.FetchUnreadMessages();
             foreach (Message msg in messages)
             {
-                Assert.AreEqual(msg.RecipientUserId, testUser1.UserId, "Recipient user should match the user the message is stored under");
-                Assert.AreEqual(msg.SenderUserId, testUser2.UserId, "Sender user should match the user the message from");
+                Assert.AreEqual(msg.RecipientUserId, testUserModel1.UserId, "Recipient user should match the user the message is stored under");
+                Assert.AreEqual(msg.SenderUserId, testUserModel2.UserId, "Sender user should match the user the message from");
                 Assert.AreEqual(msg.Content, "Hello world!", "Message should match what we sent");
                 Assert.IsFalse(msg.Received, "This message should not be read yet.");
                 msg.MarkAsReceived();

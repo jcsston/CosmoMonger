@@ -1,4 +1,10 @@
-﻿namespace CosmoMonger.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="HomeController.cs" company="CosmoMonger">
+//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -8,26 +14,31 @@
     using System.Web.Mvc.Ajax;
     using CosmoMonger.Models;
 
+    /// <summary>
+    /// This controller handles the home pages of CosmoMonger
+    /// </summary>
     [HandleError]
     public class HomeController : Controller
     {
-        private GameManager gameManager = null;
-
+        /// <summary>
+        /// Handles the default Index action
+        /// </summary>
+        /// <returns>The Index View</returns>
         public ActionResult Index()
         {
-            if (User != null && User.Identity.IsAuthenticated)
-            {
-                gameManager = new GameManager(User.Identity.Name);
-            }
-			ViewData["Title"] = "CosmoMonger";
+            ViewData["Title"] = "CosmoMonger";
             ViewData["Message"] = "Own the Cosmos!";
 
             return View();
         }
 
+        /// <summary>
+        /// Handles the About action
+        /// </summary>
+        /// <returns>The About View</returns>
         public ActionResult About()
         {
-			ViewData["Title"] = "About CosmoMonger";
+            ViewData["Title"] = "About CosmoMonger";
 
             return View();
         }

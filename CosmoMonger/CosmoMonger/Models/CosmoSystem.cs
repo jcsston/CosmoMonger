@@ -1,4 +1,10 @@
-﻿namespace CosmoMonger.Models
+﻿//-----------------------------------------------------------------------
+// <copyright file="CosmoSystem.cs" company="CosmoMonger">
+//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
@@ -19,14 +25,17 @@
         }
 
         /// <summary>
-        /// Fetches the SystemShip object for the passed in systemShip id. If the SystemShip doesn't exist, null is returned.
+        /// Fetches the SystemShip object for the passed in systemShip id.
         /// </summary>
-        /// <param name="systemShipId">The base ship id of the SystemShip.</param>
-        /// <returns>The SystemShip with the matching base ship id</returns>
-        public SystemShip GetShip(int systemShipId)
+        /// <param name="shipId">The base ship id of the SystemShip.</param>
+        /// <returns>
+        /// The SystemShip with the matching base ship id. 
+        /// If the SystemShip doesn't exist, null is returned.
+        /// </returns>
+        public SystemShip GetShip(int shipId)
         {
             return (from ss in this.SystemShips
-                    where ss.BaseShipId == systemShipId
+                    where ss.BaseShipId == shipId
                     select ss).SingleOrDefault();
         }
 
@@ -41,14 +50,16 @@
 
         /// <summary>
         /// Fetches the SystemGood object for the passed in systemGood id. 
-        /// If the SystemGood doesn't exist, null is returned.
         /// </summary>
-        /// <param name="systemGoodId">The good id of the SystemGood object to get.</param>
-        /// <returns>Matching SystemGood object</returns>
-        public SystemGood GetGood(int systemGoodId)
+        /// <param name="goodId">The good id of the SystemGood object to get.</param>
+        /// <returns>
+        /// The SystemGood object with the matching goodId. 
+        /// If there is no SystemGood for the passed in good id, null is returned.
+        /// </returns>
+        public SystemGood GetGood(int goodId)
         {
             return (from sg in this.SystemGoods
-                    where sg.GoodId == systemGoodId
+                    where sg.GoodId == goodId
                     select sg).SingleOrDefault();
         }
 
@@ -106,10 +117,11 @@
         }
 
         /// <summary>
-        /// Fetches the SystemWeaponUpgrade object for the passed upgrade id. Returns null if the SystemWeaponUpgrade does not exist.
+        /// Fetches the SystemWeaponUpgrade object for the passed upgrade id. 
+        /// Returns null if the SystemWeaponUpgrade does not exist.
         /// </summary>
         /// <param name="upgradeId">The upgrade id.</param>
-        /// <returns></returns>
+        /// <returns>A SystemWeaponUpgrades</returns>
         public SystemWeaponUpgrade GetWeaponUpgrade(int upgradeId)
         {
             return (from su in this.SystemWeaponUpgrades

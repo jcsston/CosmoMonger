@@ -1,4 +1,10 @@
-﻿namespace CosmoMonger.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="GameController.cs" company="CosmoMonger">
+//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -15,6 +21,9 @@
     [Authorize]
     public class GameController : Controller
     {
+        /// <summary>
+        /// Holds the GameManger object for this controller
+        /// </summary>
         private GameManager gameManager = null;
 
         /// <summary>
@@ -25,11 +34,19 @@
         {
             get
             {
-                if (gameManager == null)
+                if (this.gameManager == null)
                 {
-                    gameManager = new GameManager(User.Identity.Name);
+                    if (User != null && User.Identity.IsAuthenticated)
+                    {
+                        this.gameManager = new GameManager(User.Identity.Name);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("This property should never be accessed by an un-authenticated user");
+                    }
                 }
-                return gameManager;
+
+                return this.gameManager;
             }
         }
     }

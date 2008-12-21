@@ -8,11 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CosmoMonger.Views.Player
-{
-
-
-    public partial class Create
-    {
+namespace CosmoMonger.Views.Player {
+    
+    
+    public partial class Create {
     }
 }

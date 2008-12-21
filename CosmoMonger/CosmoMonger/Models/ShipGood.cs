@@ -1,4 +1,10 @@
-﻿namespace CosmoMonger.Models
+﻿//-----------------------------------------------------------------------
+// <copyright file="ShipGood.cs" company="CosmoMonger">
+//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
