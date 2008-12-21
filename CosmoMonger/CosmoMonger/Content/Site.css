@@ -226,8 +226,8 @@ page width. Or, you can specify an exact pixel width. */
 	white-space:nowrap;
 	margin:0;
 	padding: 0.3em;
-	color: white;
-	background-color: royalblue;
+	color: black;/* white */
+	background-color: gray;/* royalblue */
 	text-decoration:none;
 }
 	
@@ -243,8 +243,8 @@ page width. Or, you can specify an exact pixel width. */
 	
 #menuh a:link, #menuh a:visited, #menuh a:active	/* menu at rest */
 	{
-	color: white;
-	background-color: royalblue;
+	color: black;/* white */
+	background-color: gray;/* royalblue */
 	text-decoration:none;
 	}
 	
