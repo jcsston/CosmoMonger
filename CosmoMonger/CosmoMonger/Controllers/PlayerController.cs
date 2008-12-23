@@ -23,25 +23,14 @@ namespace CosmoMonger.Controllers
     public class PlayerController : GameController
     {
         /// <summary>
-        /// Redirects to CreatePlayer for new players.
-        /// Redirects to ViewProfile for current players.
+        /// Redirects to the ViewProfile action
         /// </summary>
         /// <returns>
-        /// The CreatePlayer action if the current user has no player. 
-        /// Otherwise the ViewProfile action with the current player id.
+        /// The ViewProfile action
         /// </returns>
         public ActionResult Index()
         {
-            if (this.ControllerGame.CurrentPlayer == null)
-            {
-                // Go to the create action
-                return RedirectToAction("CreatePlayer");
-            }
-            else
-            {
-                // Otherwise, show the profile of the current player
-                return RedirectToAction("ViewProfile", this.ControllerGame.CurrentPlayer.PlayerId);
-            }
+            return RedirectToAction("ViewProfile");
         }
 
         /// <summary>
@@ -51,6 +40,7 @@ namespace CosmoMonger.Controllers
         public ActionResult CreatePlayer()
         {
             Race [] races = this.ControllerGame.GetRaces();
+            ViewData["Title"] = "Create Player";
             ViewData["raceId"] = new SelectList(races, "RaceId", "Name");
             return View();
         }
@@ -101,9 +91,31 @@ namespace CosmoMonger.Controllers
         /// </summary>
         /// <param name="playerId">The id of the player to view.</param>
         /// <returns>The ViewProfile view with the Player model data.</returns>
+        public ActionResult ViewProfile()
+        {
+            if (this.ControllerGame.CurrentPlayer == null)
+            {
+                // Go to the create action
+                return RedirectToAction("CreatePlayer");
+            }
+            else
+            {
+                // Otherwise, show the profile of the current player
+                return RedirectToAction("ViewProfile", this.ControllerGame.CurrentPlayer.PlayerId);
+            }
+        }
+
+        /// <summary>
+        /// Looks up the profile data for the passed in player id and returns the ViewProfile view.
+        /// </summary>
+        /// <param name="playerId">The id of the player to view.</param>
+        /// <returns>The ViewProfile view with the Player model data.</returns>
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ViewProfile(int playerId)
         {
-            return View(this.ControllerGame.GetPlayer(playerId));
+            ViewData["Title"] = "View Player Profile";
+            ViewData["Player"] = this.ControllerGame.GetPlayer(playerId);
+            return View();
         }
 
         /// <summary>
@@ -112,6 +124,7 @@ namespace CosmoMonger.Controllers
         /// <returns>The EditProfile view</returns>
         public ActionResult EditProfile()
         {
+            ViewData["Title"] = "Edit Player Profile";
             return View();
         }
 

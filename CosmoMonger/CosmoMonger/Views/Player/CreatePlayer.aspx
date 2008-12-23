@@ -17,21 +17,32 @@
             <table>
                 <tr>
                     <td>Name:</td>
-                    <td>
+                    <td colspan="2">
                         <%= Html.TextBox("name") %>
                         <%= Html.ValidationMessage("name")%>
                     </td>
                 </tr>
+                <script type="text/javascript" language="javascript">
+                    function UpdateRaceImage() {
+                        var raceSelect = document.getElementById('raceId');
+                        var raceOption = raceSelect.options[raceSelect.selectedIndex];
+                        document.getElementById('RaceImg').src = '../Content/Races/' + raceOption.text + '.jpg';
+                    }
+                    window.onload = UpdateRaceImage;
+                </script>
                 <tr>
                     <td>Race:</td>
                     <td>
-                        <%= Html.DropDownList("raceId") %>
+                        <%= Html.DropDownList("raceId", new { onChange = "UpdateRaceImage();" })%>
                         <%= Html.ValidationMessage("raceId")%>
+                    </td>
+                    <td>
+                        <img id="RaceImg" src="" alt="Race Image" width="100px" height="100px"/>
+                        <div id="RaceDesc"></div>
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td><input type="submit" value="Create Player" /></td>
+                    <td colspan="3" align="right"><input type="submit" value="Create Player" /></td>
                 </tr>
             </table>
         <% } %>

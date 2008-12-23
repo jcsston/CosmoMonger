@@ -11,7 +11,8 @@ body
 	font-family: Verdana, Helvetica, Sans-Serif;
 	margin: 0;
 	padding: 0;
-	color: white; /*background-image: url(2153.jpg);*/
+	color: white; 
+	background-image: url(Stars.png);
 	position: fixed;
 	left: 0px;
 	bottom: 0px;
@@ -97,7 +98,7 @@ page width. Or, you can specify an exact pixel width. */
 
 .main
 {
-    background-image: url(Stars.jpg);
+    background-image: url(Stars.png);
 }
 
 #header
@@ -227,7 +228,7 @@ page width. Or, you can specify an exact pixel width. */
 	margin:0;
 	padding: 0.3em;
 	color: black;/* white */
-	background-color: gray;/* royalblue */
+	background-color: silver;/* royalblue */
 	text-decoration:none;
 }
 	
@@ -244,7 +245,7 @@ page width. Or, you can specify an exact pixel width. */
 #menuh a:link, #menuh a:visited, #menuh a:active	/* menu at rest */
 	{
 	color: black;/* white */
-	background-color: gray;/* royalblue */
+	background-color: silver;/* royalblue */
 	text-decoration:none;
 	}
 	

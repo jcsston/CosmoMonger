@@ -27,7 +27,7 @@ namespace CosmoMonger.Tests.Controllers
             // Assert
             ViewDataDictionary viewData = result.ViewData;
             Assert.AreEqual("CosmoMonger", viewData["Title"]);
-            Assert.AreEqual("Own the Cosmos!", viewData["Message"]);
+            Assert.AreEqual("Buy low, sell high, and destroy your opponents!", viewData["Message"]);
         }
 
         [TestMethod]
