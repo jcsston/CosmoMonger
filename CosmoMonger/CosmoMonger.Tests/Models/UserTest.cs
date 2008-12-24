@@ -1,18 +1,17 @@
 ﻿namespace CosmoMonger.Tests.Models
 {
     using System;
-    using System.Text;
     using System.Collections.Generic;
     using System.Linq;
-    using CosmoMonger.Models;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.Text;
     using System.Web.Security;
+    using CosmoMonger.Models;
+    using NUnit.Framework;
     
-
     /// <summary>
     /// Summary description for UserTest
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class UserTest
     {
         private string baseTestUsername;
@@ -20,54 +19,20 @@
 
         public UserTest()
         {
+            SetupNewTestData();
+        }
+
+        private void SetupNewTestData()
+        {
             string postFix = DateTime.Now.ToBinary().ToString();
             baseTestUsername = "testUser_" + postFix;
             baseTestEmail = "testUser_" + postFix + "@cosmomonger.com";
         }
 
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
-        #region Additional test attributes
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-        #endregion
-
-        [TestMethod]
+        [Test]
         public void UserCreatePlayer()
         {
+            SetupNewTestData();
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
 
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
@@ -98,9 +63,10 @@
             Assert.AreEqual("player" + this.baseTestUsername, testPlayer.Name, "Test Player has correct name");
         }
 
-        [TestMethod]
+        [Test]
         public void UserUpdateProfile1()
         {
+            SetupNewTestData();
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
             CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail, null, null, true, null, out status);
@@ -117,9 +83,10 @@
             Assert.AreEqual(this.baseTestEmail, testUser.Email, "Test User actually has orignal e-mail");
         }
 
-        [TestMethod]
+        [Test]
         public void UserUpdateProfile2()
         {
+            SetupNewTestData();
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
             CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail, null, null, true, null, out status);
@@ -135,9 +102,10 @@
             Assert.AreEqual(this.baseTestUsername, usernameWithUpdatedEmail, "Test User actually has updated e-mail");
         }
 
-        [TestMethod]
+        [Test]
         public void UserUpdateProfile3()
         {
+            SetupNewTestData();
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
             CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail, null, null, true, null, out status);
@@ -153,9 +121,10 @@
             Assert.AreEqual("update" + this.baseTestUsername, usernameWithUpdatedEmail, "Test User actually has updated username");
         }
 
-        [TestMethod]
+        [Test]
         public void UserUpdateProfile4()
         {
+            SetupNewTestData();
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
             CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail, null, null, true, null, out status);
@@ -179,9 +148,10 @@
         /// <summary>
         /// Tests the send message.
         /// </summary>
-        [TestMethod]
+        [Test]
         public void UserSendMessage()
         {
+            SetupNewTestData();
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
             CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("msg1" + this.baseTestUsername, "test1000", "msg1" + this.baseTestEmail, null, null, true, null, out status);

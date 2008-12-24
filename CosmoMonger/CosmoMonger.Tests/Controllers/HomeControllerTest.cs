@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CosmoMonger;
-using CosmoMonger.Controllers;
-
-namespace CosmoMonger.Tests.Controllers
+﻿namespace CosmoMonger.Tests.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Web.Mvc;
+    using CosmoMonger;
+    using CosmoMonger.Controllers;
+    using NUnit.Framework;
+
     /// <summary>
     /// Summary description for HomeControllerTest
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class HomeControllerTest
     {
-        [TestMethod]
+        [Test]
         public void Index()
         {
             // Arrange
@@ -30,7 +30,7 @@ namespace CosmoMonger.Tests.Controllers
             Assert.AreEqual("Buy low, sell high, and destroy your opponents!", viewData["Message"]);
         }
 
-        [TestMethod]
+        [Test]
         public void About()
         {
             // Arrange

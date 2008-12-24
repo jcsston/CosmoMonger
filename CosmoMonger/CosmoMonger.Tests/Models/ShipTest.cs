@@ -2,17 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
     using System.Threading;
-    using System.Linq;
-    using CosmoMonger.Models;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System.Web.Security;
+    using CosmoMonger.Models;
+    using NUnit.Framework;
 
     /// <summary>
     /// Summary description for ShipTest
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class ShipTest
     {
         Random rnd = new Random();
@@ -24,48 +24,7 @@
             //
         }
 
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
-        #region Additional test attributes
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-        #endregion
-
-
-        [TestMethod]
+        [Test]
         public void ShipTravel()
         {
             Player testPlayer = PlayerTest.CreateTestPlayer();
@@ -95,7 +54,7 @@
             Assert.AreEqual(targetSystem, testShip.CosmoSystem, "Ship should now be in the target system");
         }
 
-        [TestMethod]
+        [Test]
         public void ShipTravelRandom()
         {
             Player testPlayer = PlayerTest.CreateTestPlayer();
@@ -128,7 +87,7 @@
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ShipTravelRandomThreaded()
         {
             Thread[] t = new Thread[10];
