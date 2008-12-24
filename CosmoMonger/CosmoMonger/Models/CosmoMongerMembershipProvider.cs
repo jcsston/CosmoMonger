@@ -202,7 +202,36 @@ namespace CosmoMonger.Models
 
 		public override bool DeleteUser(string username, bool deleteAllRelatedData)
 		{
-			throw new NotImplementedException();
+            if (!deleteAllRelatedData)
+            {
+                throw new ArgumentException("Must delete all related data to user", "deleteAllRelatedData");
+            }
+
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            User matchingUser = (from u in db.Users
+                                 where u.UserName == username
+                                 select u).SingleOrDefault();
+            if (matchingUser != null)
+            {
+                // We have to delete all objects in the database related to this user
+                var playerShips = (from p in db.Players where p.User == matchingUser select p.Ship);
+                var playerShipIds = (from p in db.Players where p.User == matchingUser select p.Ship.ShipId);
+                db.InProgressCombats.DeleteAllOnSubmit(from c in db.InProgressCombats
+                                                       where playerShipIds.Contains(c.AttackerShipId)
+                                                       || playerShipIds.Contains(c.DefenderShipId)
+                                                       select c);
+                db.ShipGoods.DeleteAllOnSubmit(from g in db.ShipGoods where playerShips.Contains(g.Ship) select g);
+                db.Ships.DeleteAllOnSubmit(playerShips);
+                db.Players.DeleteAllOnSubmit(from p in db.Players where p.User == matchingUser select p);
+                db.Messages.DeleteAllOnSubmit(from m in db.Messages
+                                              where m.RecipientUserId == matchingUser.UserId
+                                              || m.SenderUserId == matchingUser.UserId
+                                              select m);
+                db.Users.DeleteOnSubmit(matchingUser);
+                db.SubmitChanges();
+                return true;
+            }
+            return false;
 		}
 
 		/// <summary>

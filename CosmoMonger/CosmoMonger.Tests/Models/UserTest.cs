@@ -14,39 +14,37 @@
     [TestFixture]
     public class UserTest
     {
-        private string baseTestUsername;
-        private string baseTestEmail;
+        private string baseTestUsername = "testUser";
+        private string baseTestEmail = "testUser@cosmomonger.com";
 
-        public UserTest()
+        [SetUp]
+        [TearDown]
+        public void Cleanup()
         {
-            SetupNewTestData();
-        }
-
-        private void SetupNewTestData()
-        {
-            string postFix = DateTime.Now.ToBinary().ToString();
-            baseTestUsername = "testUser_" + postFix;
-            baseTestEmail = "testUser_" + postFix + "@cosmomonger.com";
+            // Cleanup any possible test users
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            provider.DeleteUser(this.baseTestUsername, true);
+            provider.DeleteUser("1" + this.baseTestUsername, true);
+            provider.DeleteUser("2" + this.baseTestUsername, true);
         }
 
         [Test]
-        public void UserCreatePlayer()
+        public void CreatePlayer()
         {
-            SetupNewTestData();
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
 
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
-            CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser("create" + this.baseTestUsername, "test1000", "create" + this.baseTestEmail, null, null, true, null, out status);
+            CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail, null, null, true, null, out status);
             Assert.IsNotNull(testUser, "Test User is created");
             
-            Assert.AreEqual("create" + this.baseTestUsername, testUser.UserName, "Test User has correct username");
-            Assert.AreEqual("create" + this.baseTestEmail, testUser.Email, "Test User has correct e-mail");
+            Assert.AreEqual(this.baseTestUsername, testUser.UserName, "Test User has correct username");
+            Assert.AreEqual(this.baseTestEmail, testUser.Email, "Test User has correct e-mail");
 
-            testUser = (CosmoMongerMembershipUser)provider.GetUser("create"+ this.baseTestUsername, false);
+            testUser = (CosmoMongerMembershipUser)provider.GetUser(this.baseTestUsername, false);
             Assert.IsNotNull(testUser, "Test User exists in the database");
-            Assert.AreEqual("create" + this.baseTestUsername, testUser.UserName, "Test User has correct username");
-            Assert.AreEqual("create" + this.baseTestEmail, testUser.Email, "Test User has correct e-mail");
+            Assert.AreEqual(this.baseTestUsername, testUser.UserName, "Test User has correct username");
+            Assert.AreEqual(this.baseTestEmail, testUser.Email, "Test User has correct e-mail");
 
             Race humanRace = (from r in db.Races
                               where r.Name == "Human"
@@ -56,85 +54,120 @@
             User testUserModel = testUser.GetUserModel();
             Assert.IsNotNull(testUserModel, "Able to get model object for user");
             
-            Player testPlayer = testUserModel.CreatePlayer("player" + this.baseTestUsername, humanRace);
+            Player testPlayer = testUserModel.CreatePlayer(this.baseTestUsername, humanRace);
             Assert.IsNotNull(testPlayer, "Test Player is created");
             
             Assert.AreEqual(true, testPlayer.Alive, "Test Player is alive");
-            Assert.AreEqual("player" + this.baseTestUsername, testPlayer.Name, "Test Player has correct name");
+            Assert.AreEqual(this.baseTestUsername, testPlayer.Name, "Test Player has correct name");
         }
 
         [Test]
-        public void UserUpdateProfile1()
+        public void DeleteUser()
         {
-            SetupNewTestData();
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
             CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail, null, null, true, null, out status);
-            Assert.IsNotNull(testUser, "Test User was created");
+            Assert.IsNotNull(testUser, "Test User was created. status = {0}", new object[]{status});
+
+            // Test the deleting of the user
+            bool deleted = provider.DeleteUser(this.baseTestUsername, true);
+            Assert.IsTrue(deleted, "The DeleteUser method should have returned true");
+
+            testUser = (CosmoMongerMembershipUser)provider.GetUser(this.baseTestUsername, false);
+            Assert.IsNull(testUser, "Test User has been deleted from the database");
+        }
+
+        [Test]
+        public void DeleteUserLeaveUserData()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser, "Test User was created. status = {0}", new object[] { status });
+
+            try
+            {
+                // Test the deleting of the user
+                provider.DeleteUser(this.baseTestUsername, false);
+                Assert.Fail("The DeleteUser method should have returned thrown an exception");
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.AreEqual("deleteAllRelatedData", ex.ParamName, "Failed argument should be deleteAllRelatedData.");
+            }
+
+            testUser = (CosmoMongerMembershipUser)provider.GetUser(this.baseTestUsername, false);
+            Assert.IsNotNull(testUser, "Test User should still be in the database");
+        }
+
+        [Test]
+        public void UpdateProfile1()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser, "Test User was created. status = {0}", new object[] { status });
 
             // Test the updating of just the username
             User testUserModel = testUser.GetUserModel();
             Assert.IsNotNull(testUserModel, "Able to get model object for user");
-            testUserModel.UpdateProfile("update" + baseTestUsername, this.baseTestEmail);
+            testUserModel.UpdateProfile("1" + baseTestUsername, this.baseTestEmail);
 
-            testUser = (CosmoMongerMembershipUser)provider.GetUser("update" + this.baseTestUsername, false);
+            testUser = (CosmoMongerMembershipUser)provider.GetUser("1" + this.baseTestUsername, false);
             Assert.IsNotNull(testUser, "Test User with updated username exists in the database");
-            Assert.AreEqual("update" + this.baseTestUsername, testUser.UserName, "Test User actually has updated username");
+            Assert.AreEqual("1" + this.baseTestUsername, testUser.UserName, "Test User actually has updated username");
             Assert.AreEqual(this.baseTestEmail, testUser.Email, "Test User actually has orignal e-mail");
         }
 
         [Test]
-        public void UserUpdateProfile2()
+        public void UpdateProfile2()
         {
-            SetupNewTestData();
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
             CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail, null, null, true, null, out status);
-            Assert.IsNotNull(testUser, "Test User was created");
+            Assert.IsNotNull(testUser, "Test User was created. status = {0}", new object[] { status });
 
             User testUserModel = testUser.GetUserModel();
             Assert.IsNotNull(testUserModel, "Able to get model object for user");
 
             // Test the updating of the e-mail
-            testUserModel.UpdateProfile(this.baseTestUsername, "update" + this.baseTestEmail);
+            testUserModel.UpdateProfile(this.baseTestUsername, "1" + this.baseTestEmail);
 
-            string usernameWithUpdatedEmail = provider.GetUserNameByEmail("update" + this.baseTestEmail);
+            string usernameWithUpdatedEmail = provider.GetUserNameByEmail("1" + this.baseTestEmail);
             Assert.AreEqual(this.baseTestUsername, usernameWithUpdatedEmail, "Test User actually has updated e-mail");
         }
 
         [Test]
-        public void UserUpdateProfile3()
+        public void UpdateProfile3()
         {
-            SetupNewTestData();
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
             CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail, null, null, true, null, out status);
-            Assert.IsNotNull(testUser, "Test User was created");
+            Assert.IsNotNull(testUser, "Test User was created. status = {0}", new object[] { status });
 
             User testUserModel = testUser.GetUserModel();
             Assert.IsNotNull(testUserModel, "Able to get model object for user");
 
             // Test the updating of both username and the e-mail
-            testUserModel.UpdateProfile("update" + this.baseTestUsername, "update" + this.baseTestEmail);
+            testUserModel.UpdateProfile("1" + this.baseTestUsername, "1" + this.baseTestEmail);
 
-            string usernameWithUpdatedEmail = provider.GetUserNameByEmail("update" + this.baseTestEmail);
-            Assert.AreEqual("update" + this.baseTestUsername, usernameWithUpdatedEmail, "Test User actually has updated username");
+            string usernameWithUpdatedEmail = provider.GetUserNameByEmail("1" + this.baseTestEmail);
+            Assert.AreEqual("1" + this.baseTestUsername, usernameWithUpdatedEmail, "Test User actually has updated username");
         }
 
         [Test]
-        public void UserUpdateProfile4()
+        public void UpdateProfile4()
         {
-            SetupNewTestData();
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
             CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(this.baseTestUsername, "test1000", this.baseTestEmail, null, null, true, null, out status);
-            Assert.IsNotNull(testUser, "Test User was created");
+            Assert.IsNotNull(testUser, "Test User was created. status = {0}", new object[] { status });
 
             User testUserModel = testUser.GetUserModel();
             Assert.IsNotNull(testUserModel, "Able to get model object for user");
 
             // Change both to something else
-            testUserModel.UpdateProfile("update2" + this.baseTestUsername, "update2" + this.baseTestEmail);
+            testUserModel.UpdateProfile("1" + this.baseTestUsername, "1" + this.baseTestEmail);
 
             // Test updating with the orignal profile values
             testUserModel.UpdateProfile(this.baseTestUsername, this.baseTestEmail);
@@ -149,19 +182,18 @@
         /// Tests the send message.
         /// </summary>
         [Test]
-        public void UserSendMessage()
+        public void SendMessage()
         {
-            SetupNewTestData();
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
-            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("msg1" + this.baseTestUsername, "test1000", "msg1" + this.baseTestEmail, null, null, true, null, out status);
-            Assert.IsNotNull(testUser1, "Test User 1 was created");
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
 
             User testUserModel1 = testUser1.GetUserModel();
             Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
 
-            CosmoMongerMembershipUser testUser2 = (CosmoMongerMembershipUser)provider.CreateUser("msg2" + this.baseTestUsername, "test1000", "msg2" + this.baseTestEmail, null, null, true, null, out status);
-            Assert.IsNotNull(testUser2, "Test User 2 was created");
+            CosmoMongerMembershipUser testUser2 = (CosmoMongerMembershipUser)provider.CreateUser("2" + this.baseTestUsername, "test1000", "2" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser2, "Test User 2 was created. status = {0}", new object[] { status });
 
             User testUserModel2 = testUser2.GetUserModel();
             Assert.IsNotNull(testUserModel2, "Able to get model object for user 2");

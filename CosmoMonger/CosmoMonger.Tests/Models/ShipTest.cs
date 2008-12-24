@@ -15,19 +15,30 @@
     [TestFixture]
     public class ShipTest
     {
-        Random rnd = new Random();
+        private Random rnd = new Random();
+        private string baseTestUsername = "testUser";
+        private string baseTestEmail = "testUser@cosmomonger.com";
+        private string baseTestPlayerName = "testPlayer";
+        private int shipTravelLoopCount = 5;
+        private int shipTravelThreadCount = 10;
 
-        public ShipTest()
+        [SetUp]
+        [TearDown]
+        public void Cleanup()
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            // Cleanup any possible test players
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            provider.DeleteUser(this.baseTestUsername, true);
+            for (int i = 0; i < shipTravelThreadCount; i++)
+            {
+                provider.DeleteUser(i + this.baseTestUsername, true);
+            }
         }
 
         [Test]
         public void ShipTravel()
         {
-            Player testPlayer = PlayerTest.CreateTestPlayer();
+            Player testPlayer = PlayerTest.CreateTestPlayer(this.baseTestUsername, this.baseTestEmail, this.baseTestPlayerName);
             Ship testShip = testPlayer.Ship;
             CosmoSystem startingSystem = testShip.CosmoSystem;
             
@@ -55,13 +66,34 @@
         }
 
         [Test]
+        [CategoryAttribute("LongRunning")]
         public void ShipTravelRandom()
         {
-            Player testPlayer = PlayerTest.CreateTestPlayer();
+            TravelRandom(0);
+        }
+
+        [Test]
+        public void ShipTravelRandomThreaded()
+        {
+            Thread[] t = new Thread[this.shipTravelThreadCount];
+            for (int i = 0; i < t.Length; i++)
+            {
+                t[i] = new Thread(new ParameterizedThreadStart(this.TravelRandom));
+                t[i].Start(i);
+            }
+            for (int i = 0; i < t.Length; i++)
+            {
+                t[i].Join();
+            }
+        }
+
+        private void TravelRandom(object playerIndex)
+        {
+            Player testPlayer = PlayerTest.CreateTestPlayer(playerIndex + this.baseTestUsername, playerIndex + this.baseTestEmail, playerIndex + this.baseTestPlayerName);
             Ship testShip = testPlayer.Ship;
             CosmoSystem startingSystem = testShip.CosmoSystem;
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < this.shipTravelLoopCount; i++)
             {
                 CosmoSystem[] possibleTargetSystems = testShip.GetInRangeSystems();
                 Assert.AreNotEqual(0, possibleTargetSystems.Length, "Ship should always be within range of at least one system");
@@ -84,21 +116,6 @@
                 Assert.AreEqual(0.0, travelTimeDiff.TotalSeconds, 2.0, "Ship have should taken " + timeToTravel + " seconds to travel, +/-2.0 seconds.");
 
                 Assert.AreEqual(targetSystem, testShip.CosmoSystem, "Ship should now be in the target system");
-            }
-        }
-
-        [Test]
-        public void ShipTravelRandomThreaded()
-        {
-            Thread[] t = new Thread[10];
-            for (int i = 0; i < t.Length; i++)
-            {
-                t[i] = new Thread(new ThreadStart(this.ShipTravelRandom));
-                t[i].Start();
-            }
-            for (int i = 0; i < t.Length; i++)
-            {
-                t[i].Join();
             }
         }
     }

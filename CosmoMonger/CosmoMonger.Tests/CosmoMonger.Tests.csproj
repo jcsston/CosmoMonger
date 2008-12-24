@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\CosmoMongerMembershipProviderTest.cs" />
+    <Compile Include="Models\GameManagerTest.cs" />
     <Compile Include="Models\PlayerTest.cs" />
     <Compile Include="Models\ShipTest.cs" />
     <Compile Include="Models\UserTest.cs" />
@@ -79,7 +80,6 @@
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AuthoringTests.txt" />
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>

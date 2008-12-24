@@ -15,30 +15,27 @@
     [TestFixture]
     public class PlayerTest
     {
-        private string baseTestUsername;
-        private string baseTestEmail;
-        private string baseTestPlayerName;
+        private string baseTestUsername = "testUser";
+        private string baseTestEmail = "testUser@cosmomonger.com";
+        private string baseTestPlayerName = "testPlayer";
 
-        public PlayerTest()
+        [SetUp]
+        [TearDown]
+        public void Cleanup()
         {
-            string postFix = DateTime.Now.ToBinary().ToString();
-            this.baseTestUsername = "testUser_" + postFix;
-            this.baseTestEmail = "testUser_" + postFix + "@cosmomonger.com";
-            this.baseTestPlayerName = "testPlayer_" + postFix;
+            // Cleanup any possible test players
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            provider.DeleteUser(this.baseTestUsername, true);
         }
 
-        static public Player CreateTestPlayer()
+        static public Player CreateTestPlayer(string baseTestUsername, string baseTestEmail, string baseTestPlayerName)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
-
-            string postFix = DateTime.Now.ToBinary().ToString() + "_thread" + Thread.CurrentThread.ManagedThreadId;
-            string baseTestUsername = "testUser_" + postFix;
-            string baseTestEmail = "testUser_" + postFix + "@cosmomonger.com";
 
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;
             CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(baseTestUsername, "test1000", baseTestEmail, null, null, true, null, out status);
-            Assert.IsNotNull(testUser, "Test User was created");
+            Assert.IsNotNull(testUser, "Test User was created. status = {0}", new object[]{status});
 
             User testUserModel = testUser.GetUserModel();
             Assert.IsNotNull(testUserModel, "Able to get model object for user");
@@ -50,15 +47,48 @@
         }
 
         [Test]
-        public void PlayerUpdateProfile()
+        public void UpdateProfile1()
         {
             // We first need to create a player
-            Player testPlayer = PlayerTest.CreateTestPlayer();
+            Player testPlayer = PlayerTest.CreateTestPlayer(this.baseTestUsername, this.baseTestEmail, this.baseTestPlayerName);
             
-            // Update profile
-            testPlayer.UpdateProfile("player2" + this.baseTestUsername);
+            // Update player profile
+            testPlayer.UpdateProfile("1" + this.baseTestPlayerName);
+
             // Check results
-            Assert.AreEqual("player2" + this.baseTestUsername, testPlayer.Name, "Player name is updated");
+            Assert.AreEqual("1" + this.baseTestPlayerName, testPlayer.Name, "Player name is updated");
+        }
+
+        [Test]
+        public void UpdateProfile2()
+        {
+            // We first need to create a player
+            Player testPlayer = PlayerTest.CreateTestPlayer(this.baseTestUsername, this.baseTestEmail, this.baseTestPlayerName);
+
+            // Update player profile
+            testPlayer.UpdateProfile(this.baseTestPlayerName);
+
+            // Check results
+            Assert.AreEqual(this.baseTestPlayerName, testPlayer.Name, "Player name is the same");
+        }
+
+        [Test]
+        public void UpdateProfile3()
+        {
+            // We first need to create a player
+            Player testPlayer = PlayerTest.CreateTestPlayer(this.baseTestUsername, this.baseTestEmail, this.baseTestPlayerName);
+
+            // Update player profile
+            testPlayer.UpdateProfile("1" + this.baseTestPlayerName);
+
+            // Check results
+            Assert.AreEqual("1" + this.baseTestPlayerName, testPlayer.Name, "Player name is updated");
+
+            // Restore player profile
+            testPlayer.UpdateProfile(this.baseTestPlayerName);
+
+            // Check results
+            Assert.AreEqual(this.baseTestPlayerName, testPlayer.Name, "Player name is restored");
         }
     }
 }
