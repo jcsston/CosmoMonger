@@ -24,8 +24,8 @@
                     <td rowspan="2" style="width: 40%" align="center">
                         <img id="RaceImg" src="" alt="Race Image" width="100px" height="100px" 
                             style="margin-left: 0px"/></td>
-                    <td style="width: 10%">Home System:</td>
-                    <td style="width: 20%">Glop</td>
+                    <td style="width: 15%">Home System:</td>
+                    <td style="width: 15%">Glop</td>
                 </tr>
                 <script type="text/javascript" language="javascript">
                     function UpdateRaceImage() {
@@ -41,10 +41,26 @@
                         <%= Html.DropDownList("raceId", new { onChange = "UpdateRaceImage();" })%>
                         <%= Html.ValidationMessage("raceId")%>
                     </td>
-                    
+              </table>
+              <table style="width: 100%">    
+                </tr>
+                <%--Racial Modifiers --%>
+                <tr>
+                    <td style="width: 20%" align="left">Racial Modifiers</td>
+                    <td style="width: 20%" align="center">Weapon</td>
+                    <td style="width: 20%" align="center">Shield</td>
+                    <td style="width: 20%" align="center">Accuracy</td>
+                    <td style="width: 20%" align="center">Engine</td> 
                 </tr>
                 <tr>
-                <td colspan="5">Although slow and ponderous, these crab-like aliens were the first to achieve interstellar travel in this sector.  They were also the first to start an interstellar war when they consumed the ambassador representing the Skumm nation during a scouting expedition to system D2O.  Although the resulting Skumm-Crab War has officially concluded, bad blood exists between the two races to this day.<div id="RaceDesc"></div>
+                    <td style="width: 20%" align="left"></td>
+                    <td style="width: 20%" align="center">0</td>
+                    <td style="width: 20%" align="center">+1</td>
+                    <td style="width: 20%" align="center">0</td>
+                    <td style="width: 20%" align="center">-1</td> 
+                </tr>
+                <tr>
+                <td colspan="5"><div id="RaceDesc">Although slow and ponderous, these crab-like aliens were the first to achieve interstellar travel in this sector.  They were also the first to start an interstellar war when they consumed the ambassador representing the Skumm nation during a scouting expedition to system D2O.  Although the resulting Skumm-Crab War has officially concluded, bad blood exists between the two races to this day.</div>
                 </td>
                 </tr>
                 <tr>

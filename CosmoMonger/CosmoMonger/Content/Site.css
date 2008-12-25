@@ -252,7 +252,7 @@ page width. Or, you can specify an exact pixel width. */
 #menuh a:hover	/* menu at mouse-over  */
 	{
 	color: white;
-	background-color: cornflowerblue;
+	background-color: blue;
 	text-decoration:none;
 	}	
 	
