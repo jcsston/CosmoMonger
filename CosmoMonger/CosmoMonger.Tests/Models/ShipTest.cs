@@ -14,32 +14,16 @@
     /// Summary description for ShipTest
     /// </summary>
     [TestFixture]
-    public class ShipTest
+    public class ShipTest : BasePlayerTest
     {
         private Random rnd = new Random();
-        private string baseTestUsername = "testUser";
-        private string baseTestEmail = "testUser@cosmomonger.com";
-        private string baseTestPlayerName = "testPlayer";
         private int shipTravelLoopCount = 5;
         private int shipTravelThreadCount = 10;
-
-        [SetUp]
-        [TearDown]
-        public void Cleanup()
-        {
-            // Cleanup any possible test players
-            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
-            provider.DeleteUser(this.baseTestUsername, true);
-            for (int i = 0; i < shipTravelThreadCount; i++)
-            {
-                provider.DeleteUser(i + this.baseTestUsername, true);
-            }
-        }
 
         [Test]
         public void Travel()
         {
-            Player testPlayer = PlayerTest.CreateTestPlayer(this.baseTestUsername, this.baseTestEmail, this.baseTestPlayerName);
+            Player testPlayer = this.CreateTestPlayer();
             Ship testShip = testPlayer.Ship;
             CosmoSystem startingSystem = testShip.CosmoSystem;
             
@@ -90,7 +74,7 @@
 
         private void TravelRandom(object playerIndex)
         {
-            Player testPlayer = PlayerTest.CreateTestPlayer(playerIndex + this.baseTestUsername, playerIndex + this.baseTestEmail, playerIndex + this.baseTestPlayerName);
+            Player testPlayer = this.CreateTestPlayer();
             Ship testShip = testPlayer.Ship;
             CosmoSystem startingSystem = testShip.CosmoSystem;
 

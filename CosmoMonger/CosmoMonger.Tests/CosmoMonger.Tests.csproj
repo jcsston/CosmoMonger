@@ -71,10 +71,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\BasePlayerTest.cs" />
     <Compile Include="Models\CosmoMongerMembershipProviderTest.cs" />
     <Compile Include="Models\CosmoSystemTest.cs" />
     <Compile Include="Models\GameManagerTest.cs" />
     <Compile Include="Models\PlayerTest.cs" />
+    <Compile Include="Models\ShipGoodTest.cs" />
     <Compile Include="Models\ShipTest.cs" />
     <Compile Include="Models\SystemGoodTest.cs" />
     <Compile Include="Models\UserTest.cs" />
