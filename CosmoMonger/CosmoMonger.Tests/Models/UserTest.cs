@@ -89,7 +89,7 @@
             {
                 // Test the deleting of the user
                 provider.DeleteUser(this.baseTestUsername, false);
-                Assert.Fail("The DeleteUser method should have returned thrown an exception");
+                Assert.Fail("The DeleteUser method should have thrown an exception");
             }
             catch (ArgumentException ex)
             {

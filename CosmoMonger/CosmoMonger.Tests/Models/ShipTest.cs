@@ -8,6 +8,7 @@
     using System.Web.Security;
     using CosmoMonger.Models;
     using NUnit.Framework;
+    using NUnit.Framework.SyntaxHelpers;
 
     /// <summary>
     /// Summary description for ShipTest
@@ -36,7 +37,7 @@
         }
 
         [Test]
-        public void ShipTravel()
+        public void Travel()
         {
             Player testPlayer = PlayerTest.CreateTestPlayer(this.baseTestUsername, this.baseTestEmail, this.baseTestPlayerName);
             Ship testShip = testPlayer.Ship;
@@ -67,13 +68,13 @@
 
         [Test]
         [CategoryAttribute("LongRunning")]
-        public void ShipTravelRandom()
+        public void TravelRandom()
         {
             TravelRandom(0);
         }
 
         [Test]
-        public void ShipTravelRandomThreaded()
+        public void TravelRandomThreaded()
         {
             Thread[] t = new Thread[this.shipTravelThreadCount];
             for (int i = 0; i < t.Length; i++)

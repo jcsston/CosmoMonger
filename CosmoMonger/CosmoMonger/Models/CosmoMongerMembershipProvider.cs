@@ -258,19 +258,43 @@ namespace CosmoMonger.Models
             throw new NotImplementedException();
         }
 
+        private MembershipUserCollection FindUsersBy(IEnumerable<User> matchingUsers, int pageIndex, int pageSize, out int totalRecords)
+        {
+            totalRecords = matchingUsers.Count();
+            matchingUsers = matchingUsers.Skip(pageIndex * pageSize).Take(pageSize);
+
+            MembershipUserCollection col = new MembershipUserCollection();
+            foreach (User user in matchingUsers)
+            {
+                col.Add(new CosmoMongerMembershipUser(user));
+            }
+
+            return col;
+        }
+
         public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
-            throw new NotImplementedException();
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            var matchingUsers = (from u in db.Users
+                                 where u.Email.Contains(emailToMatch)
+                                 select u);
+            return FindUsersBy(matchingUsers, pageIndex, pageSize, out totalRecords);
         }
 
         public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
-            throw new NotImplementedException();
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            var matchingUsers = (from u in db.Users
+                                 where u.UserName.Contains(usernameToMatch)
+                                 select u);
+            return FindUsersBy(matchingUsers, pageIndex, pageSize, out totalRecords);
         }
 
         public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
         {
-            throw new NotImplementedException();
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            var matchingUsers = (from u in db.Users select u);
+            return FindUsersBy(matchingUsers, pageIndex, pageSize, out totalRecords);
         }
 
         public override int GetNumberOfUsersOnline()

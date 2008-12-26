@@ -128,5 +128,30 @@ namespace CosmoMonger.Models
                     where su.WeaponId == upgradeId
                     select su).SingleOrDefault();
         }
+
+        /// <summary>
+        /// Adds the good type to this system
+        /// </summary>
+        /// <param name="goodId">The good type to add to this system.</param>
+        /// <param name="quantity">The quantity of the good to add.</param>
+        public void AddGood(int goodId, int quantity)
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            SystemGood systemGood = this.GetGood(goodId);
+            if (systemGood == null)
+            {
+                // Add this new good type to the system
+                systemGood = new SystemGood();
+                systemGood.CosmoSystem = this;
+                systemGood.GoodId = goodId;
+                this.SystemGoods.Add(systemGood);
+            }
+
+            // Add the correct number of goods to the system
+            systemGood.Quantity += quantity;
+
+            // Save changes to the database
+            db.SubmitChanges();
+        }
     }
 }
