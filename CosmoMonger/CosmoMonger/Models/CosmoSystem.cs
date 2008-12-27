@@ -144,6 +144,7 @@ namespace CosmoMonger.Models
                 systemGood = new SystemGood();
                 systemGood.CosmoSystem = this;
                 systemGood.GoodId = goodId;
+                systemGood.PriceMultiplier = 1.0;
                 this.SystemGoods.Add(systemGood);
             }
 

@@ -516,6 +516,24 @@
       <column name="Description" type="varchar(255)" />
     </addColumn>
   </changeSet>
+  <changeSet author="Jory Stone" id="11">
+    <comment>Renamed Model column on the BaseShip table to Name to keep in line with other tables.</comment>
+    <renameColumn tableName="BaseShip" oldColumnName="Model" newColumnName="Name" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="12">
+    <comment>Added unique constraints to the table</comment>
+    <addUniqueConstraint tableName="User" columnNames="UserName" constraintName="UQ_User_UserName" />
+    <addUniqueConstraint tableName="User" columnNames="Email" constraintName="UQ_User_Email" />
+    <addUniqueConstraint tableName="System" columnNames="Name" constraintName="UQ_System_Name" />
+    <addUniqueConstraint tableName="BaseShip" columnNames="Name" constraintName="UQ_BaseShip_Name" />
+    <addUniqueConstraint tableName="Good" columnNames="Name" constraintName="UQ_Good_Name" />
+    <addUniqueConstraint tableName="JumpDrive" columnNames="Name" constraintName="UQ_JumpDrive_Name" />
+    <addUniqueConstraint tableName="Race" columnNames="Name" constraintName="UQ_Race_Name" />
+    <addUniqueConstraint tableName="Shield" columnNames="Name" constraintName="UQ_Shield_Name" />
+    <addUniqueConstraint tableName="Weapon" columnNames="Name" constraintName="UQ_Weapon_Name" />
+    <addUniqueConstraint tableName="NpcType" columnNames="Name" constraintName="UQ_NpcType_Name" />
+    <addUniqueConstraint tableName="Npc" columnNames="Name" constraintName="UQ_Npc_Name" />
+  </changeSet>
   <changeSet id="0-testData" author="Jory Stone" runOnChange="true">
     <sqlFile path="CosmoMongerData.sql"/>
   </changeSet>

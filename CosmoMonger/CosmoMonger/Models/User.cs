@@ -51,7 +51,7 @@ namespace CosmoMonger.Models
 
             // Assign the default base ship type
             BaseShip baseShip = (from bs in db.BaseShips
-                                 where bs.Model == "Glorified Trash Can"
+                                 where bs.Name == "Glorified Trash Can"
                                  select bs).SingleOrDefault();
             if (baseShip == null)
             {
