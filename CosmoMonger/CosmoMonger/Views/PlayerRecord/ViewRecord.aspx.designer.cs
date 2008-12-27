@@ -8,9 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CosmoMonger.Views.Player {
-    
-    
-    public partial class EditProfile {
+namespace CosmoMonger.Views.PlayerRecord
+{
+
+
+    public partial class ViewRecord
+    {
     }
 }

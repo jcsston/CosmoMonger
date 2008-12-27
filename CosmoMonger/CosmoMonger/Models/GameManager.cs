@@ -211,5 +211,16 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
             return (from r in db.Races where r.RaceId == raceId select r).SingleOrDefault();
         }
+
+        /// <summary>
+        /// Gets the system by id number.
+        /// </summary>
+        /// <param name="raceId">The system id.</param>
+        /// <returns>CosmoSystem oject, null if the system does not exist</returns>
+        public CosmoSystem GetSystem(int systemId)
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            return (from s in db.CosmoSystems where s.SystemId == systemId select s).SingleOrDefault();
+        }
     }
 }

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B853FB8E-E426-4E4F-A117-A6CCAEE0CA7A}</ProjectGuid>
     <ProjectTypeGuids>{603c0e0b-db56-11dc-be95-000d561079b0};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
@@ -76,6 +76,9 @@
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
+    <Compile Include="Controllers\PlayerRecordController.cs" />
+    <Compile Include="Controllers\TradeController.cs" />
+    <Compile Include="Controllers\TravelController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -143,6 +146,20 @@
     <Compile Include="Views\Home\Index.aspx.designer.cs">
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Views\PlayerRecord\ListRecords.aspx.cs">
+      <DependentUpon>ListRecords.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\PlayerRecord\ListRecords.aspx.designer.cs">
+      <DependentUpon>ListRecords.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PlayerRecord\ViewRecord.aspx.cs">
+      <DependentUpon>ViewRecord.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\PlayerRecord\ViewRecord.aspx.designer.cs">
+      <DependentUpon>ViewRecord.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Player\CreatePlayer.aspx.cs">
       <DependentUpon>CreatePlayer.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -185,14 +202,48 @@
     <Compile Include="Views\Shared\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
+    <Compile Include="Views\Trade\ListGoods.aspx.cs">
+      <DependentUpon>ListGoods.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Trade\ListGoods.aspx.designer.cs">
+      <DependentUpon>ListGoods.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Travel\GalaxyMap.aspx.cs">
+      <DependentUpon>GalaxyMap.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Travel\GalaxyMap.aspx.designer.cs">
+      <DependentUpon>GalaxyMap.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Travel\Travel.aspx.cs">
+      <DependentUpon>Travel.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Travel\Travel.aspx.designer.cs">
+      <DependentUpon>Travel.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Travel\TravelInProgress.aspx.cs">
+      <DependentUpon>TravelInProgress.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Travel\TravelInProgress.aspx.designer.cs">
+      <DependentUpon>TravelInProgress.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\CosmoMongerDb.xml" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Views\PlayerRecord\ListRecords.aspx" />
+    <Content Include="Views\PlayerRecord\ViewRecord.aspx" />
     <Content Include="Views\Player\CreatePlayer.aspx" />
     <Content Include="Views\Player\EditProfile.aspx" />
     <Content Include="Views\Player\ViewProfile.aspx" />
+    <Content Include="Views\Trade\ListGoods.aspx" />
+    <Content Include="Views\Travel\GalaxyMap.aspx" />
+    <Content Include="Views\Travel\Travel.aspx" />
+    <Content Include="Views\Travel\TravelInProgress.aspx" />
     <Content Include="Web.config" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery-1.2.6.js" />
@@ -248,6 +299,9 @@
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

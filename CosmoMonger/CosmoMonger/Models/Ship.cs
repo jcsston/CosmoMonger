@@ -180,5 +180,18 @@ namespace CosmoMonger.Models
         {
             return this.ShipGoods.ToArray();
         }
+
+        /// <summary>
+        /// Fetches the ShipGood object for the passed in goodId id. 
+        /// </summary>
+        /// <param name="goodId">The good id of the ShipGood object to get.</param>
+        /// <returns>
+        /// The ShipGood object with the matching goodId. 
+        /// If there is no ShipGood for the passed in good id, null is returned.
+        /// </returns>
+        public ShipGood GetGood(int goodId)
+        {
+            return (from g in this.ShipGoods where g.GoodId == goodId select g).SingleOrDefault();
+        }
     }
 }
