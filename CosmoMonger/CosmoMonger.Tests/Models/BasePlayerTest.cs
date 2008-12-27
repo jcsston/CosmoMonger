@@ -8,6 +8,7 @@
     using System.Web.Security;
     using CosmoMonger.Models;
     using NUnit.Framework;
+    using NUnit.Framework.SyntaxHelpers;
 
     /// <summary>
     /// This is the base test class for player related tests.
@@ -50,9 +51,12 @@
         {
             // Cleanup any possible test players
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
-            for (int i = 0; i <= this.playerCount; i++)
+            int totalRecords = 0;
+            MembershipUserCollection col = provider.FindUsersByName(this.baseTestUsername, 0, 1000, out totalRecords);
+            Assert.That(totalRecords, Is.LessThanOrEqualTo(1000), "BasePlayerTest class coded to only delete 1000 test users");
+            foreach (MembershipUser user in col)
             {
-                provider.DeleteUser(i + this.baseTestUsername, true);
+                provider.DeleteUser(user.UserName, true);
             }
         }
     }

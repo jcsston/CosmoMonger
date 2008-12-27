@@ -84,6 +84,7 @@
             catch (ArgumentOutOfRangeException ex)
             {
                 Assert.That(ex.ParamName, Is.EqualTo("quantity"), "Quantity to buy should be the invalid argument");
+                return;
             }
 
             Assert.Fail("Player should not been able to buy more goods than at the system");
@@ -118,7 +119,7 @@
             Assert.That(systemWater, Is.Not.Null, "System should now have a water SystemGood");
             Assert.That(systemWater.Quantity, Is.GreaterThanOrEqualTo(20), "System should now have at least 20 water goods");
 
-            int playerCost = (int)(systemWater.PriceMultiplier * water.BasePrice);
+            int playerCost = (int)(systemWater.PriceMultiplier * water.BasePrice) * systemWater.Quantity;
             int systemStartingCount = systemWater.Quantity;
             try
             {
@@ -127,6 +128,7 @@
             catch (ArgumentException ex)
             {
                 Assert.That(ex.ParamName, Is.EqualTo("quantity"), "Quantity to buy should be the invalid argument");
+                return;
             }
 
             Assert.Fail("Player should not been able to buy more goods than they can afford");
@@ -170,6 +172,7 @@
             catch (ArgumentException ex)
             {
                 Assert.That(ex.ParamName, Is.EqualTo("quantity"), "Quantity to buy should be the invalid argument");
+                return;
             }
 
             Assert.Fail("Player should not been able to buy more goods than they can carry");

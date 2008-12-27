@@ -21,6 +21,7 @@
         private int shipTravelThreadCount = 10;
 
         [Test]
+        [CategoryAttribute("LongRunning")]
         public void Travel()
         {
             Player testPlayer = this.CreateTestPlayer();
@@ -58,6 +59,7 @@
         }
 
         [Test]
+        [CategoryAttribute("LongRunning")]
         public void TravelRandomThreaded()
         {
             Thread[] t = new Thread[this.shipTravelThreadCount];

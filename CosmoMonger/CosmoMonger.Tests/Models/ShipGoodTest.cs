@@ -45,7 +45,7 @@
                 startingSystem.AddGood(water.GoodId, 0);
                 systemWater = startingSystem.GetGood(water.GoodId);
             }
-            int playerProfit = (int)(systemWater.PriceMultiplier * water.BasePrice);
+            int playerProfit = (int)(systemWater.PriceMultiplier * water.BasePrice) * 10;
             int systemStartingCount = systemWater.Quantity;
             shipGood.Sell(manager, 10);
 
@@ -83,7 +83,8 @@
             if (systemWater != null)
             {
                 // Remove the good from the system
-                startingSystem.SystemGoods.Remove(systemWater);
+                db.SystemGoods.DeleteOnSubmit(systemWater);
+                db.SubmitChanges();
             }
             try
             {
@@ -108,9 +109,6 @@
             CosmoSystem startingSystem = testShip.CosmoSystem;
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
-            // Store the player starting cash
-            int playerStartingCash = testPlayer.CashCredits;
-
             // Add some water to this ship for us to sell
             Good water = (from g in db.Goods
                           where g.Name == "Water"
@@ -121,6 +119,7 @@
             shipGood.Quantity = 10;
             shipGood.Ship = testShip;
             testShip.ShipGoods.Add(shipGood);
+            db.SubmitChanges();
 
             // Verify that the good is for sell in the current system
             SystemGood systemWater = startingSystem.GetGood(water.GoodId);
@@ -137,6 +136,7 @@
             catch (ArgumentOutOfRangeException ex)
             {
                 Assert.That(ex.ParamName, Is.EqualTo("quantity"), "Quantity to sell should be the invalid argument");
+                return;
             }
 
             Assert.Fail("Player should not been able to sell more goods than aboard");

@@ -216,13 +216,13 @@ namespace CosmoMonger.Models
                 // We have to delete all objects in the database related to this user
                 var playerShips = (from p in db.Players where p.User == matchingUser select p.Ship);
                 var playerShipIds = (from p in db.Players where p.User == matchingUser select p.Ship.ShipId);
+                db.Players.DeleteAllOnSubmit(from p in db.Players where p.User == matchingUser select p);
                 db.InProgressCombats.DeleteAllOnSubmit(from c in db.InProgressCombats
                                                        where playerShipIds.Contains(c.AttackerShipId)
                                                        || playerShipIds.Contains(c.DefenderShipId)
                                                        select c);
                 db.ShipGoods.DeleteAllOnSubmit(from g in db.ShipGoods where playerShips.Contains(g.Ship) select g);
                 db.Ships.DeleteAllOnSubmit(playerShips);
-                db.Players.DeleteAllOnSubmit(from p in db.Players where p.User == matchingUser select p);
                 db.Messages.DeleteAllOnSubmit(from m in db.Messages
                                               where m.RecipientUserId == matchingUser.UserId
                                               || m.SenderUserId == matchingUser.UserId

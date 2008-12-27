@@ -31,7 +31,7 @@ namespace CosmoMonger.Models
             }
 
             // Check that we are not trying to sell more goods than we have
-            if (this.Quantity > quantity)
+            if (this.Quantity < quantity)
             {
                 throw new ArgumentOutOfRangeException("quantity", quantity, "Unable to sell more goods than aboard");
             }
