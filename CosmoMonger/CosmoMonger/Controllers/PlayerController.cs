@@ -101,7 +101,7 @@ namespace CosmoMonger.Controllers
             else
             {
                 // Otherwise, show the profile of the current player
-                return RedirectToAction("ViewProfile", this.ControllerGame.CurrentPlayer.PlayerId);
+                return ViewProfile(this.ControllerGame.CurrentPlayer.PlayerId);
             }
         }
 

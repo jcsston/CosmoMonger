@@ -45,7 +45,7 @@
                 startingSystem.AddGood(water.GoodId, 0);
                 systemWater = startingSystem.GetGood(water.GoodId);
             }
-            int playerProfit = (int)(systemWater.PriceMultiplier * water.BasePrice) * 10;
+            int playerProfit = systemWater.Price * 10;
             int systemStartingCount = systemWater.Quantity;
             shipGood.Sell(manager, 10);
 

@@ -8,6 +8,7 @@ namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
 
     /// <summary>
@@ -23,6 +24,7 @@ namespace CosmoMonger.Models
         {
             get
             {
+                Debug.Assert(this.PriceMultiplier > 0.0 && this.PriceMultiplier <= 5.0);
                 return (int)(this.Good.BasePrice * this.PriceMultiplier);
             }
         }

@@ -42,7 +42,7 @@
             Assert.That(systemWater, Is.Not.Null, "System should now have a water SystemGood");
             Assert.That(systemWater.Quantity, Is.GreaterThanOrEqualTo(20), "System should now have at least 20 water goods");
 
-            int playerCost = (int)(systemWater.PriceMultiplier * water.BasePrice) * 20;
+            int playerCost = systemWater.Price * 20;
             int systemStartingCount = systemWater.Quantity;
             systemWater.Buy(manager, 20);
 
@@ -163,7 +163,7 @@
             Assert.That(systemWater, Is.Not.Null, "System should now have a water SystemGood");
             Assert.That(systemWater.Quantity, Is.GreaterThanOrEqualTo(200), "System should now have at least 20 water goods");
 
-            int playerCost = (int)(systemWater.PriceMultiplier * water.BasePrice);
+            int playerCost = systemWater.Price * 2000;
             int systemStartingCount = systemWater.Quantity;
             try
             {
