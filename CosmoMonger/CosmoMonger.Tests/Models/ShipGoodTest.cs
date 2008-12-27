@@ -93,6 +93,7 @@
             catch (InvalidOperationException ex)
             {
                 // Correct
+                Assert.That(ex, Is.Not.Null, "InvalidOperationException should be valid");
                 return;
             }
             Assert.Fail("Player should not been able to sell in the system when the good was not sold in the system");
