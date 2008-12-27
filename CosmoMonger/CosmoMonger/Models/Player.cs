@@ -24,6 +24,19 @@ namespace CosmoMonger.Models
     public partial class Player
     {
         /// <summary>
+        /// Updates the net worth for this player.
+        /// </summary>
+        public void UpdateNetWorth()
+        {
+            int netWorth = this.BankCredits + this.CashCredits;
+            if (this.Ship != null)
+            {
+                netWorth += this.Ship.TradeInValue + this.Ship.ShipGoods.Sum(x => x.Quantity * x.Good.BasePrice);
+            }
+            this.NetWorth = netWorth;
+        }
+
+        /// <summary>
         /// Updates the player profile with the new player name. 
         /// Throws an ArgumentException if an existing player with the same name already exists.
         /// </summary>
@@ -42,6 +55,16 @@ namespace CosmoMonger.Models
             // Update this player
             this.Name = name;
             db.SubmitChanges();
+        }
+
+        partial void OnCashCreditsChanged()
+        {
+            this.UpdateNetWorth();
+        }
+
+        partial void OnBankCreditsChanged()
+        {
+            this.UpdateNetWorth();
         }
     }
 }

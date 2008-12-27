@@ -7,6 +7,7 @@
 namespace CosmoMonger.Models
 {
     using System;
+    using System.ComponentModel;
     using System.Configuration;
     using System.Data;
     using System.Diagnostics;
@@ -192,6 +193,42 @@ namespace CosmoMonger.Models
         public ShipGood GetGood(int goodId)
         {
             return (from g in this.ShipGoods where g.GoodId == goodId select g).SingleOrDefault();
+        }
+
+        partial void OnBaseShipIdChanged()
+        {
+            Player player = this.Players.SingleOrDefault();
+            if (player != null)
+            {
+                player.UpdateNetWorth();
+            }
+        }
+
+        partial void OnJumpDriveIdChanged()
+        {
+            Player player = this.Players.SingleOrDefault();
+            if (player != null)
+            {
+                player.UpdateNetWorth();
+            }
+        }
+
+        partial void OnShieldIdChanged()
+        {
+            Player player = this.Players.SingleOrDefault();
+            if (player != null)
+            {
+                player.UpdateNetWorth();
+            }
+        }
+
+        partial void OnWeaponIdChanged()
+        {
+            Player player = this.Players.SingleOrDefault();
+            if (player != null)
+            {
+                player.UpdateNetWorth();
+            }
         }
     }
 }
