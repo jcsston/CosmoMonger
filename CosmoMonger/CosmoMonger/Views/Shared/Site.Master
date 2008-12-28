@@ -10,13 +10,7 @@
 
 <body>
     <div class="page">
-
         <div id="header">
-<!--
-            <div id="logindisplay">
-                <% Html.RenderPartial("LoginUserControl"); %>
-            </div>
-    -->        
             <!-- The following CSS menu is from http://sperling.com/examples/menuh/ -->
             <div id="menuh-container">
                 <div id="menuh">

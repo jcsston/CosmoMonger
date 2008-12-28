@@ -38,6 +38,7 @@ namespace CosmoMonger.Controllers
         {
             ViewData["Title"] = "Travel Map";
             ViewData["Systems"] = this.ControllerGame.CurrentPlayer.Ship.GetInRangeSystems();
+            ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
             return View("Travel");
         }
 
@@ -63,7 +64,9 @@ namespace CosmoMonger.Controllers
         public ActionResult GalaxyMap()
         {
             ViewData["Title"] = "Galaxy Map";
+            ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
             ViewData["Systems"] = this.ControllerGame.GetSystems();
+            ViewData["GalaxySize"] = this.ControllerGame.GetGalaxySize();
             return View();
         }
     }

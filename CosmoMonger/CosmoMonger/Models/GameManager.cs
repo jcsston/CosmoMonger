@@ -222,5 +222,11 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
             return (from s in db.CosmoSystems where s.SystemId == systemId select s).SingleOrDefault();
         }
+
+        public int GetGalaxySize()
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            return Math.Max(db.CosmoSystems.Max(x => x.PositionX), db.CosmoSystems.Max(x => x.PositionY));
+        }
     }
 }
