@@ -216,13 +216,17 @@ namespace CosmoMonger.Models
         /// Gets the system by id number.
         /// </summary>
         /// <param name="raceId">The system id.</param>
-        /// <returns>CosmoSystem oject, null if the system does not exist</returns>
+        /// <returns>CosmoSystem object, null if the system does not exist</returns>
         public CosmoSystem GetSystem(int systemId)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
             return (from s in db.CosmoSystems where s.SystemId == systemId select s).SingleOrDefault();
         }
 
+        /// <summary>
+        /// Gets the size of the galaxy.
+        /// </summary>
+        /// <returns>An int that gives the x/y size of the galaxy</returns>
         public int GetGalaxySize()
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();

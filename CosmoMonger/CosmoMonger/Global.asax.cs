@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-
-namespace CosmoMonger
+﻿namespace CosmoMonger
 {
-    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
-    // visit http://go.microsoft.com/?LinkId=9394801
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Routing;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
 
-    public class MvcApplication : System.Web.HttpApplication
+    /// <summary>
+    /// Note: For instructions on enabling IIS6 or IIS7 classic mode, 
+    /// visit http://go.microsoft.com/?LinkId=9394801
+    /// </summary>
+    public class MvcApplication : HttpApplication
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
@@ -26,6 +28,7 @@ namespace CosmoMonger
 
         protected void Application_Start()
         {
+            Logger.Write("CosmoMonger Application Start", "ASP.NET Core");
             RegisterRoutes(RouteTable.Routes);
         }
     }

@@ -95,6 +95,7 @@
     <Compile Include="Models\CosmoMongerMembershipUser.cs" />
     <Compile Include="Models\CosmoSystem.cs" />
     <Compile Include="Models\GameManager.cs" />
+    <Compile Include="Models\LogRequestAttribute.cs" />
     <Compile Include="Models\Messsage.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Ship.cs" />
