@@ -19,7 +19,6 @@ namespace CosmoMonger.Controllers
     /// Any user has to be authorized to access this controller.
     /// </summary>
     [Authorize]
-    [LogRequest]
     public class GameController : Controller
     {
         /// <summary>

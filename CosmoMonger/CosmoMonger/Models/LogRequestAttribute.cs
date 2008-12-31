@@ -10,22 +10,28 @@
     {
         void IActionFilter.OnActionExecuted(ActionExecutedContext filterContext)
         {
-            /*
-            ICollection<string> props = (ICollection<string>)new
-            {
-                Action = filterContext.Result,
-                Controller = filterContext.Controller.ToString(),
-                TimeStamp = filterContext.HttpContext.Timestamp,
-                IPAddress = filterContext.HttpContext.Request.UserHostAddress
-            };*/
+            Dictionary<string, object> props = new Dictionary<string, object>
+            { 
+                { "Controller", filterContext.Controller.ToString() },
+                { "TimeStamp", filterContext.HttpContext.Timestamp },
+                { "IPAddress", filterContext.HttpContext.Request.UserHostAddress },
+                { "SessionID", filterContext.HttpContext.Session.SessionID }
+            };
             string message = filterContext.RouteData.Values["controller"] + "." + filterContext.RouteData.Values["action"];
-            Logger.Write(message, "Page Log", 1, 101, TraceEventType.Information, "Action Executed");
+            Logger.Write(message, "Page Log", 1, 101, TraceEventType.Information, "Action Executed", props);
         }
 
         void IActionFilter.OnActionExecuting(ActionExecutingContext filterContext)
         {
+            Dictionary<string, object> props = new Dictionary<string, object>
+            { 
+                { "Controller", filterContext.Controller.ToString() },
+                { "TimeStamp", filterContext.HttpContext.Timestamp },
+                { "IPAddress", filterContext.HttpContext.Request.UserHostAddress },
+                { "SessionID", filterContext.HttpContext.Session.SessionID }
+            };
             string message = filterContext.RouteData.Values["controller"] + "." + filterContext.RouteData.Values["action"];
-            Logger.Write(message, "Page Log", 1, 101, TraceEventType.Information, "Action Executing");
+            Logger.Write(message, "Page Log", 1, 101, TraceEventType.Information, "Action Executing", props);
         }
     }
 }
