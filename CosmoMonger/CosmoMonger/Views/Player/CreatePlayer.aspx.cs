@@ -9,5 +9,6 @@ namespace CosmoMonger.Views.Player
 {
     public partial class Create : ViewPage
     {
+
     }
 }

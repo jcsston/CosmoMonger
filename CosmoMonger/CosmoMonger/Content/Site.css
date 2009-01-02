@@ -20,6 +20,9 @@ body
 	top: 0px;
 }
 
+div.race 
+{display: none;}
+
 a:link
 {
     color: #034af3;

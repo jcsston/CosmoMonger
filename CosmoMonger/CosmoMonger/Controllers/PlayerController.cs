@@ -22,6 +22,7 @@ namespace CosmoMonger.Controllers
     /// </summary>
     public class PlayerController : GameController
     {
+        
         /// <summary>
         /// Redirects to the ViewProfile action
         /// </summary>
@@ -42,6 +43,9 @@ namespace CosmoMonger.Controllers
             Race [] races = this.ControllerGame.GetRaces();
             ViewData["Title"] = "Create Player";
             ViewData["raceId"] = new SelectList(races, "RaceId", "Name");
+            //new Roger stuff
+            ViewData["Races"] = races;
+
             return View();
         }
 
