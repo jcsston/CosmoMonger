@@ -37,18 +37,18 @@
         public ActionResult ListRecords(string recordType)
 	    {
             ViewData["Title"] = "List Top Player Records";
-            ViewData["RecordTypes"] = new { 
-                NetWorth = "", 
-                BountyTotal = "", 
-                HighestBounty = "", 
-                ShipsDestroyed = "", 
-                ForcedSurrenders = "", 
-                ForcedFlees = "", 
-                CargoLooted = "", 
-                ShipsLost = "", 
-                SurrenderCount = "", 
-                FleeCount = "", 
-                CargoLost = ""
+            ViewData["RecordTypes"] = new string [] { 
+                "NetWorth", 
+                "BountyTotal",
+                "HighestBounty",
+                "ShipsDestroyed",
+                "ForcedSurrenders",
+                "ForcedFlees",
+                "CargoLooted",
+                "ShipsLost",
+                "SurrenderCount",
+                "FleeCount",
+                "CargoLost"
             };
             ViewData["TopRecords"] = this.ControllerGame.GetTopPlayers(recordType, 10);
             return View();

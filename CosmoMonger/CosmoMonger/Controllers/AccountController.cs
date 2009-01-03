@@ -9,6 +9,9 @@
     using System.Web.Mvc;
     using System.Web.Security;
     using System.Web.UI;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using Recaptcha;
+    using System.Configuration;
 
     /// <summary>
     /// This controller manages user account creation, login, and logout
@@ -237,6 +240,28 @@
             if (!String.Equals(password, confirmPassword, StringComparison.Ordinal))
             {
                 ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
+            }
+
+            RecaptchaValidator humanValidator = new RecaptchaValidator();
+            humanValidator.PrivateKey = ConfigurationManager.AppSettings["RecaptchaPrivateKey"];
+            humanValidator.RemoteIP = this.Request.UserHostAddress;
+            humanValidator.Challenge = this.Request.Form["recaptcha_challenge_field"];
+            humanValidator.Response = this.Request.Form["recaptcha_response_field"];
+
+            RecaptchaResponse humanResponse = humanValidator.Validate();
+            if (!humanResponse.IsValid)
+            {
+                Dictionary<string, object> props = new Dictionary<string, object>
+                { 
+                    { "PrivateKey", humanValidator.PrivateKey },
+                    { "RemoteIP", humanValidator.RemoteIP },
+                    { "Challenge", humanValidator.Challenge },
+                    { "Response", humanValidator.Response },
+                    { "IsValid", humanResponse.IsValid },
+                    { "ErrorCode", humanResponse.ErrorCode }
+                };
+                Logger.Write("Failed reCAPTCHA attempt", "Controller", 100, props);
+                ModelState.AddModelError("recaptcha", "reCAPTCHA failed to verify");
             }
 
             if (ViewData.ModelState.IsValid)

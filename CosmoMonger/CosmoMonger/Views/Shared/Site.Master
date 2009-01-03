@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <title><%= Html.Encode(ViewData["Title"]) %></title>
     <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../Scripts/jquery-1.2.6.min.js"></script>
 </head>
 
 <body>
@@ -96,7 +97,8 @@
                         { "SessionID", this.ViewContext.HttpContext.Session.SessionID },
                         { "ProcessingTime", processingTime }
                     };
-                    Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(this.ViewContext.RouteData.Values["controller"] + "." + this.ViewContext.RouteData.Values["action"], "Page Log", props);
+                    string message = this.ViewContext.RouteData.Values["controller"] + "." + this.ViewContext.RouteData.Values["action"];
+                    Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(message, "Page Log", props);
                 %>
                 Processing Time: <%=processingTime%> seconds
              </p>

@@ -324,3 +324,14 @@ div#menuh li li li li:hover ul
 {display:block;}
 
 /* End CSS Drop Down Menu */
+
+/* Password Strength CSS */
+.password {
+font-size : 12px;
+border : 1px solid #cc9933;
+width : 200px;
+font-family : arial, sans-serif;
+}
+.pstrength-minchar {
+font-size : 10px;
+}
