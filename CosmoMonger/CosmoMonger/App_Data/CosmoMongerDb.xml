@@ -534,6 +534,14 @@
     <addUniqueConstraint tableName="NpcType" columnNames="Name" constraintName="UQ_NpcType_Name" />
     <addUniqueConstraint tableName="Npc" columnNames="Name" constraintName="UQ_Npc_Name" />
   </changeSet>
+  <changeSet author="Jory Stone" id="13">
+    <comment>Extended the Password column on the User table to a varbinary(64) so we can switch to SHA512</comment>
+    <modifyColumn tableName="User">
+      <column name="Password" type="varbinary(64)">
+        <constraints nullable="false"/>
+      </column>
+    </modifyColumn>
+  </changeSet>
   <changeSet id="0-testData" author="Jory Stone" runOnChange="true">
     <sqlFile path="CosmoMongerData.sql"/>
   </changeSet>

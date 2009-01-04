@@ -137,6 +137,27 @@
     <Compile Include="Views\Account\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Account\SendVerificationCode.aspx.cs">
+      <DependentUpon>SendVerificationCode.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Account\SendVerificationCode.aspx.designer.cs">
+      <DependentUpon>SendVerificationCode.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\SentVerificationCode.aspx.cs">
+      <DependentUpon>SentVerificationCode.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Account\SentVerificationCode.aspx.designer.cs">
+      <DependentUpon>SentVerificationCode.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\VerifyEmail.aspx.cs">
+      <DependentUpon>VerifyEmail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Account\VerifyEmail.aspx.designer.cs">
+      <DependentUpon>VerifyEmail.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Views\Home\About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -240,6 +261,11 @@
     <Content Include="App_Data\CosmoMongerDb.xml" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\digitalspaghetti.password.js" />
+    <Content Include="Scripts\digitialspaghetti.password.min.js" />
+    <Content Include="Views\Account\SendVerificationCode.aspx" />
+    <Content Include="Views\Account\SentVerificationCode.aspx" />
+    <Content Include="Views\Account\VerifyEmail.aspx" />
     <Content Include="Views\PlayerRecord\ListRecords.aspx" />
     <Content Include="Views\PlayerRecord\ViewRecord.aspx" />
     <Content Include="Views\Player\CreatePlayer.aspx" />

@@ -16,6 +16,7 @@ namespace CosmoMonger.Models
     using System.Security.Cryptography;
     using System.Diagnostics;
     using System.Text;
+    using System.Net.Mail;
 
     public class CosmoMongerMembershipUser : MembershipUser
     {
@@ -87,6 +88,15 @@ namespace CosmoMonger.Models
             }
         }
 
+        public string VerificationCode
+        {
+            get
+            {
+                string code = this.user.UserId.ToString();
+                return code;
+            }
+        }
+
         public CosmoMongerMembershipUser(User u)
         {
             this.user = u;
@@ -101,13 +111,10 @@ namespace CosmoMonger.Models
         {
             Logger.Write("Hashing Password: " + password, "Business Object", 1, 1000, TraceEventType.Verbose);
             // We need to convert the password string to a byte string for encoding
-            byte[] passwordBytes = Encoding.Default.GetBytes("CosmoMonger" + password);
-            SHA1 hasher = SHA1Managed.Create();
-            // Hash the password multiple times to make brute force attacks harder
-            for (int i = 0; i < 1000; i++)
-            {
-                passwordBytes = hasher.ComputeHash(passwordBytes);
-            }
+            byte[] passwordBytes = Encoding.UTF8.GetBytes("CosmoMonger+" + password + "Rules!");
+            SHA512 hasher = SHA512.Create();
+            // Hash the password
+            passwordBytes = hasher.ComputeHash(passwordBytes);
             Logger.Write("Hashed Password to: " + passwordBytes.ToString(), "Business Object", 1, 1001, TraceEventType.Verbose);
             return passwordBytes;
         }
@@ -213,6 +220,31 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Verifies that the verification code matches this users verification code. 
+        /// Used to verify the users e-mail and approve the user account.
+        /// </summary>
+        /// <param name="verificationCode">The verification code to check.</param>
+        /// <returns>
+        /// true if the specified verification code is valid and the user has been approved; otherwise, false.
+        /// </returns>
+        public bool VerifyEmail(string verificationCode)
+        {
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+
+            if (this.VerificationCode == verificationCode)
+            {
+                // Verify the user
+                this.user.Validated = true;
+                db.SubmitChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         ///  Clears the locked-out state of the user so that the user can login.
         /// </summary>
         /// <param name="userName">The membership user whose lock status you want to clear.</param>
@@ -234,6 +266,25 @@ namespace CosmoMonger.Models
         public User GetUserModel()
         {
             return this.user;
+        }
+
+        public bool SendVerificationCode(string baseVerificationCodeUrl)
+        {
+            // Build e-mail message
+            MailMessage msg = new MailMessage();
+            msg.From = new MailAddress("admin@cosmomonger.com", "CosmoMonger");
+            msg.To.Add(this.Email);
+            msg.Subject = "Email Verification for CosmoMonger";
+            msg.Body =
+                "To verify your CosmoMonger account go to\n" +
+                baseVerificationCodeUrl + this.VerificationCode + "\n\n" +
+                "Verification Code: " + this.VerificationCode;
+
+            // Send e-mail
+            SmtpClient smtp = new SmtpClient();
+            smtp.Send(msg);
+
+            return true;
         }
     }
 }
