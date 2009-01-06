@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" CodeBehind="ChangePassword.aspx.cs" Inherits="CosmoMonger.Views.Account.ChangePassword" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 
 <asp:Content ID="changePasswordContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Change Password</h2>

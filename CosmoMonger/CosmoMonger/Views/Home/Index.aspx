@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="CosmoMonger.Views.Home.Index" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
     <form id="form1" runat="server">

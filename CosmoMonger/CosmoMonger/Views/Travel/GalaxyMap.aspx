@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" CodeBehind="GalaxyMap.aspx.cs" Inherits="CosmoMonger.Views.Travel.GalaxyMap" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h1>Galaxy Map</h1>
     <div id="map" style="position: relative; width: 400px; height: 400px; border: solid 2px blue; overflow: hidden;">

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" CodeBehind="VerifyEmail.aspx.cs" Inherits="CosmoMonger.Views.Account.VerifyEmail" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Verify Email</h2>
     
@@ -28,7 +28,7 @@
     <% } %>
     
     <p>
-        Never recieved your verification code?
+        Never received your verification code?
         <br /> 
         Click <%= Html.ActionLink("here", "SendVerificationCode", new { username = ViewData["username"] })%> to send a new verification code.
     </p>

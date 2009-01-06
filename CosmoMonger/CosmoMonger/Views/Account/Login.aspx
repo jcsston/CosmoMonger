@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="CosmoMonger.Views.Account.Login" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 
 <asp:Content ID="loginContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Login</h2>
