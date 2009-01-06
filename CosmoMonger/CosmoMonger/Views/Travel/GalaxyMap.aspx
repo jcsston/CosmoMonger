@@ -15,10 +15,10 @@
                 {
                     %> color: red; <% 
                 } 
-                %>" onmouseover="document.getElementById('<%=Html.Encode(system.Name)%>').style.display = '';" onmouseout="document.getElementById('<%=Html.Encode(system.Name)%>').style.display = 'none';">
+                %>" onmouseover="document.getElementById('system<%=system.SystemId %>').style.display = '';" onmouseout="document.getElementById('system<%=system.SystemId %>').style.display = 'none';">
                 <%=Html.Encode(system.Name) %>
             </div>
-            <div id="<%=Html.Encode(system.Name) %>" style="padding: 2px; display: none; border: solid 1px black; background: #1D60FF none;">
+            <div id="system<%=system.SystemId %>" style="padding: 2px; display: none; border: solid 1px black; background: #1D60FF none;">
             Good Types: <%=system.GetGoods().Length %> <br />
             Bank: <%=system.HasBank ? "Yes" : "No" %>
             </div>
