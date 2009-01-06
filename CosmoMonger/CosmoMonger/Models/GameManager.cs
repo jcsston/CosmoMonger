@@ -90,7 +90,7 @@ namespace CosmoMonger.Models
         public static int GetDatabaseVersion()
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            return int.Parse(db.ExecuteQuery<string>("SELECT MAX([ID]) FROM [DATABASECHANGELOG]").Single());
+            return int.Parse(db.ExecuteQuery<string>("SELECT MAX(CAST(Id AS int)) FROM DATABASECHANGELOG WHERE ISNUMERIC(Id) = 1").Single());
         }
 
         /// <summary>
