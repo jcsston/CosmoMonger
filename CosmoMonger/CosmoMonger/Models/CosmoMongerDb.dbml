@@ -10,11 +10,11 @@
       <Column Name="InitialJumpDriveId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="InitialWeaponId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="InitialShieldId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="BaseShip_Ship" Member="Ships" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="Ship" />
-      <Association Name="BaseShip_SystemShip" Member="SystemShips" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="SystemShip" />
-      <Association Name="Weapon_BaseShip" Member="InitialWeapon" Storage="_Weapon" ThisKey="InitialWeaponId" OtherKey="WeaponId" Type="Weapon" IsForeignKey="true" />
-      <Association Name="JumpDrive_BaseShip" Member="InitialJumpDrive" Storage="_JumpDrive" ThisKey="InitialJumpDriveId" OtherKey="JumpDriveId" Type="JumpDrive" IsForeignKey="true" />
-      <Association Name="Shield_BaseShip" Member="InitialShield" Storage="_Shield" ThisKey="InitialShieldId" OtherKey="ShieldId" Type="Shield" IsForeignKey="true" />
+      <Association Name="BaseShip_Ship" Member="Ships" OtherKey="BaseShipId" Type="Ship" />
+      <Association Name="BaseShip_SystemShip" Member="SystemShips" OtherKey="BaseShipId" Type="SystemShip" />
+      <Association Name="Weapon_BaseShip" Member="InitialWeapon" Storage="_Weapon" ThisKey="InitialWeaponId" Type="Weapon" IsForeignKey="true" />
+      <Association Name="JumpDrive_BaseShip" Member="InitialJumpDrive" Storage="_JumpDrive" ThisKey="InitialJumpDriveId" Type="JumpDrive" IsForeignKey="true" />
+      <Association Name="Shield_BaseShip" Member="InitialShield" Storage="_Shield" ThisKey="InitialShieldId" Type="Shield" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="Weapon" Member="Weapons">
@@ -25,16 +25,16 @@
       <Column Name="TurnCost" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="CargoCost" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="BasePrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Weapon_BaseShip" Member="BaseShips" ThisKey="WeaponId" OtherKey="InitialWeaponId" Type="BaseShip" />
-      <Association Name="Weapon_Ship" Member="Ships" ThisKey="WeaponId" OtherKey="WeaponId" Type="Ship" />
-      <Association Name="Weapon_SystemWeaponUpgrade" Member="SystemWeaponUpgrades" ThisKey="WeaponId" OtherKey="WeaponId" Type="SystemWeaponUpgrade" />
+      <Association Name="Weapon_BaseShip" Member="BaseShips" OtherKey="InitialWeaponId" Type="BaseShip" />
+      <Association Name="Weapon_Ship" Member="Ships" OtherKey="WeaponId" Type="Ship" />
+      <Association Name="Weapon_SystemWeaponUpgrade" Member="SystemWeaponUpgrades" OtherKey="WeaponId" Type="SystemWeaponUpgrade" />
     </Type>
   </Table>
   <Table Name="BuddyList" Member="BuddyLists">
     <Type Name="BuddyList">
       <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="FriendId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="User_BuddyList" Member="User" ThisKey="UserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_BuddyList" Member="User" ThisKey="UserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="Good" Member="Goods">
@@ -43,15 +43,15 @@
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="BasePrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Contraband" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="Good_ShipGood" Member="ShipGoods" ThisKey="GoodId" OtherKey="GoodId" Type="ShipGood" />
-      <Association Name="Good_SystemGood" Member="SystemGoods" ThisKey="GoodId" OtherKey="GoodId" Type="SystemGood" />
+      <Association Name="Good_ShipGood" Member="ShipGoods" OtherKey="GoodId" Type="ShipGood" />
+      <Association Name="Good_SystemGood" Member="SystemGoods" OtherKey="GoodId" Type="SystemGood" />
     </Type>
   </Table>
   <Table Name="IgnoreList" Member="IgnoreLists">
     <Type Name="IgnoreList">
       <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="AntiFriendId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="User_IgnoreList" Member="User" ThisKey="UserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_IgnoreList" Member="User" ThisKey="UserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="InProgressCombat" Member="InProgressCombats">
@@ -62,8 +62,8 @@
       <Column Name="TurnPointsLeft" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Surrender" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="JettisonCargo" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="Ship_InProgressCombat" Member="Ship" ThisKey="AttackerShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
-      <Association Name="Ship_InProgressCombat1" Member="Ship1" ThisKey="DefenderShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
+      <Association Name="Ship_InProgressCombat" Member="Ship" ThisKey="AttackerShipId" Type="Ship" IsForeignKey="true" />
+      <Association Name="Ship_InProgressCombat1" Member="Ship1" ThisKey="DefenderShipId" Type="Ship" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="JumpDrive" Member="JumpDrives">
@@ -74,9 +74,9 @@
       <Column Name="Range" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="CargoCost" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="BasePrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="JumpDrive_BaseShip" Member="BaseShips" ThisKey="JumpDriveId" OtherKey="InitialJumpDriveId" Type="BaseShip" />
-      <Association Name="JumpDrive_Ship" Member="Ships" ThisKey="JumpDriveId" OtherKey="JumpDriveId" Type="Ship" />
-      <Association Name="JumpDrive_SystemJumpDriveUpgrade" Member="SystemJumpDriveUpgrades" ThisKey="JumpDriveId" OtherKey="JumpDriveId" Type="SystemJumpDriveUpgrade" />
+      <Association Name="JumpDrive_BaseShip" Member="BaseShips" OtherKey="InitialJumpDriveId" Type="BaseShip" />
+      <Association Name="JumpDrive_Ship" Member="Ships" OtherKey="JumpDriveId" Type="Ship" />
+      <Association Name="JumpDrive_SystemJumpDriveUpgrade" Member="SystemJumpDriveUpgrades" OtherKey="JumpDriveId" Type="SystemJumpDriveUpgrade" />
     </Type>
   </Table>
   <Table Name="Message" Member="Messages">
@@ -87,7 +87,7 @@
       <Column Name="Content" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Column Name="Time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="Received" Storage="_Read" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="User_Message" Member="RecipientUser" Storage="_User1" ThisKey="RecipientUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="User_Message" Member="RecipientUser" Storage="_User1" ThisKey="RecipientUserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="Npc" Member="Npcs">
@@ -100,16 +100,16 @@
       <Column Name="Credits" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Badness" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Bounty" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="NpcType_Npc" Member="NpcType" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="NpcType" IsForeignKey="true" />
-      <Association Name="Race_Npc" Member="Race" ThisKey="RaceId" OtherKey="RaceId" Type="Race" IsForeignKey="true" />
-      <Association Name="Ship_Npc" Member="Ship" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
+      <Association Name="NpcType_Npc" Member="NpcType" ThisKey="NpcTypeId" Type="NpcType" IsForeignKey="true" />
+      <Association Name="Race_Npc" Member="Race" ThisKey="RaceId" Type="Race" IsForeignKey="true" />
+      <Association Name="Ship_Npc" Member="Ship" ThisKey="ShipId" Type="Ship" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="NpcType" Member="NpcTypes">
     <Type Name="NpcType">
       <Column Name="NpcTypeId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
-      <Association Name="NpcType_Npc" Member="Npcs" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="Npc" />
+      <Association Name="NpcType_Npc" Member="Npcs" OtherKey="NpcTypeId" Type="Npc" />
     </Type>
   </Table>
   <Table Name="Player" Member="Players">
@@ -136,9 +136,9 @@
       <Column Name="FleeCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="CargoLostWorth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Alive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="Race_Player" Member="Race" ThisKey="RaceId" OtherKey="RaceId" Type="Race" IsForeignKey="true" />
-      <Association Name="Ship_Player" Member="Ship" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
-      <Association Name="User_Player" Member="User" ThisKey="UserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+      <Association Name="Race_Player" Member="Race" ThisKey="RaceId" Type="Race" IsForeignKey="true" />
+      <Association Name="Ship_Player" Member="Ship" ThisKey="ShipId" Type="Ship" IsForeignKey="true" />
+      <Association Name="User_Player" Member="User" ThisKey="UserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="Race" Member="Races">
@@ -148,8 +148,14 @@
       <Column Name="Weapons" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Shields" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Engine" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Race_Npc" Member="Npcs" ThisKey="RaceId" OtherKey="RaceId" Type="Npc" />
-      <Association Name="Race_Player" Member="Players" ThisKey="RaceId" OtherKey="RaceId" Type="Player" />
+      <Column Name="Accuracy" Type="System.Int32" DbType="Int" CanBeNull="false" />
+      <Column Name="RacialEnemy" Type="System.Int32" DbType="Int" CanBeNull="false" />
+      <Column Name="RacialPreference" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="HomeSystem" Type="System.Int32" DbType="Int" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="varchar(1000)" CanBeNull="false" />
+      <Association Name="Race_Npc" Member="Npcs" OtherKey="RaceId" Type="Npc" />
+      <Association Name="Race_Player" Member="Players" OtherKey="RaceId" Type="Player" />
+      <Association Name="CosmoSystem_Race" Member="CosmoSystem" ThisKey="HomeSystem" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="Shield" Member="Shields">
@@ -159,9 +165,9 @@
       <Column Name="Strength" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="BasePrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="CargoCost" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
-      <Association Name="Shield_BaseShip" Member="BaseShips" ThisKey="ShieldId" OtherKey="InitialShieldId" Type="BaseShip" />
-      <Association Name="Shield_Ship" Member="Ships" ThisKey="ShieldId" OtherKey="ShieldId" Type="Ship" />
-      <Association Name="Shield_SystemShieldUpgrade" Member="SystemShieldUpgrades" ThisKey="ShieldId" OtherKey="ShieldId" Type="SystemShieldUpgrade" />
+      <Association Name="Shield_BaseShip" Member="BaseShips" OtherKey="InitialShieldId" Type="BaseShip" />
+      <Association Name="Shield_Ship" Member="Ships" OtherKey="ShieldId" Type="Ship" />
+      <Association Name="Shield_SystemShieldUpgrade" Member="SystemShieldUpgrades" OtherKey="ShieldId" Type="SystemShieldUpgrade" />
     </Type>
   </Table>
   <Table Name="Ship" Member="Ships">
@@ -179,16 +185,16 @@
       <Column Name="TargetSystemId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="CurrentJumpDriveCharge" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="TargetSystemArrivalTime" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
-      <Association Name="Ship_InProgressCombat" Member="InProgressCombats" ThisKey="ShipId" OtherKey="AttackerShipId" Type="InProgressCombat" />
-      <Association Name="Ship_InProgressCombat1" Member="InProgressCombats1" ThisKey="ShipId" OtherKey="DefenderShipId" Type="InProgressCombat" />
-      <Association Name="Ship_Npc" Member="Npcs" ThisKey="ShipId" OtherKey="ShipId" Type="Npc" />
-      <Association Name="Ship_Player" Member="Players" ThisKey="ShipId" OtherKey="ShipId" Type="Player" />
-      <Association Name="Ship_ShipGood" Member="ShipGoods" ThisKey="ShipId" OtherKey="ShipId" Type="ShipGood" />
-      <Association Name="BaseShip_Ship" Member="BaseShip" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="BaseShip" IsForeignKey="true" />
-      <Association Name="JumpDrive_Ship" Member="JumpDrive" ThisKey="JumpDriveId" OtherKey="JumpDriveId" Type="JumpDrive" IsForeignKey="true" />
-      <Association Name="Shield_Ship" Member="Shield" ThisKey="ShieldId" OtherKey="ShieldId" Type="Shield" IsForeignKey="true" />
-      <Association Name="Weapon_Ship" Member="Weapon" ThisKey="WeaponId" OtherKey="WeaponId" Type="Weapon" IsForeignKey="true" />
-      <Association Name="CosmoSystem_Ship" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
+      <Association Name="Ship_InProgressCombat" Member="InProgressCombats" OtherKey="AttackerShipId" Type="InProgressCombat" />
+      <Association Name="Ship_InProgressCombat1" Member="InProgressCombats1" OtherKey="DefenderShipId" Type="InProgressCombat" />
+      <Association Name="Ship_Npc" Member="Npcs" OtherKey="ShipId" Type="Npc" />
+      <Association Name="Ship_Player" Member="Players" OtherKey="ShipId" Type="Player" />
+      <Association Name="Ship_ShipGood" Member="ShipGoods" OtherKey="ShipId" Type="ShipGood" />
+      <Association Name="BaseShip_Ship" Member="BaseShip" ThisKey="BaseShipId" Type="BaseShip" IsForeignKey="true" />
+      <Association Name="JumpDrive_Ship" Member="JumpDrive" ThisKey="JumpDriveId" Type="JumpDrive" IsForeignKey="true" />
+      <Association Name="Shield_Ship" Member="Shield" ThisKey="ShieldId" Type="Shield" IsForeignKey="true" />
+      <Association Name="Weapon_Ship" Member="Weapon" ThisKey="WeaponId" Type="Weapon" IsForeignKey="true" />
+      <Association Name="CosmoSystem_Ship" Member="CosmoSystem" ThisKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="ShipGood" Member="ShipGoods">
@@ -196,8 +202,8 @@
       <Column Name="ShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="GoodId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Good_ShipGood" Member="Good" ThisKey="GoodId" OtherKey="GoodId" Type="Good" IsForeignKey="true" />
-      <Association Name="Ship_ShipGood" Member="Ship" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
+      <Association Name="Good_ShipGood" Member="Good" ThisKey="GoodId" Type="Good" IsForeignKey="true" />
+      <Association Name="Ship_ShipGood" Member="Ship" ThisKey="ShipId" Type="Ship" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="System" Member="CosmoSystems">
@@ -207,12 +213,13 @@
       <Column Name="PositionX" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PositionY" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="HasBank" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="CosmoSystem_Ship" Member="Ships" ThisKey="SystemId" OtherKey="SystemId" Type="Ship" />
-      <Association Name="CosmoSystem_SystemGood" Member="SystemGoods" ThisKey="SystemId" OtherKey="SystemId" Type="SystemGood" />
-      <Association Name="CosmoSystem_SystemJumpDriveUpgrade" Member="SystemJumpDriveUpgrades" ThisKey="SystemId" OtherKey="SystemId" Type="SystemJumpDriveUpgrade" />
-      <Association Name="CosmoSystem_SystemShieldUpgrade" Member="SystemShieldUpgrades" ThisKey="SystemId" OtherKey="SystemId" Type="SystemShieldUpgrade" />
-      <Association Name="CosmoSystem_SystemShip" Member="SystemShips" ThisKey="SystemId" OtherKey="SystemId" Type="SystemShip" />
-      <Association Name="CosmoSystem_SystemWeaponUpgrade" Member="SystemWeaponUpgrades" ThisKey="SystemId" OtherKey="SystemId" Type="SystemWeaponUpgrade" />
+      <Association Name="CosmoSystem_Race" Member="Races" OtherKey="HomeSystem" Type="Race" />
+      <Association Name="CosmoSystem_Ship" Member="Ships" OtherKey="SystemId" Type="Ship" />
+      <Association Name="CosmoSystem_SystemGood" Member="SystemGoods" OtherKey="SystemId" Type="SystemGood" />
+      <Association Name="CosmoSystem_SystemJumpDriveUpgrade" Member="SystemJumpDriveUpgrades" OtherKey="SystemId" Type="SystemJumpDriveUpgrade" />
+      <Association Name="CosmoSystem_SystemShieldUpgrade" Member="SystemShieldUpgrades" OtherKey="SystemId" Type="SystemShieldUpgrade" />
+      <Association Name="CosmoSystem_SystemShip" Member="SystemShips" OtherKey="SystemId" Type="SystemShip" />
+      <Association Name="CosmoSystem_SystemWeaponUpgrade" Member="SystemWeaponUpgrades" OtherKey="SystemId" Type="SystemWeaponUpgrade" />
     </Type>
   </Table>
   <Table Name="SystemGood" Member="SystemGoods">
@@ -221,8 +228,8 @@
       <Column Name="GoodId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PriceMultiplier" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Association Name="Good_SystemGood" Member="Good" ThisKey="GoodId" OtherKey="GoodId" Type="Good" IsForeignKey="true" />
-      <Association Name="CosmoSystem_SystemGood" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
+      <Association Name="Good_SystemGood" Member="Good" ThisKey="GoodId" Type="Good" IsForeignKey="true" />
+      <Association Name="CosmoSystem_SystemGood" Member="CosmoSystem" ThisKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="SystemJumpDriveUpgrade" Member="SystemJumpDriveUpgrades">
@@ -231,8 +238,8 @@
       <Column Name="JumpDriveId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PriceMultiplier" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Association Name="JumpDrive_SystemJumpDriveUpgrade" Member="JumpDrive" ThisKey="JumpDriveId" OtherKey="JumpDriveId" Type="JumpDrive" IsForeignKey="true" />
-      <Association Name="CosmoSystem_SystemJumpDriveUpgrade" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
+      <Association Name="JumpDrive_SystemJumpDriveUpgrade" Member="JumpDrive" ThisKey="JumpDriveId" Type="JumpDrive" IsForeignKey="true" />
+      <Association Name="CosmoSystem_SystemJumpDriveUpgrade" Member="CosmoSystem" ThisKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="SystemShieldUpgrade" Member="SystemShieldUpgrades">
@@ -241,8 +248,8 @@
       <Column Name="ShieldId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PriceMultiplier" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Association Name="Shield_SystemShieldUpgrade" Member="Shield" ThisKey="ShieldId" OtherKey="ShieldId" Type="Shield" IsForeignKey="true" />
-      <Association Name="CosmoSystem_SystemShieldUpgrade" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
+      <Association Name="Shield_SystemShieldUpgrade" Member="Shield" ThisKey="ShieldId" Type="Shield" IsForeignKey="true" />
+      <Association Name="CosmoSystem_SystemShieldUpgrade" Member="CosmoSystem" ThisKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="SystemShip" Member="SystemShips">
@@ -251,8 +258,8 @@
       <Column Name="BaseShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PriceMultiplier" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Association Name="BaseShip_SystemShip" Member="BaseShip" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="BaseShip" IsForeignKey="true" />
-      <Association Name="CosmoSystem_SystemShip" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
+      <Association Name="BaseShip_SystemShip" Member="BaseShip" ThisKey="BaseShipId" Type="BaseShip" IsForeignKey="true" />
+      <Association Name="CosmoSystem_SystemShip" Member="CosmoSystem" ThisKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="SystemWeaponUpgrade" Member="SystemWeaponUpgrades">
@@ -261,8 +268,8 @@
       <Column Name="WeaponId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PriceMultiplier" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Association Name="CosmoSystem_SystemWeaponUpgrade" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
-      <Association Name="Weapon_SystemWeaponUpgrade" Member="Weapon" ThisKey="WeaponId" OtherKey="WeaponId" Type="Weapon" IsForeignKey="true" />
+      <Association Name="CosmoSystem_SystemWeaponUpgrade" Member="CosmoSystem" ThisKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
+      <Association Name="Weapon_SystemWeaponUpgrade" Member="Weapon" ThisKey="WeaponId" Type="Weapon" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="[User]" Member="Users">
@@ -276,10 +283,10 @@
       <Column Name="Admin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="LastLogin" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
       <Column Name="LoginAttemptCount" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
-      <Association Name="User_BuddyList" Member="BuddyLists" ThisKey="UserId" OtherKey="UserId" Type="BuddyList" />
-      <Association Name="User_IgnoreList" Member="IgnoreLists" ThisKey="UserId" OtherKey="UserId" Type="IgnoreList" />
-      <Association Name="User_Message" Member="Messages" Storage="_Messages1" ThisKey="UserId" OtherKey="RecipientUserId" Type="Message" />
-      <Association Name="User_Player" Member="Players" ThisKey="UserId" OtherKey="UserId" Type="Player" />
+      <Association Name="User_BuddyList" Member="BuddyLists" OtherKey="UserId" Type="BuddyList" />
+      <Association Name="User_IgnoreList" Member="IgnoreLists" OtherKey="UserId" Type="IgnoreList" />
+      <Association Name="User_Message" Member="Messages" Storage="_Messages1" OtherKey="RecipientUserId" Type="Message" />
+      <Association Name="User_Player" Member="Players" OtherKey="UserId" Type="Player" />
     </Type>
   </Table>
 </Database>

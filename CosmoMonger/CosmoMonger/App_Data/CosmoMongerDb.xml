@@ -542,6 +542,25 @@
       </column>
     </modifyColumn>
   </changeSet>
+  <changeSet author="Roger Boykin" id="14">
+    <comment>Made some changes to the Race Table</comment>
+    <dropColumn tableName="Race" columnName="Description"/>
+    <addColumn tableName="Race">
+      <column name="Accuracy" type="int" />
+      <column name="HomeSystem" type="varchar(30)" />
+      <column name="RacialEnemy" type="int" />
+      <column name="RacialPreference" type="int" />
+      <column name="Description" type="varchar(1000)" />
+    </addColumn>
+  </changeSet>
+  <changeSet author="Roger Boykin" id="15">
+    <comment>Fixing errors on the Race Table</comment>
+    <dropColumn tableName="Race" columnName="HomeSystem"/>
+    <addColumn tableName="Race">
+      <column name="HomeSystem" type="int" />
+    </addColumn>  
+    <addForeignKeyConstraint baseColumnNames="HomeSystem" baseTableName="Race" constraintName="FK_SystemId_Race" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+  </changeSet>
   <changeSet id="0-testData" author="Jory Stone" runOnChange="true">
     <sqlFile path="CosmoMongerData.sql"/>
   </changeSet>
