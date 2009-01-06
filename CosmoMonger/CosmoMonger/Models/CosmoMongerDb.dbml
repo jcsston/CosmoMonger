@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Database Name="CosmoMonger" Class="CosmoMongerDbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=localhost;Initial Catalog=CosmoMonger;Persist Security Info=True;User ID=CosmoUser" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="CosmoMongerConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.BaseShip" Member="BaseShips">
+  <Table Name="BaseShip" Member="BaseShips">
     <Type Name="BaseShip">
       <Column Name="BaseShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Storage="_Model" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
@@ -17,7 +17,7 @@
       <Association Name="Shield_BaseShip" Member="InitialShield" Storage="_Shield" ThisKey="InitialShieldId" OtherKey="ShieldId" Type="Shield" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Weapon" Member="Weapons">
+  <Table Name="Weapon" Member="Weapons">
     <Type Name="Weapon">
       <Column Name="WeaponId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
@@ -30,14 +30,14 @@
       <Association Name="Weapon_SystemWeaponUpgrade" Member="SystemWeaponUpgrades" ThisKey="WeaponId" OtherKey="WeaponId" Type="SystemWeaponUpgrade" />
     </Type>
   </Table>
-  <Table Name="dbo.BuddyList" Member="BuddyLists">
+  <Table Name="BuddyList" Member="BuddyLists">
     <Type Name="BuddyList">
       <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="FriendId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Association Name="User_BuddyList" Member="User" ThisKey="UserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Good" Member="Goods">
+  <Table Name="Good" Member="Goods">
     <Type Name="Good">
       <Column Name="GoodId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
@@ -47,14 +47,14 @@
       <Association Name="Good_SystemGood" Member="SystemGoods" ThisKey="GoodId" OtherKey="GoodId" Type="SystemGood" />
     </Type>
   </Table>
-  <Table Name="dbo.IgnoreList" Member="IgnoreLists">
+  <Table Name="IgnoreList" Member="IgnoreLists">
     <Type Name="IgnoreList">
       <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="AntiFriendId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Association Name="User_IgnoreList" Member="User" ThisKey="UserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.InProgressCombat" Member="InProgressCombats">
+  <Table Name="InProgressCombat" Member="InProgressCombats">
     <Type Name="InProgressCombat">
       <Column Name="AttackerShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="DefenderShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -66,7 +66,7 @@
       <Association Name="Ship_InProgressCombat1" Member="Ship1" ThisKey="DefenderShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.JumpDrive" Member="JumpDrives">
+  <Table Name="JumpDrive" Member="JumpDrives">
     <Type Name="JumpDrive">
       <Column Name="JumpDriveId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
@@ -79,7 +79,7 @@
       <Association Name="JumpDrive_SystemJumpDriveUpgrade" Member="SystemJumpDriveUpgrades" ThisKey="JumpDriveId" OtherKey="JumpDriveId" Type="SystemJumpDriveUpgrade" />
     </Type>
   </Table>
-  <Table Name="dbo.Message" Member="Messages">
+  <Table Name="Message" Member="Messages">
     <Type Name="Message">
       <Column Name="MessageId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="RecipientUserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -90,7 +90,7 @@
       <Association Name="User_Message" Member="RecipientUser" Storage="_User1" ThisKey="RecipientUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Npc" Member="Npcs">
+  <Table Name="Npc" Member="Npcs">
     <Type Name="Npc">
       <Column Name="NpcId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="NpcTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -105,14 +105,14 @@
       <Association Name="Ship_Npc" Member="Ship" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.NpcType" Member="NpcTypes">
+  <Table Name="NpcType" Member="NpcTypes">
     <Type Name="NpcType">
       <Column Name="NpcTypeId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Association Name="NpcType_Npc" Member="Npcs" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="Npc" />
     </Type>
   </Table>
-  <Table Name="dbo.Player" Member="Players">
+  <Table Name="Player" Member="Players">
     <Type Name="Player">
       <Column Name="PlayerId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -141,7 +141,7 @@
       <Association Name="User_Player" Member="User" ThisKey="UserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Race" Member="Races">
+  <Table Name="Race" Member="Races">
     <Type Name="Race">
       <Column Name="RaceId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
@@ -152,7 +152,7 @@
       <Association Name="Race_Player" Member="Players" ThisKey="RaceId" OtherKey="RaceId" Type="Player" />
     </Type>
   </Table>
-  <Table Name="dbo.Shield" Member="Shields">
+  <Table Name="Shield" Member="Shields">
     <Type Name="Shield">
       <Column Name="ShieldId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
@@ -164,7 +164,7 @@
       <Association Name="Shield_SystemShieldUpgrade" Member="SystemShieldUpgrades" ThisKey="ShieldId" OtherKey="ShieldId" Type="SystemShieldUpgrade" />
     </Type>
   </Table>
-  <Table Name="dbo.Ship" Member="Ships">
+  <Table Name="Ship" Member="Ships">
     <Type Name="Ship">
       <Column Name="ShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="BaseShipId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -191,7 +191,7 @@
       <Association Name="CosmoSystem_Ship" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.ShipGood" Member="ShipGoods">
+  <Table Name="ShipGood" Member="ShipGoods">
     <Type Name="ShipGood">
       <Column Name="ShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="GoodId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -200,7 +200,7 @@
       <Association Name="Ship_ShipGood" Member="Ship" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.System" Member="CosmoSystems">
+  <Table Name="System" Member="CosmoSystems">
     <Type Name="CosmoSystem">
       <Column Name="SystemId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
@@ -215,7 +215,7 @@
       <Association Name="CosmoSystem_SystemWeaponUpgrade" Member="SystemWeaponUpgrades" ThisKey="SystemId" OtherKey="SystemId" Type="SystemWeaponUpgrade" />
     </Type>
   </Table>
-  <Table Name="dbo.SystemGood" Member="SystemGoods">
+  <Table Name="SystemGood" Member="SystemGoods">
     <Type Name="SystemGood">
       <Column Name="SystemId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="GoodId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -225,7 +225,7 @@
       <Association Name="CosmoSystem_SystemGood" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.SystemJumpDriveUpgrade" Member="SystemJumpDriveUpgrades">
+  <Table Name="SystemJumpDriveUpgrade" Member="SystemJumpDriveUpgrades">
     <Type Name="SystemJumpDriveUpgrade">
       <Column Name="SystemId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="JumpDriveId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -235,7 +235,7 @@
       <Association Name="CosmoSystem_SystemJumpDriveUpgrade" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.SystemShieldUpgrade" Member="SystemShieldUpgrades">
+  <Table Name="SystemShieldUpgrade" Member="SystemShieldUpgrades">
     <Type Name="SystemShieldUpgrade">
       <Column Name="SystemId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="ShieldId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -245,7 +245,7 @@
       <Association Name="CosmoSystem_SystemShieldUpgrade" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.SystemShip" Member="SystemShips">
+  <Table Name="SystemShip" Member="SystemShips">
     <Type Name="SystemShip">
       <Column Name="SystemId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="BaseShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -255,7 +255,7 @@
       <Association Name="CosmoSystem_SystemShip" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.SystemWeaponUpgrade" Member="SystemWeaponUpgrades">
+  <Table Name="SystemWeaponUpgrade" Member="SystemWeaponUpgrades">
     <Type Name="SystemWeaponUpgrade">
       <Column Name="SystemId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="WeaponId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -265,7 +265,7 @@
       <Association Name="Weapon_SystemWeaponUpgrade" Member="Weapon" ThisKey="WeaponId" OtherKey="WeaponId" Type="Weapon" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.[User]" Member="Users">
+  <Table Name="[User]" Member="Users">
     <Type Name="User">
       <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Email" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />

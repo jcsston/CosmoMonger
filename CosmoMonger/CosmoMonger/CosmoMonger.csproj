@@ -11,6 +11,7 @@
     <RootNamespace>CosmoMonger</RootNamespace>
     <AssemblyName>CosmoMonger</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,8 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging.Database, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging.Database, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Recaptcha, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\library\Recaptcha.dll</HintPath>
@@ -57,6 +62,7 @@
     <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC Beta\Assemblies\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -109,153 +115,6 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Utility\DataContextFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Account\ChangePassword.aspx.cs">
-      <DependentUpon>ChangePassword.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Account\ChangePassword.aspx.designer.cs">
-      <DependentUpon>ChangePassword.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Account\ChangePasswordSuccess.aspx.cs">
-      <DependentUpon>ChangePasswordSuccess.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Account\ChangePasswordSuccess.aspx.designer.cs">
-      <DependentUpon>ChangePasswordSuccess.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Account\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Account\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Account\Register.aspx.cs">
-      <DependentUpon>Register.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Account\Register.aspx.designer.cs">
-      <DependentUpon>Register.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Account\SendVerificationCode.aspx.cs">
-      <DependentUpon>SendVerificationCode.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Account\SendVerificationCode.aspx.designer.cs">
-      <DependentUpon>SendVerificationCode.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Account\SentVerificationCode.aspx.cs">
-      <DependentUpon>SentVerificationCode.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Account\SentVerificationCode.aspx.designer.cs">
-      <DependentUpon>SentVerificationCode.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Account\VerifyEmail.aspx.cs">
-      <DependentUpon>VerifyEmail.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Account\VerifyEmail.aspx.designer.cs">
-      <DependentUpon>VerifyEmail.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Home\About.aspx.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Home\About.aspx.designer.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Home\Index.aspx.cs">
-      <DependentUpon>Index.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Home\Index.aspx.designer.cs">
-      <DependentUpon>Index.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PlayerRecord\ListRecords.aspx.cs">
-      <DependentUpon>ListRecords.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\PlayerRecord\ListRecords.aspx.designer.cs">
-      <DependentUpon>ListRecords.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PlayerRecord\ViewRecord.aspx.cs">
-      <DependentUpon>ViewRecord.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\PlayerRecord\ViewRecord.aspx.designer.cs">
-      <DependentUpon>ViewRecord.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Player\CreatePlayer.aspx.cs">
-      <DependentUpon>CreatePlayer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Player\CreatePlayer.aspx.designer.cs">
-      <DependentUpon>CreatePlayer.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Player\EditProfile.aspx.cs">
-      <DependentUpon>EditProfile.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Player\EditProfile.aspx.designer.cs">
-      <DependentUpon>EditProfile.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Player\ViewProfile.aspx.cs">
-      <DependentUpon>ViewProfile.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Player\ViewProfile.aspx.designer.cs">
-      <DependentUpon>ViewProfile.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Shared\Error.aspx.cs">
-      <DependentUpon>Error.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Shared\Error.aspx.designer.cs">
-      <DependentUpon>Error.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Shared\LoginUserControl.ascx.cs">
-      <DependentUpon>LoginUserControl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Shared\LoginUserControl.ascx.designer.cs">
-      <DependentUpon>LoginUserControl.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Shared\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Shared\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Trade\ListGoods.aspx.cs">
-      <DependentUpon>ListGoods.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Trade\ListGoods.aspx.designer.cs">
-      <DependentUpon>ListGoods.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Travel\GalaxyMap.aspx.cs">
-      <DependentUpon>GalaxyMap.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Travel\GalaxyMap.aspx.designer.cs">
-      <DependentUpon>GalaxyMap.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Travel\Travel.aspx.cs">
-      <DependentUpon>Travel.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Travel\Travel.aspx.designer.cs">
-      <DependentUpon>Travel.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Travel\TravelInProgress.aspx.cs">
-      <DependentUpon>TravelInProgress.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Travel\TravelInProgress.aspx.designer.cs">
-      <DependentUpon>TravelInProgress.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\CosmoMongerDb.xml" />

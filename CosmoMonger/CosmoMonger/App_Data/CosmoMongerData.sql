@@ -34,11 +34,11 @@ END;
 IF NOT EXISTS (SELECT * FROM BaseShip)
 BEGIN
 SET IDENTITY_INSERT BaseShip ON
-INSERT INTO BaseShip (BaseShipId,Model,BasePrice,CargoSpace,InitialJumpDriveId,InitialWeaponId,InitialShieldId) VALUES (1,'Glorified Trash Can',5000,25,1,1,1)
-INSERT INTO BaseShip (BaseShipId,Model,BasePrice,CargoSpace,InitialJumpDriveId,InitialWeaponId,InitialShieldId) VALUES (2,'Rover',25000,35,2,2,1)
-INSERT INTO BaseShip (BaseShipId,Model,BasePrice,CargoSpace,InitialJumpDriveId,InitialWeaponId,InitialShieldId) VALUES (3,'Widow Maker',750000,50,3,4,1)
-INSERT INTO BaseShip (BaseShipId,Model,BasePrice,CargoSpace,InitialJumpDriveId,InitialWeaponId,InitialShieldId) VALUES (4,'Dagger',2500000,100,4,3,1)
-INSERT INTO BaseShip (BaseShipId,Model,BasePrice,CargoSpace,InitialJumpDriveId,InitialWeaponId,InitialShieldId) VALUES (5,'Weed Wacker',10000000,255,4,4,1)
+INSERT INTO BaseShip (BaseShipId,Name,BasePrice,CargoSpace,InitialJumpDriveId,InitialWeaponId,InitialShieldId) VALUES (1,'Glorified Trash Can',5000,25,1,1,1)
+INSERT INTO BaseShip (BaseShipId,Name,BasePrice,CargoSpace,InitialJumpDriveId,InitialWeaponId,InitialShieldId) VALUES (2,'Rover',25000,35,2,2,1)
+INSERT INTO BaseShip (BaseShipId,Name,BasePrice,CargoSpace,InitialJumpDriveId,InitialWeaponId,InitialShieldId) VALUES (3,'Widow Maker',750000,50,3,4,1)
+INSERT INTO BaseShip (BaseShipId,Name,BasePrice,CargoSpace,InitialJumpDriveId,InitialWeaponId,InitialShieldId) VALUES (4,'Dagger',2500000,100,4,3,1)
+INSERT INTO BaseShip (BaseShipId,Name,BasePrice,CargoSpace,InitialJumpDriveId,InitialWeaponId,InitialShieldId) VALUES (5,'Weed Wacker',10000000,255,4,4,1)
 SET IDENTITY_INSERT BaseShip OFF
 END;
 

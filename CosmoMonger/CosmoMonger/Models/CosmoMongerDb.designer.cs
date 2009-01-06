@@ -305,7 +305,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.BaseShip")]
+	[Table()]
 	public partial class BaseShip : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -690,7 +690,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.Weapon")]
+	[Table()]
 	public partial class Weapon : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -956,7 +956,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.BuddyList")]
+	[Table()]
 	public partial class BuddyList : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -1083,7 +1083,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.Good")]
+	[Table()]
 	public partial class Good : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -1273,7 +1273,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.IgnoreList")]
+	[Table()]
 	public partial class IgnoreList : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -1400,7 +1400,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.InProgressCombat")]
+	[Table()]
 	public partial class InProgressCombat : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -1664,7 +1664,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.JumpDrive")]
+	[Table()]
 	public partial class JumpDrive : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -1930,7 +1930,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.Message")]
+	[Table()]
 	public partial class Message : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -2153,7 +2153,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.Npc")]
+	[Table()]
 	public partial class Npc : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -2506,7 +2506,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.NpcType")]
+	[Table()]
 	public partial class NpcType : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -2620,7 +2620,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.Player")]
+	[Table()]
 	public partial class Player : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -3309,7 +3309,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.Race")]
+	[Table()]
 	public partial class Race : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -3523,7 +3523,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.Shield")]
+	[Table()]
 	public partial class Shield : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -3765,7 +3765,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.Ship")]
+	[Table()]
 	public partial class Ship : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -4460,7 +4460,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.ShipGood")]
+	[Table()]
 	public partial class ShipGood : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -4652,7 +4652,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.System")]
+	[Table(Name="System")]
 	public partial class CosmoSystem : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -4978,7 +4978,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.SystemGood")]
+	[Table()]
 	public partial class SystemGood : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -5194,7 +5194,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.SystemJumpDriveUpgrade")]
+	[Table()]
 	public partial class SystemJumpDriveUpgrade : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -5410,7 +5410,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.SystemShieldUpgrade")]
+	[Table()]
 	public partial class SystemShieldUpgrade : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -5626,7 +5626,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.SystemShip")]
+	[Table()]
 	public partial class SystemShip : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -5842,7 +5842,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.SystemWeaponUpgrade")]
+	[Table()]
 	public partial class SystemWeaponUpgrade : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -6058,7 +6058,7 @@ namespace CosmoMonger.Models
 		}
 	}
 	
-	[Table(Name="dbo.[User]")]
+	[Table(Name="[User]")]
 	public partial class User : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		

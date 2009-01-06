@@ -13,9 +13,9 @@
           <NativeDebugging>False</NativeDebugging>
           <SQLDebugging>False</SQLDebugging>
           <PublishCopyOption>RunFiles</PublishCopyOption>
-          <PublishTargetLocation>\\WIN2K3.stone.local\cosmomonger\</PublishTargetLocation>
+          <PublishTargetLocation>ftp://208.81.130.2/httpdocs/</PublishTargetLocation>
           <PublishDeleteAllFiles>False</PublishDeleteAllFiles>
-          <PublishCopyAppData>True</PublishCopyAppData>
+          <PublishCopyAppData>False</PublishCopyAppData>
           <ExternalProgram>
           </ExternalProgram>
           <StartExternalURL>

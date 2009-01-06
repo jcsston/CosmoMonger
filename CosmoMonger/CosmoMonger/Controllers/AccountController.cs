@@ -294,7 +294,7 @@
             CosmoMongerMembershipUser verifyUser = (CosmoMongerMembershipUser)Provider.GetUser(username, false);
             if (verifyUser != null)
             {
-                string baseVerificationUrl = "http://wwww.cosmomonger.com" + this.Url.Action("VerifyEmail") + "&username=" + this.Url.Encode(username) + "&verificationCode=";
+                string baseVerificationUrl = this.Request.Url.GetLeftPart(UriPartial.Authority)  + this.Url.Action("VerifyEmail") + "?username=" + this.Url.Encode(username) + "&verificationCode=";
                 verifyUser.SendVerificationCode(baseVerificationUrl);
                 return View("SentVerificationCode");
             }
