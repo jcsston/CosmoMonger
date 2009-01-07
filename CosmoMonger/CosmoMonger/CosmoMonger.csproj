@@ -124,6 +124,7 @@
     <Content Include="Scripts\digitialspaghetti.password.min.js" />
     <Content Include="Views\Account\SendVerificationCode.aspx" />
     <Content Include="Views\Account\SentVerificationCode.aspx" />
+    <Content Include="Views\Account\VerifiedEmail.aspx" />
     <Content Include="Views\Account\VerifyEmail.aspx" />
     <Content Include="Views\PlayerRecord\ListRecords.aspx" />
     <Content Include="Views\PlayerRecord\ViewRecord.aspx" />

@@ -17,6 +17,7 @@ namespace CosmoMonger.Models
     using System.Diagnostics;
     using System.Text;
     using System.Net.Mail;
+    using System.Collections.Generic;
 
     public class CosmoMongerMembershipUser : MembershipUser
     {
@@ -97,6 +98,10 @@ namespace CosmoMonger.Models
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CosmoMongerMembershipUser"/> class.
+        /// </summary>
+        /// <param name="u">The User model object for this user.</param>
         public CosmoMongerMembershipUser(User u)
         {
             this.user = u;
@@ -109,13 +114,17 @@ namespace CosmoMonger.Models
         /// <returns>byte array containing the SHA1 hash.</returns>
         static private byte[] HashPassword(string password)
         {
-            Logger.Write("Hashing Password: " + password, "Business Object", 1, 1000, TraceEventType.Verbose);
+            Logger.Write("Hashing Password: " + password, "Business Object", 1, 1000, TraceEventType.Verbose, "User Password Hashing");
+            
             // We need to convert the password string to a byte string for encoding
             byte[] passwordBytes = Encoding.UTF8.GetBytes("CosmoMonger+" + password + "Rules!");
-            SHA512 hasher = SHA512.Create();
+            
             // Hash the password
+            SHA512 hasher = SHA512.Create();
             passwordBytes = hasher.ComputeHash(passwordBytes);
-            Logger.Write("Hashed Password to: " + passwordBytes.ToString(), "Business Object", 1, 1001, TraceEventType.Verbose);
+            
+            Logger.Write("Hashed User Password to: " + passwordBytes.ToString(), "Business Object", 1, 1001, TraceEventType.Verbose, "User Password Hashed");
+
             return passwordBytes;
         }
 
@@ -141,8 +150,7 @@ namespace CosmoMonger.Models
             user.Email = email;
             user.Password = HashPassword(password);
             user.Active = true;
-            // TODO: Add e-mail validatation
-            user.Validated = true;
+            user.Validated = false;
 
             // Insert the user record into the database
             db.Users.InsertOnSubmit(user);
@@ -188,7 +196,7 @@ namespace CosmoMonger.Models
             byte [] hashedPassword = HashPassword(password);
             byte[] correctPassword = this.user.Password;
 
-            Debug.Assert(hashedPassword.Length == correctPassword.Length, "SHA1 Hashed Passwords should always be the same length");
+            Debug.Assert(hashedPassword.Length == correctPassword.Length, "Hashed Passwords should always be the same length");
             
             for (int i = 0; i < hashedPassword.Length; i++)
             {
@@ -263,11 +271,20 @@ namespace CosmoMonger.Models
             return false;
         }
 
+        /// <summary>
+        /// Gets the User model object for this user.
+        /// </summary>
+        /// <returns>A reference to the User model object for this user</returns>
         public User GetUserModel()
         {
             return this.user;
         }
 
+        /// <summary>
+        /// Sends the verification code to the users e-mail.
+        /// </summary>
+        /// <param name="baseVerificationCodeUrl">The base verification code URL. Example: http://localhost:54084/Account/VerifyEmail?username=jcsston&verificationCode=</param>
+        /// <returns>True if the e-mail was successfully sent to the SMTP server. False if sending to the SMTP server failed.</returns>
         public bool SendVerificationCode(string baseVerificationCodeUrl)
         {
             // Build e-mail message
@@ -280,9 +297,24 @@ namespace CosmoMonger.Models
                 baseVerificationCodeUrl + this.VerificationCode + "\n\n" +
                 "Verification Code: " + this.VerificationCode;
 
-            // Send e-mail
-            SmtpClient smtp = new SmtpClient();
-            smtp.Send(msg);
+            try
+            {
+                // Send e-mail
+                SmtpClient smtp = new SmtpClient();
+                smtp.Send(msg);
+            }
+            catch (SmtpException ex)
+            {
+                Dictionary<string, object> props = new Dictionary<string, object>
+                {
+                    { "Error", ex },
+                    { "UserId", this.user.UserId },
+                    { "Email", this.Email },
+                    { "Message", msg }
+                };
+                Logger.Write("Failed to send e-mail with verification code", "Model", 1, 1053, TraceEventType.Error, "SmtpException in CosmoMongerMemebershipUser.SendVerificationCode", props);
+                return false;
+            }
 
             return true;
         }

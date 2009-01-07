@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
     using System.Security.Principal;
@@ -9,10 +11,10 @@
     using System.Web.Mvc;
     using System.Web.Security;
     using System.Web.UI;
+    using CosmoMonger.Models;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
     using Recaptcha;
-    using System.Configuration;
-    using CosmoMonger.Models;
+    using System.Web.Routing;
 
     /// <summary>
     /// This controller manages user account creation, login, and logout
@@ -262,7 +264,7 @@
                     { "IsValid", humanResponse.IsValid },
                     { "ErrorCode", humanResponse.ErrorCode }
                 };
-                Logger.Write("Failed reCAPTCHA attempt", "Controller", 100, props);
+                Logger.Write("Failed reCAPTCHA attempt", "Controller", 100, 1042, TraceEventType.Verbose, "Failed reCAPTCHA attempt", props);
                 ModelState.AddModelError("recaptcha", "reCAPTCHA failed to verify");
             }
 
@@ -274,8 +276,9 @@
 
                 if (newUser != null)
                 {
-                    
-                    return SendVerificationCode(username);
+                    return RedirectToAction("SendVerificationCode", new RouteValueDictionary(new {
+                        username = username
+                    }));
                 }
                 else
                 {
@@ -289,33 +292,43 @@
 
         public ActionResult SendVerificationCode(string username)
         {
-            ViewData["Title"] = "Send Verification Code";
-
             CosmoMongerMembershipUser verifyUser = (CosmoMongerMembershipUser)Provider.GetUser(username, false);
             if (verifyUser != null)
             {
                 string baseVerificationUrl = this.Request.Url.GetLeftPart(UriPartial.Authority)  + this.Url.Action("VerifyEmail") + "?username=" + this.Url.Encode(username) + "&verificationCode=";
-                verifyUser.SendVerificationCode(baseVerificationUrl);
-                return View("SentVerificationCode");
+                if (verifyUser.SendVerificationCode(baseVerificationUrl))
+                {
+                    ViewData["Title"] = "Sent Verification Code";
+                    return View("SentVerificationCode");
+                }
+                else
+                {
+                    // Failed to send e-mail
+                    ModelState.AddModelError("_FORM", "Failed to send verification e-mail. Please try again, if the problem persists, please contact admin@cosmomonger.com.");
+                }
             }
             else
             {
                 // Username is invalid
                 ModelState.AddModelError("username", "Invalid username");
-                return View();
             }
+
+            // If we got this far, something failed
+            ViewData["Title"] = "Send Verification Code";
+            return View();
         }
 
         public ActionResult VerifyEmail(string username, string verificationCode)
         {
-            ViewData["Title"] = "Verify Email";
-
             CosmoMongerMembershipUser checkUser = (CosmoMongerMembershipUser)Provider.GetUser(username, false);
             if (checkUser != null)
             {
                 if (checkUser.VerifyEmail(verificationCode))
                 {
-                    return RedirectToAction("Login");
+                    ViewData["Title"] = "Verified Email";
+                    ViewData["UserName"] = checkUser.UserName;
+                    ViewData["Email"] = checkUser.Email;
+                    return View("VerifiedEmail");
                 }
                 else
                 {
@@ -327,6 +340,7 @@
                 ModelState.AddModelError("username", "Invalid username");
             }
 
+            ViewData["Title"] = "Verify Email";
             return View();
         }
 
