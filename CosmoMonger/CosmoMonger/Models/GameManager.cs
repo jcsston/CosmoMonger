@@ -192,7 +192,7 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Gets all the races avaible.
+        /// Gets all the races available.
         /// </summary>
         /// <returns>Array of Race objects</returns>
         public Race[] GetRaces()
