@@ -13,6 +13,7 @@ namespace CosmoMonger.Models
     using System.Web;
     using System.Web.Security;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using Microsoft.Practices.EnterpriseLibrary.Security.Cryptography;
     using System.Security.Cryptography;
     using System.Diagnostics;
     using System.Text;
@@ -107,27 +108,6 @@ namespace CosmoMonger.Models
             this.user = u;
         }
 
-        /// <summary>
-        /// Hashes the password using SHA1
-        /// </summary>
-        /// <param name="password">The password to hash.</param>
-        /// <returns>byte array containing the SHA1 hash.</returns>
-        static private byte[] HashPassword(string password)
-        {
-            Logger.Write("Hashing Password: " + password, "Business Object", 1, 1000, TraceEventType.Verbose, "User Password Hashing");
-            
-            // We need to convert the password string to a byte string for encoding
-            byte[] passwordBytes = Encoding.UTF8.GetBytes("CosmoMonger+" + password + "Rules!");
-            
-            // Hash the password
-            SHA512 hasher = SHA512.Create();
-            passwordBytes = hasher.ComputeHash(passwordBytes);
-            
-            Logger.Write("Hashed User Password to: " + passwordBytes.ToString(), "Business Object", 1, 1001, TraceEventType.Verbose, "User Password Hashed");
-
-            return passwordBytes;
-        }
-
         static public CosmoMongerMembershipUser CreateUser(string username, string password, string email)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
@@ -148,7 +128,7 @@ namespace CosmoMonger.Models
             User user = new User();
             user.UserName = username;
             user.Email = email;
-            user.Password = HashPassword(password);
+            user.Password = Cryptographer.CreateHash("SHA512", password);
             user.Active = true;
             user.Validated = false;
 
@@ -174,7 +154,7 @@ namespace CosmoMonger.Models
             if (user != null && ValidatePassword(oldPassword))
             {
                 // Update the users password
-                user.Password = HashPassword(newPassword);
+                user.Password = Cryptographer.CreateHash("SHA512", newPassword);
                 db.SubmitChanges();
                 return true;
             }
@@ -192,22 +172,8 @@ namespace CosmoMonger.Models
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
 
-            bool validPassword = true;
-            byte [] hashedPassword = HashPassword(password);
-            byte[] correctPassword = this.user.Password;
-
-            Debug.Assert(hashedPassword.Length == correctPassword.Length, "Hashed Passwords should always be the same length");
-            
-            for (int i = 0; i < hashedPassword.Length; i++)
-            {
-                if (hashedPassword[i] != correctPassword[i])
-                {
-                    validPassword = false;
-                    break;
-                }
-            }
-
-            if (validPassword)
+            bool validPassword = Cryptographer.CompareHash("SHA512", password, this.user.Password);
+            if (validPassword && this.IsApproved)
             {
                 this.user.LoginAttemptCount = 0;
                 this.user.LastLogin = DateTime.Now;

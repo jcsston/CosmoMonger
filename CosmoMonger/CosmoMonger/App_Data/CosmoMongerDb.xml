@@ -561,6 +561,28 @@
     </addColumn>  
     <addForeignKeyConstraint baseColumnNames="HomeSystem" baseTableName="Race" constraintName="FK_SystemId_Race" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
   </changeSet>
+  <changeSet author="Jory Stone" id="16">
+    <comment>Changed the Password column on the User table to a varchar(128) for the switch to the Enterprise Library for hashing needs.</comment>
+    <modifyColumn tableName="User">
+      <column name="Password" type="varchar(128)">
+        <constraints nullable="false"/>
+      </column>
+    </modifyColumn>
+  </changeSet>
+  <changeSet author="Jory Stone" id="17">
+    <comment>
+      Extended the Password column on the User table to varchar(160) to give a little more room hashes. 
+      Also reset all passwords to "cosmomonger" to account for varbinary->varchar change.
+    </comment>
+    <modifyColumn tableName="User">
+      <column name="Password" type="varchar(160)">
+        <constraints nullable="false"/>
+      </column>
+    </modifyColumn>
+    <update tableName="User">
+      <column name="Password" value="VdLTV2HzKIEflxVqixNl5okUPEL7vvtc2SA/ka77+LOZ+anpBSBZfteYxq4s4t7U3V7y21GmXG5Fi0ZH+D9E27e4esE5sHVK6yvfo0FGSBE="/>
+    </update>
+  </changeSet>
   <changeSet id="0-testData" author="Jory Stone" runOnChange="true">
     <sqlFile path="CosmoMongerData.sql"/>
   </changeSet>
