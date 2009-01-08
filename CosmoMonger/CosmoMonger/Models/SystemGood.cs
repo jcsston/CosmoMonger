@@ -24,7 +24,7 @@ namespace CosmoMonger.Models
         {
             get
             {
-                Debug.Assert(this.PriceMultiplier > 0.0 && this.PriceMultiplier <= 5.0);
+                Debug.Assert(this.PriceMultiplier > 0.0 && this.PriceMultiplier <= 5.0, "Prices cannot be below 0 and cannot be 5x+ the base price.");
                 return (int)(this.Good.BasePrice * this.PriceMultiplier);
             }
         }

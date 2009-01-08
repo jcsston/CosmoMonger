@@ -66,7 +66,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Fetches the SystemEngineUpgrades objects for the System.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Array of JumpDrive upgrades in the system</returns>
         public SystemJumpDriveUpgrade[] GetEngineUpgrades()
         {
             return this.SystemJumpDriveUpgrades.ToArray();
@@ -77,7 +77,7 @@ namespace CosmoMonger.Models
         /// Returns null if the SystemEngineUpgrade does not exist.
         /// </summary>
         /// <param name="upgradeId">The upgrade id.</param>
-        /// <returns></returns>
+        /// <returns>The matching Engine/JumpDrive upgrade for the system</returns>
         public SystemJumpDriveUpgrade GetEngineUpgrade(int upgradeId)
         {
             return (from su in this.SystemJumpDriveUpgrades
@@ -88,7 +88,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Fetches the SystemShieldUpgrades objects for the System.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Array of Shield upgrades in the system</returns>
         public SystemShieldUpgrade[] GetShieldUpgrades()
         {
             return this.SystemShieldUpgrades.ToArray();
@@ -98,12 +98,12 @@ namespace CosmoMonger.Models
         /// Fetches the SystemShieldUpgrade object for the passed upgrade id. 
         /// Returns null if the SystemShieldUpgrade does not exist.
         /// </summary>
-        /// <param name="upgradeId">The upgrade id.</param>
-        /// <returns></returns>
-        public SystemShieldUpgrade GetShieldUpgrade(int upgradeId)
+        /// <param name="shieldId">The shield id.</param>
+        /// <returns>The SystemShieldUpgrade object matching the passed in shieldId</returns>
+        public SystemShieldUpgrade GetShieldUpgrade(int shieldId)
         {
             return (from su in this.SystemShieldUpgrades
-                    where su.ShieldId == upgradeId
+                    where su.ShieldId == shieldId
                     select su).SingleOrDefault();
         }
 

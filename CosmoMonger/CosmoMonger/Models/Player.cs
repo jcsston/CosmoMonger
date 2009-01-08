@@ -33,6 +33,7 @@ namespace CosmoMonger.Models
             {
                 netWorth += this.Ship.TradeInValue + this.Ship.ShipGoods.Sum(x => x.Quantity * x.Good.BasePrice);
             }
+
             this.NetWorth = netWorth;
         }
 
@@ -57,13 +58,21 @@ namespace CosmoMonger.Models
             db.SubmitChanges();
         }
 
+        /// <summary>
+        /// A property changed event, called when CashCredits is changed.
+        /// </summary>
         partial void OnCashCreditsChanged()
         {
+            // Because CashCredits has changed we need to update NetWorth
             this.UpdateNetWorth();
         }
 
+        /// <summary>
+        /// A property changed event, called when BankCredits is changed.
+        /// </summary>
         partial void OnBankCreditsChanged()
         {
+            // Because BankCredits has changed we need to update NetWorth
             this.UpdateNetWorth();
         }
     }

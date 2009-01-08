@@ -204,7 +204,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Gets the race by id number.
         /// </summary>
-        /// <param name="raceId">The race id.</param>
+        /// <param name="raceId">The race id of the Race object to get.</param>
         /// <returns>Race oject, null if the race does not exist</returns>
         public Race GetRace(int raceId)
         {
@@ -215,7 +215,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Gets the system by id number.
         /// </summary>
-        /// <param name="raceId">The system id.</param>
+        /// <param name="systemId">The system id of the System object to get.</param>
         /// <returns>CosmoSystem object, null if the system does not exist</returns>
         public CosmoSystem GetSystem(int systemId)
         {

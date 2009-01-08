@@ -7,8 +7,8 @@
 namespace CosmoMonger.Models
 {
     using System;
-    using System.Data;
     using System.Configuration;
+    using System.Data;
     using System.Linq;
 
     /// <summary>

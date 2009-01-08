@@ -195,6 +195,9 @@ namespace CosmoMonger.Models
             return (from g in this.ShipGoods where g.GoodId == goodId select g).SingleOrDefault();
         }
 
+        /// <summary>
+        /// Called when the BaseShip/BaseShipId is changed.
+        /// </summary>
         partial void OnBaseShipIdChanged()
         {
             Player player = this.Players.SingleOrDefault();
@@ -204,6 +207,9 @@ namespace CosmoMonger.Models
             }
         }
 
+        /// <summary>
+        /// Called when the JumpDrive/JumpDriveId is changed.
+        /// </summary>
         partial void OnJumpDriveIdChanged()
         {
             Player player = this.Players.SingleOrDefault();
@@ -213,6 +219,9 @@ namespace CosmoMonger.Models
             }
         }
 
+        /// <summary>
+        /// Called when the Shield/ShieldId is changed.
+        /// </summary>
         partial void OnShieldIdChanged()
         {
             Player player = this.Players.SingleOrDefault();
@@ -222,6 +231,9 @@ namespace CosmoMonger.Models
             }
         }
 
+        /// <summary>
+        /// Called when the Weapon/WeaponId is changed.
+        /// </summary>
         partial void OnWeaponIdChanged()
         {
             Player player = this.Players.SingleOrDefault();

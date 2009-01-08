@@ -245,17 +245,20 @@
                 ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
             }
 
-            // Check the captcha response
-            RecaptchaValidator humanValidator = new RecaptchaValidator();
-            humanValidator.PrivateKey = ConfigurationManager.AppSettings["RecaptchaPrivateKey"];
-            humanValidator.RemoteIP = this.Request.UserHostAddress;
-            humanValidator.Challenge = this.Request.Form["recaptcha_challenge_field"];
-            humanValidator.Response = this.Request.Form["recaptcha_response_field"];
-
-            RecaptchaResponse humanResponse = humanValidator.Validate();
-            if (!humanResponse.IsValid)
+            // We don't check the captcha if running localhost and no challenge was given
+            if (this.Request.UserHostAddress == "127.0.0.1" && this.Request.Form["recaptcha_challenge_field"] != null)
             {
-                Dictionary<string, object> props = new Dictionary<string, object>
+                // Check the captcha response
+                RecaptchaValidator humanValidator = new RecaptchaValidator();
+                humanValidator.PrivateKey = ConfigurationManager.AppSettings["RecaptchaPrivateKey"];
+                humanValidator.RemoteIP = this.Request.UserHostAddress;
+                humanValidator.Challenge = this.Request.Form["recaptcha_challenge_field"];
+                humanValidator.Response = this.Request.Form["recaptcha_response_field"];
+
+                RecaptchaResponse humanResponse = humanValidator.Validate();
+                if (!humanResponse.IsValid)
+                {
+                    Dictionary<string, object> props = new Dictionary<string, object>
                 { 
                     { "PrivateKey", humanValidator.PrivateKey },
                     { "RemoteIP", humanValidator.RemoteIP },
@@ -264,8 +267,9 @@
                     { "IsValid", humanResponse.IsValid },
                     { "ErrorCode", humanResponse.ErrorCode }
                 };
-                Logger.Write("Failed reCAPTCHA attempt", "Controller", 100, 1042, TraceEventType.Verbose, "Failed reCAPTCHA attempt", props);
-                ModelState.AddModelError("recaptcha", "reCAPTCHA failed to verify");
+                    Logger.Write("Failed reCAPTCHA attempt", "Controller", 100, 1042, TraceEventType.Verbose, "Failed reCAPTCHA attempt", props);
+                    ModelState.AddModelError("recaptcha", "reCAPTCHA failed to verify");
+                }
             }
 
             if (ViewData.ModelState.IsValid)
