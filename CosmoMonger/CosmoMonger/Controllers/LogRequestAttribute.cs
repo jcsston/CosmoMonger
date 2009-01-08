@@ -1,4 +1,4 @@
-﻿namespace CosmoMonger.Models
+﻿namespace CosmoMonger.Controllers
 {
     using System.Web.Mvc;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
