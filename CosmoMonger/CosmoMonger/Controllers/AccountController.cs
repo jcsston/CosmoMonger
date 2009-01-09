@@ -19,7 +19,7 @@
     /// <summary>
     /// This controller manages user account creation, login, and logout
     /// </summary>
-    [HandleError]
+    [CosmoMongerHandleError]
     [OutputCache(Location = OutputCacheLocation.None)]
     public class AccountController : Controller
     {

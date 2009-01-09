@@ -55,7 +55,7 @@
                         document.getElementById("SkummShield").style.display = "inline";
                         document.getElementById("SkummAccuracy").style.display = "inline";
                         document.getElementById("SkummEngine").style.display = "inline";
-                        document.getElementById("SkummName").style.display = "inline";
+                        //document.getElementById("SkummName").style.display = "inline";
                         document.getElementById("SkummHomeSystem").style.display = "inline";
                         document.getElementById("SkummDescription").style.display = "inline";
                         } 
@@ -65,7 +65,7 @@
                         document.getElementById("DecapodianShield").style.display = "inline";
                         document.getElementById("DecapodianAccuracy").style.display = "inline";
                         document.getElementById("DecapodianEngine").style.display = "inline";
-                        document.getElementById("DecapodianName").style.display = "inline";
+                        //document.getElementById("DecapodianName").style.display = "inline";
                         document.getElementById("DecapodianHomeSystem").style.display = "inline";
                         document.getElementById("DecapodianDescription").style.display = "inline";
                         }
@@ -75,7 +75,7 @@
                         document.getElementById("BinariteShield").style.display = "inline";
                         document.getElementById("BinariteAccuracy").style.display = "inline";
                         document.getElementById("BinariteEngine").style.display = "inline";
-                        document.getElementById("BinariteName").style.display = "inline";
+                        //document.getElementById("BinariteName").style.display = "inline";
                         document.getElementById("BinariteHomeSystem").style.display = "inline";
                         document.getElementById("BinariteDescription").style.display = "inline";
                         } 
@@ -85,7 +85,7 @@
                         document.getElementById("ShrodinoidShield").style.display = "inline";
                         document.getElementById("ShrodinoidAccuracy").style.display = "inline";
                         document.getElementById("ShrodinoidEngine").style.display = "inline";
-                        document.getElementById("ShrodinoidName").style.display = "inline";
+                        //document.getElementById("ShrodinoidName").style.display = "inline";
                         document.getElementById("ShrodinoidHomeSystem").style.display = "inline";
                         document.getElementById("ShrodinoidDescription").style.display = "inline";
                         } 
@@ -95,7 +95,7 @@
                         document.getElementById("HumanShield").style.display = "inline";
                         document.getElementById("HumanAccuracy").style.display = "inline";
                         document.getElementById("HumanEngine").style.display = "inline";
-                        document.getElementById("HumanName").style.display = "inline";
+                        //document.getElementById("HumanName").style.display = "inline";
                         document.getElementById("HumanHomeSystem").style.display = "inline";
                         document.getElementById("HumanDescription").style.display = "inline";
                         }  

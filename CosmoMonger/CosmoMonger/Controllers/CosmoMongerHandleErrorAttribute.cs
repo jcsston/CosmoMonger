@@ -12,17 +12,20 @@
     {
         public override void OnException(ExceptionContext filterContext)
         {
-            if (filterContext != null && !filterContext.ExceptionHandled && filterContext.HttpContext.IsCustomErrorEnabled)
+            base.OnException(filterContext);
+            if (filterContext.HttpContext.Response.StatusCode == 500 && filterContext.ExceptionHandled)
             {
-                Exception innerException = filterContext.Exception;
-
-                bool rethrow = ExceptionPolicy.HandleException(innerException, "Page Policy");
-                if (rethrow)
+                ViewResult result = (ViewResult)filterContext.Result;
+                try
                 {
-                    throw innerException;
+                    ExceptionPolicy.HandleException(filterContext.Exception, "Page Policy");
+                }
+                catch (ApplicationException ex)
+                {
+                    result.ViewData["Title"] = "Space-time anomaly detected";
+                    result.ViewData["Message"] = ex.Message;
                 }
             }
-            base.OnException(filterContext);
         }
     }
 }

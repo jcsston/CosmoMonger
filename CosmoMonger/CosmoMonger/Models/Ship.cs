@@ -154,7 +154,7 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Gets a list of Systems within traveling range of the Ship.
+        /// Gets a list of Systems within traveling range of the Ship. Excluding the current system.
         /// </summary>
         /// <returns>Array of CosmoSystems within JumpDrive distance</returns>
         public CosmoSystem[] GetInRangeSystems()

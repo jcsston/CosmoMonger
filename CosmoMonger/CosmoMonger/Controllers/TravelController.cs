@@ -38,6 +38,7 @@ namespace CosmoMonger.Controllers
         {
             ViewData["Title"] = "Travel Map";
             ViewData["Systems"] = this.ControllerGame.CurrentPlayer.Ship.GetInRangeSystems();
+            ViewData["Range"] = this.ControllerGame.CurrentPlayer.Ship.JumpDrive.Range;
             ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
             return View("Travel");
         }
