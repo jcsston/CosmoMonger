@@ -6271,6 +6271,8 @@ namespace CosmoMonger.Models
 		
 		private int _LoginAttemptCount;
 		
+		private System.Nullable<System.DateTime> _LastActivity;
+		
 		private EntitySet<BuddyList> _BuddyLists;
 		
 		private EntitySet<IgnoreList> _IgnoreLists;
@@ -6301,6 +6303,8 @@ namespace CosmoMonger.Models
     partial void OnLastLoginChanged();
     partial void OnLoginAttemptCountChanging(int value);
     partial void OnLoginAttemptCountChanged();
+    partial void OnLastActivityChanging(System.Nullable<System.DateTime> value);
+    partial void OnLastActivityChanged();
     #endregion
 		
 		public User()
@@ -6488,6 +6492,26 @@ namespace CosmoMonger.Models
 					this._LoginAttemptCount = value;
 					this.SendPropertyChanged("LoginAttemptCount");
 					this.OnLoginAttemptCountChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_LastActivity", DbType="datetime")]
+		public System.Nullable<System.DateTime> LastActivity
+		{
+			get
+			{
+				return this._LastActivity;
+			}
+			set
+			{
+				if ((this._LastActivity != value))
+				{
+					this.OnLastActivityChanging(value);
+					this.SendPropertyChanging();
+					this._LastActivity = value;
+					this.SendPropertyChanged("LastActivity");
+					this.OnLastActivityChanged();
 				}
 			}
 		}

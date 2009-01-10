@@ -7,97 +7,30 @@
 namespace CosmoMonger.Models
 {
     using System;
-    using System.Data;
+    using System.Collections.Generic;
     using System.Configuration;
+    using System.Data;
+    using System.Diagnostics;
     using System.Linq;
+    using System.Net.Mail;
+    using System.Security.Cryptography;
+    using System.Text;
+    using System.Threading;
     using System.Web;
     using System.Web.Security;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
     using Microsoft.Practices.EnterpriseLibrary.Security.Cryptography;
-    using System.Security.Cryptography;
-    using System.Diagnostics;
-    using System.Text;
-    using System.Net.Mail;
-    using System.Collections.Generic;
 
+    /// <summary>
+    /// This class represents a user account in the system and manages checking the password,
+    /// changing the password, and sending verification e-mails.
+    /// </summary>
     public class CosmoMongerMembershipUser : MembershipUser
     {
+        /// <summary>
+        /// Stores a reference to the backing User model object.
+        /// </summary>
         private User user = null;
-
-        //public override string Comment { get; set; }
-        //public override DateTime CreationDate { get; }
-
-        public override string Email 
-        {
-            get
-            {
-                return this.user.Email;
-            }
-            set
-            {
-                this.user.UpdateProfile(this.user.UserName, this.user.Email);
-            }
-        }
-
-        public override bool IsApproved
-        {
-            get
-            {
-                return this.user.Active;
-            }
-            set
-            {
-                this.user.Active = value;
-            }
-        }
-
-        public override bool IsLockedOut
-        {
-            get
-            {
-                return !this.IsApproved;
-            }
-        }
-        
-        //public override DateTime LastActivityDate { get; set; }
-        //public override DateTime LastLockoutDate { get; }
-        public override DateTime LastLoginDate 
-        {
-            get
-            {
-                return this.user.LastLogin.GetValueOrDefault(DateTime.Now);
-            }
-            set
-            {
-                this.user.LastLogin = value;
-            }
-        }
-
-        //public override DateTime LastPasswordChangedDate { get; }
-        public override string ProviderName 
-        {
-            get
-            {
-                return "CosmoMongerMembershipProvider";
-            }
-        }
-
-        public override string UserName
-        {
-            get
-            {
-                return this.user.UserName;
-            }
-        }
-
-        public string VerificationCode
-        {
-            get
-            {
-                string code = this.user.UserId.ToString();
-                return code;
-            }
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CosmoMongerMembershipUser"/> class.
@@ -108,7 +41,164 @@ namespace CosmoMonger.Models
             this.user = u;
         }
 
-        static public CosmoMongerMembershipUser CreateUser(string username, string password, string email)
+        ////public override string Comment { get; set; }
+        ////public override DateTime CreationDate { get; }
+
+        /// <summary>
+        /// Gets or sets the e-mail address for the membership user.
+        /// </summary>
+        /// <value></value>
+        /// <returns>
+        /// The e-mail address for the membership user.
+        /// </returns>
+        public override string Email 
+        {
+            get
+            {
+                return this.user.Email;
+            }
+
+            set
+            {
+                this.user.UpdateProfile(this.user.UserName, this.user.Email);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the membership user can be authenticated.
+        /// </summary>
+        /// <value></value>
+        /// <returns>true if the user can be authenticated; otherwise, false.
+        /// </returns>
+        public override bool IsApproved
+        {
+            get
+            {
+                return this.user.Validated;
+            }
+
+            set
+            {
+                this.user.Validated = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the membership user is locked out and unable to login.
+        /// </summary>
+        /// <value></value>
+        /// <returns>true if the membership user is locked out and unable to login; otherwise, false.
+        /// </returns>
+        public override bool IsLockedOut
+        {
+            get
+            {
+                return !this.user.Active;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the date and time when the membership user was last authenticated or accessed the application.
+        /// If the user has never accessed the application, DateTime.MinValue is returned.
+        /// </summary>
+        /// <value></value>
+        /// <returns>
+        /// The date and time when the membership user was last authenticated or accessed the application.
+        /// </returns>
+        public override DateTime LastActivityDate 
+        {
+            get
+            {
+                return this.user.LastActivity.GetValueOrDefault(DateTime.MinValue);
+            }
+
+            set
+            {
+                this.user.LastActivity = value;
+            }
+        }
+
+        ////public override DateTime LastLockoutDate { get; }
+
+        /// <summary>
+        /// Gets or sets the date and time when the user was last authenticated.
+        /// </summary>
+        /// <value></value>
+        /// <returns>
+        /// The date and time when the user was last authenticated.
+        /// </returns>
+        public override DateTime LastLoginDate 
+        {
+            get
+            {
+                return this.user.LastLogin.GetValueOrDefault(DateTime.Now);
+            }
+
+            set
+            {
+                this.user.LastLogin = value;
+            }
+        }
+
+        ////public override DateTime LastPasswordChangedDate { get; }
+
+        /// <summary>
+        /// Gets the name of the membership provider that stores and retrieves user information for the membership user.
+        /// </summary>
+        /// <value></value>
+        /// <returns>
+        /// The name of the membership provider that stores and retrieves user information for the membership user.
+        /// </returns>
+        public override string ProviderName 
+        {
+            get
+            {
+                return "CosmoMongerMembershipProvider";
+            }
+        }
+
+        /// <summary>
+        /// Gets the logon name of the membership user.
+        /// </summary>
+        /// <value></value>
+        /// <returns>
+        /// The logon name of the membership user.
+        /// </returns>
+        public override string UserName
+        {
+            get
+            {
+                return this.user.UserName;
+            }
+        }
+
+        /// <summary>
+        /// Gets the verification code sent to the users e-mail address to verify their e-mail.
+        /// </summary>
+        /// <value>The verification code.</value>
+        public string VerificationCode
+        {
+            get
+            {
+                string code = this.user.UserId.ToString();
+                return code;
+            }
+        }
+
+        /// <summary>
+        /// Creates a new user.
+        /// </summary>
+        /// <param name="username">The username of the new user.</param>
+        /// <param name="password">The password for the new user.</param>
+        /// <param name="email">The email address for the new user.</param>
+        /// <exception cref="ArgumentException">
+        /// Throws an ArgumentException for the username param if there is another user 
+        /// already in the system with the same username.
+        /// Throws an ArgumentException for the email param if there is another user
+        /// already in the system with the same e-mail.
+        /// </exception>
+        /// <returns>A new CosmoMongerMembershipUser object for the newly created user.</returns>
+        public static CosmoMongerMembershipUser CreateUser(string username, string password, string email)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
 
@@ -118,6 +208,7 @@ namespace CosmoMonger.Models
             {
                 throw new ArgumentException("Duplicate username", "username");
             }
+
             bool matchingEmail = (from u in db.Users where u.Email == email select u).Any();
             if (matchingEmail)
             {
@@ -142,7 +233,6 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Change the password for a user
         /// </summary>
-        /// <param name="username">The user to update the password for.</param>
         /// <param name="oldPassword">The current password for the specified user.</param>
         /// <param name="newPassword">The new password for the specified user.</param>
         /// <returns>
@@ -151,13 +241,14 @@ namespace CosmoMonger.Models
         public override bool ChangePassword(string oldPassword, string newPassword)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            if (user != null && ValidatePassword(oldPassword))
+            if (this.user != null && this.ValidatePassword(oldPassword))
             {
                 // Update the users password
-                user.Password = Cryptographer.CreateHash("SHA512", newPassword);
+                this.user.Password = Cryptographer.CreateHash("SHA512", newPassword);
                 db.SubmitChanges();
                 return true;
             }
+
             return false;
         }
 
@@ -171,9 +262,9 @@ namespace CosmoMonger.Models
         public bool ValidatePassword(string password)
         {
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
-
+            
             bool validPassword = Cryptographer.CompareHash("SHA512", password, this.user.Password);
-            if (validPassword && this.IsApproved)
+            if (validPassword && this.IsApproved && !this.IsLockedOut)
             {
                 this.user.LoginAttemptCount = 0;
                 this.user.LastLogin = DateTime.Now;
@@ -182,12 +273,38 @@ namespace CosmoMonger.Models
             }
             else
             {
+                Debug.Assert(this.user.Active, "The user has to be active to validate the password");
+
                 this.user.LoginAttemptCount += 1;
-                // Disable the account if login attempts pass 5 times
-                if (this.user.LoginAttemptCount > 5)
+                
+                // If login attempts reaches 3, we start adding a delay to the login process
+                // This is to prevent brute forcing login passwords
+                if (this.user.LoginAttemptCount >= 3)
                 {
+                    // Make the user disabled in the database right now, to prevent attacks 
+                    // from simply ending the connection if the login takes too long
                     this.user.Active = false;
+                    db.SubmitChanges();
+
+                    try
+                    {
+                        // The delay increases for every login attempt
+                        // 3rd failed login 4 sec delay
+                        // 4th failed login 8 sec delay
+                        // 5th failed login 16 sec delay
+                        // ...
+                        // 10th failed login 512 sec delay
+                        Thread.Sleep(1000 * (int)Math.Pow(2, this.user.LoginAttemptCount - 1));
+                    }
+                    catch (ArgumentOutOfRangeException ex)
+                    {
+                        Logger.Write("Exception when delaying login: " + ex, "Business Object", 1, 1023, TraceEventType.Error, "Exception in CosmoMongerMembershipUser.ValidatePassword");
+                    }
+
+                    // Re-enable the user
+                    this.user.Active = true;
                 }
+
                 db.SubmitChanges();
                 return false;
             }
@@ -219,9 +336,8 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        ///  Clears the locked-out state of the user so that the user can login.
+        /// Clears the locked-out state of the user so that the user can login.
         /// </summary>
-        /// <param name="userName">The membership user whose lock status you want to clear.</param>
         /// <returns>
         /// true if the membership user was successfully unlocked; otherwise, false.
         /// </returns>
@@ -234,6 +350,7 @@ namespace CosmoMonger.Models
                 db.SubmitChanges();
                 return true;
             }
+
             return false;
         }
 
@@ -249,7 +366,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Sends the verification code to the users e-mail.
         /// </summary>
-        /// <param name="baseVerificationCodeUrl">The base verification code URL. Example: http://localhost:54084/Account/VerifyEmail?username=jcsston&verificationCode=</param>
+        /// <param name="baseVerificationCodeUrl">The base verification code URL. Example: http://localhost:54084/Account/VerifyEmail?username=jcsston&amp;verificationCode=</param>
         /// <returns>True if the e-mail was successfully sent to the SMTP server. False if sending to the SMTP server failed.</returns>
         public bool SendVerificationCode(string baseVerificationCodeUrl)
         {

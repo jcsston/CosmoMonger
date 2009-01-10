@@ -110,7 +110,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Fetches the SystemWeaponUpgrades objects for the System.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An array of Weapon upgrades in the system</returns>
         public SystemWeaponUpgrade[] GetWeaponUpgrades()
         {
             return this.SystemWeaponUpgrades.ToArray();

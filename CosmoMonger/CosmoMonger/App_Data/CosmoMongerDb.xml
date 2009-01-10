@@ -583,6 +583,12 @@
       <column name="Password" value="VdLTV2HzKIEflxVqixNl5okUPEL7vvtc2SA/ka77+LOZ+anpBSBZfteYxq4s4t7U3V7y21GmXG5Fi0ZH+D9E27e4esE5sHVK6yvfo0FGSBE="/>
     </update>
   </changeSet>
+  <changeSet author="Jory Stone" id="18">
+    <comment>Adding LastActivity column to User table to keep track of user activity.</comment>
+    <addColumn tableName="User">
+      <column name="LastActivity" type="datetime" />
+    </addColumn>
+  </changeSet>
   <changeSet id="0-testData" author="Jory Stone" runOnChange="true">
     <sqlFile path="CosmoMongerData.sql"/>
   </changeSet>
