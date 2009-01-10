@@ -1,4 +1,13 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
+
+<script runat="server">
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+
+    }
+</script>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div>
         <p>
@@ -55,7 +64,6 @@
                         document.getElementById("SkummShield").style.display = "inline";
                         document.getElementById("SkummAccuracy").style.display = "inline";
                         document.getElementById("SkummEngine").style.display = "inline";
-                        //document.getElementById("SkummName").style.display = "inline";
                         document.getElementById("SkummHomeSystem").style.display = "inline";
                         document.getElementById("SkummDescription").style.display = "inline";
                         } 
@@ -65,7 +73,6 @@
                         document.getElementById("DecapodianShield").style.display = "inline";
                         document.getElementById("DecapodianAccuracy").style.display = "inline";
                         document.getElementById("DecapodianEngine").style.display = "inline";
-                        //document.getElementById("DecapodianName").style.display = "inline";
                         document.getElementById("DecapodianHomeSystem").style.display = "inline";
                         document.getElementById("DecapodianDescription").style.display = "inline";
                         }
@@ -75,7 +82,6 @@
                         document.getElementById("BinariteShield").style.display = "inline";
                         document.getElementById("BinariteAccuracy").style.display = "inline";
                         document.getElementById("BinariteEngine").style.display = "inline";
-                        //document.getElementById("BinariteName").style.display = "inline";
                         document.getElementById("BinariteHomeSystem").style.display = "inline";
                         document.getElementById("BinariteDescription").style.display = "inline";
                         } 
@@ -85,7 +91,6 @@
                         document.getElementById("ShrodinoidShield").style.display = "inline";
                         document.getElementById("ShrodinoidAccuracy").style.display = "inline";
                         document.getElementById("ShrodinoidEngine").style.display = "inline";
-                        //document.getElementById("ShrodinoidName").style.display = "inline";
                         document.getElementById("ShrodinoidHomeSystem").style.display = "inline";
                         document.getElementById("ShrodinoidDescription").style.display = "inline";
                         } 
@@ -95,7 +100,6 @@
                         document.getElementById("HumanShield").style.display = "inline";
                         document.getElementById("HumanAccuracy").style.display = "inline";
                         document.getElementById("HumanEngine").style.display = "inline";
-                        //document.getElementById("HumanName").style.display = "inline";
                         document.getElementById("HumanHomeSystem").style.display = "inline";
                         document.getElementById("HumanDescription").style.display = "inline";
                         }  
@@ -117,7 +121,7 @@
                         <%= Html.TextBox("name") %>
                         <%= Html.ValidationMessage("name")%>
                     </td>
-                    <td rowspan="2" style="width: 40%" align="center">
+                    <td rowspan="3" style="width: 40%" align="center">
                         <img id="RaceImg" src="" alt="Race Image" width="100px" height="100px" 
                             style="margin-left: 0px"/></td>
                     <td style="width: 15%">Home System:</td>
@@ -130,8 +134,8 @@
                    <% races[i, 2] = race.Shields.ToString(); %>
                    <% races[i, 3] = race.Engine.ToString(); %>
                    <% races[i, 4] = race.Accuracy.ToString(); %>
-                   <% races[i, 5] = race.HomeSystem.ToString(); %>
-                <%--    <% races[i, 5] = race.HomeSystem.Name; %> --%>
+                 <% races[i, 5] = race.HomeSystem.ToString(); %> 
+                <%--      <% races[i, 5] = race.HomeSystem.Name; %> --%>
                    <% races[i, 6] = race.Description; %>
                    <% i++; %>
                    <% } %>
@@ -139,7 +143,11 @@
                             <div class="race" id="BinariteHomeSystem"><%= races[3, 5]%></div><div class="race" id="ShrodinoidHomeSystem"><%= races[4, 5]%></div><div class="race" id="HumanHomeSystem"><%= races[5, 5]%></div></td>
               
                 </tr>
-                
+                <tr><td></td>
+                <td></td>
+                <td>Racial Preference</td>
+                <td>goes here</td>
+                </tr>
                 <tr>
                     <td>Race:</td>
                     <td style="width: 20%">
@@ -147,6 +155,8 @@
                         <%= Html.ValidationMessage("raceId")%> 
                         
                     </td>
+                    <td>Racial Enemy</td>
+                    <td>goes here</td>
                 </tr>     
               </table>
               <table style="width: 100%">    
@@ -172,7 +182,7 @@
                 </tr>
                 <tr><td  align="center" colspan="5">Description</td></tr>
                 <tr>
-                <td colspan="5" align="center"><div class="race" id="SkummDescription"><%= races[1, 6]%></div><div class="race" id="DecapodianDescription"><%= races[2, 6]%></div>
+                <td colspan="5" align="left"><div class="race" id="SkummDescription"><%= races[1, 6]%></div><div class="race" id="DecapodianDescription"><%= races[2, 6]%></div>
                             <div class="race" id="BinariteDescription"><%= races[3, 6]%></div><div class="race" id="ShrodinoidDescription"><%= races[4, 6]%></div><div class="race" id="HumanDescription"><%= races[5, 6]%></div></td> 
                 </tr>
                 
