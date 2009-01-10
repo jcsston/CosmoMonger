@@ -134,8 +134,8 @@
                    <% races[i, 2] = race.Shields.ToString(); %>
                    <% races[i, 3] = race.Engine.ToString(); %>
                    <% races[i, 4] = race.Accuracy.ToString(); %>
-                 <% races[i, 5] = race.HomeSystem.ToString(); %> 
-                <%--      <% races[i, 5] = race.HomeSystem.Name; %> --%>
+            <%--     <% races[i, 5] = race.HomeSystem.ToString(); %> --%>
+                      <% races[i, 5] = race.HomeSystem.Name; %> 
                    <% races[i, 6] = race.Description; %>
                    <% i++; %>
                    <% } %>

@@ -589,6 +589,18 @@
       <column name="LastActivity" type="datetime" />
     </addColumn>
   </changeSet>
+  <changeSet author="Roger Boykin" id="19">
+    <comment>Changing HomeSystem, RacialPreference, RacialEnemy in Race Table to have Id on end.
+    Changing Accuracy, HomeSystemId, RacialEnemyId, and Description in Race Table to not null.
+    Providing a default null value to Accuracy, HomeSystemId, RacialEnemyId and Description in Race Table.</comment>
+    <renameColumn tableName="Race" oldColumnName="HomeSystem" newColumnName="HomeSystemId" />
+    <renameColumn tableName="Race" oldColumnName="RacialPreference" newColumnName="RacialPreferenceId" />
+    <renameColumn tableName="Race" oldColumnName="RacialEnemy" newColumnName="RacialEnemyId" />
+    <addNotNullConstraint tableName="Race" columnName="Accuracy" defaultNullValue="0" columnDataType="int" />
+    <addNotNullConstraint tableName="Race" columnName="HomeSystemId" defaultNullValue="1" columnDataType="int" />
+    <addNotNullConstraint tableName="Race" columnName="RacialEnemyId" defaultNullValue="1" columnDataType="int" />
+    <addNotNullConstraint tableName="Race" columnName="Description" defaultNullValue="Needs a Description" columnDataType="varchar(1000)"/>
+  </changeSet>
   <changeSet id="0-testData" author="Jory Stone" runOnChange="true">
     <sqlFile path="CosmoMongerData.sql"/>
   </changeSet>
