@@ -105,46 +105,46 @@ UPDATE Race SET Accuracy = -1 WHERE RaceId = 5;
 UPDATE Race SET Accuracy = -1 WHERE RaceId = 6;
 
 -- Adding Skumm Home System to Race Table
-UPDATE Race SET HomeSystem = 7 WHERE RaceId = 1;
+UPDATE Race SET HomeSystemId = 7 WHERE RaceId = 1;
 
 -- Adding Decapodian Home System to Race Table
-UPDATE Race SET HomeSystem = 3 WHERE RaceId = 3;
+UPDATE Race SET HomeSystemId = 3 WHERE RaceId = 3;
 
 -- Adding Binarite Home System to Race Table
-UPDATE Race SET HomeSystem = 10 WHERE RaceId = 4;
+UPDATE Race SET HomeSystemId = 10 WHERE RaceId = 4;
 
 -- Adding Schrodinoid Home System to Race Table
-UPDATE Race SET HomeSystem = 5 WHERE RaceId = 5;
+UPDATE Race SET HomeSystemId = 5 WHERE RaceId = 5;
 
 -- Adding Human Home System to Race Table
-UPDATE Race SET HomeSystem = 1 WHERE RaceId = 6;
+UPDATE Race SET HomeSystemId = 1 WHERE RaceId = 6;
 
 -- Adding Skumm Racial Enemy to Race Table
-UPDATE Race SET RacialEnemy = 3 WHERE RaceId = 1;
+UPDATE Race SET RacialEnemyId = 3 WHERE RaceId = 1;
 
 -- Adding Decapodian Racial Enemy to Race Table
-UPDATE Race SET RacialEnemy = 1 WHERE RaceId = 3;
+UPDATE Race SET RacialEnemyId = 1 WHERE RaceId = 3;
 
 -- Adding Binarite Racial Enemy to Race Table
-UPDATE Race SET RacialEnemy = 5 WHERE RaceId = 4;
+UPDATE Race SET RacialEnemyId = 5 WHERE RaceId = 4;
 
 -- Adding Schrodinoid Racial Enemy to Race Table
-UPDATE Race SET RacialEnemy = 4 WHERE RaceId = 5;
+UPDATE Race SET RacialEnemyId = 4 WHERE RaceId = 5;
 
 -- Adding Human Racial Enemy to Race Table
-UPDATE Race SET RacialEnemy = 6 WHERE RaceId = 6;
+UPDATE Race SET RacialEnemyId = 6 WHERE RaceId = 6;
 
 -- Adding Skumm Racial Preference to Race Table
-UPDATE Race SET RacialPreference = 1 WHERE RaceId = 1;
+UPDATE Race SET RacialPreferenceId = 1 WHERE RaceId = 1;
 
 -- Adding Decapodian Racial Preference to Race Table
-UPDATE Race SET RacialPreference = 3 WHERE RaceId = 3;
+UPDATE Race SET RacialPreferenceId = 3 WHERE RaceId = 3;
 
 -- Adding Binarite Racial Preference to Race Table
-UPDATE Race SET RacialPreference = 4 WHERE RaceId = 4;
+UPDATE Race SET RacialPreferenceId = 4 WHERE RaceId = 4;
 
 -- Adding Schrodinoid Racial Preference to Race Table
-UPDATE Race SET RacialPreference = 5 WHERE RaceId = 5;
+UPDATE Race SET RacialPreferenceId = 5 WHERE RaceId = 5;
 
 -- Adding Skumm Description to Race Table
 UPDATE Race SET Description = 'The Skumm are colonies of highly evolved algae who were once content to simply float on the surface of their watery planet.  When a Decapodian scouting expedition set down on their home planet, the Skumm learned that aliens existed in their universe.   An inquisitive people, the Skumm sent an ambassador to greet the aliens.  The Skumm watched in horror as the Decapodian captain consumed their diplomat with a giant straw!  Thus began the Skumm-Crab War.  The two races have learned a modicum of restraint since the war concluded but they still do not trust each other.' WHERE RaceId = 1;
@@ -153,7 +153,7 @@ UPDATE Race SET Description = 'The Skumm are colonies of highly evolved algae wh
 UPDATE Race SET Description = 'Although slow and ponderous, these crab-like aliens were the first to achieve interstellar travel in this sector.  They were also the first to start an interstellar war when one of their captains consumed the ambassador representing the Skumm nation during a scouting expedition to system D2O.  Although the resulting Skumm-Crab War has officially concluded, bad blood exists between the two races to this day.' WHERE RaceId = 3;
 
 -- Adding Binarite Description to Race Table
-UPDATE Race SET Description = 'Binarites are artificial intelligences that were created by the Schrodinoids to run their space ships.  A schism developed between the Binarites and their masters when the Schrodinoids began to require their machine slaves to show homage to their prophet known as The Uncertain One.  As ardent proponents of relativistic physics, the Schrodinoids found this worship of quantum mechanics highly unsettling.   The Binarites won their freedom in the resulting revolution.  Now the Binarites seek only to bring logic to an illogical universe.' WHERE RaceId = 4;
+UPDATE Race SET Description = 'Binarites are artificial intelligences that were created by the Schrodinoids to run their space ships.  A schism developed between the Binarites and their masters when the Schrodinoids began to require their machine slaves to show homage to their prophet known as The Uncertain One.  As ardent proponents of relativistic physics, the Binarites found this worship of quantum mechanics highly unsettling.   The Binarites won their freedom in the resulting revolution.  Now the Binarites seek only to bring logic to an illogical universe.' WHERE RaceId = 4;
 
 -- Adding Schrodinoid Description to Race Table
 UPDATE Race SET Description = 'Schrodinoids are feline bipeds who gained dominance over the other life forms in the Quantum 5 system.   While many other races have used physics to reach the stars, Schrodinoids are unique because their belief in quantum mechanics grew so strong that it became their dominant religion.   The combination of feline appearance and fanatical belief in quantum mechanics led to their being nicknamed - Schrodinger’s Kitties.' WHERE RaceId = 5;

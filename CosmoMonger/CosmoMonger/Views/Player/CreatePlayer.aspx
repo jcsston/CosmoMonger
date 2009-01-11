@@ -28,6 +28,8 @@
                 document.getElementById("SkummEngine").style.display = "none";
                 document.getElementById("SkummHomeSystem").style.display = "none";
                 document.getElementById("SkummDescription").style.display = "none";
+                document.getElementById("SkummRacialEnemy").style.display = "none";
+                document.getElementById("SkummRacialPreference").style.display = "none";
                 
                 document.getElementById("DecapodianWeapon").style.display = "none";
                 document.getElementById("DecapodianShield").style.display = "none";
@@ -35,6 +37,8 @@
                 document.getElementById("DecapodianEngine").style.display = "none";
                 document.getElementById("DecapodianHomeSystem").style.display = "none";
                 document.getElementById("DecapodianDescription").style.display = "none";
+                document.getElementById("DecapodianRacialEnemy").style.display = "none";
+                document.getElementById("DecapodianRacialPreference").style.display = "none";
                 
                 document.getElementById("BinariteWeapon").style.display = "none";
                 document.getElementById("BinariteShield").style.display = "none";
@@ -42,6 +46,8 @@
                 document.getElementById("BinariteEngine").style.display = "none";
                 document.getElementById("BinariteHomeSystem").style.display = "none";
                 document.getElementById("BinariteDescription").style.display = "none";
+                document.getElementById("BinariteRacialEnemy").style.display = "none";
+                document.getElementById("BinariteRacialPreference").style.display = "none";
                 
                 document.getElementById("ShrodinoidWeapon").style.display = "none";
                 document.getElementById("ShrodinoidShield").style.display = "none";
@@ -49,6 +55,8 @@
                 document.getElementById("ShrodinoidEngine").style.display = "none";
                 document.getElementById("ShrodinoidHomeSystem").style.display = "none";
                 document.getElementById("ShrodinoidDescription").style.display = "none";
+                document.getElementById("ShrodinoidRacialEnemy").style.display = "none";
+                document.getElementById("ShrodinoidRacialPreference").style.display = "none";
                 
                 document.getElementById("HumanWeapon").style.display = "none";
                 document.getElementById("HumanShield").style.display = "none";
@@ -56,6 +64,8 @@
                 document.getElementById("HumanEngine").style.display = "none";
                 document.getElementById("HumanHomeSystem").style.display = "none";
                 document.getElementById("HumanDescription").style.display = "none";
+                document.getElementById("HumanRacialEnemy").style.display = "none";
+                document.getElementById("HumanRacialPreference").style.display = "none";
                 
                 //setting the display style to "inline" for the selected race's divs
                 if (raceSelect.selectedIndex == 0)//if true, Skumm has been selected
@@ -66,6 +76,8 @@
                 document.getElementById("SkummEngine").style.display = "inline";
                 document.getElementById("SkummHomeSystem").style.display = "inline";
                 document.getElementById("SkummDescription").style.display = "inline";
+                document.getElementById("SkummRacialEnemy").style.display = "inline";
+                document.getElementById("SkummRacialPreference").style.display = "inline";
                 } 
                 if (raceSelect.selectedIndex == 1)//if true, Decapodian has been selected
                 {
@@ -75,6 +87,8 @@
                 document.getElementById("DecapodianEngine").style.display = "inline";
                 document.getElementById("DecapodianHomeSystem").style.display = "inline";
                 document.getElementById("DecapodianDescription").style.display = "inline";
+                document.getElementById("DecapodianRacialEnemy").style.display = "inline";
+                document.getElementById("DecapodianRacialPreference").style.display = "inline";
                 }
                 if (raceSelect.selectedIndex == 2)//if true, Binarite has been selected
                 {
@@ -84,6 +98,8 @@
                 document.getElementById("BinariteEngine").style.display = "inline";
                 document.getElementById("BinariteHomeSystem").style.display = "inline";
                 document.getElementById("BinariteDescription").style.display = "inline";
+                document.getElementById("BinariteRacialEnemy").style.display = "inline";
+                document.getElementById("BinariteRacialPreference").style.display = "inline";
                 } 
                 if (raceSelect.selectedIndex == 3)//if true, Shrodinoid has been selected
                 {
@@ -93,6 +109,8 @@
                 document.getElementById("ShrodinoidEngine").style.display = "inline";
                 document.getElementById("ShrodinoidHomeSystem").style.display = "inline";
                 document.getElementById("ShrodinoidDescription").style.display = "inline";
+                document.getElementById("ShrodinoidRacialEnemy").style.display = "inline";
+                document.getElementById("ShrodinoidRacialPreference").style.display = "inline";
                 } 
                 if (raceSelect.selectedIndex == 4)//if true, Human has been selected
                 {
@@ -102,6 +120,8 @@
                 document.getElementById("HumanEngine").style.display = "inline";
                 document.getElementById("HumanHomeSystem").style.display = "inline";
                 document.getElementById("HumanDescription").style.display = "inline";
+                document.getElementById("HumanRacialEnemy").style.display = "inline";
+                document.getElementById("HumanRacialPreference").style.display = "inline";
                 }  
                 
             }
@@ -125,7 +145,7 @@
                         <img id="RaceImg" src="" alt="Race Image" width="100px" height="100px" style="margin-left: 0px"/>
                     </td>
                     <td style="width: 15%">Home System:</td>
-                    <% string[,] races = new string[6, 7]; %>
+                    <% string[,] races = new string[6, 9]; %>
                     <% int i = 1; %>
                     <% foreach (Race race in (Race [])ViewData["Races"])
                    { %>
@@ -134,9 +154,54 @@
                    <% races[i, 2] = race.Shields.ToString(); %>
                    <% races[i, 3] = race.Engine.ToString(); %>
                    <% races[i, 4] = race.Accuracy.ToString(); %>
-            <%--     <% races[i, 5] = race.HomeSystem.ToString(); %> --%>
-                      <% races[i, 5] = race.HomeSystem.Name; %> 
+                   <% races[i, 5] = race.HomeSystem.Name; %> 
                    <% races[i, 6] = race.Description; %>
+                   <%-- No foreign key relationship exists for RacialEnemyId --%>
+                   <% if (race.RacialEnemyId == 1)
+                      { %>
+                      <% races[i, 7] = "Skumm"; %>
+                   <% } %>
+                   <% if (race.RacialEnemyId == 3)
+                      { %>
+                      <% races[i, 7] = "Decapodians"; %>
+                   <% } %>
+                   <% if (race.RacialEnemyId == 4)
+                      { %>
+                      <% races[i, 7] = "Binarites"; %>
+                   <% } %>
+                   <% if (race.RacialEnemyId == 5)
+                      { %>
+                      <% races[i, 7] = "Schrodinoids"; %>
+                   <% } %>
+                   <% if (race.RacialEnemyId == 6)
+                      { %>
+                      <% races[i, 7] = "Humans"; %>
+                   <% } %>
+                   <%-- No foreign key relationship exists for RacialPreferenceId --%>
+                   <% if (race.RacialPreferenceId == 1)
+                      { %>
+                      <% races[i, 8] = "Skumm"; %>
+                   <% } %>
+                   <% if (race.RacialPreferenceId == 3)
+                      { %>
+                      <% races[i, 8] = "Decapodians"; %>
+                   <% } %>
+                   <% if (race.RacialPreferenceId == 4)
+                      { %>
+                      <% races[i, 8] = "Binarites"; %>
+                   <% } %>
+                   <% if (race.RacialPreferenceId == 5)
+                      { %>
+                      <% races[i, 8] = "Schrodinoids"; %>
+                   <% } %>
+                   <% if (race.RacialPreferenceId == 6)
+                      { %>
+                      <% races[i, 8] = "Humans"; %>
+                   <% } %>
+                   <% if (race.RacialPreferenceId == null)
+                      { %>
+                      <% races[i, 8] = "None"; %>
+                   <% } %>
                    <% i++; %>
                    <% } %>
                     <td style="width: 15%">
@@ -151,7 +216,13 @@
                     <td></td>
                     <td></td>
                     <td>Racial Preference</td>
-                    <td>goes here</td>
+                    <td style="width: 15%">
+                        <div class="race" id="SkummRacialPreference"><%= races[1, 8]%></div>
+                        <div class="race" id="DecapodianRacialPreference"><%= races[2, 8]%></div>
+                        <div class="race" id="BinariteRacialPreference"><%= races[3, 8]%></div>
+                        <div class="race" id="ShrodinoidRacialPreference"><%= races[4, 8]%></div>
+                        <div class="race" id="HumanRacialPreference"><%= races[5, 8]%></div>                    
+                    </td>
                 </tr>
                 <tr>
                     <td>Race:</td>
@@ -160,7 +231,13 @@
                         <%= Html.ValidationMessage("raceId")%> 
                     </td>
                     <td>Racial Enemy</td>
-                    <td>goes here</td>
+                    <td style="width: 15%">
+                        <div class="race" id="SkummRacialEnemy"><%= races[1, 7]%></div>
+                        <div class="race" id="DecapodianRacialEnemy"><%= races[2, 7]%></div>
+                        <div class="race" id="BinariteRacialEnemy"><%= races[3, 7]%></div>
+                        <div class="race" id="ShrodinoidRacialEnemy"><%= races[4, 7]%></div>
+                        <div class="race" id="HumanRacialEnemy"><%= races[5, 7]%></div>
+                    </td>
                 </tr>     
               </table>
               <table style="width: 100%">    
