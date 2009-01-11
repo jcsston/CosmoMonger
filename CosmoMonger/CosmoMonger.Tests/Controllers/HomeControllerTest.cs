@@ -8,6 +8,7 @@
     using CosmoMonger;
     using CosmoMonger.Controllers;
     using NUnit.Framework;
+    using NUnit.Framework.SyntaxHelpers;
 
     /// <summary>
     /// Summary description for HomeControllerTest
@@ -26,8 +27,8 @@
 
             // Assert
             ViewDataDictionary viewData = result.ViewData;
-            Assert.AreEqual("CosmoMonger", viewData["Title"]);
-            Assert.AreEqual("Buy low, sell high, and destroy your opponents!", viewData["Message"]);
+            Assert.That(viewData["Title"], Is.EqualTo("CosmoMonger"), "The page title should match");
+            //Assert.That(result.ViewName, Is.EqualTo("Index"), "The correct view is returned");
         }
 
         [Test]
@@ -41,7 +42,8 @@
 
             // Assert
             ViewDataDictionary viewData = result.ViewData;
-            Assert.AreEqual("About CosmoMonger", viewData["Title"]);
+            Assert.That(viewData["Title"], Is.EqualTo("About CosmoMonger"));
+            //Assert.That(result.ViewName, Is.EqualTo("About"));
         }
     }
 }
