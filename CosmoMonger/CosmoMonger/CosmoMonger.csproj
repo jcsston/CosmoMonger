@@ -91,6 +91,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\PlayerRecordController.cs" />
+    <Compile Include="Controllers\ShipController.cs" />
     <Compile Include="Controllers\TradeController.cs" />
     <Compile Include="Controllers\TravelController.cs" />
     <Compile Include="Default.aspx.cs">
@@ -138,6 +139,8 @@
     <Content Include="Views\Player\CreatePlayer.aspx" />
     <Content Include="Views\Player\EditProfile.aspx" />
     <Content Include="Views\Player\ViewProfile.aspx" />
+    <Content Include="Views\Ship\BuyShip.aspx" />
+    <Content Include="Views\Ship\ViewShip.aspx" />
     <Content Include="Views\Trade\ListGoods.aspx" />
     <Content Include="Views\Travel\GalaxyMap.aspx" />
     <Content Include="Views\Travel\Travel.aspx" />
