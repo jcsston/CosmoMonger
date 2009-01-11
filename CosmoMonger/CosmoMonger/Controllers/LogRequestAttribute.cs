@@ -1,10 +1,10 @@
 ﻿namespace CosmoMonger.Controllers
 {
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Threading;
     using System.Web.Mvc;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Diagnostics;
 
     public class LogRequestAttribute : ActionFilterAttribute, IActionFilter
     {

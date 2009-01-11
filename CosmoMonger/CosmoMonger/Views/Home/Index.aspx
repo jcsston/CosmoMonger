@@ -2,7 +2,7 @@
 
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
     <form id="form1" runat="server">
-    <h2><%= Html.Encode(ViewData["Message"]) %></h2>
+    <h2>Buy low, sell high, and destroy your opponents!</h2>
     <p>
         To learn more about ASP.NET MVC visit <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>.
     </p>

@@ -27,8 +27,6 @@ namespace CosmoMonger.Controllers
         public ActionResult Index()
         {
             ViewData["Title"] = "CosmoMonger";
-            //ViewData["Message"] = "Own the Cosmos!";
-            ViewData["Message"] = "Buy low, sell high, and destroy your opponents!";
             
             return View();
         }

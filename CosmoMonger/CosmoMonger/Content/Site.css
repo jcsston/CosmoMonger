@@ -5,7 +5,7 @@ to use a different color start by replacing all instances of
 ----------------------------------------------------------*/
 body
 {
-	border: 12px outset #808080;
+	/*border: 12px outset #808080;*/
 	background-color: black;
 	font-size: .75em;
 	font-family: Verdana, Helvetica, Sans-Serif;
@@ -13,11 +13,6 @@ body
 	padding: 0;
 	color: white; 
 	background-image: url(Stars.png);
-	position: fixed;
-	left: 0px;
-	bottom: 0px;
-	right: 0px;
-	top: 0px;
 }
 
 div.race 
@@ -99,17 +94,13 @@ page width. Or, you can specify an exact pixel width. */
     margin-right: auto;
 }
 
-.main
-{
-    background-image: url(Stars.png);
-}
-
 #header
 {
     position: relative;
     margin-bottom: 0px;
     color: white;
     padding: 0;
+    clear: both;
 }
 
 #header h1
@@ -126,7 +117,6 @@ page width. Or, you can specify an exact pixel width. */
 #main
 {
     padding: 30px 30px 15px 30px;
-    background-color: black;
     margin-bottom: 30px;
     _height: 1px; /* only IE6 applies CSS properties starting with an underscrore */
 }
@@ -151,11 +141,6 @@ page width. Or, you can specify an exact pixel width. */
 .error
 {
     color:Red;
-}
-
-#menucontainer
-{
-    margin-top:40px;
 }
 
 #title
