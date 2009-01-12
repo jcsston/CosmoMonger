@@ -37,9 +37,19 @@ namespace CosmoMonger.Controllers
         public ActionResult Travel()
         {
             ViewData["Title"] = "Travel Map";
-            ViewData["Systems"] = this.ControllerGame.CurrentPlayer.Ship.GetInRangeSystems();
+
+            // Check if the player is still traveling
+            ViewData["IsTraveling"] = this.ControllerGame.CurrentPlayer.Ship.CheckIfTraveling();
+
+            // Fill out ranges
+            ViewData["GalaxySize"] = this.ControllerGame.GetGalaxySize();
             ViewData["Range"] = this.ControllerGame.CurrentPlayer.Ship.JumpDrive.Range;
+
+            // Fill system details
             ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
+            ViewData["InRangeSystems"] = this.ControllerGame.CurrentPlayer.Ship.GetInRangeSystems();
+            ViewData["Systems"] = this.ControllerGame.GetSystems();
+
             return View("Travel");
         }
 
@@ -51,11 +61,35 @@ namespace CosmoMonger.Controllers
         public ActionResult Travel(int targetSystem)
         {
             CosmoSystem targetSystemModel = this.ControllerGame.GetSystem(targetSystem);
-            int travelTime = this.ControllerGame.CurrentPlayer.Ship.Travel(targetSystemModel);
+            if (targetSystemModel != null)
+            {
+                // Check if the player is still traveling
+                ViewData["IsTraveling"] = this.ControllerGame.CurrentPlayer.Ship.CheckIfTraveling();
 
-            ViewData["Title"] = "Travel in Progress...";
-            ViewData["TravelTime"] = travelTime;
-            return View("TravelInProgress");
+                try
+                {
+                    int travelTime = this.ControllerGame.CurrentPlayer.Ship.Travel(targetSystemModel);
+
+                    ViewData["Title"] = "Travel in Progress...";
+                    ViewData["TravelTime"] = travelTime;
+                    return View("TravelInProgress");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    this.ViewData.ModelState.AddModelError("_FORM", ex);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    this.ViewData.ModelState.AddModelError("_FORM", ex);
+                }
+            }
+            else
+            {
+                this.ViewData.ModelState.AddModelError("_FORM", "The target system is invalid");
+            }
+
+            // If we got down here, then an error was thrown
+            return Travel();
         }
 
         /// <summary>
@@ -67,8 +101,9 @@ namespace CosmoMonger.Controllers
             ViewData["Title"] = "Galaxy Map";
             ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
             ViewData["Systems"] = this.ControllerGame.GetSystems();
+            ViewData["Range"] = this.ControllerGame.CurrentPlayer.Ship.JumpDrive.Range;
             ViewData["GalaxySize"] = this.ControllerGame.GetGalaxySize();
-            return View();
+            return View("GalaxyMap");
         }
     }
 }

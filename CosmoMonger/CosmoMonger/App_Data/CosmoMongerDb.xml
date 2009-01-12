@@ -601,7 +601,439 @@
     <addNotNullConstraint tableName="Race" columnName="RacialEnemyId" defaultNullValue="1" columnDataType="int" />
     <addNotNullConstraint tableName="Race" columnName="Description" defaultNullValue="Needs a Description" columnDataType="varchar(1000)"/>
   </changeSet>
-  <changeSet id="0-testData" author="Jory Stone" runOnChange="true">
-    <sqlFile path="CosmoMongerData.sql"/>
+  <changeSet author="Jory Stone" id="20">
+    <comment>Providing a default null value to Accuracy, HomeSystemId, RacialEnemyId and Description in Race Table.</comment>
+    <modifyColumn tableName="Race">
+      <column name="Accuracy" type="int" defaultValueNumeric="0">
+        <constraints nullable="false" />
+      </column>
+      <column name="HomeSystemId" type="int" defaultValueNumeric="1">
+        <constraints nullable="false" />
+      </column>
+      <column name="RacialEnemyId" type="int" defaultValueNumeric="1">
+        <constraints nullable="false" />
+      </column>
+      <column name="Description" type="varchar(1000)" defaultValue="Needs a Description">
+        <constraints nullable="false" />
+      </column>
+    </modifyColumn>
+  </changeSet>
+  <changeSet author="Jory Stone" id="21">
+    <comment>Clear out old data in the database to prepare it for changelog managed data.</comment>
+    <sql>
+      DELETE FROM Player;
+      DELETE FROM ShipGood;
+      DELETE FROM Ship;
+      DELETE FROM Race;
+      DELETE FROM SystemGood;
+      DELETE FROM SystemShip;
+      DELETE FROM System;
+      DELETE FROM Good;
+      DELETE FROM BaseShip;
+      DELETE FROM Shield;
+      DELETE FROM Weapon;
+      DELETE FROM JumpDrive;
+    </sql>
+  </changeSet>
+  <changeSet author="Jory Stone" id="22">
+    <comment>Adding JumpDrive data</comment>
+    <sql>SET IDENTITY_INSERT JumpDrive ON</sql>
+    <insert tableName="JumpDrive">
+      <column name="JumpDriveId" valueNumeric="1" />
+      <column name="Name" value="Rocket" />
+      <column name="Speed" valueNumeric="5" />
+      <column name="Range" valueNumeric="10" />
+      <column name="CargoCost" valueNumeric="0" />
+      <column name="BasePrice" valueNumeric="1000" />
+    </insert>
+    <insert tableName="JumpDrive">
+      <column name="JumpDriveId" valueNumeric="2" />
+      <column name="Name" value="Nuclear" />
+      <column name="Speed" valueNumeric="5" />
+      <column name="Range" valueNumeric="15" />
+      <column name="CargoCost" valueNumeric="2" />
+      <column name="BasePrice" valueNumeric="10000" />
+    </insert>
+    <insert tableName="JumpDrive">
+      <column name="JumpDriveId" valueNumeric="3" />
+      <column name="Name" value="Plasma" />
+      <column name="Speed" valueNumeric="3" />
+      <column name="Range" valueNumeric="15" />
+      <column name="CargoCost" valueNumeric="5" />
+      <column name="BasePrice" valueNumeric="25000" />
+    </insert>
+    <insert tableName="JumpDrive">
+      <column name="JumpDriveId" valueNumeric="4" />
+      <column name="Name" value="Light" />
+      <column name="Speed" valueNumeric="1" />
+      <column name="Range" valueNumeric="20" />
+      <column name="CargoCost" valueNumeric="10" />
+      <column name="BasePrice" valueNumeric="10000" />
+    </insert>
+    <sql>SET IDENTITY_INSERT JumpDrive OFF</sql>
+  </changeSet>
+  <changeSet author="Jory Stone" id="23">
+    <comment>Adding Shield data</comment>
+    <sql>SET IDENTITY_INSERT Shield ON</sql>
+    <insert tableName="Shield">
+      <column name="ShieldId" valueNumeric="1" />
+      <column name="Name" value="Force Field" />
+      <column name="Strength" valueNumeric="10" />
+      <column name="CargoCost" valueNumeric="1" />
+      <column name="BasePrice" valueNumeric="100" />
+    </insert>
+    <sql>SET IDENTITY_INSERT Shield OFF</sql>
+  </changeSet>
+  <changeSet author="Jory Stone" id="24">
+    <comment>Adding Weapon data</comment>
+    <sql>SET IDENTITY_INSERT Weapon ON</sql>
+    <insert tableName="Weapon">
+      <column name="WeaponId" valueNumeric="1" />
+      <column name="Name" value="Railgun" />
+      <column name="Power" valueNumeric="8" />
+      <column name="TurnCost" valueNumeric="2" />
+      <column name="CargoCost" valueNumeric="0" />
+      <column name="BasePrice" valueNumeric="1000" />
+    </insert>
+    <insert tableName="Weapon">
+      <column name="WeaponId" valueNumeric="2" />
+      <column name="Name" value="Laser" />
+      <column name="Power" valueNumeric="5" />
+      <column name="TurnCost" valueNumeric="1" />
+      <column name="CargoCost" valueNumeric="2" />
+      <column name="BasePrice" valueNumeric="10000" />
+    </insert>
+    <insert tableName="Weapon">
+      <column name="WeaponId" valueNumeric="3" />
+      <column name="Name" value="Missile" />
+      <column name="Power" valueNumeric="15" />
+      <column name="TurnCost" valueNumeric="2" />
+      <column name="CargoCost" valueNumeric="5" />
+      <column name="BasePrice" valueNumeric="250000" />
+    </insert>
+    <insert tableName="Weapon">
+      <column name="WeaponId" valueNumeric="4" />
+      <column name="Name" value="Newtonian" />
+      <column name="Power" valueNumeric="15" />
+      <column name="TurnCost" valueNumeric="1" />
+      <column name="CargoCost" valueNumeric="10" />
+      <column name="BasePrice" valueNumeric="1000000" />
+    </insert>
+    <sql>SET IDENTITY_INSERT Weapon OFF</sql>
+  </changeSet>
+  <changeSet author="Jory Stone" id="25">
+    <comment>Adding BaseShip data</comment>
+    <sql>SET IDENTITY_INSERT BaseShip ON</sql>
+    <insert tableName="BaseShip">
+      <column name="BaseShipId" valueNumeric="1" />
+      <column name="Name" value="Glorified Trash Can" />
+      <column name="BasePrice" valueNumeric="5000" />
+      <column name="CargoSpace" valueNumeric="25" />
+      <column name="InitialJumpDriveId" valueNumeric="1" />
+      <column name="InitialWeaponId" valueNumeric="1" />
+      <column name="InitialShieldId" valueNumeric="1" />
+    </insert>
+    <insert tableName="BaseShip">
+      <column name="BaseShipId" valueNumeric="2" />
+      <column name="Name" value="Rover" />
+      <column name="BasePrice" valueNumeric="25000" />
+      <column name="CargoSpace" valueNumeric="35" />
+      <column name="InitialJumpDriveId" valueNumeric="2" />
+      <column name="InitialWeaponId" valueNumeric="2" />
+      <column name="InitialShieldId" valueNumeric="1" />
+    </insert>
+    <insert tableName="BaseShip">
+      <column name="BaseShipId" valueNumeric="3" />
+      <column name="Name" value="Widow Maker" />
+      <column name="BasePrice" valueNumeric="750000" />
+      <column name="CargoSpace" valueNumeric="50" />
+      <column name="InitialJumpDriveId" valueNumeric="3" />
+      <column name="InitialWeaponId" valueNumeric="4" />
+      <column name="InitialShieldId" valueNumeric="1" />
+    </insert>
+    <insert tableName="BaseShip">
+      <column name="BaseShipId" valueNumeric="4" />
+      <column name="Name" value="Dagger" />
+      <column name="BasePrice" valueNumeric="2500000" />
+      <column name="CargoSpace" valueNumeric="100" />
+      <column name="InitialJumpDriveId" valueNumeric="4" />
+      <column name="InitialWeaponId" valueNumeric="3" />
+      <column name="InitialShieldId" valueNumeric="1" />
+    </insert>
+    <insert tableName="BaseShip">
+      <column name="BaseShipId" valueNumeric="5" />
+      <column name="Name" value="Weed Wacker" />
+      <column name="BasePrice" valueNumeric="10000000" />
+      <column name="CargoSpace" valueNumeric="255" />
+      <column name="InitialJumpDriveId" valueNumeric="4" />
+      <column name="InitialWeaponId" valueNumeric="4" />
+      <column name="InitialShieldId" valueNumeric="1" />
+    </insert>
+    <sql>SET IDENTITY_INSERT BaseShip OFF</sql>
+  </changeSet>
+  <changeSet author="Jory Stone" id="26">
+    <comment>Update BaseShip models with updated cargo space amounts</comment>
+    <update tableName="BaseShip">
+      <column name="CargoSpace" valueNumeric="75"/>
+      <where>BaseShipId=4</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="CargoSpace" valueNumeric="110"/>
+      <where>BaseShipId=5</where>
+    </update>
+  </changeSet>
+  <changeSet author="Jory Stone, Roger Boykin" id="27">
+    <comment>Insert Good data</comment>
+    <sql>SET IDENTITY_INSERT Good ON</sql>
+    <insert tableName="Good">
+      <column name="GoodId" valueNumeric="1" />
+      <column name="Name" value="FoodCubes" />
+      <column name="BasePrice" valueNumeric="40" />
+      <column name="Contraband" valueBoolean="false" />
+    </insert>
+    <insert tableName="Good">
+      <column name="GoodId" valueNumeric="2" />
+      <column name="Name" value="Water" />
+      <column name="BasePrice" valueNumeric="30" />
+      <column name="Contraband" valueBoolean="false" />
+    </insert>
+    <insert tableName="Good">
+      <column name="GoodId" valueNumeric="3" />
+      <column name="Name" value="Machine Parts" />
+      <column name="BasePrice" valueNumeric="75" />
+      <column name="Contraband" valueBoolean="false" />
+    </insert>
+    <insert tableName="Good">
+      <column name="GoodId" valueNumeric="4" />
+      <column name="Name" value="DeathRays" />
+      <column name="BasePrice" valueNumeric="150" />
+      <column name="Contraband" valueBoolean="true" />
+    </insert>
+    <insert tableName="Good">
+      <column name="GoodId" valueNumeric="5" />
+      <column name="Name" value="Zowie" />
+      <column name="BasePrice" valueNumeric="100" />
+      <column name="Contraband" valueBoolean="true" />
+    </insert>
+    <insert tableName="Good">
+      <column name="GoodId" valueNumeric="6" />
+      <column name="Name" value="Fuel Rods" />
+      <column name="BasePrice" valueNumeric="50" />
+      <column name="Contraband" valueBoolean="false" />
+    </insert>
+    <insert tableName="Good">
+      <column name="GoodId" valueNumeric="7" />
+      <column name="Name" value="LuvBots" />
+      <column name="BasePrice" valueNumeric="125" />
+      <column name="Contraband" valueBoolean="true" />
+    </insert>
+    <insert tableName="Good">
+      <column name="GoodId" valueNumeric="8" />
+      <column name="Name" value="Fullerene" />
+      <column name="BasePrice" valueNumeric="60" />
+      <column name="Contraband" valueBoolean="false" />
+    </insert>
+    <insert tableName="Good">
+      <column name="GoodId" valueNumeric="9" />
+      <column name="Name" value="Nanites" />
+      <column name="BasePrice" valueNumeric="175" />
+      <column name="Contraband" valueBoolean="true" />
+    </insert>
+    <insert tableName="Good">
+      <column name="GoodId" valueNumeric="10" />
+      <column name="Name" value="Artificial Intelligences" />
+      <column name="BasePrice" valueNumeric="200" />
+      <column name="Contraband" valueBoolean="false" />
+    </insert>
+    <sql>SET IDENTITY_INSERT Good OFF</sql>
+  </changeSet>
+  <changeSet author="Jory Stone, Roger Boykin" id="28">
+    <comment>Insert System data</comment>
+    <sql>SET IDENTITY_INSERT System ON</sql>
+    <insert tableName="System">
+      <column name="SystemId" valueNumeric="1" />
+      <column name="Name" value="Sol" />
+      <column name="PositionX" valueNumeric="0" />
+      <column name="PositionY" valueNumeric="0" />
+      <column name="HasBank" valueBoolean="true" />
+    </insert>
+    <insert tableName="System">
+      <column name="SystemId" valueNumeric="2" />
+      <column name="Name" value="Vance's Folly" />
+      <column name="PositionX" valueNumeric="6" />
+      <column name="PositionY" valueNumeric="3" />
+      <column name="HasBank" valueBoolean="false" />
+    </insert>
+    <insert tableName="System">
+      <column name="SystemId" valueNumeric="3" />
+      <column name="Name" value="Glop" />
+      <column name="PositionX" valueNumeric="15" />
+      <column name="PositionY" valueNumeric="2" />
+      <column name="HasBank" valueBoolean="true" />
+    </insert>
+    <insert tableName="System">
+      <column name="SystemId" valueNumeric="4" />
+      <column name="Name" value="Sigle" />
+      <column name="PositionX" valueNumeric="20" />
+      <column name="PositionY" valueNumeric="10" />
+      <column name="HasBank" valueBoolean="true" />
+    </insert>
+    <insert tableName="System">
+      <column name="SystemId" valueNumeric="5" />
+      <column name="Name" value="Quantum 5" />
+      <column name="PositionX" valueNumeric="12" />
+      <column name="PositionY" valueNumeric="19" />
+      <column name="HasBank" valueBoolean="true" />
+    </insert>
+    <insert tableName="System">
+      <column name="SystemId" valueNumeric="6" />
+      <column name="Name" value="0011111010" />
+      <column name="PositionX" valueNumeric="3" />
+      <column name="PositionY" valueNumeric="23" />
+      <column name="HasBank" valueBoolean="false" />
+    </insert>
+    <insert tableName="System">
+      <column name="SystemId" valueNumeric="7" />
+      <column name="Name" value="D2O" />
+      <column name="PositionX" valueNumeric="25" />
+      <column name="PositionY" valueNumeric="23" />
+      <column name="HasBank" valueBoolean="false" />
+    </insert>
+    <insert tableName="System">
+      <column name="SystemId" valueNumeric="8" />
+      <column name="Name" value="Last Chance" />
+      <column name="PositionX" valueNumeric="8" />
+      <column name="PositionY" valueNumeric="12" />
+      <column name="HasBank" valueBoolean="false" />
+    </insert>
+    <insert tableName="System">
+      <column name="SystemId" valueNumeric="9" />
+      <column name="Name" value="Haven" />
+      <column name="PositionX" valueNumeric="18" />
+      <column name="PositionY" valueNumeric="16" />
+      <column name="HasBank" valueBoolean="true" />
+    </insert>
+    <insert tableName="System">
+      <column name="SystemId" valueNumeric="10" />
+      <column name="Name" value="1111101000" />
+      <column name="PositionX" valueNumeric="4" />
+      <column name="PositionY" valueNumeric="15" />
+      <column name="HasBank" valueBoolean="true" />
+    </insert>
+    <sql>SET IDENTITY_INSERT System OFF</sql>
+  </changeSet>
+  <changeSet author="Jory Stone, Roger Boykin" id="29">
+    <comment>Add Race data</comment>
+    <sql>SET IDENTITY_INSERT Race ON</sql>
+    <insert tableName="Race">
+      <column name="RaceId" valueNumeric="1" />
+      <column name="Name" value="Skumm" />
+      <column name="Description" value="The Skumm are colonies of highly evolved algae who were once content to simply float on the surface of their watery planet.  When a Decapodian scouting expedition set down on their home planet, the Skumm learned that aliens existed in their universe.   An inquisitive people, the Skumm sent an ambassador to greet the aliens.  The Skumm watched in horror as the Decapodian captain consumed their diplomat with a giant straw!  Thus began the Skumm-Crab War.  The two races have learned a modicum of restraint since the war concluded but they still do not trust each other." />
+      <column name="Weapons" valueNumeric="0" />
+      <column name="Shields" valueNumeric="-1" />
+      <column name="Accuracy" valueNumeric="0" />
+      <column name="Engine" valueNumeric="1" />
+      <column name="HomeSystemId" valueNumeric="7" />
+    </insert>
+    <insert tableName="Race">
+      <column name="RaceId" valueNumeric="2" />
+      <column name="Name" value="Decapodians" />
+      <column name="Description" value="Although slow and ponderous, these crab-like aliens were the first to achieve interstellar travel in this sector.  They were also the first to start an interstellar war when one of their captains consumed the ambassador representing the Skumm nation during a scouting expedition to system D2O.  Although the resulting Skumm-Crab War has officially concluded, bad blood exists between the two races to this day." />
+      <column name="Weapons" valueNumeric="0" />
+      <column name="Shields" valueNumeric="1" />
+      <column name="Accuracy" valueNumeric="0" />
+      <column name="Engine" valueNumeric="-1" />
+      <column name="HomeSystemId" valueNumeric="3" />
+    </insert>
+    <insert tableName="Race">
+      <column name="RaceId" valueNumeric="3" />
+      <column name="Name" value="Binarites" />
+      <column name="Description" value="Binarites are artificial intelligences that were created by the Schrodinoids to run their space ships.  A schism developed between the Binarites and their masters when the Schrodinoids began to require their machine slaves to show homage to their prophet known as The Uncertain One.  As ardent proponents of relativistic physics, the Schrodinoids found this worship of quantum mechanics highly unsettling.  The Binarites won their freedom in the resulting revolution.  Now the Binarites seek only to bring logic to an illogical universe." />
+      <column name="Weapons" valueNumeric="-1" />
+      <column name="Shields" valueNumeric="0" />
+      <column name="Accuracy" valueNumeric="1" />
+      <column name="Engine" valueNumeric="0" />
+      <column name="HomeSystemId" valueNumeric="10" />
+    </insert>
+    <insert tableName="Race">
+      <column name="RaceId" valueNumeric="4" />
+      <column name="Name" value="Schrodinoids" />
+      <column name="Description" value="Schrodinoids are feline bipeds who gained dominance over the other life forms in the Quantum 5 system.  While many other races have used physics to reach the stars, Schrodinoids are unique because their belief in quantum mechanics grew so strong that it became their dominant religion.   The combination of feline appearance and fanatical belief in quantum mechanics led to their being nicknamed - Schrodinger’s Kitties." />
+      <column name="Weapons" valueNumeric="1" />
+      <column name="Shields" valueNumeric="0" />
+      <column name="Accuracy" valueNumeric="-1" />
+      <column name="Engine" valueNumeric="0" />
+      <column name="HomeSystemId" valueNumeric="5" />
+    </insert>
+    <insert tableName="Race">
+      <column name="RaceId" valueNumeric="5" />
+      <column name="Name" value="Humans" />
+      <column name="Description" value="Humans are the relative newcomers to this sector of space.  The majority of humans are located in the densely populated Sol system, but during recent years, more humans have decided to leave their home system and try their luck out here.  Most of these immigrant humans want nothing to do with others of their own species, having endured the pervasive overcrowding for most of their lives." />
+      <column name="Weapons" valueNumeric="1" />
+      <column name="Shields" valueNumeric="1" />
+      <column name="Accuracy" valueNumeric="-1" />
+      <column name="Engine" valueNumeric="-1" />
+      <!-- Sol is the home system of the Humans -->
+      <column name="HomeSystemId" valueNumeric="1" />
+    </insert>
+    <sql>SET IDENTITY_INSERT Race OFF</sql>
+  </changeSet>
+  <changeSet author="Jory Stone" id="30">
+    <comment>Update Race with enemies and preferences</comment>
+    <update tableName="Race">
+      <!-- Adding Skumm Racial Enemy to Race Table -->
+      <column name="RacialEnemyId" valueNumeric="2"/>
+      <!-- Adding Skumm Racial Preference to Race Table -->
+      <column name="RacialPreferenceId" valueNumeric="1"/>
+      <where>RaceId=1</where>
+    </update>
+    <update tableName="Race">
+      <!-- Adding Decapodian Racial Enemy to Race Table -->
+      <column name="RacialEnemyId" valueNumeric="1" />
+      <where>RaceId=2</where>
+    </update>
+    <update tableName="Race">
+      <!-- Adding Binarite Racial Enemy to Race Table -->
+      <column name="RacialEnemyId" valueNumeric="4"/>
+      <!-- Adding Decapodian Racial Preference to Race Table -->
+      <column name="RacialPreferenceId" valueNumeric="3"/>
+      <where>RaceId=3</where>
+    </update>
+    <update tableName="Race">
+      <!-- Adding Schrodinoid Racial Enemy to Race Table -->
+      <column name="RacialEnemyId" valueNumeric="3"/>
+      <!-- Adding Binarite Racial Preference to Race Table -->
+      <column name="RacialPreferenceId" valueNumeric="4"/>
+      <where>RaceId=4</where>
+    </update>
+    <update tableName="Race">
+      <!-- Adding Schrodinoid Racial Preference to Race Table -->
+      <column name="RacialEnemyId" valueNumeric="5"/>
+      <!-- Adding Human Racial Enemy to Race Table -->
+      <column name="RacialPreferenceId" valueNumeric="5"/>
+      <where>RaceId=5</where>
+    </update>
+  </changeSet>
+  <changeSet author="Jory Stone" id="31">
+    <comment>Add more foreign key constraints to Race table</comment>
+    <dropForeignKeyConstraint constraintName="FK_SystemId_Race" baseTableName="Race"/>
+    <addForeignKeyConstraint baseColumnNames="HomeSystemId" baseTableName="Race" constraintName="FK_System_Race_HomeSystemId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    <addForeignKeyConstraint baseColumnNames="RacialEnemyId" baseTableName="Race" constraintName="FK_Race_Race_RacialEnemyId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="RaceId" referencedTableName="Race"/>
+    <addForeignKeyConstraint baseColumnNames="RacialPreferenceId" baseTableName="Race" constraintName="FK_Race_Race_RacialPreferenceId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="RaceId" referencedTableName="Race"/>
+  </changeSet>
+  <changeSet author="Jory Stone, Roger Boykin" id="32">
+    <comment>Updating Binarites Race Description</comment>
+    <update tableName="Race">
+      <column name="Description" value="Binarites are artificial intelligences that were created by the Schrodinoids to run their space ships.  A schism developed between the Binarites and their masters when the Schrodinoids began to require their machine slaves to show homage to their prophet known as The Uncertain One.  As ardent proponents of relativistic physics, the Binarites found this worship of quantum mechanics highly unsettling.   The Binarites won their freedom in the resulting revolution.  Now the Binarites seek only to bring logic to an illogical universe."/>
+      <where>RaceId=5</where>
+    </update>
+  </changeSet>
+  <changeSet author="Jory Stone" id="33">
+    <comment>Move the Sol system to 1,1</comment>
+    <update tableName="System">
+      <column name="PositionX" valueNumeric="1"/>
+      <column name="PositionY" valueNumeric="1"/>
+      <where>SystemId=1</where>
+    </update>
   </changeSet>
 </databaseChangeLog>

@@ -47,8 +47,6 @@
 	                    <li><%= Html.ActionLink("Travel", "Index", "Travel")%>
 	                        <ul>
 	                            <li><%= Html.ActionLink("Travel", "Travel", "Travel")%></li>
-	                            <li><%= Html.ActionLink("Galaxy Map", "GalaxyMap", "Travel")%></li>
-                                
                             </ul>
 	                    </li>
                     </ul>

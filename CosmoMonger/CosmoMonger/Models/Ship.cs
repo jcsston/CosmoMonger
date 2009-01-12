@@ -94,7 +94,7 @@ namespace CosmoMonger.Models
             CosmoSystem[] inRangeSystems = this.GetInRangeSystems();
             if (!inRangeSystems.Contains(targetSystem))
             {
-                throw new ArgumentOutOfRangeException("Target system is out of JumpDrive range", "targetSystem");
+                throw new ArgumentOutOfRangeException("targetSystem", "Target system is out of JumpDrive range");
             }
 
             // Check that the ship is not already traveling

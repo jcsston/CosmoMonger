@@ -23,26 +23,54 @@
     <table>
         <tr>
             <td>
-                <div id="map" style="position: relative; width: 400px; height: 400px; border: solid 2px blue; overflow: hidden;">
-                <ul>
-                <% int galaxySize = (int)ViewData["GalaxySize"];
-                   foreach (CosmoMonger.Models.CosmoSystem system in (CosmoMonger.Models.CosmoSystem[])ViewData["Systems"])
-                   {
-                       int x = (system.PositionX * (95 / galaxySize)) + 5;
-                       int y = (system.PositionY * (95 / galaxySize)) + 5;
+                <%
+                    CosmoMonger.Models.CosmoSystem currentSystem = ViewData["CurrentSystem"] as CosmoMonger.Models.CosmoSystem;
+                    int galaxySize = (int)ViewData["GalaxySize"];
+                    int displaySize = 400;
+                    int currentPositionX = 0;
+                    int currentPositionY = 0;
+                    double pixelPerPoint = 1.0 * displaySize / galaxySize;
                 %>
-                    <li style="position: absolute; left: <%= x %>%; top: <%= y %>%;">
-                        <a style="<% 
+                <div id="map" style="position: relative; width: <%=displaySize%>px; height: <%=displaySize%>px; border: solid 2px blue; overflow: hidden; padding: 15px;">
+                <ul>
+                <% 
+                   foreach (CosmoMonger.Models.CosmoSystem system in (ViewData["Systems"] as CosmoMonger.Models.CosmoSystem[]))
+                   {
+                       int x = (int)(system.PositionX * pixelPerPoint);
+                       int y = (int)(system.PositionY * pixelPerPoint);
+                %>
+                    <a href="javascript:selectSystem(<%=system.SystemId %>)"
+                    <img style="position: absolute; left: <%= x %>px; top: <%= y %>px; <% 
                             if (system == ViewData["CurrentSystem"])  
                             {
+                                // Store the x/y of the player's current position
+                                currentPositionX = x;
+                                currentPositionY = y;
                                 %> color: red; <% 
-                            } 
-                            %>" href="javascript:selectSystem(<%=system.SystemId %>)">
-                            <%=Html.Encode(system.Name) %>
-                        </a>
-                    </li>
+                            }
+                            else
+                            {
+                                %> border: none; <%
+                            }
+                            %>"
+                            alt="<%=Html.Encode(system.Name)%>"
+                            title="<%=Html.Encode(system.Name)%>"
+                            src="/Content/System.png"
+                            width="20px" height="20px" />
+                     </a>
                 <% } %>
                 </ul>
+                <%
+                    // Calcuate the size and position of the in-range circle
+                    int shipRange = (int)ViewData["Range"];
+                    int shipRangeSize = (int)(pixelPerPoint * shipRange) * 2;
+                    int shipRangeX = currentPositionX + 10 - (shipRangeSize / 2);
+                    int shipRangeY = currentPositionY + 10 - (shipRangeSize / 2);
+                %>
+                <img id="shipRange" src="/Content/ShipRangeCircle.png" alt="Ship Range" 
+                    style="position: absolute; left: <%=shipRangeX %>px; top: <%=shipRangeY%>px; z-index: -1;" 
+                    width="<%=shipRangeSize %>px" 
+                    height="<%=shipRangeSize %>px" />
                 </div>
             </td>
             <td valign="top">
@@ -76,7 +104,7 @@
                         if (system == ViewData["CurrentSystem"])  
                         {
                         %>
-                            <p>You are currently in this system.</p>
+                            <p style="color: red;">You are currently in this system.</p>
                             <script language="javascript" type="text/javascript">
                                 document.onload = selectSystem(<%=system.SystemId %>);
                             </script>
