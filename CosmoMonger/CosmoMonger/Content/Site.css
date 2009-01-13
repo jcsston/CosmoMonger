@@ -320,3 +320,33 @@ font-family : arial, sans-serif;
 .pstrength-minchar {
 font-size : 10px;
 }
+
+.galaxy-map
+{
+    position: relative; 
+    width: 400px;
+    height: 400px;
+    border: solid 2px blue; 
+    overflow: hidden; 
+    padding: 15px;
+}
+
+.system-current
+{
+    color: red;
+}
+
+.system-inrange
+{
+    color: blue;
+}
+
+.system-outofrange
+{
+    border: none;
+}
+
+.system-info
+{
+    padding: 4px;
+}

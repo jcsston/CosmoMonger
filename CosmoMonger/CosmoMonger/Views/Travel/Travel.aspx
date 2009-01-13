@@ -1,25 +1,24 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h1>Travel</h1>
+    <%
+        CosmoMonger.Models.CosmoSystem currentSystem = ViewData["CurrentSystem"] as CosmoMonger.Models.CosmoSystem;
+    %>
     <script language="javascript" type="text/javascript">
         function selectSystem(selectedSystemId) {
-            var systemDiv;
-            <% 
-               foreach (CosmoMonger.Models.CosmoSystem system in (CosmoMonger.Models.CosmoSystem[])ViewData["Systems"])
-               { %>
-                systemDiv = document.getElementById('system<%=system.SystemId %>');
-                if (systemDiv) 
-                {
-                    systemDiv.style.display = 'none';
-                }
-            <% } %>
-            systemDiv = document.getElementById('system' + selectedSystemId);
-            if (systemDiv)
-            {
-                systemDiv.style.display = '';
-            }
-            document.getElementById('targetSystem').value = selectedSystemId;
+            // Store the selected system in the input form field
+            $('#targetSystem').val(selectedSystemId);
+            
+            // Only display the selected system information
+            selectedSystemId = 'system' + selectedSystemId;
+            $("div.system-info:not(#" + selectedSystemId + ")").css("display", "none");
+            $("#" + selectedSystemId).css("display", "");
         }
+        
+        // On-load function to select the system the player currently is in
+        $(document).ready(function() {
+            selectSystem(<%=currentSystem.SystemId %>);
+        });
     </script>
     <% using (Html.BeginForm()) { %>
     <%=Html.Hidden("targetSystem")%>
@@ -28,7 +27,6 @@
         <tr>
             <td>
                 <%
-                    CosmoMonger.Models.CosmoSystem currentSystem = ViewData["CurrentSystem"] as CosmoMonger.Models.CosmoSystem;
                     CosmoMonger.Models.CosmoSystem[] inRangeSystems = ViewData["InRangeSystems"] as CosmoMonger.Models.CosmoSystem[];
                     int galaxySize = (int)ViewData["GalaxySize"];
                     int displaySize = 400;
@@ -36,32 +34,28 @@
                     int currentPositionY = 0;
                     double pixelPerPoint = 1.0 * displaySize / galaxySize;
                 %>
-                <div id="map" style="position: relative; width: <%=displaySize%>px; height: <%=displaySize%>px; border: solid 2px blue; overflow: hidden; padding: 15px;">
+                <div id="map" class="galaxy-map">
                 <ul>
                 <% 
-                   foreach (CosmoMonger.Models.CosmoSystem system in (ViewData["Systems"] as CosmoMonger.Models.CosmoSystem[]))
-                   {
-                       int x = (int)(system.PositionX * pixelPerPoint);
-                       int y = (int)(system.PositionY * pixelPerPoint);
+                    foreach (CosmoMonger.Models.CosmoSystem system in (ViewData["Systems"] as CosmoMonger.Models.CosmoSystem[]))
+                    {
+                        int x = (int)(system.PositionX * pixelPerPoint);
+                        int y = (int)(system.PositionY * pixelPerPoint);
+                        string systemClass = "system-outofrange";
+                        if (system == ViewData["CurrentSystem"])  
+                        {
+                            // Store the x/y of the player's current position
+                            currentPositionX = x;
+                            currentPositionY = y;
+                            systemClass = "system-current";
+                        }
+                        else if (inRangeSystems.Contains(system))
+                        {
+                            systemClass = "system-inrange";
+                        }
                 %>
-                    <a href="javascript:selectSystem(<%=system.SystemId %>)"
-                    <img style="position: absolute; left: <%= x %>px; top: <%= y %>px; <% 
-                            if (system == ViewData["CurrentSystem"])  
-                            {
-                                // Store the x/y of the player's current position
-                                currentPositionX = x;
-                                currentPositionY = y;
-                                %> color: red; <% 
-                            }
-                            else if (inRangeSystems.Contains(system))
-                            {
-                                %> color: blue; <% 
-                            }
-                            else
-                            {
-                                %> border: none; <%
-                            }
-                            %>"
+                    <a href="javascript:selectSystem(<%=system.SystemId %>)">
+                    <img style="position: absolute; left: <%= x %>px; top: <%= y %>px; " class="<%=systemClass %>"
                             alt="<%=Html.AttributeEncode(system.Name)%>"
                             title="<%=Html.AttributeEncode(system.Name)%>"
                             src="/Content/System.png"
@@ -88,7 +82,7 @@
                    foreach (CosmoMonger.Models.CosmoSystem system in (CosmoMonger.Models.CosmoSystem[])ViewData["Systems"])
                    {
                 %>
-                    <div id="system<%=system.SystemId %>" style="padding: 4px; display: none; border: solid 2px black;">
+                    <div id="system<%=system.SystemId %>" class="system-info">
                     <b><%=Html.Encode(system.Name) %></b>
                     <hr />
                     <% if (system.Races.Count > 0)
@@ -113,17 +107,14 @@
                         if (system == ViewData["CurrentSystem"])  
                         {
                         %>
-                            <p style="color: red;">You are currently in this system.</p>
-                            <script language="javascript" type="text/javascript">
-                                document.onload = selectSystem(<%=system.SystemId %>);
-                            </script>
+                            <p style="color: red;">You are currently in this system.</p>                            
                         <% 
                         }
                         else if (inRangeSystems.Contains(system))
                         {
                         %>
-                            <p style="color: Blue;">You can travel to this system.</p>
-                            <input type="submit" value="Travel" onclick="" />
+                            <p style="color: blue;">You can travel to this system.</p>
+                            <input type="submit" value="Travel" />
                         <%
                         }
                         %>
