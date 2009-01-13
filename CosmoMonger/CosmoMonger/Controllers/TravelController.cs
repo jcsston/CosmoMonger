@@ -91,19 +91,5 @@ namespace CosmoMonger.Controllers
             // If we got down here, then an error was thrown
             return Travel();
         }
-
-        /// <summary>
-        /// Gets a list of all systems via the GameManager.GetSystems and passes the array 
-        /// to the Galaxy view to display a galaxy wide map view.
-        /// </summary>
-        public ActionResult GalaxyMap()
-        {
-            ViewData["Title"] = "Galaxy Map";
-            ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
-            ViewData["Systems"] = this.ControllerGame.GetSystems();
-            ViewData["Range"] = this.ControllerGame.CurrentPlayer.Ship.JumpDrive.Range;
-            ViewData["GalaxySize"] = this.ControllerGame.GetGalaxySize();
-            return View("GalaxyMap");
-        }
     }
 }
