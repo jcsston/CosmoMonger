@@ -1097,6 +1097,8 @@ namespace CosmoMonger.Models
 		
 		private bool _Contraband;
 		
+		private int _TargetCount;
+		
 		private EntitySet<ShipGood> _ShipGoods;
 		
 		private EntitySet<SystemGood> _SystemGoods;
@@ -1113,6 +1115,8 @@ namespace CosmoMonger.Models
     partial void OnBasePriceChanged();
     partial void OnContrabandChanging(bool value);
     partial void OnContrabandChanged();
+    partial void OnTargetCountChanging(int value);
+    partial void OnTargetCountChanged();
     #endregion
 		
 		public Good()
@@ -1198,6 +1202,26 @@ namespace CosmoMonger.Models
 					this._Contraband = value;
 					this.SendPropertyChanged("Contraband");
 					this.OnContrabandChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_TargetCount", DbType="int NOT NULL")]
+		public int TargetCount
+		{
+			get
+			{
+				return this._TargetCount;
+			}
+			set
+			{
+				if ((this._TargetCount != value))
+				{
+					this.OnTargetCountChanging(value);
+					this.SendPropertyChanging();
+					this._TargetCount = value;
+					this.SendPropertyChanged("TargetCount");
+					this.OnTargetCountChanged();
 				}
 			}
 		}
@@ -5319,6 +5343,10 @@ namespace CosmoMonger.Models
 		
 		private double _PriceMultiplier;
 		
+		private double _ProductionFactor;
+		
+		private double _ConsumptionFactor;
+		
 		private EntityRef<Good> _Good;
 		
 		private EntityRef<CosmoSystem> _CosmoSystem;
@@ -5335,6 +5363,10 @@ namespace CosmoMonger.Models
     partial void OnQuantityChanged();
     partial void OnPriceMultiplierChanging(double value);
     partial void OnPriceMultiplierChanged();
+    partial void OnProductionFactorChanging(double value);
+    partial void OnProductionFactorChanged();
+    partial void OnConsumptionFactorChanging(double value);
+    partial void OnConsumptionFactorChanged();
     #endregion
 		
 		public SystemGood()
@@ -5428,6 +5460,46 @@ namespace CosmoMonger.Models
 					this._PriceMultiplier = value;
 					this.SendPropertyChanged("PriceMultiplier");
 					this.OnPriceMultiplierChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ProductionFactor", DbType="double NOT NULL")]
+		public double ProductionFactor
+		{
+			get
+			{
+				return this._ProductionFactor;
+			}
+			set
+			{
+				if ((this._ProductionFactor != value))
+				{
+					this.OnProductionFactorChanging(value);
+					this.SendPropertyChanging();
+					this._ProductionFactor = value;
+					this.SendPropertyChanged("ProductionFactor");
+					this.OnProductionFactorChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ConsumptionFactor", DbType="double NOT NULL")]
+		public double ConsumptionFactor
+		{
+			get
+			{
+				return this._ConsumptionFactor;
+			}
+			set
+			{
+				if ((this._ConsumptionFactor != value))
+				{
+					this.OnConsumptionFactorChanging(value);
+					this.SendPropertyChanging();
+					this._ConsumptionFactor = value;
+					this.SendPropertyChanged("ConsumptionFactor");
+					this.OnConsumptionFactorChanged();
 				}
 			}
 		}
