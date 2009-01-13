@@ -1074,4 +1074,27 @@
       <where>RaceId=3</where>
     </update>
   </changeSet>
+  <changeSet author="Jory Stone, Roger Boykin" id="36">
+    <comment>Updating Binarites Race Description</comment>
+    <update tableName="Race">
+      <column name="Description" value="Binarites are artificial intelligences that were created by the Schrodinoids to run their space ships.  A schism developed between the Binarites and their masters when the Schrodinoids began to require their machine slaves to show homage to their prophet known as The Uncertain One.  As ardent proponents of relativistic physics, the Binarites found this worship of quantum mechanics highly unsettling.   The Binarites won their freedom in the resulting revolution.  Now the Binarites seek only to bring logic to an illogical universe."/>
+      <where>RaceId=3</where>
+    </update>
+  </changeSet>
+  <changeSet author="Jory Stone" id="37">
+    <comment>Adding TargetCount column to Good table to keep track of target number of goods in galaxy.</comment>
+    <addColumn tableName="Good">
+      <column name="TargetCount" type="int" defaultValueNumeric="100">
+        <constraints nullable="false" />
+      </column>
+    </addColumn>
+    <addColumn tableName="SystemGood">
+      <column name="ProductionFactor" type="float" defaultValueNumeric="0">
+        <constraints nullable="false" />
+      </column>
+      <column name="ConsumptionFactor" type="float" defaultValueNumeric="0">
+        <constraints nullable="false" />
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

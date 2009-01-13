@@ -107,13 +107,13 @@
                         if (system == ViewData["CurrentSystem"])  
                         {
                         %>
-                            <p style="color: red;">You are currently in this system.</p>                            
+                            <p class="system-current">You are currently in this system.</p>                            
                         <% 
                         }
                         else if (inRangeSystems.Contains(system))
                         {
                         %>
-                            <p style="color: blue;">You can travel to this system.</p>
+                            <p class="system-inrange">You can travel to this system.</p>
                             <input type="submit" value="Travel" />
                         <%
                         }
