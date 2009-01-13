@@ -68,7 +68,7 @@
                 document.getElementById("HumanRacialPreference").style.display = "none";
                 
                 //setting the display style to "inline" for the selected race's divs
-                if (raceSelect.selectedIndex == 0)//if true, Skumm has been selected
+                if (raceOption.value == 1)//if true, Skumm has been selected
                 {
                 document.getElementById("SkummWeapon").style.display = "inline";
                 document.getElementById("SkummShield").style.display = "inline";
@@ -78,8 +78,8 @@
                 document.getElementById("SkummDescription").style.display = "inline";
                 document.getElementById("SkummRacialEnemy").style.display = "inline";
                 document.getElementById("SkummRacialPreference").style.display = "inline";
-                } 
-                if (raceSelect.selectedIndex == 1)//if true, Decapodian has been selected
+                }
+                else if (raceOption.value == 2)//if true, Decapodian has been selected
                 {
                 document.getElementById("DecapodianWeapon").style.display = "inline";
                 document.getElementById("DecapodianShield").style.display = "inline";
@@ -90,7 +90,7 @@
                 document.getElementById("DecapodianRacialEnemy").style.display = "inline";
                 document.getElementById("DecapodianRacialPreference").style.display = "inline";
                 }
-                if (raceSelect.selectedIndex == 2)//if true, Shrodinoid has been selected
+                else if (raceOption.value == 4)//if true, Shrodinoid has been selected
                 {
                 document.getElementById("ShrodinoidWeapon").style.display = "inline";
                 document.getElementById("ShrodinoidShield").style.display = "inline";
@@ -100,8 +100,8 @@
                 document.getElementById("ShrodinoidDescription").style.display = "inline";
                 document.getElementById("ShrodinoidRacialEnemy").style.display = "inline";
                 document.getElementById("ShrodinoidRacialPreference").style.display = "inline";
-                } 
-                if (raceSelect.selectedIndex == 3)//if true, Binarite has been selected
+                }
+                else if (raceOption.value == 3)//if true, Binarite has been selected
                 {
                 document.getElementById("BinariteWeapon").style.display = "inline";
                 document.getElementById("BinariteShield").style.display = "inline";
@@ -111,8 +111,8 @@
                 document.getElementById("BinariteDescription").style.display = "inline";
                 document.getElementById("BinariteRacialEnemy").style.display = "inline";
                 document.getElementById("BinariteRacialPreference").style.display = "inline";
-                } 
-                if (raceSelect.selectedIndex == 4)//if true, Human has been selected
+                }
+                else if (raceOption.value == 5)//if true, Human has been selected
                 {
                 document.getElementById("HumanWeapon").style.display = "inline";
                 document.getElementById("HumanShield").style.display = "inline";
@@ -171,8 +171,8 @@
                     <td style="width: 15%">
                         <div class="race" id="SkummHomeSystem"><%= races[1, 5]%></div>
                         <div class="race" id="DecapodianHomeSystem"><%= races[2, 5]%></div>
-                        <div class="race" id="ShrodinoidHomeSystem"><%= races[3, 5]%></div>
-                        <div class="race" id="BinariteHomeSystem"><%= races[4, 5]%></div>
+                        <div class="race" id="ShrodinoidHomeSystem"><%= races[4, 5]%></div>
+                        <div class="race" id="BinariteHomeSystem"><%= races[3, 5]%></div>
                         <div class="race" id="HumanHomeSystem"><%= races[5, 5]%></div>
                     </td>
                 </tr>
@@ -183,8 +183,8 @@
                     <td style="width: 15%">
                         <div class="race" id="SkummRacialPreference"><%= races[1, 8]%></div>
                         <div class="race" id="DecapodianRacialPreference"><%= races[2, 8]%></div>
-                        <div class="race" id="ShrodinoidRacialPreference"><%= races[3, 8]%></div>
-                        <div class="race" id="BinariteRacialPreference"><%= races[4, 8]%></div>
+                        <div class="race" id="ShrodinoidRacialPreference"><%= races[4, 8]%></div>
+                        <div class="race" id="BinariteRacialPreference"><%= races[3, 8]%></div>
                         <div class="race" id="HumanRacialPreference"><%= races[5, 8]%></div>                    
                     </td>
                 </tr>
@@ -198,8 +198,8 @@
                     <td style="width: 15%">
                         <div class="race" id="SkummRacialEnemy"><%= races[1, 7]%></div>
                         <div class="race" id="DecapodianRacialEnemy"><%= races[2, 7]%></div>
-                        <div class="race" id="ShrodinoidRacialEnemy"><%= races[3, 7]%></div>
-                        <div class="race" id="BinariteRacialEnemy"><%= races[4, 7]%></div>
+                        <div class="race" id="ShrodinoidRacialEnemy"><%= races[4, 7]%></div>
+                        <div class="race" id="BinariteRacialEnemy"><%= races[3, 7]%></div>
                         <div class="race" id="HumanRacialEnemy"><%= races[5, 7]%></div>
                     </td>
                 </tr>     
@@ -219,29 +219,29 @@
                     <td style="width: 20%" align="center">
                         <div class="race" id="SkummWeapon"><%= races[1, 1]%></div>
                         <div class="race" id="DecapodianWeapon"><%= races[2, 1]%></div>
-                        <div class="race" id="ShrodinoidWeapon"><%= races[3, 1]%></div>
-                        <div class="race" id="BinariteWeapon"><%= races[4, 1]%></div>
+                        <div class="race" id="ShrodinoidWeapon"><%= races[4, 1]%></div>
+                        <div class="race" id="BinariteWeapon"><%= races[3, 1]%></div>
                         <div class="race" id="HumanWeapon"><%= races[5, 1]%></div>
                     </td>
                     <td style="width: 20%" align="center">
                         <div class="race" id="SkummShield"><%= races[1, 2]%></div>
                         <div class="race" id="DecapodianShield"><%= races[2, 2]%></div>
-                        <div class="race" id="ShrodinoidShield"><%= races[3, 2]%></div>
-                        <div class="race" id="BinariteShield"><%= races[4, 2]%></div>
+                        <div class="race" id="ShrodinoidShield"><%= races[4, 2]%></div>
+                        <div class="race" id="BinariteShield"><%= races[3, 2]%></div>
                         <div class="race" id="HumanShield"><%= races[5, 2]%></div>
                     </td>
                     <td style="width: 20%" align="center">
                         <div class="race" id="SkummAccuracy"><%= races[1, 4]%></div>
                         <div class="race" id="DecapodianAccuracy"><%= races[2, 4]%></div>
-                        <div class="race" id="ShrodinoidAccuracy"><%= races[3, 4]%></div>
-                        <div class="race" id="BinariteAccuracy"><%= races[4, 4]%></div>
+                        <div class="race" id="ShrodinoidAccuracy"><%= races[4, 4]%></div>
+                        <div class="race" id="BinariteAccuracy"><%= races[3, 4]%></div>
                         <div class="race" id="HumanAccuracy"><%= races[5, 4]%></div>
                     </td>
                     <td style="width: 20%" align="center">
                         <div class="race" id="SkummEngine"><%= races[1, 3]%></div>
                         <div class="race" id="DecapodianEngine"><%= races[2, 3]%></div>
-                        <div class="race" id="ShrodinoidEngine"><%= races[3, 3]%></div>
-                        <div class="race" id="BinariteEngine"><%= races[4, 3]%></div>
+                        <div class="race" id="ShrodinoidEngine"><%= races[4, 3]%></div>
+                        <div class="race" id="BinariteEngine"><%= races[3, 3]%></div>
                         <div class="race" id="HumanEngine"><%= races[5, 3]%></div>
                     </td> 
                 </tr>
@@ -250,8 +250,8 @@
                     <td colspan="5" align="left">
                         <div class="race" id="SkummDescription"><%= races[1, 6]%></div>
                         <div class="race" id="DecapodianDescription"><%= races[2, 6]%></div>
-                        <div class="race" id="ShrodinoidDescription"><%= races[3, 6]%></div>
-                        <div class="race" id="BinariteDescription"><%= races[4, 6]%></div>
+                        <div class="race" id="ShrodinoidDescription"><%= races[4, 6]%></div>
+                        <div class="race" id="BinariteDescription"><%= races[3, 6]%></div>
                         <div class="race" id="HumanDescription"><%= races[5, 6]%></div>
                     </td> 
                 </tr>
