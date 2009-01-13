@@ -1036,4 +1036,26 @@
       <where>SystemId=1</where>
     </update>
   </changeSet>
+  <changeSet author="Jory Stone" id="34">
+    <comment>Correcting Race Data</comment>
+    <update tableName="Race">
+      <column name="Name" value="Decapodian" />
+      <column name="RacialPreferenceId" valueNumeric="2" />
+      <where>RaceId=2</where>
+    </update>
+    <update tableName="Race">
+      <column name="Name" value="Schrodinoid" />
+      <where>RaceId=3</where>
+    </update>
+    <update tableName="Race">
+      <column name="Name" value="Binarite" />
+      <where>RaceId=4</where>
+    </update>
+    <update tableName="Race">
+      <column name="Name" value="Human" />
+      <column name="Description" value="Humans are the relative newcomers to this sector of space.  The majority of humans are located in the densely populated Sol system, but during recent years, more humans have decided to leave their home system and try their luck out here.  Most of these immigrant humans want nothing to do with others of their own species, having endured the pervasive overcrowding for most of their lives." />
+      <column name="RacialPreferenceId" valueNumeric="null" />
+      <where>RaceId=5</where>
+    </update>
+  </changeSet>
 </databaseChangeLog>

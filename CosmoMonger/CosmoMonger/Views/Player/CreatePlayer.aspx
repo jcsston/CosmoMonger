@@ -90,7 +90,7 @@
                 document.getElementById("DecapodianRacialEnemy").style.display = "inline";
                 document.getElementById("DecapodianRacialPreference").style.display = "inline";
                 }
-                if (raceSelect.selectedIndex == 2)//if true, Binarite has been selected
+                if (raceSelect.selectedIndex == 3)//if true, Binarite has been selected
                 {
                 document.getElementById("BinariteWeapon").style.display = "inline";
                 document.getElementById("BinariteShield").style.display = "inline";
@@ -101,7 +101,7 @@
                 document.getElementById("BinariteRacialEnemy").style.display = "inline";
                 document.getElementById("BinariteRacialPreference").style.display = "inline";
                 } 
-                if (raceSelect.selectedIndex == 3)//if true, Shrodinoid has been selected
+                if (raceSelect.selectedIndex == 2)//if true, Shrodinoid has been selected
                 {
                 document.getElementById("ShrodinoidWeapon").style.display = "inline";
                 document.getElementById("ShrodinoidShield").style.display = "inline";
@@ -145,65 +145,29 @@
                         <img id="RaceImg" src="" alt="Race Image" width="100px" height="100px" style="margin-left: 0px"/>
                     </td>
                     <td style="width: 15%">Home System:</td>
-                    <% string[,] races = new string[6, 9]; %>
-                    <% int i = 1; %>
-                    <% foreach (Race race in (Race [])ViewData["Races"])
-                   { %>
-                  
-                   <% races[i, 1] = race.Weapons.ToString(); %>
-                   <% races[i, 2] = race.Shields.ToString(); %>
-                   <% races[i, 3] = race.Engine.ToString(); %>
-                   <% races[i, 4] = race.Accuracy.ToString(); %>
-                   <% races[i, 5] = race.HomeSystem.Name; %> 
-                   <% races[i, 6] = race.Description; %>
-                   <%-- No foreign key relationship exists for RacialEnemyId --%>
-                   <% if (race.RacialEnemyId == 1)
-                      { %>
-                      <% races[i, 7] = "Skumm"; %>
-                   <% } %>
-                   <% if (race.RacialEnemyId == 3)
-                      { %>
-                      <% races[i, 7] = "Decapodians"; %>
-                   <% } %>
-                   <% if (race.RacialEnemyId == 4)
-                      { %>
-                      <% races[i, 7] = "Binarites"; %>
-                   <% } %>
-                   <% if (race.RacialEnemyId == 5)
-                      { %>
-                      <% races[i, 7] = "Schrodinoids"; %>
-                   <% } %>
-                   <% if (race.RacialEnemyId == 6)
-                      { %>
-                      <% races[i, 7] = "Humans"; %>
-                   <% } %>
-                   <%-- No foreign key relationship exists for RacialPreferenceId --%>
-                   <% if (race.RacialPreferenceId == 1)
-                      { %>
-                      <% races[i, 8] = "Skumm"; %>
-                   <% } %>
-                   <% if (race.RacialPreferenceId == 3)
-                      { %>
-                      <% races[i, 8] = "Decapodians"; %>
-                   <% } %>
-                   <% if (race.RacialPreferenceId == 4)
-                      { %>
-                      <% races[i, 8] = "Binarites"; %>
-                   <% } %>
-                   <% if (race.RacialPreferenceId == 5)
-                      { %>
-                      <% races[i, 8] = "Schrodinoids"; %>
-                   <% } %>
-                   <% if (race.RacialPreferenceId == 6)
-                      { %>
-                      <% races[i, 8] = "Humans"; %>
-                   <% } %>
-                   <% if (race.RacialPreferenceId == null)
-                      { %>
-                      <% races[i, 8] = "None"; %>
-                   <% } %>
-                   <% i++; %>
-                   <% } %>
+                    <% 
+                        string[,] races = new string[6, 9];
+                        int i = 1; 
+                        foreach (Race race in (Race [])ViewData["Races"])
+                        {
+                            races[i, 1] = race.Weapons.ToString();
+                            races[i, 2] = race.Shields.ToString();
+                            races[i, 3] = race.Engine.ToString();
+                            races[i, 4] = race.Accuracy.ToString(); 
+                            races[i, 5] = race.HomeSystem.Name; 
+                            races[i, 6] = race.Description; 
+                            races[i, 7] = race.RacialEnemy.Name;
+                            if (race.RacialPreference != null)
+                            {
+                                races[i, 8] = race.RacialPreference.Name; 
+                            }
+                            else
+                            {
+                                races[i, 8] = "None";
+                            }
+                            i++;
+                        }
+                    %>
                     <td style="width: 15%">
                         <div class="race" id="SkummHomeSystem"><%= races[1, 5]%></div>
                         <div class="race" id="DecapodianHomeSystem"><%= races[2, 5]%></div>
