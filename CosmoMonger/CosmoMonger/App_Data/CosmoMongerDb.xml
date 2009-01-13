@@ -1058,4 +1058,20 @@
       <where>RaceId=5</where>
     </update>
   </changeSet>
+  <changeSet author="Jory Stone" id="35">
+    <comment>Correcting Schrodinoid and Binarite Race names</comment>
+    <!-- This temporary name setting is needed due to the unique check on the Name column -->
+    <update tableName="Race">
+      <column name="Name" value="BinariteTmp" />
+      <where>RaceId=3</where>
+    </update>
+    <update tableName="Race">
+      <column name="Name" value="Schrodinoid" />
+      <where>RaceId=4</where>
+    </update>
+    <update tableName="Race">
+      <column name="Name" value="Binarite" />
+      <where>RaceId=3</where>
+    </update>
+  </changeSet>
 </databaseChangeLog>
