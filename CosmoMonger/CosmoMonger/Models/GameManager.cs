@@ -232,5 +232,49 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = GameManager.GetDbContext();
             return Math.Max(db.CosmoSystems.Max(x => x.PositionX), db.CosmoSystems.Max(x => x.PositionY));
         }
+
+        /// <summary>
+        /// Updates the system good count, causing systems to produce goods as needed.
+        /// </summary>
+        public void UpdateSystemGoodCount()
+        {
+            Random rnd = new Random();
+            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            foreach (Good good in db.Goods)
+            {
+                // Get the total number of this good type avaiable in all systems
+                int totalSystemGoodCount = good.SystemGoods.Sum(x => x.Quantity);
+
+                // Check if we need to add some of this good to the galaxy
+                if (totalSystemGoodCount < good.TargetCount)
+                {
+                    // Randomly select a good at a system to produce
+                    var goodProducingSystems = (from g in good.SystemGoods
+                                                where g.ProductionFactor > 0
+                                                select g);
+                    if (goodProducingSystems.Count() == 0)
+                    {
+                        // No systems produce this good?
+                        // Continue on to the next good type
+                        continue;
+                    }
+
+                    int selectedSystemGoodIndex = rnd.Next(goodProducingSystems.Count());
+                    SystemGood selectedSystemGood = goodProducingSystems.ElementAt(selectedSystemGoodIndex);
+                    
+                    // Produce the good, using the count needed and the production factor
+                    int lackingGoodCount = good.TargetCount - totalSystemGoodCount;
+                    selectedSystemGood.Quantity += (int)(lackingGoodCount * selectedSystemGood.ProductionFactor);
+
+                    // Send changes to the database
+                    db.SubmitChanges();
+                }
+            }
+        }
+
+        public void UpdateSystemGoodPrice()
+        {
+
+        }
     }
 }

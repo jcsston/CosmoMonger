@@ -11,7 +11,7 @@
     using NUnit.Framework.SyntaxHelpers;
 
     [TestFixture]
-    public class GameManagerTest
+    public class GameManagerTest : BasePlayerTest
     {
         [Test]
         public void GetDbContext()
@@ -59,6 +59,14 @@
                 Assert.That(ex.ParamName, Is.EqualTo("username"), "Failed argument should be username");
             }
             Assert.That(manager, Is.Null, "An empty username should fail and not create a GameManager");
+        }
+
+        [Test]
+        public void UpdateSystemGoodCount()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+            manager.UpdateSystemGoodCount();
         }
     }
 }

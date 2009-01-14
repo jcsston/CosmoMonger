@@ -5464,7 +5464,7 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_ProductionFactor", DbType="double NOT NULL")]
+		[Column(Storage="_ProductionFactor", DbType="float NOT NULL")]
 		public double ProductionFactor
 		{
 			get
@@ -5484,7 +5484,7 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_ConsumptionFactor", DbType="double NOT NULL")]
+		[Column(Storage="_ConsumptionFactor", DbType="float NOT NULL")]
 		public double ConsumptionFactor
 		{
 			get
