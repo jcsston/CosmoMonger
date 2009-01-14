@@ -101,6 +101,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CosmoManager.cs" />
     <Compile Include="Models\CosmoMongerDb.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -136,7 +136,7 @@ namespace CosmoMonger.Models
         /// <param name="quantity">The quantity of the good to add.</param>
         public void AddGood(int goodId, int quantity)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             SystemGood systemGood = this.GetGood(goodId);
             if (systemGood == null)
             {

@@ -16,7 +16,7 @@
         [Test]
         public void Sell()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Setup player
             Player testPlayer = this.CreateTestPlayer();
@@ -56,7 +56,7 @@
         [Test]
         public void SellNotSold()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Setup player
             Player testPlayer = this.CreateTestPlayer();
@@ -102,7 +102,7 @@
         [Test]
         public void SellNotEnoughGoods()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Setup player
             Player testPlayer = this.CreateTestPlayer();

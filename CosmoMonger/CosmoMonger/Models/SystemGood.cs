@@ -84,7 +84,7 @@ namespace CosmoMonger.Models
             manager.CurrentPlayer.CashCredits -= totalCost;
 
             // Commit changes to the database
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             db.SubmitChanges();
         }
     }

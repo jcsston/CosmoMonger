@@ -21,7 +21,7 @@ namespace CosmoMonger.Models
         /// </summary>
         public void MarkAsReceived()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             this.Received = true;
             db.SubmitChanges();
         }

@@ -227,7 +227,7 @@ namespace CosmoMonger.Models
                 throw new ArgumentException("Must delete all related data to user", "deleteAllRelatedData");
             }
 
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             User matchingUser = (from u in db.Users
                                  where u.UserName == username
                                  select u).SingleOrDefault();
@@ -303,7 +303,7 @@ namespace CosmoMonger.Models
         /// </returns>
         public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             var matchingUsers = (from u in db.Users
                                  where u.Email.Contains(emailToMatch)
                                  select u);
@@ -322,7 +322,7 @@ namespace CosmoMonger.Models
         /// </returns>
         public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             var matchingUsers = (from u in db.Users
                                  where u.UserName.Contains(usernameToMatch)
                                  select u);
@@ -340,7 +340,7 @@ namespace CosmoMonger.Models
         /// </returns>
         public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             var matchingUsers = (from u in db.Users select u);
             return this.FindUsersBy(matchingUsers, pageIndex, pageSize, out totalRecords);
         }
@@ -382,7 +382,7 @@ namespace CosmoMonger.Models
         /// </returns>
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             User matchingUser = (from u in db.Users
                                  where u.UserName == username
                                  select u).SingleOrDefault();
@@ -423,7 +423,7 @@ namespace CosmoMonger.Models
         /// </returns>
         public override string GetUserNameByEmail(string email)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             User matchingUser = (from u in db.Users
                                  where u.Email == email
                                  select u).SingleOrDefault();

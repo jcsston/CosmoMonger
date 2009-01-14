@@ -32,7 +32,7 @@ namespace CosmoMonger.Models
         /// <param name="username">The username of the currently logged in user.</param>
         public GameManager(string username)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             var matchingUsers = (from u in db.Users where u.UserName == username select u);
             if (!matchingUsers.Any())
             {
@@ -66,51 +66,13 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Gets the CosmoMonger db context.
-        /// </summary>
-        /// <returns>LINQ CosmoMongerDbDataContext object</returns>
-        public static CosmoMongerDbDataContext GetDbContext()
-        {
-            return Utility.DataContextFactory.GetScopedDataContext<CosmoMongerDbDataContext>("CosmoMonger", ConfigurationManager.ConnectionStrings["CosmoMongerConnectionString"].ConnectionString);
-        }
-
-        /// <summary>
-        /// Gets the current code version. Ex. Subversion Revision number
-        /// </summary>
-        /// <returns>Revision number of running code</returns>
-        public static int GetCodeVersion()
-        {
-            return Assembly.GetExecutingAssembly().GetName().Version.Revision;
-        }
-
-        /// <summary>
-        /// Gets the database version. Ex. The liquibase changelog number
-        /// </summary>
-        /// <returns>Database version of connected database</returns>
-        public static int GetDatabaseVersion()
-        {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            return db.ExecuteQuery<int>("SELECT MAX(CAST(Id AS int)) FROM DATABASECHANGELOG WHERE ISNUMERIC(Id) = 1").Single();
-        }
-
-        /// <summary>
-        /// Calls DoAction on all NPCs in the galaxy. 
-        /// This method will be called every 5 seconds via Cache Expirations to keep the NPCs 
-        /// busy in the galaxy even when no human players are hitting pages.
-        /// </summary>
-        public void DoPendingNPCActions()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Returns the user with the passed in id. Returns null if the user does not exist.
         /// </summary>
         /// <param name="userId">The user id.</param>
         /// <returns>User object, null if the user does not exist.</returns>
         public User GetUser(int userId)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from u in db.Users where u.UserId == userId select u).SingleOrDefault();
         }
 
@@ -128,7 +90,7 @@ namespace CosmoMonger.Models
         /// <returns>Array of Player objects</returns>
         public Player[] GetTopPlayers(string recordType, int limit)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             switch (recordType)
             {
                 case "NetWorth":
@@ -177,7 +139,7 @@ namespace CosmoMonger.Models
         /// <returns>Player object, null if the player does not exist.</returns>
         public Player GetPlayer(int playerId)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from p in db.Players where p.PlayerId == playerId select p).SingleOrDefault();
         }
 
@@ -187,7 +149,7 @@ namespace CosmoMonger.Models
         /// <returns>Array of CosmoSystem objects</returns>
         public CosmoSystem[] GetSystems()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from s in db.CosmoSystems select s).ToArray();
         }
 
@@ -197,7 +159,7 @@ namespace CosmoMonger.Models
         /// <returns>Array of Race objects</returns>
         public Race[] GetRaces()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from r in db.Races select r).ToArray();
         }
 
@@ -208,7 +170,7 @@ namespace CosmoMonger.Models
         /// <returns>Race oject, null if the race does not exist</returns>
         public Race GetRace(int raceId)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from r in db.Races where r.RaceId == raceId select r).SingleOrDefault();
         }
 
@@ -219,7 +181,7 @@ namespace CosmoMonger.Models
         /// <returns>CosmoSystem object, null if the system does not exist</returns>
         public CosmoSystem GetSystem(int systemId)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from s in db.CosmoSystems where s.SystemId == systemId select s).SingleOrDefault();
         }
 
@@ -229,52 +191,8 @@ namespace CosmoMonger.Models
         /// <returns>An int that gives the x/y size of the galaxy</returns>
         public int GetGalaxySize()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return Math.Max(db.CosmoSystems.Max(x => x.PositionX), db.CosmoSystems.Max(x => x.PositionY));
-        }
-
-        /// <summary>
-        /// Updates the system good count, causing systems to produce goods as needed.
-        /// </summary>
-        public void UpdateSystemGoodCount()
-        {
-            Random rnd = new Random();
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
-            foreach (Good good in db.Goods)
-            {
-                // Get the total number of this good type avaiable in all systems
-                int totalSystemGoodCount = good.SystemGoods.Sum(x => x.Quantity);
-
-                // Check if we need to add some of this good to the galaxy
-                if (totalSystemGoodCount < good.TargetCount)
-                {
-                    // Randomly select a good at a system to produce
-                    var goodProducingSystems = (from g in good.SystemGoods
-                                                where g.ProductionFactor > 0
-                                                select g);
-                    if (goodProducingSystems.Count() == 0)
-                    {
-                        // No systems produce this good?
-                        // Continue on to the next good type
-                        continue;
-                    }
-
-                    int selectedSystemGoodIndex = rnd.Next(goodProducingSystems.Count());
-                    SystemGood selectedSystemGood = goodProducingSystems.ElementAt(selectedSystemGoodIndex);
-                    
-                    // Produce the good, using the count needed and the production factor
-                    int lackingGoodCount = good.TargetCount - totalSystemGoodCount;
-                    selectedSystemGood.Quantity += (int)(lackingGoodCount * selectedSystemGood.ProductionFactor);
-
-                    // Send changes to the database
-                    db.SubmitChanges();
-                }
-            }
-        }
-
-        public void UpdateSystemGoodPrice()
-        {
-
         }
     }
 }

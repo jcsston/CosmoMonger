@@ -77,7 +77,7 @@ namespace CosmoMonger.Models
             currentShip.BaseShip = this.BaseShip;
 
             // Commit changes to the database
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             db.SubmitChanges();
         }
     }

@@ -29,7 +29,7 @@
 
         private Player CreateTestPlayer(string baseTestUsername, string baseTestEmail, string baseTestPlayerName)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;

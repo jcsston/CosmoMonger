@@ -31,7 +31,7 @@
         [Test]
         public void CreatePlayer()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
             MembershipCreateStatus status;

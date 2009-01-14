@@ -53,7 +53,7 @@ namespace CosmoMonger.Models
             manager.CurrentPlayer.CashCredits += profit;
             
             // Commits changes to the database
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             db.SubmitChanges();
         }
     }

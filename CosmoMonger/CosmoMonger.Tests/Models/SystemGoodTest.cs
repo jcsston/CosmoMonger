@@ -16,7 +16,7 @@
         [Test]
         public void Buy()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Setup player
             Player testPlayer = this.CreateTestPlayer();
@@ -53,7 +53,7 @@
         [Test]
         public void BuyNotEnoughGoods()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Setup player
             Player testPlayer = this.CreateTestPlayer();
@@ -93,7 +93,7 @@
         [Test]
         public void BuyNotEnoughCash()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Setup player
             Player testPlayer = this.CreateTestPlayer();
@@ -137,7 +137,7 @@
         [Test]
         public void BuyNotEnoughSpace()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Setup player
             Player testPlayer = this.CreateTestPlayer();

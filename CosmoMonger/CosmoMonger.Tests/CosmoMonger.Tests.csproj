@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\BasePlayerTest.cs" />
+    <Compile Include="Models\CosmoManagerTest.cs" />
     <Compile Include="Models\CosmoMongerMembershipProviderTest.cs" />
     <Compile Include="Models\CosmoSystemTest.cs" />
     <Compile Include="Models\GameManagerTest.cs" />

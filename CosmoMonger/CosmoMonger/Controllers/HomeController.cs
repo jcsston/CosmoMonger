@@ -41,5 +41,27 @@ namespace CosmoMonger.Controllers
 
             return View();
         }
+
+        /// <summary>
+        /// This action processes pending background events that need processing.
+        /// Such as NPC actions or good production/consumption.
+        /// </summary>
+        /// <returns>The Index action result</returns>
+        public ActionResult ProcessEvents()
+        {
+            CosmoManager manager = new CosmoManager();
+            
+            // Do NPC work
+            manager.DoPendingNPCActions();
+
+            // Update system good count
+            manager.UpdateSystemGoodCount();
+
+            // Adjust system good prices
+            manager.UpdateSystemGoodPrice();
+
+            // Show the normal home page
+            return RedirectToAction("Index");
+        }
     }
 }

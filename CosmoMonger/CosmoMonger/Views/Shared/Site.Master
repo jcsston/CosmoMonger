@@ -84,7 +84,7 @@
         <div id="footer">
             <p>
                 <%= Html.ActionLink("CosmoMonger", "About", "Home") %> &copy; Copyright 2008-2009<br />
-                rev <%= CosmoMonger.Models.GameManager.GetCodeVersion() %> (db <%= CosmoMonger.Models.GameManager.GetDatabaseVersion() %>) <br />
+                rev <%= CosmoMonger.Models.CosmoManager.GetCodeVersion() %> (db <%= CosmoMonger.Models.CosmoManager.GetDatabaseVersion()%>) <br />
                 <% 
                     double processingTime = (DateTime.Now - this.ViewContext.HttpContext.Timestamp).TotalSeconds;
                     Dictionary<string, object> props = new Dictionary<string, object>

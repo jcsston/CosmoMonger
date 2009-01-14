@@ -44,7 +44,7 @@ namespace CosmoMonger.Models
         /// <param name="name">The new name of the player.</param>
         public void UpdateProfile(string name)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Check for another living player with same name
             bool matchingName = (from p in db.Players where p.Name == name && p.Alive && p != this select p).Any();

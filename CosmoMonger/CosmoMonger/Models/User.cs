@@ -29,7 +29,7 @@ namespace CosmoMonger.Models
         /// <returns>The newly created Player</returns>
         public Player CreatePlayer(string name, Race race)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             bool existingPlayerName = (from p in db.Players where p.Name == name select p).Any();
             if (existingPlayerName)
             {
@@ -95,7 +95,7 @@ namespace CosmoMonger.Models
         /// <param name="email">The email to set.</param>
         public void UpdateProfile(string username, string email)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Check that the username/email doesn't already exist on other user
             bool matchingUsername = (from u in db.Users where u.UserName == username && u != this select u).Any();
@@ -133,7 +133,7 @@ namespace CosmoMonger.Models
         /// <param name="buddy">The buddy.</param>
         public void AddBuddy(User buddy)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             bool matchingBuddy = (from bl in this.BuddyLists where bl.FriendId == buddy.UserId select bl).Any();
             if (matchingBuddy)
             {
@@ -154,7 +154,7 @@ namespace CosmoMonger.Models
         /// <param name="buddy">The buddy.</param>
         public void RemoveBuddy(User buddy)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             BuddyList buddyToRemove = (from bl in this.BuddyLists where bl.FriendId == buddy.UserId select bl).SingleOrDefault();
             if (buddyToRemove == null)
             {
@@ -180,7 +180,7 @@ namespace CosmoMonger.Models
         /// <param name="ignoreUser">The ignore user.</param>
         public void AddIgnore(User ignoreUser)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             bool matchingAntiFriend = (from il in this.IgnoreLists where il.AntiFriendId == ignoreUser.UserId select il).Any();
             if (matchingAntiFriend)
             {
@@ -200,7 +200,7 @@ namespace CosmoMonger.Models
         /// <param name="ignoreUser">The ignore user.</param>
         public void RemoveIgnore(User ignoreUser)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             IgnoreList antiFriendToRemove = (from il in this.IgnoreLists where il.AntiFriendId == ignoreUser.UserId select il).SingleOrDefault();
             if (antiFriendToRemove == null)
             {
@@ -228,7 +228,7 @@ namespace CosmoMonger.Models
         /// <param name="message">The message to send.</param>
         public void SendMessage(User fromUser, string message)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Build the message
             Message msg = new Message();

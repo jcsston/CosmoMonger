@@ -14,24 +14,6 @@
     public class GameManagerTest : BasePlayerTest
     {
         [Test]
-        public void GetDbContext()
-        {
-            Assert.That(GameManager.GetDbContext(), Is.Not.Null, "We should always be able to get a database context");
-        }
-
-        [Test]
-        public void GetCodeVersion()
-        {
-            Assert.That(GameManager.GetCodeVersion(), Is.GreaterThan(0), "Code Version should be greater than zero");
-        }
-
-        [Test]
-        public void GetDatabaseVersion()
-        {
-            Assert.That(GameManager.GetDatabaseVersion(), Is.GreaterThan(0), "Database Version should be greater than zero");
-        }
-
-        [Test]
         public void ConstructorEmptyUsername()
         {
             GameManager manager = null;
@@ -59,14 +41,6 @@
                 Assert.That(ex.ParamName, Is.EqualTo("username"), "Failed argument should be username");
             }
             Assert.That(manager, Is.Null, "An empty username should fail and not create a GameManager");
-        }
-
-        [Test]
-        public void UpdateSystemGoodCount()
-        {
-            Player testPlayer = this.CreateTestPlayer();
-            GameManager manager = new GameManager(testPlayer.User.UserName);
-            manager.UpdateSystemGoodCount();
         }
     }
 }

@@ -16,7 +16,7 @@
         [Test]
         public void AddGood()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             CosmoSystem firstSystem = (from s in db.CosmoSystems select s).FirstOrDefault();
             Assert.That(firstSystem, Is.Not.Null, "We need at least one system in the galaxy");
 

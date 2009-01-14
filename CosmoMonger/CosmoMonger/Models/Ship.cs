@@ -108,7 +108,7 @@ namespace CosmoMonger.Models
             int travelTime = (int)(5 / Math.Log(this.JumpDrive.Speed + 0.5));
 
             // Update the database
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             this.TargetSystemId = targetSystem.SystemId;
             this.TargetSystemArrivalTime = DateTime.Now.AddSeconds(travelTime);
             db.SubmitChanges();
@@ -131,7 +131,7 @@ namespace CosmoMonger.Models
                 // Has the arrival time passed?
                 if (this.TargetSystemArrivalTime < DateTime.Now)
                 {
-                    CosmoMongerDbDataContext db = GameManager.GetDbContext();
+                    CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
                     // The ship has arrived, change the location of the ship and clear out the travel fields
                     this.CosmoSystem = (from s in db.CosmoSystems 
@@ -159,7 +159,7 @@ namespace CosmoMonger.Models
         /// <returns>Array of CosmoSystems within JumpDrive distance</returns>
         public CosmoSystem[] GetInRangeSystems()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
             // Find all systems within range of the JumpDrive
             // We use the distance formula, sqrt((x2 - x1)^2 + (y2 - y1)^2)

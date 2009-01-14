@@ -200,7 +200,7 @@ namespace CosmoMonger.Models
         /// <returns>A new CosmoMongerMembershipUser object for the newly created user.</returns>
         public static CosmoMongerMembershipUser CreateUser(string username, string password, string email)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Check for an existing user
             bool matchingUsername = (from u in db.Users where u.UserName == username select u).Any();
@@ -240,7 +240,7 @@ namespace CosmoMonger.Models
         /// </returns>
         public override bool ChangePassword(string oldPassword, string newPassword)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             if (this.user != null && this.ValidatePassword(oldPassword))
             {
                 // Update the users password
@@ -261,7 +261,7 @@ namespace CosmoMonger.Models
         /// </returns>
         public bool ValidatePassword(string password)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
             bool validPassword = Cryptographer.CompareHash("SHA512", password, this.user.Password);
             if (validPassword && this.IsApproved && !this.IsLockedOut)
@@ -320,7 +320,7 @@ namespace CosmoMonger.Models
         /// </returns>
         public bool VerifyEmail(string verificationCode)
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             if (this.VerificationCode == verificationCode)
             {
@@ -343,7 +343,7 @@ namespace CosmoMonger.Models
         /// </returns>
         public override bool UnlockUser()
         {
-            CosmoMongerDbDataContext db = GameManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             if (this.user != null)
             {
                 this.user.Active = true;
