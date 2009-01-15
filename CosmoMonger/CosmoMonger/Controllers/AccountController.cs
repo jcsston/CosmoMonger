@@ -35,7 +35,7 @@ namespace CosmoMonger.Controllers
         /// the default forms authentication and membership providers.
         /// </summary>
         public AccountController()
-            : this(null, null)
+            : this(null)
         {
         }
 
@@ -45,16 +45,9 @@ namespace CosmoMonger.Controllers
         /// of unit testing this type. See the comments on the IFormsAuthentication interface for more
         /// information.
         /// </summary>
-        public AccountController(IFormsAuthentication formsAuth, MembershipProvider provider)
+        public AccountController(MembershipProvider provider)
         {
-            FormsAuth = formsAuth ?? new FormsAuthenticationWrapper();
             Provider = provider ?? Membership.Provider;
-        }
-
-        public IFormsAuthentication FormsAuth
-        {
-            get;
-            private set;
         }
 
         public MembershipProvider Provider
@@ -167,15 +160,7 @@ namespace CosmoMonger.Controllers
 
                     if (loginSuccessful)
                     {
-                        FormsAuth.SetAuthCookie(username, rememberMe);
-                        if (!String.IsNullOrEmpty(returnUrl))
-                        {
-                            return Redirect(returnUrl);
-                        }
-                        else
-                        {
-                            return RedirectToAction("Index", "Home");
-                        }
+                        return new FormsLoginResult(username, rememberMe);
                     }
                     else if (!user.IsApproved)
                     {
@@ -203,9 +188,7 @@ namespace CosmoMonger.Controllers
 
         public ActionResult Logout()
         {
-            FormsAuth.SignOut();
-
-            return RedirectToAction("Index", "Home");
+            return new FormsLogoutResult();
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)

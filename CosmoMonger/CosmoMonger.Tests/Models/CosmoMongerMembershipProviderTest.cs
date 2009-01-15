@@ -13,13 +13,6 @@
     [TestFixture]
     public class CosmoMongerMembershipProviderTest
     {
-        public CosmoMongerMembershipProviderTest()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
         [Test]
         public void CosmoMongerMembershipProviderMaxInvalidPasswordAttempts()
         {

@@ -87,6 +87,8 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Attributes\CosmoMongerHandleErrorAttribute.cs" />
+    <Compile Include="Controllers\FormsLoginResult.cs" />
+    <Compile Include="Controllers\FormsLogoutResult.cs" />
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
@@ -120,8 +122,6 @@
     <Compile Include="Models\SystemShip.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Utility\DataContextFactory.cs" />
-    <Compile Include="Models\Utility\FormsAuthenticationWrapper.cs" />
-    <Compile Include="Models\Utility\IFormsAuthentication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +133,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\digitalspaghetti.password.js" />
     <Content Include="Scripts\digitialspaghetti.password.min.js" />
+    <Content Include="Scripts\jquery-1.2.6-vsdoc.js" />
     <Content Include="Views\Account\SendVerificationCode.aspx" />
     <Content Include="Views\Account\SentVerificationCode.aspx" />
     <Content Include="Views\Account\VerifiedEmail.aspx" />

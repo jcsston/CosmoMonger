@@ -47,6 +47,21 @@
         }
 
         [Test]
+        public void GetRaces()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            Race[] races = manager.GetRaces();
+            Assert.That(races.Length, Is.GreaterThanOrEqualTo(1), "We need at least one race");
+
+            Race humanRace = (from r in races
+                                     where r.Name == "Human"
+                                     select r).SingleOrDefault();
+            Assert.That(humanRace, Is.Not.Null, "The human race should exist");
+        }
+
+        [Test]
         public void GetSystems()
         {
             Player testPlayer = this.CreateTestPlayer();
@@ -68,6 +83,62 @@
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
             Assert.That(manager.GetGalaxySize(), Is.GreaterThan(1), "Galaxy should be larger than 1x1");
+        }
+
+        [Test]
+        public void GetTopPlayersEmptyRecordType()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            Player[] topPlayers = null;
+            try
+            {
+                topPlayers = manager.GetTopPlayers("", 10);
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.That(ex.ParamName, Is.EqualTo("recordType"), "recordType should be the failed argument");
+            }
+            Assert.That(topPlayers, Is.Null, "GetTopPlayers should fail with an empty record type");
+        }
+
+        [Test]
+        public void GetTopPlayersNetWorth()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            Player[] topPlayers = manager.GetTopPlayers("NetWorth", 10);
+            Assert.That(topPlayers, Is.Not.Null, "GetTopPlayers should return an array of records");
+            Assert.That(topPlayers.Length, Is.LessThanOrEqualTo(10), "Returned array should be 10 or less items");
+        }
+
+        [Test]
+        public void GetPlayer()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            Assert.That(manager.GetPlayer(testPlayer.PlayerId), Is.EqualTo(testPlayer), "GetPlayer(testPlayerId) should return the test player");
+        }
+
+        [Test]
+        public void GetUser()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            Assert.That(manager.GetUser(testPlayer.User.UserId), Is.EqualTo(testPlayer.User), "GetUser(testUserId) should return the test user");
+        }
+
+        [Test]
+        public void GetSystem()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            Assert.That(manager.GetSystem(testPlayer.Ship.SystemId), Is.EqualTo(testPlayer.Ship.CosmoSystem), "GetSystem(systemId) should return the system the test player ship is in");
         }
     }
 }
