@@ -1,37 +1,68 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <form id="form1" runat="server">
 <h1>Player Profile</h1>
 <table style="width: 100%">
 <% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["Player"]; %>
-<tr><td align="center" colspan="4"><h2><%= player.Name%></h2></td></tr>
-<tr></tr>
+<tr><td class="vp-playerName" colspan="6"><%= player.Name%></td></tr>
+<tr><td>&nbsp;</td></tr>
 <tr>
-    <td align="center" style="width: 33%" colspan="2"><h3>Financial</h3></td>
-    <td align="center" style="width: 33%"><h3>Reputation</h3></td>
-    <td align="center" style="width: 33%"><h3>Bounty</h3></td>
-</tr>
-<tr></tr>
-<tr><td>Net Worth:</td><td><%= player.NetWorth%></td><td></td><td></td></tr>
-<tr><td>Cash Credits:</td><td><%= player.CashCredits%></td><td></td><td></td></tr>
-<tr><td>Bank Credits:</td><td><%= player.BankCredits%></td><td></td><td></td></tr>
-<tr>
-    <td align="center" style="width: 33%" colspan="2"><h3>Racial Data</h3></td>
-    <td align="center" style="width: 33%"><h3>Time Played</h3></td>
-    <td align="center" style="width: 33%"><h3>Status</h3></td>
+    <td class="vp-headers" colspan="2">Financial Data</td>
+    <td class="vp-headers" colspan="2">Reputation</td>
+    <td class="vp-headers" colspan="2">Bounty</td>
 </tr>
 <tr>
-    <td>Race:</td><td><%= player.Race.Name%></td>
-    <td align="center"><%= player.TimePlayed%></td>
-    <% string status = "Dead";%>
-    <% if (player.Alive)
-       {%>
-       <%status = "Alive"; %>
-     <% } %> %>  
-    <td align="center"><%= status%></td>
+    <td class="vp-columnData">Net Worth:</td>
+    <td class="vp-columnData"><%= player.NetWorth%></td>
+    <td class="vp-columnData"><%=player.Reputation%></td>
+    <% string repDescription = "Neutral";
+       if (player.BountyTotal > 5)
+       {
+           repDescription = "Good";
+       }
+       else if (player.BountyTotal < -5)
+       {
+           repDescription = "Evil";
+       }
+     %>
+    <td class="vp-columnData"><%=repDescription%></td>
+    <td class="vp-columnData"><%=player.BountyTotal%></td>
+    <td class="vp-columnData">Credits</td>
 </tr>
-<tr><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td></td></tr>
+<tr>
+    <td class="vp-columnData">Cash Credits:</td>
+    <td class="vp-columnData"><%= player.CashCredits%></td>
+</tr>
+<tr>
+    <td class="vp-columnData">Bank Credits:</td>
+    <td class="vp-columnData"><%= player.BankCredits%></td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr>
+    <td class="vp-headers" colspan="2">Racial Data</td>
+    <td class="vp-headers" colspan="2">Time Played</td>
+    <td class="vp-headers" colspan="2">Want A New Player?</td>
+</tr>
+<tr>
+    <td class="vp-columnData">Player's Race:</td>
+    <td class="vp-columnData"><%= player.Race.Name%></td>
+    <td class="vp-columnData"><%= player.TimePlayed%></td>
+    <td class="vp-columnData">hours</td>
+    <td align="center" colspan="2">Warning! This is irrevisible!</td>
+</tr>
+<tr>
+    <td class="vp-columnData">Discount/Bonus:</td>
+    <td class="vp-columnData"><%=player.Race.RacialPreference.Name%>s</td>
+    <td colspan="2"></td><td align="center" colspan="2">
+    <asp:Button ID="newPlayerButton" runat="server" Text="Kill Current Player" 
+                                Height="25px" Width="121px" /></td>
+</tr>
+<tr>
+    <td class="vp-columnData">Surcharge/Penalty:</td>
+    <td class="vp-columnData"><%=player.Race.RacialEnemy.Name%>s</td>
+</tr>
 </table>
+    </form>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>
