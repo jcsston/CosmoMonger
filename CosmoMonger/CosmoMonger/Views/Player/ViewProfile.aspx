@@ -15,17 +15,7 @@
     <td class="vp-columnData">Net Worth:</td>
     <td class="vp-columnData"><%= player.NetWorth%></td>
     <td class="vp-columnData"><%=player.Reputation%></td>
-    <% string repDescription = "Neutral";
-       if (player.BountyTotal > 5)
-       {
-           repDescription = "Good";
-       }
-       else if (player.BountyTotal < -5)
-       {
-           repDescription = "Evil";
-       }
-     %>
-    <td class="vp-columnData"><%=repDescription%></td>
+    <td class="vp-columnData"><%=player.ReputationLevel%></td>
     <td class="vp-columnData"><%=player.BountyTotal%></td>
     <td class="vp-columnData">Credits</td>
 </tr>

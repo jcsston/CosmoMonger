@@ -23,9 +23,35 @@ namespace CosmoMonger.Models
     /// </summary>
     public partial class Player
     {
+
+        /// <summary>
+        /// Gets the reputation level.
+        /// </summary>
+        /// <value>The reputation level.</value>
+        public string ReputationLevel
+        {
+            get
+            {
+                if (this.Reputation > 5)
+                {
+                    return "Good";
+                }
+                else if (this.Reputation < -5)
+                {
+                    return "Evil";
+                }
+                else
+                {
+                    return "Neutral";
+                }
+                
+            }
+
+        }
         /// <summary>
         /// Updates the net worth for this player.
         /// </summary>
+        /// 
         public void UpdateNetWorth()
         {
             int netWorth = this.BankCredits + this.CashCredits;

@@ -24,14 +24,14 @@ namespace CosmoMonger.Controllers
     {
         
         /// <summary>
-        /// Redirects to the ViewProfile action
+        /// Redirects to the PlayerProfile action
         /// </summary>
         /// <returns>
-        /// The ViewProfile action
+        /// The PlayerProfile action
         /// </returns>
         public ActionResult Index()
         {
-            return RedirectToAction("ViewProfile");
+            return RedirectToAction("PlayerProfile");
         }
 
         /// <summary>
@@ -52,11 +52,11 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Creates a player using the inputed player name and race by calling the User.CreatePlayer method. 
         /// Raises an error if another player with the same name already exists.
-        /// Redirects to ViewProfile view if player is successfully created, CreatePlayer view otherwise.
+        /// Redirects to PlayerProfile view if player is successfully created, CreatePlayer view otherwise.
         /// </summary>
         /// <param name="name">The name for the new player.</param>
         /// <param name="raceId">The race id for the new player.</param>
-        /// <returns>The ViewProfile view if player is created, CreatePlayer view otherwise.</returns>
+        /// <returns>The PlayerProfile view if player is created, CreatePlayer view otherwise.</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult CreatePlayer(string name, int raceId)
         {
@@ -87,15 +87,15 @@ namespace CosmoMonger.Controllers
                 return CreatePlayer();
             }
 
-            return RedirectToAction("ViewProfile", newPlayer.PlayerId);
+            return RedirectToAction("PlayerProfile", newPlayer.PlayerId);
         }
 
         /// <summary>
-        /// Looks up the profile data for the passed in player id and returns the ViewProfile view.
+        /// Looks up the profile data for the passed in player id and returns the PlayerProfile view.
         /// </summary>
         /// <param name="playerId">The id of the player to view.</param>
-        /// <returns>The ViewProfile view with the Player model data.</returns>
-        public ActionResult ViewProfile()
+        /// <returns>The PlayerProfile view with the Player model data.</returns>
+        public ActionResult PlayerProfile()
         {
             if (this.ControllerGame.CurrentPlayer == null)
             {
@@ -105,17 +105,17 @@ namespace CosmoMonger.Controllers
             else
             {
                 // Otherwise, show the profile of the current player
-                return ViewProfile(this.ControllerGame.CurrentPlayer.PlayerId);
+                return PlayerProfile(this.ControllerGame.CurrentPlayer.PlayerId);
             }
         }
 
         /// <summary>
-        /// Looks up the profile data for the passed in player id and returns the ViewProfile view.
+        /// Looks up the profile data for the passed in player id and returns the PlayerProfile view.
         /// </summary>
         /// <param name="playerId">The id of the player to view.</param>
-        /// <returns>The ViewProfile view with the Player model data.</returns>
+        /// <returns>The PlayerProfile view with the Player model data.</returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult ViewProfile(int playerId)
+        public ActionResult PlayerProfile(int playerId)
         {
             ViewData["Title"] = "View Player Profile";
             ViewData["Player"] = this.ControllerGame.GetPlayer(playerId);
@@ -125,8 +125,8 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Edit the current users profile
         /// </summary>
-        /// <returns>The EditProfile view</returns>
-        public ActionResult EditProfile()
+        /// <returns>The UserProfile view</returns>
+        public ActionResult UserProfile()
         {
             ViewData["Title"] = "Edit Player Profile";
             return View();
@@ -134,17 +134,17 @@ namespace CosmoMonger.Controllers
 
         /// <summary>
         /// Saves the edited profile data using the User.UpdateProfile and Player.UpdateProfile methods.
-        /// Returns EditProfile view if there is an error in saving the profile data.
-        /// If no error was found the ViewProfile view is returned.
+        /// Returns UserProfile view if there is an error in saving the profile data.
+        /// If no error was found the PlayerProfile view is returned.
         /// </summary>
         /// <param name="playerId">The player id to update.</param>
         /// <param name="characterName">The updated character name.</param>
         /// <returns>
-        /// The ViewProfile action if no error was encountered. 
-        /// The EditProfile view is returned on errors requiring a change of input.
+        /// The PlayerProfile action if no error was encountered. 
+        /// The UserProfile view is returned on errors requiring a change of input.
         /// </returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult EditProfile(int playerId, string characterName)
+        public ActionResult UserProfile(int playerId, string characterName)
         {
             Player updatePlayer = this.ControllerGame.GetPlayer(playerId);
             try
@@ -160,14 +160,14 @@ namespace CosmoMonger.Controllers
                 }
                 else
                 {
-                    Logger.Write("Unknown error when Player.UpdateProfile was called with characterName: " + characterName + " Exception Details: " + ex.ToString(), "Controller", 100, 1003, TraceEventType.Error, "ArgumentException in PlayerController.EditProfile");
+                    Logger.Write("Unknown error when Player.UpdateProfile was called with characterName: " + characterName + " Exception Details: " + ex.ToString(), "Controller", 100, 1003, TraceEventType.Error, "ArgumentException in PlayerController.UserProfile");
                     ModelState.AddModelError("_FORM", "Unknown error");
                 }
 
                 return View();
             }
 
-            return RedirectToAction("ViewProfile", updatePlayer.PlayerId);
+            return RedirectToAction("PlayerProfile", updatePlayer.PlayerId);
         }
     }
 }
