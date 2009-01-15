@@ -2,16 +2,16 @@
 
 <script runat="server">
 
-    protected void Page_Load(object sender, EventArgs e)
-    {
+protected void Page_Load(object sender, EventArgs e)
+{
 
-    }
+}
 </script>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div>
         <p>
-            <span style="font-size: medium;">
+            <span class="cp-topLines">
             Welcome! Before you can begin playing, you 
             need to set up a player profile.
             </span>
@@ -128,47 +128,48 @@
             window.onload = UpdateRaceImage;
         </script>
         <p>
-            <span style="font-size: medium;">
+            <span class="cp-topLines">
             You may wish to glance at the rules before selecting your character's race.
             </span>
         </p>
-        <%= Html.ValidationSummary() %>
-        <% using (Html.BeginForm()) { %>
-            <table style="width: 100%">
+        <%= Html.ValidationSummary()%>
+        <% using (Html.BeginForm())
+           { %>
+            <table class="cp-table">
                 <tr>
-                    <td style="width: 10%">Name:</td>
-                    <td style="width: 20%">
-                        <%= Html.TextBox("name") %>
+                    <td class="cp-leftHeaders">Name:</td>
+                    <td class="cp-leftData">
+                        <%= Html.TextBox("name")%>
                         <%= Html.ValidationMessage("name")%>
                     </td>
                     <td rowspan="3" style="width: 40%" align="center">
                         <img id="RaceImg" src="" alt="Race Image" width="100px" height="100px" style="margin-left: 0px"/>
                     </td>
-                    <td style="width: 15%">Home System:</td>
+                    <td  class="cp-rightHeaders">Home System:</td>
                     <% 
-                        string[,] races = new string[6, 9];
-                        int i = 1; 
-                        foreach (Race race in (Race [])ViewData["Races"])
-                        {
-                            races[i, 1] = race.Weapons.ToString();
-                            races[i, 2] = race.Shields.ToString();
-                            races[i, 3] = race.Engine.ToString();
-                            races[i, 4] = race.Accuracy.ToString(); 
-                            races[i, 5] = race.HomeSystem.Name; 
-                            races[i, 6] = race.Description; 
-                            races[i, 7] = race.RacialEnemy.Name;
-                            if (race.RacialPreference != null)
-                            {
-                                races[i, 8] = race.RacialPreference.Name; 
-                            }
-                            else
-                            {
-                                races[i, 8] = "None";
-                            }
-                            i++;
-                        }
+string[,] races = new string[6, 9];
+int i = 1;
+foreach (Race race in (Race[])ViewData["Races"])
+{
+    races[i, 1] = race.Weapons.ToString();
+    races[i, 2] = race.Shields.ToString();
+    races[i, 3] = race.Engine.ToString();
+    races[i, 4] = race.Accuracy.ToString();
+    races[i, 5] = race.HomeSystem.Name;
+    races[i, 6] = race.Description;
+    races[i, 7] = race.RacialEnemy.Name;
+    if (race.RacialPreference != null)
+    {
+        races[i, 8] = race.RacialPreference.Name;
+    }
+    else
+    {
+        races[i, 8] = "None";
+    }
+    i++;
+}
                     %>
-                    <td style="width: 15%">
+                    <td class="cp-rightData">
                         <div class="race" id="SkummHomeSystem"><%= races[1, 5]%></div>
                         <div class="race" id="DecapodianHomeSystem"><%= races[2, 5]%></div>
                         <div class="race" id="ShrodinoidHomeSystem"><%= races[4, 5]%></div>
@@ -179,8 +180,8 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <td>Racial Preference</td>
-                    <td style="width: 15%">
+                    <td class="cp-rightHeaders">Racial Preference</td>
+                    <td class="cp-rightData">
                         <div class="race" id="SkummRacialPreference"><%= races[1, 8]%></div>
                         <div class="race" id="DecapodianRacialPreference"><%= races[2, 8]%></div>
                         <div class="race" id="ShrodinoidRacialPreference"><%= races[4, 8]%></div>
@@ -189,13 +190,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Race:</td>
-                    <td style="width: 20%">
+                    <td class=".cp-leftHeaders">Race:</td>
+                    <td class="cp-leftData">
                         <%= Html.DropDownList("raceId", new { onChange = "UpdateRaceImage();" })%>
                         <%= Html.ValidationMessage("raceId")%> 
                     </td>
-                    <td>Racial Enemy</td>
-                    <td style="width: 15%">
+                    <td class="cp-rightHeaders">Racial Enemy</td>
+                    <td class="cp-rightData">
                         <div class="race" id="SkummRacialEnemy"><%= races[1, 7]%></div>
                         <div class="race" id="DecapodianRacialEnemy"><%= races[2, 7]%></div>
                         <div class="race" id="ShrodinoidRacialEnemy"><%= races[4, 7]%></div>
@@ -204,40 +205,40 @@
                     </td>
                 </tr>     
               </table>
-              <table style="width: 100%">    
-                
+              <table class="cp-table">    
+               <tr><td>&nbsp;</td></tr> 
                 <%--Racial Modifiers --%>
                 <tr>
-                    <td style="width: 20%" align="left">Racial Modifiers</td>
-                    <td style="width: 20%" align="center">Weapon</td>
-                    <td style="width: 20%" align="center">Shield</td>
-                    <td style="width: 20%" align="center">Accuracy</td>
-                    <td style="width: 20%" align="center">Engine</td> 
+                    <td class="cp-racialMods">Racial Modifiers</td>
+                    <td class="cp-racialMods">Weapon</td>
+                    <td class="cp-racialMods">Shield</td>
+                    <td class="cp-racialMods">Accuracy</td>
+                    <td class="cp-racialMods">Engine</td> 
                 </tr>
                 <tr>
-                    <td style="width: 20%" align="left"></td>
-                    <td style="width: 20%" align="center">
+                    <td class="cp-racialMods">Value</td>
+                    <td class="cp-racialMods">
                         <div class="race" id="SkummWeapon"><%= races[1, 1]%></div>
                         <div class="race" id="DecapodianWeapon"><%= races[2, 1]%></div>
                         <div class="race" id="ShrodinoidWeapon"><%= races[4, 1]%></div>
                         <div class="race" id="BinariteWeapon"><%= races[3, 1]%></div>
                         <div class="race" id="HumanWeapon"><%= races[5, 1]%></div>
                     </td>
-                    <td style="width: 20%" align="center">
+                    <td class="cp-racialMods">
                         <div class="race" id="SkummShield"><%= races[1, 2]%></div>
                         <div class="race" id="DecapodianShield"><%= races[2, 2]%></div>
                         <div class="race" id="ShrodinoidShield"><%= races[4, 2]%></div>
                         <div class="race" id="BinariteShield"><%= races[3, 2]%></div>
                         <div class="race" id="HumanShield"><%= races[5, 2]%></div>
                     </td>
-                    <td style="width: 20%" align="center">
+                    <td class="cp-racialMods">
                         <div class="race" id="SkummAccuracy"><%= races[1, 4]%></div>
                         <div class="race" id="DecapodianAccuracy"><%= races[2, 4]%></div>
                         <div class="race" id="ShrodinoidAccuracy"><%= races[4, 4]%></div>
                         <div class="race" id="BinariteAccuracy"><%= races[3, 4]%></div>
                         <div class="race" id="HumanAccuracy"><%= races[5, 4]%></div>
                     </td>
-                    <td style="width: 20%" align="center">
+                    <td class="cp-racialMods">
                         <div class="race" id="SkummEngine"><%= races[1, 3]%></div>
                         <div class="race" id="DecapodianEngine"><%= races[2, 3]%></div>
                         <div class="race" id="ShrodinoidEngine"><%= races[4, 3]%></div>
@@ -245,6 +246,7 @@
                         <div class="race" id="HumanEngine"><%= races[5, 3]%></div>
                     </td> 
                 </tr>
+                <tr><td>&nbsp;</td></tr>
                 <tr><td  align="center" colspan="5">Description</td></tr>
                 <tr>
                     <td colspan="5" align="left">
@@ -255,7 +257,7 @@
                         <div class="race" id="HumanDescription"><%= races[5, 6]%></div>
                     </td> 
                 </tr>
-                
+                <tr><td>&nbsp;</td></tr>
                 <tr>
                     <td colspan="5" align="center"><input type="submit" value="Create Player" /></td>
                 </tr>
