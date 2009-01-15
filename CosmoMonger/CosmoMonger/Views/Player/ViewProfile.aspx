@@ -52,7 +52,18 @@
 </tr>
 <tr>
     <td class="vp-columnData">Discount/Bonus:</td>
-    <td class="vp-columnData"><%=player.Race.RacialPreference.Name%>s</td>
+    <% string racePref;
+       if (player.Race.RacialPreference == null)
+       {
+           racePref = "None";
+       }
+       else
+       {
+           racePref = player.Race.RacialPreference.Name + "s";
+       }
+           
+            %>
+    <td class="vp-columnData"><%=racePref%></td>
     <td colspan="2"></td><td align="center" colspan="2">
     <asp:Button ID="newPlayerButton" runat="server" Text="Kill Current Player" 
                                 Height="25px" Width="121px" /></td>
