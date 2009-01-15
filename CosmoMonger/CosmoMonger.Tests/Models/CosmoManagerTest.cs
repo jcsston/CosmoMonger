@@ -32,23 +32,24 @@
         }
 
         [Test]
+        public void DoPendingNPCActions()
+        {
+            CosmoManager manager = new CosmoManager();
+            manager.DoPendingNPCActions();
+        }
+
+        [Test]
         public void UpdateSystemGoodCount()
         {
             CosmoManager manager = new CosmoManager();
-            for (int i = 0; i < 1000; i++)
-            {
-                manager.UpdateSystemGoodCount();
-            }
+            manager.UpdateSystemGoodCount();
         }
 
         [Test]
         public void UpdateSystemGoodPrice()
         {
             CosmoManager manager = new CosmoManager();
-            for (int i = 0; i < 10; i++)
-            {
-                manager.UpdateSystemGoodPrice();
-            }
+            manager.UpdateSystemGoodPrice();
         }
     }
 }

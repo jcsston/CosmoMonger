@@ -1,20 +1,26 @@
-﻿namespace CosmoMonger.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="AccountController.cs" company="CosmoMonger">
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Controllers
 {
     using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Linq;
     using System.Security.Principal;
-    using System.Web;
     using System.Web.Mvc;
+    using System.Web.Routing;
     using System.Web.Security;
     using System.Web.UI;
+    using CosmoMonger.Controllers.Attributes;
     using CosmoMonger.Models;
+    using CosmoMonger.Models.Utility;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
     using Recaptcha;
-    using System.Web.Routing;
 
     /// <summary>
     /// This controller manages user account creation, login, and logout
@@ -36,7 +42,7 @@
         /// <summary>
         /// Initializes a new instance of the AccountController class.
         /// This constructor is not used by the MVC framework but is instead provided for ease
-        /// of unit testing this type. See the comments at the end of this file for more
+        /// of unit testing this type. See the comments on the IFormsAuthentication interface for more
         /// information.
         /// </summary>
         public AccountController(IFormsAuthentication formsAuth, MembershipProvider provider)
@@ -386,30 +392,6 @@
                 default:
                     return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
-        }
-    }
-
-    // The FormsAuthentication type is sealed and contains static members, so it is difficult to
-    // unit test code that calls its members. The interface and helper class below demonstrate
-    // how to create an abstract wrapper around such a type in order to make the AccountController
-    // code unit testable.
-
-    public interface IFormsAuthentication
-    {
-        void SetAuthCookie(string userName, bool createPersistentCookie);
-        void SignOut();
-    }
-
-    public class FormsAuthenticationWrapper : IFormsAuthentication
-    {
-        public void SetAuthCookie(string userName, bool createPersistentCookie)
-        {
-            FormsAuthentication.SetAuthCookie(userName, createPersistentCookie);
-        }
-
-        public void SignOut()
-        {
-            FormsAuthentication.SignOut();
         }
     }
 }

@@ -61,10 +61,8 @@ namespace CosmoMonger.Models
 
             playerShip.BaseShip = baseShip;
 
-            // Assign the default starting location
-            CosmoSystem startingSystem = (from s in db.CosmoSystems
-                                          where s.Name == "Sol"
-                                          select s).SingleOrDefault();
+            // Assign the default starting location based on the race
+            CosmoSystem startingSystem = race.HomeSystem;
             if (startingSystem == null)
             {
                 Logger.Write("Unable to load player starting system from database", "Model", 9999, 4, TraceEventType.Critical);

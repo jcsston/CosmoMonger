@@ -27,7 +27,26 @@
             return CreateTestPlayer(playerCount + this.baseTestUsername, playerCount + this.baseTestEmail, this.baseTestPlayerName);
         }
 
+        protected Player CreateTestPlayer(Race playerRace)
+        {
+            playerCount++;
+            return CreateTestPlayer(playerCount + this.baseTestUsername, playerCount + this.baseTestEmail, this.baseTestPlayerName, playerRace);
+        }
+
         private Player CreateTestPlayer(string baseTestUsername, string baseTestEmail, string baseTestPlayerName)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Default to Human race
+            Race humanRace = (from r in db.Races
+                              where r.Name == "Human"
+                              select r).SingleOrDefault();
+            Assert.IsNotNull(humanRace, "Human Race needs to be present in the database");
+
+            return this.CreateTestPlayer(baseTestUsername, baseTestEmail, baseTestPlayerName, humanRace);
+        }
+
+        private Player CreateTestPlayer(string baseTestUsername, string baseTestEmail, string baseTestPlayerName, Race playerRace)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
@@ -39,10 +58,7 @@
             User testUserModel = testUser.GetUserModel();
             Assert.IsNotNull(testUserModel, "Able to get model object for user");
 
-            Race humanRace = (from r in db.Races
-                              where r.Name == "Human"
-                              select r).SingleOrDefault();
-            return testUserModel.CreatePlayer(baseTestUsername, humanRace);
+            return testUserModel.CreatePlayer(baseTestUsername, playerRace);
         }
 
         [SetUp]

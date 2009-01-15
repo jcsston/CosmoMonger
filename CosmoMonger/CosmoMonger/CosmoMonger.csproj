@@ -86,7 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\CosmoMongerHandleErrorAttribute.cs" />
+    <Compile Include="Controllers\Attributes\CosmoMongerHandleErrorAttribute.cs" />
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
@@ -111,7 +111,7 @@
     <Compile Include="Models\CosmoMongerMembershipUser.cs" />
     <Compile Include="Models\CosmoSystem.cs" />
     <Compile Include="Models\GameManager.cs" />
-    <Compile Include="Controllers\LogRequestAttribute.cs" />
+    <Compile Include="Controllers\Attributes\LogRequestAttribute.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Ship.cs" />
@@ -120,6 +120,8 @@
     <Compile Include="Models\SystemShip.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Utility\DataContextFactory.cs" />
+    <Compile Include="Models\Utility\FormsAuthenticationWrapper.cs" />
+    <Compile Include="Models\Utility\IFormsAuthentication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

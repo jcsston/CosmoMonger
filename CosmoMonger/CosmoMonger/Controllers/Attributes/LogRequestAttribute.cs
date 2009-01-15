@@ -1,8 +1,14 @@
-﻿namespace CosmoMonger.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="LogRequestAttribute.cs" company="CosmoMonger">
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Controllers.Attributes
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Threading;
     using System.Web.Mvc;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 

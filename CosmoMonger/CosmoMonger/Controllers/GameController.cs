@@ -1,17 +1,14 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="GameController.cs" company="CosmoMonger">
-//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
 //-----------------------------------------------------------------------
 namespace CosmoMonger.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
-    using System.Web.Mvc.Ajax;
+    using CosmoMonger.Controllers.Attributes;
     using CosmoMonger.Models;
 
     /// <summary>

@@ -1,12 +1,14 @@
-﻿namespace CosmoMonger.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="CosmoMongerHandleErrorAttribute.cs" company="CosmoMonger">
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Controllers.Attributes
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
-    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging;
 
     public class CosmoMongerHandleErrorAttribute : HandleErrorAttribute
     {
