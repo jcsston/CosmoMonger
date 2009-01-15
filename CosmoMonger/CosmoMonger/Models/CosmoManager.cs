@@ -142,8 +142,8 @@ namespace CosmoMonger.Models
                 newPriceMultipler = newPriceMultipler * (rnd.NextDouble() + 0.5);
 
                 // Limit the price multipler to between 0.5 and 3.0
-                newPriceMultipler = Math.Max(0.5, newPriceMultipler);
-                newPriceMultipler = Math.Min(3.0, newPriceMultipler);
+                newPriceMultipler = Math.Max(0.25, newPriceMultipler);
+                newPriceMultipler = Math.Min(4.0, newPriceMultipler);
 
                 // Take average of previous and current price multipler
                 good.PriceMultiplier = (good.PriceMultiplier + newPriceMultipler) / 2.0;
