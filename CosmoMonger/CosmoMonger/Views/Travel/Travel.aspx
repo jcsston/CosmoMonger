@@ -35,7 +35,6 @@
                     double pixelPerPoint = 1.0 * displaySize / galaxySize;
                 %>
                 <div id="map" class="galaxy-map">
-                <ul>
                 <% 
                     foreach (CosmoMonger.Models.CosmoSystem system in (ViewData["Systems"] as CosmoMonger.Models.CosmoSystem[]))
                     {
@@ -62,7 +61,6 @@
                             width="20px" height="20px" />
                      </a>
                 <% } %>
-                </ul>
                 <%
                     // Calcuate the size and position of the in-range circle
                     int shipRange = (int)ViewData["Range"];

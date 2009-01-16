@@ -47,5 +47,37 @@ namespace CosmoMonger.Controllers
                 return this.gameManager;
             }
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameController"/> class.
+        /// This is the default constructor that doesn't really to anything.
+        /// </summary>
+        public GameController()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameController"/> class.
+        /// This constructor is used for unit testing purposes.
+        /// </summary>
+        /// <param name="manager">The game manager object to use.</param>
+        public GameController(GameManager manager)
+        {
+            this.gameManager = manager;
+        }
+
+        protected override void OnResultExecuting(ResultExecutingContext filterContext)
+        {
+            // Check if the user has a current player and is not trying to create a player
+            if (this.ControllerGame.CurrentPlayer == null && filterContext.Controller.GetType() != typeof(PlayerController) && filterContext.RouteData.Values["action"] != "CreatePlayer")
+            {
+                // Redirect to the CreatePlayer action
+                filterContext.HttpContext.Response.Redirect(this.Url.Action("CreatePlayer", "Player"));
+            }
+            else
+            {
+                base.OnResultExecuting(filterContext);
+            }
+        }
     }
 }

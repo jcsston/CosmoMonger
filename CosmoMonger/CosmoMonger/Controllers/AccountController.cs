@@ -160,6 +160,7 @@ namespace CosmoMonger.Controllers
 
                     if (loginSuccessful)
                     {
+                        
                         return new FormsLoginResult(username, rememberMe);
                     }
                     else if (!user.IsApproved)

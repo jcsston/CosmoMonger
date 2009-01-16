@@ -368,7 +368,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="baseVerificationCodeUrl">The base verification code URL. Example: http://localhost:54084/Account/VerifyEmail?username=jcsston&amp;verificationCode=</param>
         /// <returns>True if the e-mail was successfully sent to the SMTP server. False if sending to the SMTP server failed.</returns>
-        public bool SendVerificationCode(string baseVerificationCodeUrl)
+        public virtual bool SendVerificationCode(string baseVerificationCodeUrl)
         {
             // Build e-mail message
             MailMessage msg = new MailMessage();
