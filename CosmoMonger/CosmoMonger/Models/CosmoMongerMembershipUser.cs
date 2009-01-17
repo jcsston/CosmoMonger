@@ -273,7 +273,10 @@ namespace CosmoMonger.Models
             }
             else
             {
-                Debug.Assert(this.user.Active, "The user has to be active to validate the password");
+                if (!this.user.Active)
+                {
+                    throw new InvalidOperationException("The user has to be active to validate the password");
+                }
 
                 this.user.LoginAttemptCount += 1;
                 
@@ -298,7 +301,13 @@ namespace CosmoMonger.Models
                     }
                     catch (ArgumentOutOfRangeException ex)
                     {
-                        Logger.Write("Exception when delaying login: " + ex, "Business Object", 1, 1023, TraceEventType.Error, "Exception in CosmoMongerMembershipUser.ValidatePassword");
+                        Dictionary<string, object> props = new Dictionary<string, object>
+                        {
+                            { "Error", ex },
+                            { "UserId", this.user.UserId },
+                            { "LoginAttemptCount", this.user.LoginAttemptCount }
+                        };
+                        Logger.Write("Exception when delaying login", "Business Object", 1, 1023, TraceEventType.Error, "Exception in CosmoMongerMembershipUser.ValidatePassword", props);
                     }
 
                     // Re-enable the user
@@ -376,10 +385,15 @@ namespace CosmoMonger.Models
             msg.To.Add(this.Email);
             msg.Subject = "Email Verification for CosmoMonger";
             msg.Body =
-                "To verify your CosmoMonger account go to\n" +
-                baseVerificationCodeUrl + this.VerificationCode + "\n\n" +
-                "Verification Code: " + this.VerificationCode;
-
+                "Welcome to CosmoMonger. To activate your account and verify your e-mail\n" +
+                "address, please click on the following link:\n\n" +
+                baseVerificationCodeUrl + this.VerificationCode + "\n\n" + 
+                "If you have received this mail in error, you do not need to take any\n" +
+                "action to cancel the account. The account will not be activated, and\n" +
+                "you will not receive any further emails.\n\n" +
+                "If clicking the link above does not work, copy and paste the URL in a\n" +
+                "new browser window instead.\n\n" +
+                "Thank you for playing CosmoMonger.";
             try
             {
                 // Send e-mail

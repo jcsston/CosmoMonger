@@ -13,6 +13,7 @@ namespace CosmoMonger.Tests.Controllers
     using NUnit.Framework.SyntaxHelpers;
     using CosmoMonger.Models;
     using Moq.Mvc;
+    using System.Web.Routing;
 
     [TestFixture]
     public class AccountControllerTest
@@ -62,8 +63,10 @@ namespace CosmoMonger.Tests.Controllers
         }
 
         [Test]
+        [Ignore("This test is not complete yet")]
         public void SendVerificationCodeSuccessful()
         {
+            // Arrange
             string testUserName = "TestUser";
 
             Mock<User> mockUserModel = new Mock<User>();
@@ -78,13 +81,29 @@ namespace CosmoMonger.Tests.Controllers
             // Mock the HTTP request also
             HttpRequestMock mockRequest = new HttpRequestMock();
             Uri mockUrl = new Uri("http://www.cosmomonger.com/Account/SendVerificationCode?username=TestUser");
-            mockRequest.ExpectGet(m => m.Url)
-                .Returns(mockUrl).AtMostOnce().Verifiable();
+            mockRequest.Expect(r => r.Url)
+                .Returns(mockUrl);
+            mockRequest.Expect(r => r.HttpMethod)
+                .Returns("GET");
+            mockRequest.Expect(r => r.AppRelativeCurrentExecutionFilePath)
+                .Returns("~/Account/");
+            
+            HttpContextMock mockHttpContext = new HttpContextMock();
+            mockHttpContext.Expect(c => c.Request)
+                .Returns(mockRequest.Object);
+
+            RouteCollection routeCollection = new RouteCollection();
+            MvcApplication.RegisterRoutes(routeCollection);
+            RouteData route = routeCollection.GetRouteData(mockHttpContext.Object);
 
             AccountController controller = new AccountController(mockMembership.Object);
+            controller.ControllerContext = new ControllerContext(mockHttpContext.Object, route, new Mock<ControllerBase>().Object);
+            controller.Url = new UrlHelper(new RequestContext(mockHttpContext.Object, route));
+            
+            // Act
             ViewResult result = (ViewResult)controller.SendVerificationCode(testUserName);
 
-
+            // Assert
             Assert.That(result.ViewName, Is.EqualTo("SentVerificationCode"), "Should have returned the SentVerificationCode view");
         }
     }

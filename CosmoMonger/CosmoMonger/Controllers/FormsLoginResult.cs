@@ -7,9 +7,9 @@
 
     public class FormsLoginResult : ActionResult
     {
-        private string _userName;
-        private string _userData;
-        private bool _persistentCookie;
+        private string userName;
+        private string userData;
+        private bool persistentCookie;
 
         public FormsLoginResult(string userName)
             : this(userName, /* persistentCookie */ false)
@@ -22,41 +22,41 @@
             {
                 throw new ArgumentNullException("userName");
             }
-            _userName = userName;
-            _persistentCookie = persistentCookie;
+            this.userName = userName;
+            this.persistentCookie = persistentCookie;
         }
 
         public bool PersistentCookie
         {
-            get { return _persistentCookie; }
+            get { return this.persistentCookie; }
         }
 
         public string UserData
         {
-            get { return _userData; }
-            set { _userData = value; }
+            get { return this.userData; }
+            set { this.userData = value; }
         }
 
         public string UserName
         {
-            get { return _userName; }
+            get { return this.userName; }
         }
 
         public override void ExecuteResult(ControllerContext context)
         {
             HttpResponseBase response = context.HttpContext.Response;
 
-            if (String.IsNullOrEmpty(_userData))
+            if (String.IsNullOrEmpty(this.userData))
             {
-                FormsAuthentication.SetAuthCookie(_userName, _persistentCookie);
+                FormsAuthentication.SetAuthCookie(this.userName, this.persistentCookie);
             }
             else
             {
                 FormsAuthenticationTicket ticket =
-                    new FormsAuthenticationTicket(1, _userName,
-                                                  DateTime.Now, DateTime.Now.AddMinutes(30),
-                                                  _persistentCookie,
-                                                  _userData,
+                    new FormsAuthenticationTicket(1, this.userName,
+                                                  DateTime.Now, DateTime.Now.AddMinutes(15),
+                                                  this.persistentCookie,
+                                                  this.userData,
                                                   FormsAuthentication.FormsCookiePath);
                 string encryptedTicket = FormsAuthentication.Encrypt(ticket);
 
@@ -73,7 +73,7 @@
                 response.Cookies.Add(cookie);
             }
 
-            response.Redirect(FormsAuthentication.GetRedirectUrl(_userName, _persistentCookie));
+            response.Redirect(FormsAuthentication.GetRedirectUrl(this.userName, this.persistentCookie));
         }
     }
 }

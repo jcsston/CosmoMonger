@@ -9,7 +9,7 @@
 
     public class FormsLogoutResult : ActionResult
     {
-        private string _url;
+        private string url;
 
         public FormsLogoutResult()
             : this(FormsAuthentication.DefaultUrl)
@@ -20,20 +20,20 @@
         {
             if (String.IsNullOrEmpty(url))
             {
-                throw new ArgumentNullException("url");
+                throw new ArgumentNullException("url", "Redirect URL cannot be empty");
             }
-            _url = url;
+            this.url = url;
         }
 
         public string Url
         {
-            get { return _url; }
+            get { return this.url; }
         }
 
         public override void ExecuteResult(ControllerContext context)
         {
             FormsAuthentication.SignOut();
-            context.HttpContext.Response.Redirect(_url);
+            context.HttpContext.Response.Redirect(this.url);
         }
     }
 
