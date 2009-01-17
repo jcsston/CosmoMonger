@@ -80,6 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountControllerTest.cs" />
+    <Compile Include="Controllers\CachingXmlResolver.cs" />
+    <Compile Include="Controllers\ValidationRecord.cs" />
+    <Compile Include="Controllers\XhtmlValidator.cs" />
     <Compile Include="Models\BasePlayerTest.cs" />
     <Compile Include="Models\CosmoManagerTest.cs" />
     <Compile Include="Models\CosmoMongerMembershipProviderTest.cs" />
