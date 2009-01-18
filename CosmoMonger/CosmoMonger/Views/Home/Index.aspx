@@ -2,7 +2,7 @@
 
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
     <form id="form1" runat="server">
-    <h2>Welcome to CosmoMonger!</h2>
+    <h2>Welcome to CosmoMonger <i class="error">(Under Development)</i></h2>
     <p>
         CosmoMonger is an on-line space-based trading game featuring real-time 
         multi-player interaction.&nbsp; Players own a starship which they use to visit 
