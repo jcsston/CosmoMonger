@@ -27,7 +27,7 @@ namespace CosmoMonger.Tests.Controllers
             // Setup the mock objects
             Mock<MembershipProvider> mockMembership = new Mock<MembershipProvider>();
             Mock<MembershipUser> mockUser = new Mock<MembershipUser>();
-            mockMembership.Expect<MembershipUser>(m => m.GetUser(testUserName, false))
+            mockMembership.Expect<MembershipUser>(m => m.GetUser(testUserName, true))
                 .Returns(mockUser.Object).AtMostOnce().Verifiable();
 
             mockMembership.Expect<bool>(m => m.ValidateUser(testUserName, testPassword))
@@ -51,7 +51,7 @@ namespace CosmoMonger.Tests.Controllers
 
             Mock<MembershipProvider> mockMembership = new Mock<MembershipProvider>();
             Mock<MembershipUser> mockUser = new Mock<MembershipUser>();
-            mockMembership.Expect<MembershipUser>(m => m.GetUser(testUserName, false))
+            mockMembership.Expect<MembershipUser>(m => m.GetUser(testUserName, true))
                 .Returns(mockUser.Object).AtMostOnce().Verifiable();
             mockMembership.Expect<bool>(m => m.ValidateUser(testUserName, testPassword))
                .Returns(true).AtMostOnce().Verifiable();
