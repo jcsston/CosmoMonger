@@ -85,6 +85,39 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Updates the play time for this player.
+        /// </summary>
+        public void UpdatePlayTime()
+        {
+            if (this.Alive)
+            {
+                // Calcuate time since last play
+                TimeSpan playTimeLength = DateTime.Now - this.LastPlayed;
+                
+                // Login timeout is 5 minutes, so we ignore times greater than 5 minutes
+                if (playTimeLength.TotalMinutes < 5)
+                {
+                    // Update the time played
+                    this.TimePlayed += playTimeLength.TotalSeconds;
+
+                    // Check if the time player is past 7 days
+                    if (this.TimePlayed > 60 * 60 * 24 * 7)
+                    {
+                        // Player has reached the time limit
+                        this.Alive = false; // Die, die, die!!!
+                    }
+                }
+
+                // Update last play datetime
+                this.LastPlayed = DateTime.Now;
+
+                // Send changes to database
+                CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+                db.SubmitChanges();
+            }
+        }
+
+        /// <summary>
         /// A property changed event, called when CashCredits is changed.
         /// </summary>
         partial void OnCashCreditsChanged()

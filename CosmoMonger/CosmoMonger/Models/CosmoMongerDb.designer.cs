@@ -2666,7 +2666,7 @@ namespace CosmoMonger.Models
 		
 		private int _CashCredits;
 		
-		private int _TimePlayed;
+		private double _TimePlayed;
 		
 		private System.DateTime _LastPlayed;
 		
@@ -2720,7 +2720,7 @@ namespace CosmoMonger.Models
     partial void OnBankCreditsChanged();
     partial void OnCashCreditsChanging(int value);
     partial void OnCashCreditsChanged();
-    partial void OnTimePlayedChanging(int value);
+    partial void OnTimePlayedChanging(double value);
     partial void OnTimePlayedChanged();
     partial void OnLastPlayedChanging(System.DateTime value);
     partial void OnLastPlayedChanged();
@@ -2930,8 +2930,8 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_TimePlayed", DbType="Int NOT NULL")]
-		public int TimePlayed
+		[Column(Storage="_TimePlayed", DbType="float NOT NULL")]
+		public double TimePlayed
 		{
 			get
 			{

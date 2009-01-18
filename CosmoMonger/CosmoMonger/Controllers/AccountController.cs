@@ -152,7 +152,7 @@ namespace CosmoMonger.Controllers
             if (ViewData.ModelState.IsValid)
             {
                 // Attempt to login
-                MembershipUser user = Provider.GetUser(username, false);
+                MembershipUser user = Provider.GetUser(username, true);
                 if (user != null)
                 {
 

@@ -81,6 +81,12 @@ namespace CosmoMonger.Controllers
             }
             else
             {
+                // Update the player playtime
+                if (this.ControllerGame.CurrentPlayer != null)
+                {
+                    this.ControllerGame.CurrentPlayer.UpdatePlayTime();
+                }
+
                 base.OnResultExecuting(filterContext);
             }
         }

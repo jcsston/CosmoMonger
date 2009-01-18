@@ -137,7 +137,8 @@ page width. Or, you can specify an exact pixel width. */
 
 .error
 {
-    color:Red;
+    padding: 2px;
+    color: Red;
 }
 
 #title

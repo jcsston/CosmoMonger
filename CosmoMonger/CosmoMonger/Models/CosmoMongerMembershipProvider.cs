@@ -200,7 +200,7 @@ namespace CosmoMonger.Models
         /// </returns>
         public override bool ValidateUser(string username, string password)
         {
-            CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.GetUser(username, false);
+            CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.GetUser(username, true);
             if (user != null)
             {
                 return user.ValidatePassword(password)
@@ -266,7 +266,7 @@ namespace CosmoMonger.Models
         /// </returns>
         public override bool ChangePassword(string username, string oldPassword, string newPassword)
         {
-            CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.GetUser(username, false);
+            CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.GetUser(username, true);
             if (user != null)
             {
                 return user.ChangePassword(oldPassword, newPassword);

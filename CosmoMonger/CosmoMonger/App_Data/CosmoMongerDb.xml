@@ -1097,4 +1097,12 @@
       </column>
     </addColumn>
   </changeSet>
+  <changeSet author="Jory Stone" id="38">
+    <comment>Changed the TimePlayed column on the Player table to float so we can track seconds played more accurately</comment>
+    <modifyColumn tableName="Player">
+      <column name="TimePlayed" type="float">
+        <constraints nullable="false" />
+      </column>
+    </modifyColumn>
+  </changeSet>
 </databaseChangeLog>

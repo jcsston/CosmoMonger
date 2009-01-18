@@ -123,7 +123,7 @@
       <Column Name="ShipId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="BankCredits" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="CashCredits" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="TimePlayed" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TimePlayed" Type="System.Double" DbType="float NOT NULL" CanBeNull="false" />
       <Column Name="LastPlayed" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="NetWorth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="BountyTotal" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
