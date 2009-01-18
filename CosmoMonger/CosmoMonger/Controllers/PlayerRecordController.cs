@@ -22,28 +22,33 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Redirects to the ListRecords action.
         /// </summary>
+        /// <returns>A redirect to the ListRecords action</returns>
         public ActionResult Index()
         {
             return RedirectToAction("ListRecords");
         }
 
         /// <summary>
-	    /// Redirects to the ListRecords(string) with a default record type of NetWorth.
+        /// Redirects to the ListRecords(string) with a default record type of NetWorth.
         /// </summary>
+        /// <returns>Returns ListRecords(string) with a record type of NetWorth</returns>
         public ActionResult ListRecords()
-	    {
-            return ListRecords("NetWorth");
-	    }
+        {
+            return this.ListRecords("NetWorth");
+        }
 
         /// <summary>
-	    /// This Action will build a list of high ranking records via the GameManager.GetTopPlayers 
+        /// This Action will build a list of high ranking records via the GameManager.GetTopPlayers
         /// method to pass to the ListRecords View.
         /// </summary>
+        /// <param name="recordType">Type of the record to order the list by.</param>
+        /// <returns>The ListRecords view filled in with the top player record model data</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ListRecords(string recordType)
-	    {
+        {
             ViewData["Title"] = "List Top Player Records";
-            ViewData["RecordTypes"] = new string [] { 
+            ViewData["RecordTypes"] = new string[] 
+            { 
                 "NetWorth", 
                 "BountyTotal",
                 "HighestBounty",
@@ -58,13 +63,14 @@ namespace CosmoMonger.Controllers
             };
             ViewData["TopRecords"] = this.ControllerGame.GetTopPlayers(recordType, 10);
             return View();
-	    }
+        }
 
         /// <summary>
-	    /// This redirects to the ViewRecord(int) Action with the playerId filled in with the current player.
+        /// This redirects to the ViewRecord(int) Action with the playerId filled in with the current player.
         /// </summary>
+        /// <returns>The result of the ViewRecord(int) filled with the current player id</returns>
         public ActionResult ViewRecord()
-	    {
+        {
             if (this.ControllerGame.CurrentPlayer == null)
             {
                 // Go to the create action
@@ -73,20 +79,22 @@ namespace CosmoMonger.Controllers
             else
             {
                 // Otherwise, show the profile of the current player
-                return ViewRecord(this.ControllerGame.CurrentPlayer.PlayerId);
+                return this.ViewRecord(this.ControllerGame.CurrentPlayer.PlayerId);
             }
-	    }
+        }
 
         /// <summary>
-	    /// This Action fetches the passed in player via the GameManager.GetPlayer method 
+        /// This Action fetches the passed in player via the GameManager.GetPlayer method
         /// and displays the detailed stats for that player through the ViewRecord view.
         /// </summary>
+        /// <param name="playerId">The player id of the player record to display.</param>
+        /// <returns>The ViewRecord view filled in with the player model data</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ViewRecord(int playerId)
-	    {
+        {
             ViewData["Title"] = "View Player Record";
             ViewData["Player"] = this.ControllerGame.GetPlayer(playerId);
             return View();
-	    }
+        }
     }
 }

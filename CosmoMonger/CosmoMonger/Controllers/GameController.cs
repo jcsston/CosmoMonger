@@ -25,30 +25,6 @@ namespace CosmoMonger.Controllers
         private GameManager gameManager = null;
 
         /// <summary>
-        /// Gets the GameManager for the current player in the context of this controller.
-        /// </summary>
-        /// <value>The GameManager object for this controller.</value>
-        protected GameManager ControllerGame
-        {
-            get
-            {
-                if (this.gameManager == null)
-                {
-                    if (User != null && User.Identity.IsAuthenticated)
-                    {
-                        this.gameManager = new GameManager(User.Identity.Name);
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("This property should never be accessed by an un-authenticated user");
-                    }
-                }
-
-                return this.gameManager;
-            }
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="GameController"/> class.
         /// This is the default constructor that doesn't really to anything.
         /// </summary>
@@ -64,6 +40,30 @@ namespace CosmoMonger.Controllers
         public GameController(GameManager manager)
         {
             this.gameManager = manager;
+        }
+
+        /// <summary>
+        /// Gets the GameManager for the current player in the context of this controller.
+        /// </summary>
+        /// <value>The GameManager object for this controller.</value>
+        protected GameManager ControllerGame
+        {
+            get
+            {
+                if (this.gameManager == null)
+                {
+                    if (User != null && this.User.Identity.IsAuthenticated)
+                    {
+                        this.gameManager = new GameManager(this.User.Identity.Name);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("This property should never be accessed by an un-authenticated user");
+                    }
+                }
+
+                return this.gameManager;
+            }
         }
 
         /// <summary>

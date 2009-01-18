@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TradeController.cs" company="CosmoMonger">
-//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
 //-----------------------------------------------------------------------
@@ -32,9 +32,10 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
-        /// The system to list the goods from will be the current players system. 
+        /// The system to list the goods from will be the current players system.
         /// Fetches the list of goods via the System.GetGoods method and passes the data to the ListGoods view.
         /// </summary>
+        /// <returns></returns>
         public ActionResult ListGoods()
         {
             ViewData["Title"] = "List Goods";
@@ -44,11 +45,12 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
-        /// This action is called when a player wants to Buy goods at a system. 
+        /// This action is called when a player wants to Buy goods at a system.
         /// Buys goods via the SystemGood.Buy method, redirects to the ListGoods action.
         /// </summary>
         /// <param name="goodId">The good id.</param>
         /// <param name="quantity">The quantity.</param>
+        /// <returns></returns>
         public ActionResult BuyGoods(int goodId, int quantity)
         {
             SystemGood systemGood = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetGood(goodId);
@@ -57,11 +59,12 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
-        /// This action is called when a player wants to Sell goods at a system. 
+        /// This action is called when a player wants to Sell goods at a system.
         /// Sells goods via the ShipGood.Sell method, redirects to the ListGoods action.
         /// </summary>
         /// <param name="goodId">The good id.</param>
         /// <param name="quantity">The quantity.</param>
+        /// <returns></returns>
         public ActionResult SellGoods(int goodId, int quantity)
         {
             ShipGood shipGood = this.ControllerGame.CurrentPlayer.Ship.GetGood(goodId);

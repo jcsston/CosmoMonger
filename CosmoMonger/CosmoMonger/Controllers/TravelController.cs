@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="TravelController.cs" company="CosmoMonger">
-//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
 //-----------------------------------------------------------------------
@@ -34,6 +34,7 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Show a view of systems within range via the Ship.GetInRangeSystems method and the Travel view.
         /// </summary>
+        /// <returns></returns>
         public ActionResult Travel()
         {
             ViewData["Title"] = "Travel Map";
@@ -57,6 +58,7 @@ namespace CosmoMonger.Controllers
         /// Travel to the selected targetSystem via the Ship.Travel method, returns the TravelInProgress view.
         /// </summary>
         /// <param name="targetSystem">The target system.</param>
+        /// <returns></returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Travel(int targetSystem)
         {
@@ -89,7 +91,7 @@ namespace CosmoMonger.Controllers
             }
 
             // If we got down here, then an error was thrown
-            return Travel();
+            return this.Travel();
         }
     }
 }

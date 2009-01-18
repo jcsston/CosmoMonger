@@ -1,8 +1,9 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="PlayerController.cs" company="CosmoMonger">
-//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
+// <author>Roger Boykin</author>
 //-----------------------------------------------------------------------
 namespace CosmoMonger.Controllers
 {
@@ -22,7 +23,6 @@ namespace CosmoMonger.Controllers
     /// </summary>
     public class PlayerController : GameController
     {
-        
         /// <summary>
         /// Redirects to the PlayerProfile action
         /// </summary>
@@ -40,10 +40,9 @@ namespace CosmoMonger.Controllers
         /// <returns>The CreatePlayer view</returns>
         public ActionResult CreatePlayer()
         {
-            Race [] races = this.ControllerGame.GetRaces();
+            Race[] races = this.ControllerGame.GetRaces();
             ViewData["Title"] = "Create Player";
             ViewData["raceId"] = new SelectList(races, "RaceId", "Name");
-            //new Roger stuff
             ViewData["Races"] = races;
 
             return View();
@@ -64,7 +63,7 @@ namespace CosmoMonger.Controllers
             if (race == null)
             {
                 ModelState.AddModelError("raceId", "Invalid Race selected");
-                return CreatePlayer();
+                return this.CreatePlayer();
             }
 
             Player newPlayer = null;
@@ -84,17 +83,16 @@ namespace CosmoMonger.Controllers
                     ModelState.AddModelError("_FORM", "Unknown error");
                 }
 
-                return CreatePlayer();
+                return this.CreatePlayer();
             }
 
             return RedirectToAction("PlayerProfile", newPlayer.PlayerId);
         }
 
         /// <summary>
-        /// Looks up the profile data for the passed in player id and returns the PlayerProfile view.
+        /// Looks up the profile data for the current player and returns the PlayerProfile view.
         /// </summary>
-        /// <param name="playerId">The id of the player to view.</param>
-        /// <returns>The PlayerProfile view with the Player model data.</returns>
+        /// <returns>The PlayerProfile view with the current Player model data.</returns>
         public ActionResult PlayerProfile()
         {
             if (this.ControllerGame.CurrentPlayer == null)
@@ -105,7 +103,7 @@ namespace CosmoMonger.Controllers
             else
             {
                 // Otherwise, show the profile of the current player
-                return PlayerProfile(this.ControllerGame.CurrentPlayer.PlayerId);
+                return this.PlayerProfile(this.ControllerGame.CurrentPlayer.PlayerId);
             }
         }
 

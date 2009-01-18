@@ -56,7 +56,7 @@ namespace CosmoMonger.Models
         /// </summary>
         public void DoPendingNPCActions()
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Gets the current players ship and pass it to the ViewShip view.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The ViewShip view filled in with the model data for the players current ship</returns>
         public ActionResult Index()
         {
             ViewData["Ship"] = this.ControllerGame.CurrentPlayer.Ship;
@@ -37,7 +37,7 @@ namespace CosmoMonger.Controllers
         /// This action will fetch the avaiable ships in the current players system 
         /// via the System.GetAvailableShips method and pass the data to the BuyShip view.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The BuyShip view filled with the ships available for purchase</returns>
         public ActionResult BuyShip()
         {
             ViewData["Ships"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetAvailableShips();
@@ -48,8 +48,8 @@ namespace CosmoMonger.Controllers
         /// This action takes in the passed systemShip id and buys the ship via the SystemShip.Buy method. 
         /// Then redirects to the Index action.
         /// </summary>
-        /// <param name="systemShipId">The system ship id.</param>
-        /// <returns></returns>
+        /// <param name="systemShipId">The system ship id to buy.</param>
+        /// <returns>Redirect back to the Index action</returns>
         public ActionResult BuyShip(int systemShipId)
         {
             SystemShip shipToBuy = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetShip(systemShipId);
@@ -57,6 +57,7 @@ namespace CosmoMonger.Controllers
             {
                 shipToBuy.Buy(this.ControllerGame);
             }
+
             return RedirectToAction("Index");
         }
 
@@ -66,7 +67,7 @@ namespace CosmoMonger.Controllers
         /// This action will fetch the available ship engine upgrades via the System.GetEngineUpgrades method
         /// and pass the data to the BuyEngineUpgrade view.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Throws NotImplementedException</returns>
         public ActionResult BuyEngineUpgrade()
         {
             throw new NotImplementedException();
@@ -77,7 +78,7 @@ namespace CosmoMonger.Controllers
         /// and then redirects to the Index action.
         /// </summary>
         /// <param name="upgradeId">The upgrade id.</param>
-        /// <returns></returns>
+        /// <returns>Throws NotImplementedException</returns>
         public ActionResult BuyEngineUpgrade(int upgradeId)
         {
             throw new NotImplementedException();
@@ -87,7 +88,7 @@ namespace CosmoMonger.Controllers
         /// This action will fetch the available ship shield upgrades via the System.GetShieldUpgrades method 
         /// and pass the data to the BuyShieldUpgrade view.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Throws NotImplementedException</returns>
         public ActionResult BuyShieldUpgrade()
         {
             throw new NotImplementedException();
@@ -98,7 +99,7 @@ namespace CosmoMonger.Controllers
         /// and then redirects to the Index action.
         /// </summary>
         /// <param name="upgradeId">The upgrade id.</param>
-        /// <returns></returns>
+        /// <returns>Throws NotImplementedException</returns>
         public ActionResult BuyShieldUpgrade(int upgradeId)
         {
             throw new NotImplementedException();
@@ -108,7 +109,7 @@ namespace CosmoMonger.Controllers
         /// This action will fetch the available ship weapon upgrades via the System.GetWeaponUpgrades method 
         /// and pass the data to the BuyWeaponUpgrade view.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Throws NotImplementedException</returns>
         public ActionResult BuyWeaponUpgrade()
         {
             throw new NotImplementedException();
@@ -119,7 +120,7 @@ namespace CosmoMonger.Controllers
         /// and then redirects to the Index action.
         /// </summary>
         /// <param name="upgradeId">The upgrade id.</param>
-        /// <returns></returns>
+        /// <returns>Throws NotImplementedException</returns>
         public ActionResult BuyWeaponUpgrade(int upgradeId)
         {
             throw new NotImplementedException();

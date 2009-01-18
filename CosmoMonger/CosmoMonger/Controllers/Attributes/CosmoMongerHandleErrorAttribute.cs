@@ -10,8 +10,17 @@ namespace CosmoMonger.Controllers.Attributes
     using System.Web.Mvc;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
+    /// <summary>
+    /// This attribute adds exception handling to the controller actions.
+    /// If an exception is detected, it is handled by the ExceptionPolicy and a 
+    /// formatted message is displayed to the user.
+    /// </summary>
     public class CosmoMongerHandleErrorAttribute : HandleErrorAttribute
     {
+        /// <summary>
+        /// Called when an exception is thrown in the view or action.
+        /// </summary>
+        /// <param name="filterContext">The filter context of the Exception.</param>
         public override void OnException(ExceptionContext filterContext)
         {
             base.OnException(filterContext);

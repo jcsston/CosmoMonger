@@ -50,6 +50,10 @@ namespace CosmoMonger.Controllers
             Provider = provider ?? Membership.Provider;
         }
 
+        /// <summary>
+        /// Gets or sets the MembershipProvider used.
+        /// </summary>
+        /// <value>The MembershipProvider used for login/logout.</value>
         public MembershipProvider Provider
         {
             get;
