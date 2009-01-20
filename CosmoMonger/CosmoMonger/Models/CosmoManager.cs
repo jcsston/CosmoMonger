@@ -56,7 +56,7 @@ namespace CosmoMonger.Models
         /// </summary>
         public void DoPendingNPCActions()
         {
-            throw new NotImplementedException();
+            // TODO: Implement method in RC3
         }
 
         /// <summary>
