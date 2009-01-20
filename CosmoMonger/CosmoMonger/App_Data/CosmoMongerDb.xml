@@ -1105,4 +1105,10 @@
       </column>
     </modifyColumn>
   </changeSet>
+  <changeSet author="Jory Stone" id="39">
+    <comment>Adding LastVerificationSent column on the User table to keep users mailboxes from becoming full with multiple verification e-mails.</comment>
+    <addColumn tableName="User">
+      <column name="LastVerificationSent" type="datetime" />
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

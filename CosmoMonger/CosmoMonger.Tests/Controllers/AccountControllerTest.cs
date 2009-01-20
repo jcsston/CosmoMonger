@@ -71,8 +71,8 @@ namespace CosmoMonger.Tests.Controllers
 
             Mock<User> mockUserModel = new Mock<User>();
             Mock<CosmoMongerMembershipUser> mockUser = new Mock<CosmoMongerMembershipUser>(mockUserModel.Object);
-            mockUser.Expect<bool>(m => m.SendVerificationCode(It.IsRegex("http://www.cosmomonger.com/Account/VerifyEmail?username=TestUser&verificationCode=.*")))
-               .Returns(true).AtMostOnce().Verifiable();
+            mockUser.Expect(m => m.SendVerificationCode(It.IsRegex("http://www.cosmomonger.com/Account/VerifyEmail?username=TestUser&verificationCode=.*")))
+               .AtMostOnce().Verifiable();
 
             Mock<MembershipProvider> mockMembership = new Mock<MembershipProvider>();
             mockMembership.Expect<MembershipUser>(m => m.GetUser(testUserName, false))

@@ -6483,6 +6483,8 @@ namespace CosmoMonger.Models
 		
 		private System.Nullable<System.DateTime> _LastActivity;
 		
+		private System.Nullable<System.DateTime> _LastVerificationSent;
+		
 		private EntitySet<BuddyList> _BuddyLists;
 		
 		private EntitySet<IgnoreList> _IgnoreLists;
@@ -6515,6 +6517,8 @@ namespace CosmoMonger.Models
     partial void OnLoginAttemptCountChanged();
     partial void OnLastActivityChanging(System.Nullable<System.DateTime> value);
     partial void OnLastActivityChanged();
+    partial void OnLastVerificationSentChanging(System.Nullable<System.DateTime> value);
+    partial void OnLastVerificationSentChanged();
     #endregion
 		
 		public User()
@@ -6722,6 +6726,26 @@ namespace CosmoMonger.Models
 					this._LastActivity = value;
 					this.SendPropertyChanged("LastActivity");
 					this.OnLastActivityChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_LastVerificationSent", DbType="datetime")]
+		public System.Nullable<System.DateTime> LastVerificationSent
+		{
+			get
+			{
+				return this._LastVerificationSent;
+			}
+			set
+			{
+				if ((this._LastVerificationSent != value))
+				{
+					this.OnLastVerificationSentChanging(value);
+					this.SendPropertyChanging();
+					this._LastVerificationSent = value;
+					this.SendPropertyChanged("LastVerificationSent");
+					this.OnLastVerificationSentChanged();
 				}
 			}
 		}

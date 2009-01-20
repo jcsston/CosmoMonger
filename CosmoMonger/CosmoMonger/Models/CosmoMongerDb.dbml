@@ -291,6 +291,7 @@
       <Column Name="LastLogin" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
       <Column Name="LoginAttemptCount" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
       <Column Name="LastActivity" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
+      <Column Name="LastVerificationSent" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
       <Association Name="User_BuddyList" Member="BuddyLists" ThisKey="UserId" OtherKey="UserId" Type="BuddyList" />
       <Association Name="User_IgnoreList" Member="IgnoreLists" ThisKey="UserId" OtherKey="UserId" Type="IgnoreList" />
       <Association Name="User_Message" Member="Messages" Storage="_Messages1" ThisKey="UserId" OtherKey="RecipientUserId" Type="Message" />

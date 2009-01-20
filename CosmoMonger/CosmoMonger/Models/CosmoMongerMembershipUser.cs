@@ -20,6 +20,7 @@ namespace CosmoMonger.Models
     using System.Web.Security;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
     using Microsoft.Practices.EnterpriseLibrary.Security.Cryptography;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     /// <summary>
     /// This class represents a user account in the system and manages checking the password,
@@ -376,9 +377,22 @@ namespace CosmoMonger.Models
         /// Sends the verification code to the users e-mail.
         /// </summary>
         /// <param name="baseVerificationCodeUrl">The base verification code URL. Example: http://localhost:54084/Account/VerifyEmail?username=jcsston&amp;verificationCode=</param>
-        /// <returns>True if the e-mail was successfully sent to the SMTP server. False if sending to the SMTP server failed.</returns>
-        public virtual bool SendVerificationCode(string baseVerificationCodeUrl)
+        /// <exception cref="SmtpException">Thrown if sending to the SMTP server failed.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if not enough time has passed since the last verification e-mail for this user.</exception>
+        public virtual void SendVerificationCode(string baseVerificationCodeUrl)
         {
+            // Check that is has been at least 5 minutes since the last
+            if (this.user.LastVerificationSent.HasValue)
+            {
+                TimeSpan timeSinceLastVerificationEmail = DateTime.Now - this.user.LastVerificationSent.Value;
+
+                // It needs to be at least 5 minutes since the last verification e-mail
+                if (timeSinceLastVerificationEmail.TotalMinutes < 5)
+                {
+                    throw new InvalidOperationException("Verification e-mails can only be sent every 5 minutes.");
+                }
+            }
+
             // Build e-mail message
             MailMessage msg = new MailMessage();
             msg.From = new MailAddress("admin@cosmomonger.com", "CosmoMonger");
@@ -410,10 +424,11 @@ namespace CosmoMonger.Models
                     { "Message", msg }
                 };
                 Logger.Write("Failed to send e-mail with verification code", "Model", 1, 1053, TraceEventType.Error, "SmtpException in CosmoMongerMemebershipUser.SendVerificationCode", props);
-                return false;
+                ExceptionPolicy.HandleException(ex, "E-Mail Policy");
             }
 
-            return true;
+            // Update datetime of last verification e-mail sent
+            this.user.LastVerificationSent = DateTime.Now;
         }
     }
 }

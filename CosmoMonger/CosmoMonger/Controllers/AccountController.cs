@@ -21,6 +21,7 @@ namespace CosmoMonger.Controllers
     using CosmoMonger.Models.Utility;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
     using Recaptcha;
+    using System.Net.Mail;
 
     /// <summary>
     /// This controller manages user account creation, login, and logout
@@ -296,13 +297,21 @@ namespace CosmoMonger.Controllers
             if (verifyUser != null)
             {
                 string baseVerificationUrl = this.Request.Url.GetLeftPart(UriPartial.Authority)  + this.Url.Action("VerifyEmail") + "?username=" + this.Url.Encode(username) + "&verificationCode=";
-                if (verifyUser.SendVerificationCode(baseVerificationUrl))
+                try
                 {
+                    verifyUser.SendVerificationCode(baseVerificationUrl);
                     ViewData["Title"] = "Sent Verification Code";
                     return View("SentVerificationCode");
                 }
-                else
+                catch (InvalidOperationException ex)
                 {
+                    // Failed to sent e-mail
+                    ModelState.AddModelError("_FORM", ex);
+                }
+                catch (SmtpException ex)
+                {
+                    // Eat the exception
+                    ex = null;
                     // Failed to send e-mail
                     ModelState.AddModelError("_FORM", "Failed to send verification e-mail. Please try again, if the problem persists, please contact admin@cosmomonger.com.");
                 }
