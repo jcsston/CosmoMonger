@@ -47,6 +47,24 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Withdraw credits from the Bank.
+        /// </summary>
+        /// <param name="credits">The amount of credits to withdraw.</param>
+        public void BankWithdraw(int credits)
+        {
+            // Check
+        }
+
+        /// <summary>
+        /// Deposit credits in the Bank.
+        /// </summary>
+        /// <param name="credits">The amount of credits to deposit.</param>
+        public void BankDeposit(int credits)
+        {
+
+        }
+
+        /// <summary>
         /// Updates the net worth for this player.
         /// </summary>
         public void UpdateNetWorth()
@@ -130,6 +148,20 @@ namespace CosmoMonger.Models
         {
             // Because BankCredits has changed we need to update NetWorth
             this.UpdateNetWorth();
+        }
+
+        /// <summary>
+        /// Kills this player.
+        /// </summary>
+        public void Kill()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            
+            // Kill this player
+            this.Alive = false;
+
+            // Send changes to the database
+            db.SubmitChanges();
         }
     }
 }

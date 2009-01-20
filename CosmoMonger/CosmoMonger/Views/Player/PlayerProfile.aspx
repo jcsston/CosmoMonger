@@ -55,8 +55,7 @@
             %>
     <td class="vp-columnData"><%=racePref%></td>
     <td colspan="2"></td><td align="center" colspan="2">
-    <asp:Button ID="newPlayerButton" runat="server" Text="Kill Current Player" 
-                                Height="25px" Width="121px" /></td>
+    <%=Html.ActionLink("Kill Current Player", "KillPlayer", new { playerId = player.PlayerId }, new { onclick = "return confirm('Are you sure you want to kill your player?');" })%>
 </tr>
 <tr>
     <td class="vp-columnData">Surcharge/Penalty:</td>

@@ -90,6 +90,23 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
+        /// Kills the player.
+        /// </summary>
+        /// <param name="playerId">The player id.</param>
+        /// <returns></returns>
+        public ActionResult KillPlayer(int playerId)
+        {
+            if (this.ControllerGame.CurrentPlayer.PlayerId != playerId)
+            {
+                throw new InvalidOperationException("Tried to kill a player other than the current player");
+            }
+
+            this.ControllerGame.CurrentPlayer.Kill();
+
+            return RedirectToAction("CreatePlayer");
+        }
+
+        /// <summary>
         /// Looks up the profile data for the current player and returns the PlayerProfile view.
         /// </summary>
         /// <returns>The PlayerProfile view with the current Player model data.</returns>
