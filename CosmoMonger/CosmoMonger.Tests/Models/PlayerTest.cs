@@ -8,6 +8,7 @@
     using System.Web.Security;
     using CosmoMonger.Models;
     using NUnit.Framework;
+    using NUnit.Framework.SyntaxHelpers;
 
     /// <summary>
     /// Summary description for PlayerTest
@@ -85,6 +86,104 @@
             // Test that the created player starts in the correct home system
             Player testPlayer = this.CreateTestPlayer(testRace);
             Assert.AreEqual(testRace.HomeSystem, testPlayer.Ship.CosmoSystem, "Player Ship should start out in the player's home system");
+        }
+
+        [Test]
+        public void BankDeposit()
+        {
+            // Arrange
+            Player testPlayer = this.CreateTestPlayer();
+
+            // Give the player some starting bank credits
+            testPlayer.BankCredits = 2000;
+            testPlayer.CashCredits = 1500;
+
+            // Act
+            testPlayer.BankDeposit(1000);
+
+            // Assert
+            Assert.That(testPlayer.CashCredits, Is.EqualTo(500), "Player should have 1000 fewer cash credits");
+            Assert.That(testPlayer.BankCredits, Is.EqualTo(3000), "Player should have 1000 fewer bank credits");
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void BankDepositNoBank()
+        {
+            // Arrange
+            Player testPlayer = this.CreateTestPlayer();
+
+            // Move the player to a system without a bank
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            CosmoSystem noBankSystem = (from s in db.CosmoSystems
+                                        where !s.HasBank
+                                        select s).FirstOrDefault();
+            Assert.That(noBankSystem, Is.Not.Null, "There should be at least one system in the galaxy without a bank");
+            testPlayer.Ship.CosmoSystem = noBankSystem;
+
+            // Act, should throw an exception
+            testPlayer.BankDeposit(1000);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void BankDepositTooManyCredits()
+        {
+            // Arrange
+            Player testPlayer = this.CreateTestPlayer();
+            testPlayer.CashCredits = 2000;
+
+            // Act, should throw an exception
+            testPlayer.BankDeposit(2500);
+        }
+
+        [Test]
+        public void BankWithdraw()
+        {
+            // Arrange
+            Player testPlayer = this.CreateTestPlayer();
+
+            // Give the player some starting bank credits
+            testPlayer.BankCredits = 2000;
+            testPlayer.CashCredits = 500;
+
+            // Act
+            testPlayer.BankWithdraw(1000);
+
+            // Assert
+            Assert.That(testPlayer.CashCredits, Is.EqualTo(1500), "Player should have 1000 more cash credits");
+            Assert.That(testPlayer.BankCredits, Is.EqualTo(1000), "Player should have 1000 fewer bank credits");
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void BankWithdrawNoBank()
+        {
+            // Arrange
+            Player testPlayer = this.CreateTestPlayer();
+
+            // Move the player to a system without a bank
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            CosmoSystem noBankSystem = (from s in db.CosmoSystems
+                                        where !s.HasBank
+                                        select s).FirstOrDefault();
+            Assert.That(noBankSystem, Is.Not.Null, "There should be at least one system in the galaxy without a bank");
+            testPlayer.Ship.CosmoSystem = noBankSystem;
+
+            // Act, should throw an exception
+            testPlayer.BankWithdraw(1000);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void BankWithdrawTooManyCredits()
+        {
+            // Arrange
+            Player testPlayer = this.CreateTestPlayer();
+            testPlayer.BankCredits = 2000;
+
+            // Act, should throw an exception
+            testPlayer.BankWithdraw(2500);
         }
 
         [Test]

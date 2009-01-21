@@ -50,13 +50,22 @@ namespace CosmoMonger.Models
         /// Withdraw credits from the Bank.
         /// </summary>
         /// <param name="credits">The amount of credits to withdraw.</param>
+        /// <exception cref="InvalidOperationException">Thrown in the system the player currently is in doesn't have a bank</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if more credits than available are withdrawn</exception>
         public void BankWithdraw(int credits)
         {
+            // Check that there is a bank in the current system
+            if (!this.Ship.CosmoSystem.HasBank)
+            {
+                throw new InvalidOperationException("No bank available for withdraw from");
+            }
+
             // Check that the player has enough credits to withdraw
             if (this.BankCredits < credits)
             {
-                throw new ArgumentOutOfRangeException("credits", "Attempted to withdraw more credits than avaiable in the bank");
+                throw new ArgumentOutOfRangeException("credits", "Attempted to withdraw more credits than available in the bank");
             }
+
             this.BankCredits -= credits;
             this.CashCredits += credits;
         }
@@ -65,12 +74,20 @@ namespace CosmoMonger.Models
         /// Deposit credits in the Bank.
         /// </summary>
         /// <param name="credits">The amount of credits to deposit.</param>
+        /// <exception cref="InvalidOperationException">Thrown in the system the player currently is in doesn't have a bank</exception>
+        /// /// <exception cref="ArgumentOutOfRangeException">Thrown if more credits than available are deposited</exception>
         public void BankDeposit(int credits)
         {
-            // Check that the player has enough credits to deposit
-            if (this.CashCredits > credits)
+            // Check that there is a bank in the current system
+            if (!this.Ship.CosmoSystem.HasBank)
             {
-                throw new ArgumentOutOfRangeException("credits", "Attempted to deposit more credits than avaiable");
+                throw new InvalidOperationException("No bank available for withdraw from");
+            }
+
+            // Check that the player has enough credits to deposit
+            if (this.CashCredits < credits)
+            {
+                throw new ArgumentOutOfRangeException("credits", "Attempted to deposit more credits than available");
             }
 
             this.CashCredits -= credits;
