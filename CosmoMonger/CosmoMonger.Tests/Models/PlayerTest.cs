@@ -138,6 +138,19 @@
         }
 
         [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void BankDepositNegativeCredits()
+        {
+            // Arrange
+            Player testPlayer = this.CreateTestPlayer();
+            testPlayer.CashCredits = 1000;
+            testPlayer.BankCredits = 1000;
+
+            // Act, should throw an exception
+            testPlayer.BankDeposit(-500);
+        }
+
+        [Test]
         public void BankWithdraw()
         {
             // Arrange
@@ -184,6 +197,19 @@
 
             // Act, should throw an exception
             testPlayer.BankWithdraw(2500);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void BankWithdrawNegativeCredits()
+        {
+            // Arrange
+            Player testPlayer = this.CreateTestPlayer();
+            testPlayer.CashCredits = 1000;
+            testPlayer.BankCredits = 1000;
+
+            // Act, should throw an exception
+            testPlayer.BankWithdraw(-500);
         }
 
         [Test]

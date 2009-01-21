@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Attributes\CosmoMongerHandleErrorAttribute.cs" />
+    <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\FormsLoginResult.cs" />
     <Compile Include="Controllers\FormsLogoutResult.cs" />
     <Compile Include="Controllers\GameController.cs" />
@@ -136,6 +137,7 @@
     <Content Include="Views\Account\SentVerificationCode.aspx" />
     <Content Include="Views\Account\VerifiedEmail.aspx" />
     <Content Include="Views\Account\VerifyEmail.aspx" />
+    <Content Include="Views\Bank\Bank.aspx" />
     <Content Include="Views\PlayerRecord\ListRecords.aspx" />
     <Content Include="Views\PlayerRecord\ViewRecord.aspx" />
     <Content Include="Views\Player\CreatePlayer.aspx" />

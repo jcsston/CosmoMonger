@@ -56,6 +56,13 @@
                             </ul>
 	                    </li>
                     </ul>
+                    <ul>	
+	                    <li><%= Html.ActionLink("Bank", "Index", "Bank")%>
+	                        <ul>
+	                            <li><%= Html.ActionLink("Bank", "Bank", "Bank")%></li>
+                            </ul>
+	                    </li>
+                    </ul>
                     <ul>
                         <li><%= Html.ActionLink("Logout", "Logout", "Account")%></li>
                     </ul>

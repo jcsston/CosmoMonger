@@ -60,10 +60,16 @@ namespace CosmoMonger.Models
                 throw new InvalidOperationException("No bank available for withdraw from");
             }
 
+            // Check that the credits is postive
+            if (0 >= credits)
+            {
+                throw new ArgumentOutOfRangeException("credits", "Cannot withdraw a negative number of credits");
+            }
+
             // Check that the player has enough credits to withdraw
             if (this.BankCredits < credits)
             {
-                throw new ArgumentOutOfRangeException("credits", "Attempted to withdraw more credits than available in the bank");
+                throw new ArgumentOutOfRangeException("credits", "Cannot withdraw more credits than available in the bank");
             }
 
             this.BankCredits -= credits;
@@ -84,10 +90,16 @@ namespace CosmoMonger.Models
                 throw new InvalidOperationException("No bank available for withdraw from");
             }
 
+            // Check that the credits is postive
+            if (0 >= credits)
+            {
+                throw new ArgumentOutOfRangeException("credits", "Cannot withdraw a negative number of credits");
+            }
+
             // Check that the player has enough credits to deposit
             if (this.CashCredits < credits)
             {
-                throw new ArgumentOutOfRangeException("credits", "Attempted to deposit more credits than available");
+                throw new ArgumentOutOfRangeException("credits", "Cannot deposit more credits than available in cash");
             }
 
             this.CashCredits -= credits;
