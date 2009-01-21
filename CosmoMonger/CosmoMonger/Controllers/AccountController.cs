@@ -305,15 +305,8 @@ namespace CosmoMonger.Controllers
                 }
                 catch (InvalidOperationException ex)
                 {
-                    // Failed to sent e-mail
-                    ModelState.AddModelError("_FORM", ex);
-                }
-                catch (SmtpException ex)
-                {
-                    // Eat the exception
-                    ex = null;
                     // Failed to send e-mail
-                    ModelState.AddModelError("_FORM", "Failed to send verification e-mail. Please try again, if the problem persists, please contact admin@cosmomonger.com.");
+                    ModelState.AddModelError("_FORM", ex);
                 }
             }
             else

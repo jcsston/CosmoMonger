@@ -424,7 +424,8 @@ namespace CosmoMonger.Models
                     { "Message", msg }
                 };
                 Logger.Write("Failed to send e-mail with verification code", "Model", 1, 1053, TraceEventType.Error, "SmtpException in CosmoMongerMemebershipUser.SendVerificationCode", props);
-                ExceptionPolicy.HandleException(ex, "E-Mail Policy");
+
+                throw new InvalidOperationException("Failed to send verification e-mail. Please try again, if the problem persists, please contact admin@cosmomonger.com.", ex);
             }
 
             // Update datetime of last verification e-mail sent

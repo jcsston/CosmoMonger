@@ -52,7 +52,13 @@ namespace CosmoMonger.Models
         /// <param name="credits">The amount of credits to withdraw.</param>
         public void BankWithdraw(int credits)
         {
-            // Check
+            // Check that the player has enough credits to withdraw
+            if (this.BankCredits < credits)
+            {
+                throw new ArgumentOutOfRangeException("credits", "Attempted to withdraw more credits than avaiable in the bank");
+            }
+            this.BankCredits -= credits;
+            this.CashCredits += credits;
         }
 
         /// <summary>
@@ -61,7 +67,14 @@ namespace CosmoMonger.Models
         /// <param name="credits">The amount of credits to deposit.</param>
         public void BankDeposit(int credits)
         {
+            // Check that the player has enough credits to deposit
+            if (this.CashCredits > credits)
+            {
+                throw new ArgumentOutOfRangeException("credits", "Attempted to deposit more credits than avaiable");
+            }
 
+            this.CashCredits -= credits;
+            this.BankCredits += credits;
         }
 
         /// <summary>

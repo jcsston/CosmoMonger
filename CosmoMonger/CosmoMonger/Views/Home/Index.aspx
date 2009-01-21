@@ -1,7 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
-    <form id="form1" runat="server">
     <h2>Welcome to CosmoMonger <i class="error">(Under Development)</i></h2>
     <p>
         CosmoMonger is an on-line space-based trading game featuring real-time 
@@ -22,5 +21,4 @@
         The path to fame and fortune awaits YOU!&nbsp; Register today and start down the 
         path to achieving galatic domination....
     </p>
-    </form>
 </asp:Content>
