@@ -28,6 +28,16 @@ namespace CosmoMonger.Models
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GameManager"/> class.
+        /// This construtor is intended for unit-testing purposes.
+        /// </summary>
+        /// <param name="currentUser">The User object of the currently logged in user.</param>
+        public GameManager(User currentUser)
+        {
+            this.currentUser = currentUser;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameManager"/> class.
         /// </summary>
         /// <param name="username">The username of the currently logged in user.</param>
         public GameManager(string username)
@@ -57,7 +67,7 @@ namespace CosmoMonger.Models
         /// Gets the current player
         /// </summary>
         /// <value>The current player.</value>
-        public Player CurrentPlayer
+        public virtual Player CurrentPlayer
         {
             get
             {
@@ -147,7 +157,7 @@ namespace CosmoMonger.Models
         /// Return an array of all systems in the galaxy.
         /// </summary>
         /// <returns>Array of CosmoSystem objects</returns>
-        public CosmoSystem[] GetSystems()
+        public virtual CosmoSystem[] GetSystems()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from s in db.CosmoSystems select s).ToArray();
@@ -179,7 +189,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="systemId">The system id of the System object to get.</param>
         /// <returns>CosmoSystem object, null if the system does not exist</returns>
-        public CosmoSystem GetSystem(int systemId)
+        public virtual CosmoSystem GetSystem(int systemId)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from s in db.CosmoSystems where s.SystemId == systemId select s).SingleOrDefault();
@@ -189,7 +199,7 @@ namespace CosmoMonger.Models
         /// Gets the size of the galaxy.
         /// </summary>
         /// <returns>An int that gives the x/y size of the galaxy</returns>
-        public int GetGalaxySize()
+        public virtual int GetGalaxySize()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return Math.Max(db.CosmoSystems.Max(x => x.PositionX), db.CosmoSystems.Max(x => x.PositionY));

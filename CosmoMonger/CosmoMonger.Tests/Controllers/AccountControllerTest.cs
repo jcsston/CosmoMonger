@@ -5,15 +5,15 @@ namespace CosmoMonger.Tests.Controllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using System.Web.Security;
-    using Moq;
-    using CosmoMonger.Controllers;
     using System.Web.Mvc;
+    using System.Web.Routing;
+    using System.Web.Security;
+    using CosmoMonger.Controllers;
+    using CosmoMonger.Models;
+    using Moq;
+    using Moq.Mvc;
     using NUnit.Framework;
     using NUnit.Framework.SyntaxHelpers;
-    using CosmoMonger.Models;
-    using Moq.Mvc;
-    using System.Web.Routing;
 
     [TestFixture]
     public class AccountControllerTest

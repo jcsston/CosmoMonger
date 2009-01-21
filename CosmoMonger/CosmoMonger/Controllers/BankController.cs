@@ -6,12 +6,31 @@
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Mvc.Ajax;
+    using CosmoMonger.Models;
 
     /// <summary>
     /// 
     /// </summary>
     public class BankController : GameController
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BankController"/> class.
+        /// This is the default constructor that doesn't really to anything.
+        /// </summary>
+        public BankController()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BankController"/> class.
+        /// This constructor is used for unit testing purposes.
+        /// </summary>
+        /// <param name="manager">The game manager object to use.</param>
+        public BankController(GameManager manager) 
+            : base(manager)
+        {
+        }
+
         /// <summary>
         /// The Index action for the Bank controller.
         /// Redirects to the Bank action.

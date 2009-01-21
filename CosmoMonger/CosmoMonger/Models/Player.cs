@@ -52,7 +52,7 @@ namespace CosmoMonger.Models
         /// <param name="credits">The amount of credits to withdraw.</param>
         /// <exception cref="InvalidOperationException">Thrown in the system the player currently is in doesn't have a bank</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if more credits than available are withdrawn</exception>
-        public void BankWithdraw(int credits)
+        public virtual void BankWithdraw(int credits)
         {
             // Check that there is a bank in the current system
             if (!this.Ship.CosmoSystem.HasBank)
@@ -82,7 +82,7 @@ namespace CosmoMonger.Models
         /// <param name="credits">The amount of credits to deposit.</param>
         /// <exception cref="InvalidOperationException">Thrown in the system the player currently is in doesn't have a bank</exception>
         /// /// <exception cref="ArgumentOutOfRangeException">Thrown if more credits than available are deposited</exception>
-        public void BankDeposit(int credits)
+        public virtual void BankDeposit(int credits)
         {
             // Check that there is a bank in the current system
             if (!this.Ship.CosmoSystem.HasBank)
@@ -109,7 +109,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Updates the net worth for this player.
         /// </summary>
-        public void UpdateNetWorth()
+        public virtual void UpdateNetWorth()
         {
             int netWorth = this.BankCredits + this.CashCredits;
             if (this.Ship != null)
@@ -125,7 +125,7 @@ namespace CosmoMonger.Models
         /// Throws an ArgumentException if an existing player with the same name already exists.
         /// </summary>
         /// <param name="name">The new name of the player.</param>
-        public void UpdateProfile(string name)
+        public virtual void UpdateProfile(string name)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
@@ -144,7 +144,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Updates the play time for this player.
         /// </summary>
-        public void UpdatePlayTime()
+        public virtual void UpdatePlayTime()
         {
             if (this.Alive)
             {
@@ -195,7 +195,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Kills this player.
         /// </summary>
-        public void Kill()
+        public virtual void Kill()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             

@@ -1799,7 +1799,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Range", DbType="Int NOT NULL")]
-		public int Range
+		public virtual int Range
 		{
 			get
 			{
@@ -3245,7 +3245,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Ship_Player", Storage="_Ship", ThisKey="ShipId", OtherKey="ShipId", IsForeignKey=true)]
-		public Ship Ship
+		public virtual Ship Ship
 		{
 			get
 			{
@@ -4507,7 +4507,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Ship_Player", Storage="_Players", ThisKey="ShipId", OtherKey="ShipId")]
-		public EntitySet<Player> Players
+		public virtual EntitySet<Player> Players
 		{
 			get
 			{
@@ -4567,7 +4567,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="JumpDrive_Ship", Storage="_JumpDrive", ThisKey="JumpDriveId", OtherKey="JumpDriveId", IsForeignKey=true)]
-		public JumpDrive JumpDrive
+		public virtual JumpDrive JumpDrive
 		{
 			get
 			{
@@ -4669,7 +4669,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="CosmoSystem_Ship", Storage="_CosmoSystem", ThisKey="SystemId", OtherKey="SystemId", IsForeignKey=true)]
-		public CosmoSystem CosmoSystem
+		public virtual CosmoSystem CosmoSystem
 		{
 			get
 			{
@@ -5034,7 +5034,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_SystemId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int SystemId
+		public virtual int SystemId
 		{
 			get
 			{
@@ -5054,7 +5054,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Name", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
-		public string Name
+		public virtual string Name
 		{
 			get
 			{
@@ -5074,7 +5074,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_PositionX", DbType="Int NOT NULL")]
-		public int PositionX
+		public virtual int PositionX
 		{
 			get
 			{
@@ -5094,7 +5094,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_PositionY", DbType="Int NOT NULL")]
-		public int PositionY
+		public virtual int PositionY
 		{
 			get
 			{
@@ -5114,7 +5114,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_HasBank", DbType="Bit NOT NULL")]
-		public bool HasBank
+		public virtual bool HasBank
 		{
 			get
 			{
@@ -5147,7 +5147,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="CosmoSystem_Ship", Storage="_Ships", ThisKey="SystemId", OtherKey="SystemId")]
-		public EntitySet<Ship> Ships
+		public virtual EntitySet<Ship> Ships
 		{
 			get
 			{
@@ -5721,7 +5721,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="JumpDrive_SystemJumpDriveUpgrade", Storage="_JumpDrive", ThisKey="JumpDriveId", OtherKey="JumpDriveId", IsForeignKey=true)]
-		public JumpDrive JumpDrive
+		public virtual JumpDrive JumpDrive
 		{
 			get
 			{

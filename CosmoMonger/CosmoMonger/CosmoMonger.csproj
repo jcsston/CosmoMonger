@@ -179,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App_Data\liquibase.properties" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Models\CosmoMongerDb.dbml.layout">
       <DependentUpon>CosmoMongerDb.dbml</DependentUpon>
     </None>

@@ -76,18 +76,18 @@ namespace CosmoMonger.Models
 
         /// <summary>
         /// Starts the ship traveling to the target system.
-        /// If the ship is already in the target system an InvalidOperationException is thrown.
-        /// If the ship is not already traveling an InvalidOperationException is thrown.
-        /// If the target system is out of range of the ship an ArgumentOutOfRangeException is thrown.
         /// </summary>
         /// <param name="targetSystem">The target system to travel to.</param>
         /// <returns>The number of seconds before the ship arrives at the target system</returns>
-        public int Travel(CosmoSystem targetSystem)
+        /// <exception cref="ArgumentException">Thrown if the ship is already in the target system</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the target system is out of range of the ship</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the ship is already traveling</exception>
+        public virtual int Travel(CosmoSystem targetSystem)
         {
             // Check if ship is in the target system
             if (this.CosmoSystem == targetSystem)
             {
-                throw new InvalidOperationException("Ship is already in the target system");
+                throw new ArgumentException("Ship is already in the target system", "targetSystem");
             }
 
             // Check that the system is within range
@@ -120,7 +120,7 @@ namespace CosmoMonger.Models
         /// Checks if ship is currently traveling.
         /// </summary>
         /// <returns>true if traveling, false if no longer traveling</returns>
-        public bool CheckIfTraveling()
+        public virtual bool CheckIfTraveling()
         {
             // Do we have an arrival time?
             if (this.TargetSystemArrivalTime != null)
@@ -157,7 +157,7 @@ namespace CosmoMonger.Models
         /// Gets a list of Systems within traveling range of the Ship. Excluding the current system.
         /// </summary>
         /// <returns>Array of CosmoSystems within JumpDrive distance</returns>
-        public CosmoSystem[] GetInRangeSystems()
+        public virtual CosmoSystem[] GetInRangeSystems()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             

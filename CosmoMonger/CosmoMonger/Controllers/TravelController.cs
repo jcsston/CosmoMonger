@@ -23,6 +23,24 @@ namespace CosmoMonger.Controllers
     public class TravelController : GameController
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="TravelController"/> class.
+        /// This is the default constructor that doesn't really to anything.
+        /// </summary>
+        public TravelController()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TravelController"/> class.
+        /// This constructor is used for unit testing purposes.
+        /// </summary>
+        /// <param name="manager">The game manager object to use.</param>
+        public TravelController(GameManager manager)
+            : base(manager)
+        {
+        }
+
+        /// <summary>
         /// Redirect to the Travel action.
         /// </summary>
         /// <returns></returns>
@@ -78,16 +96,20 @@ namespace CosmoMonger.Controllers
                 }
                 catch (InvalidOperationException ex)
                 {
-                    this.ViewData.ModelState.AddModelError("_FORM", ex);
+                    ViewData.ModelState.AddModelError("_FORM", ex);
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
-                    this.ViewData.ModelState.AddModelError("_FORM", ex);
+                    ViewData.ModelState.AddModelError("_FORM", ex);
+                }
+                catch (ArgumentException ex)
+                {
+                    ViewData.ModelState.AddModelError("_FORM", ex);
                 }
             }
             else
             {
-                this.ViewData.ModelState.AddModelError("_FORM", "The target system is invalid");
+                ViewData.ModelState.AddModelError("_FORM", "The target system is invalid");
             }
 
             // If we got down here, then an error was thrown
