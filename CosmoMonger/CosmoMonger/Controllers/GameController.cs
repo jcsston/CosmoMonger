@@ -67,11 +67,11 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
-        /// Called before an action result has executed.
+        /// Called before an action has executed.
         /// This override is used to redirect users without an active player to the PlayerController.CreatePlayer action.
         /// </summary>
-        /// <param name="filterContext">The context of the executing action result.</param>
-        protected override void OnResultExecuting(ResultExecutingContext filterContext)
+        /// <param name="filterContext">The context of the executing action.</param>
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             // Check if the user has a current player and is not trying to create a player
             if (this.ControllerGame.CurrentPlayer == null && filterContext.Controller.GetType() != typeof(PlayerController) && filterContext.RouteData.Values["action"].ToString() != "CreatePlayer")
@@ -87,8 +87,9 @@ namespace CosmoMonger.Controllers
                     this.ControllerGame.CurrentPlayer.UpdatePlayTime();
                 }
 
-                base.OnResultExecuting(filterContext);
+                //base.OnResultExecuting(filterContext);
             }
+            base.OnActionExecuting(filterContext);
         }
     }
 }
