@@ -1,6 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <form id="form1" runat="server">
 <h1>Player Profile</h1>
 <table style="width: 100%">
 <% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["Player"]; %>
@@ -54,15 +53,16 @@
            
             %>
     <td class="vp-columnData"><%=racePref%></td>
-    <td colspan="2"></td><td align="center" colspan="2">
+    <td colspan="2"></td>
+    <td align="center" colspan="2">
     <%=Html.ActionLink("Kill Current Player", "KillPlayer", new { playerId = player.PlayerId }, new { onclick = "return confirm('Are you sure you want to kill your player?');" })%>
+    </td>
 </tr>
 <tr>
     <td class="vp-columnData">Surcharge/Penalty:</td>
     <td class="vp-columnData"><%=player.Race.RacialEnemy.Name%>s</td>
 </tr>
 </table>
-    </form>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>

@@ -1,13 +1,4 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
-
-<script runat="server">
-
-protected void Page_Load(object sender, EventArgs e)
-{
-
-}
-</script>
-
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div>
         <p>
@@ -16,7 +7,7 @@ protected void Page_Load(object sender, EventArgs e)
             need to set up a player profile.
             </span>
         </p>
-        <script type="text/javascript" language="javascript">
+        <script type="text/javascript">
             function UpdateRaceImage() {
                 var raceSelect = document.getElementById('raceId');
                 var raceOption = raceSelect.options[raceSelect.selectedIndex];
@@ -192,7 +183,7 @@ foreach (Race race in (Race[])ViewData["Races"])
                 <tr>
                     <td class=".cp-leftHeaders">Race:</td>
                     <td class="cp-leftData">
-                        <%= Html.DropDownList("raceId", new { onChange = "UpdateRaceImage();" })%>
+                        <%= Html.DropDownList("raceId", new { onchange = "UpdateRaceImage();" })%>
                         <%= Html.ValidationMessage("raceId")%> 
                     </td>
                     <td class="cp-rightHeaders">Racial Enemy</td>

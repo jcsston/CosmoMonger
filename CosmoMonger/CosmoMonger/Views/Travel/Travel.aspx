@@ -4,7 +4,7 @@
     <%
         CosmoMonger.Models.CosmoSystem currentSystem = ViewData["CurrentSystem"] as CosmoMonger.Models.CosmoSystem;
     %>
-    <script language="javascript" type="text/javascript">
+    <script type="text/javascript">
         function selectSystem(selectedSystemId) {
             // Store the selected system in the input form field
             $('#targetSystem').val(selectedSystemId);
@@ -21,7 +21,9 @@
         });
     </script>
     <% using (Html.BeginForm()) { %>
-    <%=Html.Hidden("targetSystem")%>
+    <div>
+        <%=Html.Hidden("targetSystem")%>
+    </div>
     <%=Html.ValidationSummary() %>
     <table>
         <tr>
