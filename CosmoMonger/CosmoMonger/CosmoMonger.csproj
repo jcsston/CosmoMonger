@@ -82,7 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\Attributes\CosmoMongerHandleErrorAttribute.cs" />
+    <Compile Include="Controllers\Attributes\ExceptionPolicyAttribute.cs" />
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\FormsLoginResult.cs" />
     <Compile Include="Controllers\FormsLogoutResult.cs" />
