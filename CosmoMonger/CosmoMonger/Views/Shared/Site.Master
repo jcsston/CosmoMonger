@@ -107,8 +107,7 @@
                     double processingTime = (DateTime.Now - this.ViewContext.HttpContext.Timestamp).TotalSeconds;
                     Dictionary<string, object> props = new Dictionary<string, object>
                     { 
-                        { "View", this.ViewContext.View.ToString() },
-                        { "TimeStamp", this.ViewContext.HttpContext.Timestamp },
+                        { "ViewPath", ((WebFormView)this.ViewContext.View).ViewPath },
                         { "IPAddress", this.ViewContext.HttpContext.Request.UserHostAddress },
                         { "SessionID", this.ViewContext.HttpContext.Session.SessionID },
                         { "ProcessingTime", processingTime }
