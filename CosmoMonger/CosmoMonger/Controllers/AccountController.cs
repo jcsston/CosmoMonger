@@ -26,7 +26,7 @@ namespace CosmoMonger.Controllers
     /// <summary>
     /// This controller manages user account creation, login, and logout
     /// </summary>
-    [CosmoMongerHandleError]
+    [ExceptionPolicy]
     [OutputCache(Location = OutputCacheLocation.None)]
     public class AccountController : Controller
     {

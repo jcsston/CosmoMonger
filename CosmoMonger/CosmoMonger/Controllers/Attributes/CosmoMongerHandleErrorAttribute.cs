@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CosmoMongerHandleErrorAttribute.cs" company="CosmoMonger">
+// <copyright file="ExceptionPolicyAttribute.cs" company="CosmoMonger">
 //     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
@@ -7,6 +7,7 @@
 namespace CosmoMonger.Controllers.Attributes
 {
     using System;
+    using System.Threading;
     using System.Web.Mvc;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
@@ -15,7 +16,7 @@ namespace CosmoMonger.Controllers.Attributes
     /// If an exception is detected, it is handled by the ExceptionPolicy and a 
     /// formatted message is displayed to the user.
     /// </summary>
-    public class CosmoMongerHandleErrorAttribute : HandleErrorAttribute
+    public class ExceptionPolicyAttribute : HandleErrorAttribute
     {
         /// <summary>
         /// Called when an exception is thrown in the view or action.
@@ -23,19 +24,19 @@ namespace CosmoMonger.Controllers.Attributes
         /// <param name="filterContext">The filter context of the Exception.</param>
         public override void OnException(ExceptionContext filterContext)
         {
-            base.OnException(filterContext);
-            if (filterContext.HttpContext.Response.StatusCode == 500 && filterContext.ExceptionHandled)
+            try
             {
+                ExceptionPolicy.HandleException(filterContext.Exception, "Page Policy");
+            }
+            catch (ApplicationException ex)
+            {
+                // Setup the view
+                base.OnException(filterContext);
+
+                // Fill in the view with the exception details
                 ViewResult result = (ViewResult)filterContext.Result;
-                try
-                {
-                    ExceptionPolicy.HandleException(filterContext.Exception, "Page Policy");
-                }
-                catch (ApplicationException ex)
-                {
-                    result.ViewData["Title"] = "Space-time anomaly detected";
-                    result.ViewData["Message"] = ex.Message;
-                }
+                result.ViewData["Title"] = "Space-time anomaly detected";
+                result.ViewData["Message"] = ex.Message;
             }
         }
     }

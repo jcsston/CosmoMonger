@@ -1,9 +1,11 @@
 ﻿namespace CosmoMonger.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     public class FormsLoginResult : ActionResult
     {
@@ -70,10 +72,30 @@
                     cookie.Domain = FormsAuthentication.CookieDomain;
                 }
 
+                Logger.Write("Storing user login cookie", "Controller", 10, 0, System.Diagnostics.TraceEventType.Verbose, "Storing cookie in FormsLoginResult.ExecuteResult",
+                    new Dictionary<string, object>
+                {
+                    { "Cookie", cookie },
+                    { "UserName", this.userName },
+                    { "FormsCookiePath", FormsAuthentication.FormsCookiePath },
+                    { "CookieDomain", FormsAuthentication.CookieDomain },
+                    { "EncryptedTicket", encryptedTicket }
+                }
+                );
+
                 response.Cookies.Add(cookie);
             }
 
-            response.Redirect(FormsAuthentication.GetRedirectUrl(this.userName, this.persistentCookie));
+            string redirectUrl = FormsAuthentication.GetRedirectUrl(this.userName, this.persistentCookie);
+            Logger.Write("Redirecting login user", "Controller", 10, 0, System.Diagnostics.TraceEventType.Verbose, "URL Redirect in FormsLoginResult.ExecuteResult",
+                new Dictionary<string, object>
+                {
+                    { "RedirectURL", redirectUrl },
+                    { "UserName", this.userName },
+                    { "PersistentCookie", this.persistentCookie }
+                }
+            );
+            response.Redirect(redirectUrl);
         }
     }
 }

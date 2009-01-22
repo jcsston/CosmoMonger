@@ -16,7 +16,7 @@ namespace CosmoMonger.Controllers
     /// Any user has to be authorized to access this controller.
     /// </summary>
     [Authorize]
-    [CosmoMongerHandleErrorAttribute]
+    [ExceptionPolicyAttribute]
     public class GameController : Controller
     {
         /// <summary>
@@ -86,9 +86,9 @@ namespace CosmoMonger.Controllers
                 {
                     this.ControllerGame.CurrentPlayer.UpdatePlayTime();
                 }
-            }
 
-            base.OnActionExecuting(filterContext);
+                base.OnActionExecuting(filterContext);
+            }
         }
     }
 }

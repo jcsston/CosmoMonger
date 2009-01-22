@@ -3,7 +3,7 @@
 <h1>Player Profile</h1>
 <table style="width: 100%">
 <% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["Player"]; %>
-<tr><td class="vp-playerName" colspan="6"><%= player.Name%></td></tr>
+<tr><td class="vp-playerName" colspan="6"><%= Html.Encode(player.Name) %></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr>
     <td class="vp-headers" colspan="2">Financial Data</td>
@@ -29,8 +29,6 @@
 <tr><td>&nbsp;</td></tr>
 <tr>
     <td class="vp-headers" colspan="2">Racial Data</td>
-    <% double hours = (player.TimePlayed) / (3600);%>
-    <% string fHours = hours.ToString("n1"); %>
     <td class="vp-headers" colspan="2">Time Played</td>
     <td class="vp-headers" colspan="2">Want A New Player?</td>
 </tr>
@@ -54,7 +52,11 @@
            
             %>
     <td class="vp-columnData"><%=racePref%></td>
-    <td class="vp-columnData"><%= fHours%></td>
+    <% 
+        double hours = (player.TimePlayed) / (3600);
+        string fHours = hours.ToString("n1"); 
+    %>
+    <td class="vp-columnData"><%=fHours%></td>
     <td class="vp-columnData">hours</td>
     <td align="center" colspan="2">
     <%=Html.ActionLink("Kill Current Player", "KillPlayer", new { playerId = player.PlayerId }, new { onclick = "return confirm('Are you sure you want to kill your player?');" })%>

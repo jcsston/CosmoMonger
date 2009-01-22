@@ -14,7 +14,7 @@ namespace CosmoMonger.Controllers
     /// <summary>
     /// This controller handles the home pages of CosmoMonger
     /// </summary>
-    [CosmoMongerHandleError]
+    [ExceptionPolicy]
     public class HomeController : Controller
     {
         /// <summary>
