@@ -29,18 +29,19 @@
 <tr><td>&nbsp;</td></tr>
 <tr>
     <td class="vp-headers" colspan="2">Racial Data</td>
+    <% double hours = (player.TimePlayed) / (3600);%>
+    <% string fHours = hours.ToString("n1"); %>
     <td class="vp-headers" colspan="2">Time Played</td>
     <td class="vp-headers" colspan="2">Want A New Player?</td>
 </tr>
 <tr>
     <td class="vp-columnData">Player's Race:</td>
     <td class="vp-columnData"><%= player.Race.Name%></td>
-    <td class="vp-columnData"><%= player.TimePlayed%></td>
-    <td class="vp-columnData">hours</td>
+    <td align="center" colspan="2">Time Limit = 168 hours</td>
     <td align="center" colspan="2">Warning! This is irrevisible!</td>
 </tr>
 <tr>
-    <td class="vp-columnData">Discount/Bonus:</td>
+    <td class="vp-columnData">Racial Preference:</td>
     <% string racePref;
        if (player.Race.RacialPreference == null)
        {
@@ -53,13 +54,14 @@
            
             %>
     <td class="vp-columnData"><%=racePref%></td>
-    <td colspan="2"></td>
+    <td class="vp-columnData"><%= fHours%></td>
+    <td class="vp-columnData">hours</td>
     <td align="center" colspan="2">
     <%=Html.ActionLink("Kill Current Player", "KillPlayer", new { playerId = player.PlayerId }, new { onclick = "return confirm('Are you sure you want to kill your player?');" })%>
     </td>
 </tr>
 <tr>
-    <td class="vp-columnData">Surcharge/Penalty:</td>
+    <td class="vp-columnData">Racial Enemy:</td>
     <td class="vp-columnData"><%=player.Race.RacialEnemy.Name%>s</td>
 </tr>
 </table>
