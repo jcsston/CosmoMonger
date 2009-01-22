@@ -8,7 +8,9 @@ namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
     /// Extension of the partial LINQ class System
@@ -136,6 +138,15 @@ namespace CosmoMonger.Models
         /// <param name="quantity">The quantity of the good to add.</param>
         public void AddGood(int goodId, int quantity)
         {
+            Logger.Write("Adding Good to System in CosmoSystem.AddGood", "Model", 1000, 1068, TraceEventType.Verbose, "Adding Good to System", 
+                new Dictionary<string, object>
+                {
+                    { "GoodId", goodId },
+                    { "Quantity", quantity },
+                    { "SystemId", this.SystemId }
+                }
+            );
+
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             SystemGood systemGood = this.GetGood(goodId);
             if (systemGood == null)

@@ -56,6 +56,8 @@ namespace CosmoMonger.Models
         /// </summary>
         public void DoPendingNPCActions()
         {
+            Logger.Write("Enter CosmoMonger.DoPendingNPCActions", "Model", 100, 1035, TraceEventType.Verbose);
+
             // TODO: Implement method in RC3
         }
 
@@ -64,6 +66,8 @@ namespace CosmoMonger.Models
         /// </summary>
         public void UpdateSystemGoodCount()
         {
+            Logger.Write("Enter CosmoMonger.UpdateSystemGoodCount", "Model", 100, 1035, TraceEventType.Verbose);
+
             Random rnd = new Random();
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             foreach (Good good in db.Goods)
@@ -126,6 +130,8 @@ namespace CosmoMonger.Models
         /// </summary>
         public void UpdateSystemGoodPrice()
         {
+            Logger.Write("Enter CosmoMonger.UpdateSystemGoodPrice", "Model", 100, 1035, TraceEventType.Verbose);
+
             Random rnd = new Random();
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             foreach (SystemGood good in db.SystemGoods)

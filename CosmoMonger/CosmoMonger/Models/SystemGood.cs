@@ -10,6 +10,7 @@ namespace CosmoMonger.Models
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
     /// Extension of the partial LINQ class SystemGood
@@ -55,6 +56,17 @@ namespace CosmoMonger.Models
             {
                 throw new ArgumentException("Not enough cargo space to carry requested number of goods", "quantity");
             }
+
+            Logger.Write("Buying goods in SystemGood.Buy", "Model", 1000, 1059, TraceEventType.Information, "Buying Goods",
+                new Dictionary<string, object>
+                {
+                    { "PlayerId", manager.CurrentPlayer.PlayerId },
+                    { "SystemId", this.SystemId },
+                    { "GoodId", this.GoodId },
+                    { "Quantity", quantity },
+                    { "TotalCost", totalCost }
+                }
+            );
 
             // Remove the goods from the system
             this.Quantity -= quantity;

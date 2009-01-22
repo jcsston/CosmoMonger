@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
+    using CosmoMonger.Models;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
@@ -28,7 +30,7 @@
 
         protected void Application_Start()
         {
-            Logger.Write("CosmoMonger Application Start", "ASP.NET Core");
+            Logger.Write("CosmoMonger Application Start (r" + CosmoManager.GetCodeVersion().ToString() + " db" + CosmoManager.GetDatabaseVersion().ToString() + ")", "ASP.NET Core", 0, 0, TraceEventType.Information, "CosmoMonger Application Start");
             RegisterRoutes(RouteTable.Routes);
         }
     }

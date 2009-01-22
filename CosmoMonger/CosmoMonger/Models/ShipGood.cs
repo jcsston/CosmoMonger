@@ -9,6 +9,8 @@ namespace CosmoMonger.Models
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Diagnostics;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
     /// Extension of the partial LINQ class ShipGood
@@ -38,7 +40,18 @@ namespace CosmoMonger.Models
 
             // Calcuate how much we will make selling these goods
             int profit = quantity * sellingGood.Price;
-            
+
+            Logger.Write("Selling goods in ShipGood.Sell", "Model", 1000, 1042, TraceEventType.Information, "Selling Goods",
+                new Dictionary<string, object>
+                {
+                    { "PlayerId", manager.CurrentPlayer.PlayerId },
+                    { "ShipId", this.ShipId },
+                    { "GoodId", this.GoodId },
+                    { "Quantity", quantity },
+                    { "Profit", profit }
+                }
+            );
+
             // Remove good(s) from the ship
             this.Quantity -= quantity;
             if (this.Quantity == 0)

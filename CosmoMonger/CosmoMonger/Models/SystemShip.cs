@@ -9,6 +9,8 @@ namespace CosmoMonger.Models
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Diagnostics;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
     /// Extension of the partial LINQ class SystemShip
@@ -50,6 +52,15 @@ namespace CosmoMonger.Models
             {
                 throw new InvalidOperationException("Not enough cargo space on new ship to transfer over cargo");
             }
+
+            Logger.Write("Buying new ship in SystemShip.Buy", "Model", 1000, 1055, TraceEventType.Information, "Buying Ship",
+                new Dictionary<string, object>
+                {
+                    { "PlayerId", manager.CurrentPlayer.PlayerId },
+                    { "OldShipBaseId", currentShip.BaseShipId },
+                    { "NewShipBaseId", this.BaseShipId }
+                }
+            );
 
             // 'Trade-in' the current ship
             SystemShip tradeInShip = (from ss in this.CosmoSystem.SystemShips

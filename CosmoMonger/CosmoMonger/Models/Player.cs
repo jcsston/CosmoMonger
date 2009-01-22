@@ -7,8 +7,10 @@
 namespace CosmoMonger.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Configuration;
     using System.Data;
+    using System.Diagnostics;
     using System.Linq;
     using System.Web;
     using System.Web.Security;
@@ -17,6 +19,7 @@ namespace CosmoMonger.Models
     using System.Web.UI.WebControls;
     using System.Web.UI.WebControls.WebParts;
     using System.Xml.Linq;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
     /// Extension of the partial LINQ class Player
@@ -72,6 +75,16 @@ namespace CosmoMonger.Models
                 throw new ArgumentOutOfRangeException("credits", "Cannot withdraw more credits than available in the bank");
             }
 
+            Logger.Write("Withdrawing credits from bank in Player.BankWithdraw", "Model", 1000, 1075, TraceEventType.Verbose, "Withdrawing credits",
+                new Dictionary<string, object>
+                {
+                    { "PlayerId", this.PlayerId },
+                    { "Credits", credits },
+                    { "BankCredits", this.BankCredits },
+                    { "CashCredits", this.CashCredits }
+                }
+            );
+
             this.BankCredits -= credits;
             this.CashCredits += credits;
         }
@@ -102,6 +115,16 @@ namespace CosmoMonger.Models
                 throw new ArgumentOutOfRangeException("credits", "Cannot deposit more credits than available in cash");
             }
 
+            Logger.Write("Depositing credits into bank in Player.BankDeposit", "Model", 1000, 1118, TraceEventType.Verbose, "Depositing credits",
+                new Dictionary<string, object>
+                {
+                    { "PlayerId", this.PlayerId },
+                    { "Credits", credits },
+                    { "BankCredits", this.BankCredits },
+                    { "CashCredits", this.CashCredits }
+                }
+            );
+
             this.CashCredits -= credits;
             this.BankCredits += credits;
         }
@@ -116,6 +139,15 @@ namespace CosmoMonger.Models
             {
                 netWorth += this.Ship.TradeInValue + this.Ship.ShipGoods.Sum(x => x.Quantity * x.Good.BasePrice);
             }
+
+            Logger.Write("Updating player net worth in Player.UpdateNetWorth", "Model", 1000, 1143, TraceEventType.Verbose, "Update player networth",
+                new Dictionary<string, object>
+                {
+                    { "PlayerId", this.PlayerId },
+                    { "NewNetWorth", netWorth },
+                    { "OldNetWorth", this.NetWorth }
+                }
+            );
 
             this.NetWorth = netWorth;
         }
@@ -197,6 +229,14 @@ namespace CosmoMonger.Models
         /// </summary>
         public virtual void Kill()
         {
+            Logger.Write("Killing player in Player.Kill", "Model", 1000, 1232, TraceEventType.Verbose, "Kill Player",
+                new Dictionary<string, object>
+                {
+                    { "PlayerId", this.PlayerId },
+                    { "Alive", this.Alive }
+                }
+            );
+
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
             // Kill this player
