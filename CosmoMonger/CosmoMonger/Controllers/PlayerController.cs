@@ -137,52 +137,6 @@ namespace CosmoMonger.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Edit the current users profile
-        /// </summary>
-        /// <returns>The UserProfile view</returns>
-        public ActionResult UserProfile()
-        {
-            ViewData["Title"] = "Edit Player Profile";
-            return View();
-        }
 
-        /// <summary>
-        /// Saves the edited profile data using the User.UpdateProfile and Player.UpdateProfile methods.
-        /// Returns UserProfile view if there is an error in saving the profile data.
-        /// If no error was found the PlayerProfile view is returned.
-        /// </summary>
-        /// <param name="playerId">The player id to update.</param>
-        /// <param name="characterName">The updated character name.</param>
-        /// <returns>
-        /// The PlayerProfile action if no error was encountered. 
-        /// The UserProfile view is returned on errors requiring a change of input.
-        /// </returns>
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult UserProfile(int playerId, string characterName)
-        {
-            Player updatePlayer = this.ControllerGame.GetPlayer(playerId);
-            try
-            {
-                updatePlayer.UpdateProfile(characterName);
-            }
-            catch (ArgumentException ex)
-            {
-                // Problem with the profile data, back to the drawing board
-                if (ex.ParamName == "name")
-                {
-                    ModelState.AddModelError("_FORM", ex.Message);
-                }
-                else
-                {
-                    Logger.Write("Unknown error when Player.UpdateProfile was called with characterName: " + characterName + " Exception Details: " + ex.ToString(), "Controller", 100, 1003, TraceEventType.Error, "ArgumentException in PlayerController.UserProfile");
-                    ModelState.AddModelError("_FORM", "Unknown error");
-                }
-
-                return View();
-            }
-
-            return RedirectToAction("PlayerProfile", updatePlayer.PlayerId);
-        }
     }
 }

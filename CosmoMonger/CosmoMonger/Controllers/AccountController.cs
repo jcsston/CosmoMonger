@@ -441,11 +441,25 @@ namespace CosmoMonger.Controllers
             return View("ChangeEmail");
         }
 
+     
         public ActionResult ChangeEmailSuccess()
         {
             ViewData["Title"] = "Change Email Success";
 
             return View("ChangeEmailSuccess");
+        }
+
+        //added by Roger 1-21-2009
+        //This function returns user email and user name to the UserProfile Page
+        public ActionResult UserProfile()
+        {
+            ViewData["Title"] = "User Profile";
+            CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)Provider.GetUser(User.Identity.Name, true);
+            ViewData["Email"] = user.Email;
+            ViewData["Name"] = user.UserName;
+            ViewData["JoinDate"] = user.GetUserModel().Joined;
+
+            return View("UserProfile");
         }
 
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)

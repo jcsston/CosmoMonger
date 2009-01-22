@@ -429,3 +429,11 @@ div.race
 	font-size: 1.5em;
 	font-family: Arial, Helvetica, sans-serif;
 }
+
+/* UserProfile CSS */
+
+.up-links
+{
+	font-size: 1em;
+	font-family: Arial, Helvetica, sans-serif;
+}

@@ -29,7 +29,7 @@
 	                    <li><%= Html.ActionLink("Player", "Index", "Player")%>
 	                        <ul>
                                 <li><%= Html.ActionLink("Player Profile", "PlayerProfile", "Player")%></li>
-                                <li><%= Html.ActionLink("User Profile", "UserProfile", "Player")%></li>
+                                <li><%= Html.ActionLink("User Profile", "UserProfile", "Account")%></li>
                             </ul>
 	                    </li>
                     </ul>
