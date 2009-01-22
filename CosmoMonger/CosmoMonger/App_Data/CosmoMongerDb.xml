@@ -1111,4 +1111,15 @@
       <column name="LastVerificationSent" type="datetime" />
     </addColumn>
   </changeSet>
+  <changeSet author="Jory Stone" id="40">
+    <comment>Adding Joined column on the User table to keep track of when users joined.</comment>
+    <addColumn tableName="User">
+      <column name="Joined" type="datetime" />
+    </addColumn>
+    <update tableName="User">
+      <column name="Joined" valueDate="GETDATE()" />
+      <where>Joined IS NULL</where>
+    </update>
+    <addNotNullConstraint tableName="User" columnName="Joined" columnDataType="datetime" />
+  </changeSet>
 </databaseChangeLog>

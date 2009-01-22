@@ -223,6 +223,7 @@ namespace CosmoMonger.Models
             user.Password = Cryptographer.CreateHash("SHA512", password);
             user.Active = true;
             user.Validated = false;
+            user.Joined = DateTime.Now;
 
             // Insert the user record into the database
             db.Users.InsertOnSubmit(user);

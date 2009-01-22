@@ -6485,6 +6485,8 @@ namespace CosmoMonger.Models
 		
 		private System.Nullable<System.DateTime> _LastVerificationSent;
 		
+		private System.DateTime _Joined;
+		
 		private EntitySet<BuddyList> _BuddyLists;
 		
 		private EntitySet<IgnoreList> _IgnoreLists;
@@ -6519,6 +6521,8 @@ namespace CosmoMonger.Models
     partial void OnLastActivityChanged();
     partial void OnLastVerificationSentChanging(System.Nullable<System.DateTime> value);
     partial void OnLastVerificationSentChanged();
+    partial void OnJoinedChanging(System.DateTime value);
+    partial void OnJoinedChanged();
     #endregion
 		
 		public User()
@@ -6746,6 +6750,26 @@ namespace CosmoMonger.Models
 					this._LastVerificationSent = value;
 					this.SendPropertyChanged("LastVerificationSent");
 					this.OnLastVerificationSentChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Joined", DbType="datetime NOT NULL")]
+		public System.DateTime Joined
+		{
+			get
+			{
+				return this._Joined;
+			}
+			set
+			{
+				if ((this._Joined != value))
+				{
+					this.OnJoinedChanging(value);
+					this.SendPropertyChanging();
+					this._Joined = value;
+					this.SendPropertyChanged("Joined");
+					this.OnJoinedChanged();
 				}
 			}
 		}
