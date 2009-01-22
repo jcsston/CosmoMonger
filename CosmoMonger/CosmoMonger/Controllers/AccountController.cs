@@ -61,16 +61,269 @@ namespace CosmoMonger.Controllers
             private set;
         }
 
-        [Authorize]
-        public ActionResult ChangePassword()
+        /// <summary>
+        /// Logins this instance.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Login()
         {
-
-            ViewData["Title"] = "Change Password";
-            ViewData["PasswordLength"] = Provider.MinRequiredPasswordLength;
-
+            ViewData["Title"] = "Login";
             return View();
         }
 
+        /// <summary>
+        /// Logins the specified username.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="rememberMe">if set to <c>true</c> [remember me].</param>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <returns></returns>
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult Login(string username, string password, bool rememberMe, string returnUrl)
+        {
+
+            ViewData["Title"] = "Login";
+
+            // Basic parameter validation
+            if (String.IsNullOrEmpty(username))
+            {
+                ModelState.AddModelError("username", "You must specify a username.");
+            }
+            if (String.IsNullOrEmpty(password))
+            {
+                ModelState.AddModelError("password", "You must specify a password.");
+            }
+
+            if (ViewData.ModelState.IsValid)
+            {
+                // Attempt to login
+                MembershipUser user = Provider.GetUser(username, true);
+                if (user != null)
+                {
+
+                    bool loginSuccessful = Provider.ValidateUser(username, password);
+
+                    if (loginSuccessful)
+                    {
+
+                        return new FormsLoginResult(username, rememberMe);
+                    }
+                    else if (!user.IsApproved)
+                    {
+                        ModelState.AddModelError("_FORM", "The username provided has not been verified. Check your e-mail for the verification e-mail.");
+                    }
+                    else if (user.IsLockedOut)
+                    {
+                        ModelState.AddModelError("_FORM", "The username provided has been locked. Contact the administrator.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("_FORM", "The username or password provided is incorrect.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("_FORM", "The username provided is incorrect.");
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            ViewData["rememberMe"] = rememberMe;
+            return View();
+        }
+
+        /// <summary>
+        /// Logouts this instance.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Logout()
+        {
+            return new FormsLogoutResult();
+        }
+
+        /// <summary>
+        /// Registers this instance.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Register()
+        {
+            ViewData["Title"] = "Register";
+            return View("Register");
+        }
+
+        /// <summary>
+        /// Registers the specified username.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="email">The email.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="confirmPassword">The confirm password.</param>
+        /// <returns></returns>
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult Register(string username, string email, string password, string confirmPassword)
+        {
+
+            ViewData["Title"] = "Register";
+            ViewData["PasswordLength"] = Provider.MinRequiredPasswordLength;
+
+            // Basic parameter validation
+            if (String.IsNullOrEmpty(username))
+            {
+                ModelState.AddModelError("username", "You must specify a username.");
+            }
+            if (String.IsNullOrEmpty(email))
+            {
+                ModelState.AddModelError("email", "You must specify an email address.");
+            }
+            if (password == null || password.Length < Provider.MinRequiredPasswordLength)
+            {
+                ModelState.AddModelError("password",
+                    String.Format(CultureInfo.CurrentCulture,
+                         "You must specify a password of {0} or more characters.",
+                         Provider.MinRequiredPasswordLength));
+            }
+            if (!String.Equals(password, confirmPassword, StringComparison.Ordinal))
+            {
+                ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
+            }
+
+            // We don't check the captcha if running localhost and no challenge was given
+            if (this.Request.UserHostAddress == "127.0.0.1" && this.Request.Form["recaptcha_challenge_field"] != null)
+            {
+                // Check the captcha response
+                RecaptchaValidator humanValidator = new RecaptchaValidator();
+                humanValidator.PrivateKey = ConfigurationManager.AppSettings["RecaptchaPrivateKey"];
+                humanValidator.RemoteIP = this.Request.UserHostAddress;
+                humanValidator.Challenge = this.Request.Form["recaptcha_challenge_field"];
+                humanValidator.Response = this.Request.Form["recaptcha_response_field"];
+
+                RecaptchaResponse humanResponse = humanValidator.Validate();
+                if (!humanResponse.IsValid)
+                {
+                    Dictionary<string, object> props = new Dictionary<string, object>
+                    { 
+                        { "PrivateKey", humanValidator.PrivateKey },
+                        { "RemoteIP", humanValidator.RemoteIP },
+                        { "Challenge", humanValidator.Challenge },
+                        { "Response", humanValidator.Response },
+                        { "IsValid", humanResponse.IsValid },
+                        { "ErrorCode", humanResponse.ErrorCode }
+                    };
+                    Logger.Write("Failed reCAPTCHA attempt", "Controller", 100, 1042, TraceEventType.Verbose, "Failed reCAPTCHA attempt", props);
+                    ModelState.AddModelError("recaptcha", "reCAPTCHA failed to verify");
+                }
+            }
+
+            if (ViewData.ModelState.IsValid)
+            {
+                // Attempt to register the user
+                MembershipCreateStatus createStatus;
+                CosmoMongerMembershipUser newUser = (CosmoMongerMembershipUser)Provider.CreateUser(username, password, email, null, null, false, null, out createStatus);
+
+                if (newUser != null)
+                {
+                    return RedirectToAction("SendVerificationCode", new RouteValueDictionary(new {
+                        username = username
+                    }));
+                }
+                else
+                {
+                    ModelState.AddModelError("_FORM", ErrorCodeToString(createStatus));
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View("Register");
+        }
+
+        /// <summary>
+        /// Sends the verification code.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <returns></returns>
+        public ActionResult SendVerificationCode(string username)
+        {
+            CosmoMongerMembershipUser verifyUser = (CosmoMongerMembershipUser)Provider.GetUser(username, false);
+            if (verifyUser != null)
+            {
+                string baseVerificationUrl = this.Request.Url.GetLeftPart(UriPartial.Authority)  + this.Url.Action("VerifyEmail") + "?username=" + this.Url.Encode(username) + "&verificationCode=";
+                try
+                {
+                    verifyUser.SendVerificationCode(baseVerificationUrl);
+                    return RedirectToAction("SendVerificationCodeSuccess");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Failed to send e-mail
+                    ModelState.AddModelError("_FORM", ex);
+                }
+            }
+            else
+            {
+                // Username is invalid
+                ModelState.AddModelError("username", "Invalid username");
+            }
+
+            // If we got this far, something failed
+            ViewData["Title"] = "Send Verification Code";
+            return View();
+        }
+
+        public ActionResult SendVerificationCodeSuccess()
+        {
+            ViewData["Title"] = "Sent Verification Code";
+            return View();
+        }
+
+        public ActionResult VerifyEmail(string username, string verificationCode)
+        {
+            CosmoMongerMembershipUser checkUser = (CosmoMongerMembershipUser)Provider.GetUser(username, false);
+            if (checkUser != null)
+            {
+                if (checkUser.VerifyEmail(verificationCode))
+                {
+                    return RedirectToAction("VerifyEmailSuccess", new RouteValueDictionary(new { email = checkUser.Email }));
+                }
+                else
+                {
+                    ModelState.AddModelError("verificationCode", "Invalid verification code");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("username", "Invalid username");
+            }
+
+            ViewData["Title"] = "Verify Email";
+            return View("VerifyEmail");
+        }
+
+        public ActionResult VerifyEmailSuccess(string email)
+        {
+            ViewData["Title"] = "Verified Email";
+            ViewData["Email"] = email;
+            return View("VerifyEmailSuccess");
+        }
+
+        /// <summary>
+        /// Changes the password.
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        public ActionResult ChangePassword()
+        {
+            ViewData["Title"] = "Change Password";
+            return View("ChangePassword");
+        }
+
+        /// <summary>
+        /// Changes the password.
+        /// </summary>
+        /// <param name="currentPassword">The current password.</param>
+        /// <param name="newPassword">The new password.</param>
+        /// <param name="confirmPassword">The confirm password.</param>
+        /// <returns></returns>
         [Authorize]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
@@ -119,231 +372,80 @@ namespace CosmoMonger.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View();
+            return View("ChangePassword");
         }
 
+        /// <summary>
+        /// Changes the password success.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult ChangePasswordSuccess()
         {
-
             ViewData["Title"] = "Change Password";
-
-            return View();
+            return View("ChangePasswordSuccess");
         }
 
-        public ActionResult Login()
+        /// <summary>
+        /// Updates the users e-mail with the newly supplied e-mail
+        /// </summary>
+        /// <returns>
+        /// The UpdateEmail() action results.
+        /// </returns>
+        [Authorize]
+        public ActionResult ChangeEmail()
         {
+            ViewData["Title"] = "Change E-Mail";
+            MembershipUser user = Provider.GetUser(User.Identity.Name, true);
+            ViewData["Email"] = user.Email;
 
-            ViewData["Title"] = "Login";
-
-            return View();
+            return View("ChangeEmail");
         }
 
+        /// <summary>
+        /// Updates the users email with the newly supplied e-mail
+        /// </summary>
+        /// <param name="email">The updated email to use.</param>
+        /// <returns>
+        /// The ChangeEmail view on error, a redirect to the ChangeEmailSuccess action otherwise.
+        /// </returns>
+        [Authorize]
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Login(string username, string password, bool rememberMe, string returnUrl)
+        public ActionResult ChangeEmail(string email)
         {
-
-            ViewData["Title"] = "Login";
+            ViewData["Title"] = "Change Email";
 
             // Basic parameter validation
-            if (String.IsNullOrEmpty(username))
-            {
-                ModelState.AddModelError("username", "You must specify a username.");
-            }
-            if (String.IsNullOrEmpty(password))
-            {
-                ModelState.AddModelError("password", "You must specify a password.");
-            }
-
-            if (ViewData.ModelState.IsValid)
-            {
-                // Attempt to login
-                MembershipUser user = Provider.GetUser(username, true);
-                if (user != null)
-                {
-
-                    bool loginSuccessful = Provider.ValidateUser(username, password);
-
-                    if (loginSuccessful)
-                    {
-                        
-                        return new FormsLoginResult(username, rememberMe);
-                    }
-                    else if (!user.IsApproved)
-                    {
-                        ModelState.AddModelError("_FORM", "The username provided has not been verified. Check your e-mail for the verification e-mail.");
-                    }
-                    else if (user.IsLockedOut)
-                    {
-                        ModelState.AddModelError("_FORM", "The username provided has been locked. Contact the administrator.");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("_FORM", "The username or password provided is incorrect.");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("_FORM", "The username provided is incorrect.");
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            ViewData["rememberMe"] = rememberMe;
-            return View();
-        }
-
-        public ActionResult Logout()
-        {
-            return new FormsLogoutResult();
-        }
-
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (filterContext.HttpContext.User.Identity is WindowsIdentity)
-            {
-                throw new InvalidOperationException("Windows authentication is not supported.");
-            }
-        }
-
-        public ActionResult Register()
-        {
-
-            ViewData["Title"] = "Register";
-            ViewData["PasswordLength"] = Provider.MinRequiredPasswordLength;
-
-            return View();
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Register(string username, string email, string password, string confirmPassword)
-        {
-
-            ViewData["Title"] = "Register";
-            ViewData["PasswordLength"] = Provider.MinRequiredPasswordLength;
-
-            // Basic parameter validation
-            if (String.IsNullOrEmpty(username))
-            {
-                ModelState.AddModelError("username", "You must specify a username.");
-            }
             if (String.IsNullOrEmpty(email))
             {
-                ModelState.AddModelError("email", "You must specify an email address.");
-            }
-            if (password == null || password.Length < Provider.MinRequiredPasswordLength)
-            {
-                ModelState.AddModelError("password",
-                    String.Format(CultureInfo.CurrentCulture,
-                         "You must specify a password of {0} or more characters.",
-                         Provider.MinRequiredPasswordLength));
-            }
-            if (!String.Equals(password, confirmPassword, StringComparison.Ordinal))
-            {
-                ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
+                ModelState.AddModelError("email", "You must specify a new email.");
             }
 
-            // We don't check the captcha if running localhost and no challenge was given
-            if (this.Request.UserHostAddress == "127.0.0.1" && this.Request.Form["recaptcha_challenge_field"] != null)
+            if (ModelState.IsValid)
             {
-                // Check the captcha response
-                RecaptchaValidator humanValidator = new RecaptchaValidator();
-                humanValidator.PrivateKey = ConfigurationManager.AppSettings["RecaptchaPrivateKey"];
-                humanValidator.RemoteIP = this.Request.UserHostAddress;
-                humanValidator.Challenge = this.Request.Form["recaptcha_challenge_field"];
-                humanValidator.Response = this.Request.Form["recaptcha_response_field"];
-
-                RecaptchaResponse humanResponse = humanValidator.Validate();
-                if (!humanResponse.IsValid)
+                // Attempt to change email
+                try
                 {
-                    Dictionary<string, object> props = new Dictionary<string, object>
-                { 
-                    { "PrivateKey", humanValidator.PrivateKey },
-                    { "RemoteIP", humanValidator.RemoteIP },
-                    { "Challenge", humanValidator.Challenge },
-                    { "Response", humanValidator.Response },
-                    { "IsValid", humanResponse.IsValid },
-                    { "ErrorCode", humanResponse.ErrorCode }
-                };
-                    Logger.Write("Failed reCAPTCHA attempt", "Controller", 100, 1042, TraceEventType.Verbose, "Failed reCAPTCHA attempt", props);
-                    ModelState.AddModelError("recaptcha", "reCAPTCHA failed to verify");
+                    MembershipUser user = Provider.GetUser(User.Identity.Name, true);
+                    user.Email = email;
+
+                    return RedirectToAction("ChangeEmailSuccess");
                 }
-            }
-
-            if (ViewData.ModelState.IsValid)
-            {
-                // Attempt to register the user
-                MembershipCreateStatus createStatus;
-                CosmoMongerMembershipUser newUser = (CosmoMongerMembershipUser)Provider.CreateUser(username, password, email, null, null, false, null, out createStatus);
-
-                if (newUser != null)
+                catch (ArgumentException ex)
                 {
-                    return RedirectToAction("SendVerificationCode", new RouteValueDictionary(new {
-                        username = username
-                    }));
-                }
-                else
-                {
-                    ModelState.AddModelError("_FORM", ErrorCodeToString(createStatus));
+                    // Display error
+                    ModelState.AddModelError("email", ex);
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return View();
+            return View("ChangeEmail");
         }
 
-        public ActionResult SendVerificationCode(string username)
+        public ActionResult ChangeEmailSuccess()
         {
-            CosmoMongerMembershipUser verifyUser = (CosmoMongerMembershipUser)Provider.GetUser(username, false);
-            if (verifyUser != null)
-            {
-                string baseVerificationUrl = this.Request.Url.GetLeftPart(UriPartial.Authority)  + this.Url.Action("VerifyEmail") + "?username=" + this.Url.Encode(username) + "&verificationCode=";
-                try
-                {
-                    verifyUser.SendVerificationCode(baseVerificationUrl);
-                    ViewData["Title"] = "Sent Verification Code";
-                    return View("SentVerificationCode");
-                }
-                catch (InvalidOperationException ex)
-                {
-                    // Failed to send e-mail
-                    ModelState.AddModelError("_FORM", ex);
-                }
-            }
-            else
-            {
-                // Username is invalid
-                ModelState.AddModelError("username", "Invalid username");
-            }
+            ViewData["Title"] = "Change Email Success";
 
-            // If we got this far, something failed
-            ViewData["Title"] = "Send Verification Code";
-            return View();
-        }
-
-        public ActionResult VerifyEmail(string username, string verificationCode)
-        {
-            CosmoMongerMembershipUser checkUser = (CosmoMongerMembershipUser)Provider.GetUser(username, false);
-            if (checkUser != null)
-            {
-                if (checkUser.VerifyEmail(verificationCode))
-                {
-                    ViewData["Title"] = "Verified Email";
-                    ViewData["UserName"] = checkUser.UserName;
-                    ViewData["Email"] = checkUser.Email;
-                    return View("VerifiedEmail");
-                }
-                else
-                {
-                    ModelState.AddModelError("verificationCode", "Invalid verification code");
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("username", "Invalid username");
-            }
-
-            ViewData["Title"] = "Verify Email";
-            return View();
+            return View("ChangeEmailSuccess");
         }
 
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)

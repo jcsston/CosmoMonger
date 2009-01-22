@@ -133,10 +133,12 @@
     <Content Include="Scripts\jquery-1.2.6-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Views\Account\ChangeEmail.aspx" />
+    <Content Include="Views\Account\ChangeEmailSuccess.aspx" />
     <Content Include="Views\Account\SendVerificationCode.aspx" />
-    <Content Include="Views\Account\SentVerificationCode.aspx" />
-    <Content Include="Views\Account\VerifiedEmail.aspx" />
+    <Content Include="Views\Account\SendVerificationCodeSuccess.aspx" />
     <Content Include="Views\Account\VerifyEmail.aspx" />
+    <Content Include="Views\Account\VerifyEmailSuccess.aspx" />
     <Content Include="Views\Bank\Bank.aspx" />
     <Content Include="Views\PlayerRecord\ListRecords.aspx" />
     <Content Include="Views\PlayerRecord\ViewRecord.aspx" />
@@ -179,7 +181,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App_Data\liquibase.properties" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="Models\CosmoMongerDb.dbml.layout">
       <DependentUpon>CosmoMongerDb.dbml</DependentUpon>
     </None>

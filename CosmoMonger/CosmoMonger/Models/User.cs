@@ -86,29 +86,21 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Update the user profile with the provided arguments. 
-        /// Raises an ArgumentException if the email or username is invalid or already taken.
+        /// Update the user's e-mail with the new e-mail address.
         /// </summary>
-        /// <param name="username">The username to set.</param>
-        /// <param name="email">The email to set.</param>
-        public void UpdateProfile(string username, string email)
+        /// <param name="email">The e-mail to set.</param>
+        /// <exception cref="ArgumentException">Thrown if the e-mail is already taken by another user</exception>
+        public void UpdateEmail(string email)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
-            // Check that the username/email doesn't already exist on other user
-            bool matchingUsername = (from u in db.Users where u.UserName == username && u != this select u).Any();
-            if (matchingUsername)
-            {
-                throw new ArgumentException("Another user has the same username", "username");
-            }
-
+            // Check that the e-mail doesn't already exist on other user
             bool matchingEmail = (from u in db.Users where u.Email == email && u != this select u).Any();
             if (matchingEmail)
             {
                 throw new ArgumentException("Another user has the same e-mail", "email");
             }
 
-            this.UserName = username;
             this.Email = email;
 
             // Save changes

@@ -61,7 +61,7 @@ namespace CosmoMonger.Models
 
             set
             {
-                this.user.UpdateProfile(this.user.UserName, this.user.Email);
+                this.user.UpdateEmail(value);
             }
         }
 
