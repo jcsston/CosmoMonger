@@ -259,5 +259,53 @@
             // Check results
             Assert.AreEqual(playerName, testPlayer.Name, "Player name is restored");
         }
+
+        [Test]
+        public void UpdatePlaytimeTracked()
+        {
+            // Arrange
+            Player testPlayer = this.CreateTestPlayer();
+            // Set last time played to 1 minute ago
+            testPlayer.LastPlayed = DateTime.Now.AddMinutes(-1);
+
+            // Act
+            testPlayer.UpdatePlayTime();
+
+            // Assert
+            Assert.That(testPlayer.Alive, Is.True, "Player should still be alive with 1 minute of playtime");
+            Assert.That(testPlayer.TimePlayed, Is.GreaterThanOrEqualTo(60), "Player should be at least 60 seconds old");
+            Assert.That(testPlayer.TimePlayed, Is.LessThanOrEqualTo(65), "Player shouldn't be more than 65 seconds old");
+        }
+
+        [Test]
+        public void UpdatePlaytimeTimeout()
+        {
+            // Arrange
+            Player testPlayer = this.CreateTestPlayer();
+            // Set last time played to 6 minute ago
+            testPlayer.LastPlayed = DateTime.Now.AddMinutes(-6);
+
+            // Act
+            testPlayer.UpdatePlayTime();
+
+            // Assert
+            Assert.That(testPlayer.Alive, Is.True, "Player should still be alive");
+            Assert.That(testPlayer.TimePlayed, Is.EqualTo(0), "Player should still be 0 seconds old");
+        }
+
+        [Test]
+        public void UpdatePlaytimeExpired()
+        {
+            // Arrange
+            Player testPlayer = this.CreateTestPlayer();
+            // Set time played to 7 days
+            testPlayer.TimePlayed = 60 * 60 * 24 * 7;
+
+            // Act
+            testPlayer.UpdatePlayTime();
+            
+            // Assert
+            Assert.That(testPlayer.Alive, Is.False, "Player should have died with 7 days of playtime");
+        }
     }
 }
