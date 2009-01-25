@@ -3,6 +3,7 @@
 //     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
+// <author>Roger Boykin</author>
 //-----------------------------------------------------------------------
 namespace CosmoMonger.Controllers
 {
@@ -11,6 +12,7 @@ namespace CosmoMonger.Controllers
     using System.Configuration;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Net.Mail;
     using System.Security.Principal;
     using System.Web.Mvc;
     using System.Web.Routing;
@@ -21,7 +23,6 @@ namespace CosmoMonger.Controllers
     using CosmoMonger.Models.Utility;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
     using Recaptcha;
-    using System.Net.Mail;
 
     /// <summary>
     /// This controller manages user account creation, login, and logout
@@ -46,15 +47,16 @@ namespace CosmoMonger.Controllers
         /// of unit testing this type. See the comments on the IFormsAuthentication interface for more
         /// information.
         /// </summary>
+        /// <param name="provider">The provider object to user.</param>
         public AccountController(MembershipProvider provider)
         {
-            Provider = provider ?? Membership.Provider;
+            this.Provider = provider ?? Membership.Provider;
         }
 
         /// <summary>
-        /// Gets or sets the MembershipProvider used.
+        /// Gets the MembershipProvider used for auth.
         /// </summary>
-        /// <value>The MembershipProvider used for login/logout.</value>
+        /// <value>Gets the MembershipProvider used for login/logout.</value>
         public MembershipProvider Provider
         {
             get;
@@ -64,7 +66,7 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Logins this instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The Login view</returns>
         public ActionResult Login()
         {
             ViewData["Title"] = "Login";
@@ -78,11 +80,10 @@ namespace CosmoMonger.Controllers
         /// <param name="password">The password.</param>
         /// <param name="rememberMe">if set to <c>true</c> [remember me].</param>
         /// <param name="returnUrl">The return URL.</param>
-        /// <returns></returns>
+        /// <returns>A redirection if successful, the Login view on failure.</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Login(string username, string password, bool rememberMe, string returnUrl)
         {
-
             ViewData["Title"] = "Login";
 
             // Basic parameter validation
@@ -90,6 +91,7 @@ namespace CosmoMonger.Controllers
             {
                 ModelState.AddModelError("username", "You must specify a username.");
             }
+
             if (String.IsNullOrEmpty(password))
             {
                 ModelState.AddModelError("password", "You must specify a password.");
@@ -98,15 +100,13 @@ namespace CosmoMonger.Controllers
             if (ViewData.ModelState.IsValid)
             {
                 // Attempt to login
-                MembershipUser user = Provider.GetUser(username, true);
+                MembershipUser user = this.Provider.GetUser(username, true);
                 if (user != null)
                 {
-
-                    bool loginSuccessful = Provider.ValidateUser(username, password);
+                    bool loginSuccessful = this.Provider.ValidateUser(username, password);
 
                     if (loginSuccessful)
                     {
-
                         return new FormsLoginResult(username, rememberMe);
                     }
                     else if (!user.IsApproved)
@@ -134,55 +134,54 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
-        /// Logouts this instance.
+        /// Logouts the currently logged in user.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A redirect to the home page</returns>
         public ActionResult Logout()
         {
             return new FormsLogoutResult();
         }
 
         /// <summary>
-        /// Registers this instance.
+        /// Registers a new user.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns the Register view</returns>
         public ActionResult Register()
         {
             ViewData["Title"] = "Register";
-            return View("Register");
+            return View();
         }
 
         /// <summary>
         /// Registers the specified username.
         /// </summary>
-        /// <param name="username">The username.</param>
-        /// <param name="email">The email.</param>
+        /// <param name="username">The username to register.</param>
+        /// <param name="email">The email for the new user.</param>
         /// <param name="password">The password.</param>
         /// <param name="confirmPassword">The confirm password.</param>
-        /// <returns></returns>
+        /// <returns>The Register view on error, redirects to SendVerificationCode on success.</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Register(string username, string email, string password, string confirmPassword)
         {
-
             ViewData["Title"] = "Register";
-            ViewData["PasswordLength"] = Provider.MinRequiredPasswordLength;
 
             // Basic parameter validation
             if (String.IsNullOrEmpty(username))
             {
                 ModelState.AddModelError("username", "You must specify a username.");
             }
+
             if (String.IsNullOrEmpty(email))
             {
                 ModelState.AddModelError("email", "You must specify an email address.");
             }
-            if (password == null || password.Length < Provider.MinRequiredPasswordLength)
+
+            if (password == null || password.Length < this.Provider.MinRequiredPasswordLength)
             {
-                ModelState.AddModelError("password",
-                    String.Format(CultureInfo.CurrentCulture,
-                         "You must specify a password of {0} or more characters.",
-                         Provider.MinRequiredPasswordLength));
+                string passwordError = String.Format(CultureInfo.CurrentCulture, "You must specify a new password of {0} or more characters.", this.Provider.MinRequiredPasswordLength);
+                ModelState.AddModelError("password", passwordError);
             }
+
             if (!String.Equals(password, confirmPassword, StringComparison.Ordinal))
             {
                 ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
@@ -219,13 +218,11 @@ namespace CosmoMonger.Controllers
             {
                 // Attempt to register the user
                 MembershipCreateStatus createStatus;
-                CosmoMongerMembershipUser newUser = (CosmoMongerMembershipUser)Provider.CreateUser(username, password, email, null, null, false, null, out createStatus);
+                CosmoMongerMembershipUser newUser = (CosmoMongerMembershipUser)this.Provider.CreateUser(username, password, email, null, null, false, null, out createStatus);
 
                 if (newUser != null)
                 {
-                    return RedirectToAction("SendVerificationCode", new RouteValueDictionary(new {
-                        username = username
-                    }));
+                    return RedirectToAction("SendVerificationCode", new RouteValueDictionary(new { username = username }));
                 }
                 else
                 {
@@ -234,17 +231,17 @@ namespace CosmoMonger.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View("Register");
+            return View();
         }
 
         /// <summary>
-        /// Sends the verification code.
+        /// Sends the verification code to the users email.
         /// </summary>
-        /// <param name="username">The username.</param>
-        /// <returns></returns>
+        /// <param name="username">The username to send the verification code for.</param>
+        /// <returns>The SendVerificationCode view on error, redirects to SendVerificationCodeSuccess on success.</returns>
         public ActionResult SendVerificationCode(string username)
         {
-            CosmoMongerMembershipUser verifyUser = (CosmoMongerMembershipUser)Provider.GetUser(username, false);
+            CosmoMongerMembershipUser verifyUser = (CosmoMongerMembershipUser)this.Provider.GetUser(username, false);
             if (verifyUser != null)
             {
                 string baseVerificationUrl = this.Request.Url.GetLeftPart(UriPartial.Authority)  + this.Url.Action("VerifyEmail") + "?username=" + this.Url.Encode(username) + "&verificationCode=";
@@ -270,15 +267,25 @@ namespace CosmoMonger.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Shows the SendVerificationCodeSuccess view.
+        /// </summary>
+        /// <returns>Returns the SendVerificationCodeSuccess View</returns>
         public ActionResult SendVerificationCodeSuccess()
         {
             ViewData["Title"] = "Sent Verification Code";
             return View();
         }
 
+        /// <summary>
+        /// Verifies the supplied email address for the supplied username.
+        /// </summary>
+        /// <param name="username">The username to verify the email of.</param>
+        /// <param name="verificationCode">The verification code.</param>
+        /// <returns>The VerifyEmail View on error, redirects to the VerifyEmailSuccess action if successful.</returns>
         public ActionResult VerifyEmail(string username, string verificationCode)
         {
-            CosmoMongerMembershipUser checkUser = (CosmoMongerMembershipUser)Provider.GetUser(username, false);
+            CosmoMongerMembershipUser checkUser = (CosmoMongerMembershipUser)this.Provider.GetUser(username, false);
             if (checkUser != null)
             {
                 if (checkUser.VerifyEmail(verificationCode))
@@ -296,25 +303,30 @@ namespace CosmoMonger.Controllers
             }
 
             ViewData["Title"] = "Verify Email";
-            return View("VerifyEmail");
+            return View();
         }
 
+        /// <summary>
+        /// Shows the VerifyEmailSuccess view.
+        /// </summary>
+        /// <param name="email">The email that was successfully verified.</param>
+        /// <returns>Returns the VerifyEmailSuccess View.</returns>
         public ActionResult VerifyEmailSuccess(string email)
         {
             ViewData["Title"] = "Verified Email";
             ViewData["Email"] = email;
-            return View("VerifyEmailSuccess");
+            return View();
         }
 
         /// <summary>
         /// Changes the password.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The ChangePassword view</returns>
         [Authorize]
         public ActionResult ChangePassword()
         {
             ViewData["Title"] = "Change Password";
-            return View("ChangePassword");
+            return View();
         }
 
         /// <summary>
@@ -323,26 +335,25 @@ namespace CosmoMonger.Controllers
         /// <param name="currentPassword">The current password.</param>
         /// <param name="newPassword">The new password.</param>
         /// <param name="confirmPassword">The confirm password.</param>
-        /// <returns></returns>
+        /// <returns>The ChangePassword view on error, redirects to the ChangePasswordSuccess action on success.</returns>
         [Authorize]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
         {
             ViewData["Title"] = "Change Password";
-            ViewData["PasswordLength"] = Provider.MinRequiredPasswordLength;
 
             // Basic parameter validation
             if (String.IsNullOrEmpty(currentPassword))
             {
                 ModelState.AddModelError("currentPassword", "You must specify a current password.");
             }
-            if (newPassword == null || newPassword.Length < Provider.MinRequiredPasswordLength)
+
+            if (newPassword == null || newPassword.Length < this.Provider.MinRequiredPasswordLength)
             {
-                ModelState.AddModelError("newPassword",
-                    String.Format(CultureInfo.CurrentCulture,
-                         "You must specify a new password of {0} or more characters.",
-                         Provider.MinRequiredPasswordLength));
+                string passwordError = String.Format(CultureInfo.CurrentCulture, "You must specify a new password of {0} or more characters.", this.Provider.MinRequiredPasswordLength);
+                ModelState.AddModelError("newPassword", passwordError);
             }
+
             if (!String.Equals(newPassword, confirmPassword, StringComparison.Ordinal))
             {
                 ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
@@ -354,7 +365,7 @@ namespace CosmoMonger.Controllers
                 bool changeSuccessful = false;
                 try
                 {
-                    changeSuccessful = Provider.ChangePassword(User.Identity.Name, currentPassword, newPassword);
+                    changeSuccessful = this.Provider.ChangePassword(User.Identity.Name, currentPassword, newPassword);
                 }
                 catch
                 {
@@ -372,17 +383,17 @@ namespace CosmoMonger.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View("ChangePassword");
+            return View();
         }
 
         /// <summary>
-        /// Changes the password success.
+        /// Shows the password change success view
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The ChangePasswordSuccess view</returns>
         public ActionResult ChangePasswordSuccess()
         {
             ViewData["Title"] = "Change Password";
-            return View("ChangePasswordSuccess");
+            return View();
         }
 
         /// <summary>
@@ -395,10 +406,10 @@ namespace CosmoMonger.Controllers
         public ActionResult ChangeEmail()
         {
             ViewData["Title"] = "Change E-Mail";
-            MembershipUser user = Provider.GetUser(User.Identity.Name, true);
+            MembershipUser user = this.Provider.GetUser(User.Identity.Name, true);
             ViewData["Email"] = user.Email;
 
-            return View("ChangeEmail");
+            return View();
         }
 
         /// <summary>
@@ -425,7 +436,7 @@ namespace CosmoMonger.Controllers
                 // Attempt to change email
                 try
                 {
-                    MembershipUser user = Provider.GetUser(User.Identity.Name, true);
+                    MembershipUser user = this.Provider.GetUser(User.Identity.Name, true);
                     user.Email = email;
 
                     return RedirectToAction("ChangeEmailSuccess");
@@ -438,30 +449,40 @@ namespace CosmoMonger.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View("ChangeEmail");
+            return View();
         }
 
-     
+        /// <summary>
+        /// Returns the changed email success view
+        /// </summary>
+        /// <returns>The ChangeEmailSuccess View</returns>
         public ActionResult ChangeEmailSuccess()
         {
             ViewData["Title"] = "Change Email Success";
 
-            return View("ChangeEmailSuccess");
+            return View();
         }
 
-        //added by Roger 1-21-2009
-        //This function returns user email and user name to the UserProfile Page
+        /// <summary>
+        /// This action returns the users email and username to the UserProfile view.
+        /// </summary>
+        /// <returns>The UserProfile view</returns>
         public ActionResult UserProfile()
         {
             ViewData["Title"] = "User Profile";
-            CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)Provider.GetUser(User.Identity.Name, true);
+            CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.Provider.GetUser(User.Identity.Name, true);
             ViewData["Email"] = user.Email;
             ViewData["Name"] = user.UserName;
             ViewData["JoinDate"] = user.GetUserModel().Joined;
 
-            return View("UserProfile");
+            return View();
         }
 
+        /// <summary>
+        /// Converts an MembershipCreateStatus error code to a friendly string.
+        /// </summary>
+        /// <param name="createStatus">The create status error to convert.</param>
+        /// <returns>An user friendly string</returns>
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
         {
             // See http://msdn.microsoft.com/en-us/library/system.web.security.membershipcreatestatus.aspx for
