@@ -27,7 +27,7 @@ namespace CosmoMonger.Models
         /// <param name="name">The player name.</param>
         /// <param name="race">The race of the new Player.</param>
         /// <returns>The newly created Player</returns>
-        public Player CreatePlayer(string name, Race race)
+        public virtual Player CreatePlayer(string name, Race race)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             bool existingPlayerName = (from p in db.Players where p.Name == name select p).Any();

@@ -147,7 +147,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="playerId">The player id.</param>
         /// <returns>Player object, null if the player does not exist.</returns>
-        public Player GetPlayer(int playerId)
+        public virtual Player GetPlayer(int playerId)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from p in db.Players where p.PlayerId == playerId select p).SingleOrDefault();
@@ -167,7 +167,7 @@ namespace CosmoMonger.Models
         /// Gets all the races available.
         /// </summary>
         /// <returns>Array of Race objects</returns>
-        public Race[] GetRaces()
+        public virtual Race[] GetRaces()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from r in db.Races select r).ToArray();
@@ -178,7 +178,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="raceId">The race id of the Race object to get.</param>
         /// <returns>Race oject, null if the race does not exist</returns>
-        public Race GetRace(int raceId)
+        public virtual Race GetRace(int raceId)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from r in db.Races where r.RaceId == raceId select r).SingleOrDefault();

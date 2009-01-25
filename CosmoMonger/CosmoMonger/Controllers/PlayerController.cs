@@ -8,12 +8,8 @@
 namespace CosmoMonger.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
-    using System.Web.Mvc.Ajax;
     using CosmoMonger.Models;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 
@@ -23,6 +19,24 @@ namespace CosmoMonger.Controllers
     /// </summary>
     public class PlayerController : GameController
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlayerController"/> class.
+        /// This is the default constructor that doesn't really to anything.
+        /// </summary>
+        public PlayerController()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PlayerController"/> class.
+        /// This constructor is used for unit testing purposes.
+        /// </summary>
+        /// <param name="manager">The game manager object to use.</param>
+        public PlayerController(GameManager manager) 
+            : base(manager)
+        {
+        }
+
         /// <summary>
         /// Redirects to the PlayerProfile action
         /// </summary>

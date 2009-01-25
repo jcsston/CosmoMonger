@@ -115,7 +115,7 @@
   </Table>
   <Table Name="Player" Member="Players">
     <Type Name="Player">
-      <Column Name="PlayerId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PlayerId" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="UserId" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Modifier="Virtual" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="RaceId" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />

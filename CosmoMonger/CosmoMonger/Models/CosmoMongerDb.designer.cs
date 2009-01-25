@@ -2759,7 +2759,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_PlayerId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int PlayerId
+		public virtual int PlayerId
 		{
 			get
 			{
