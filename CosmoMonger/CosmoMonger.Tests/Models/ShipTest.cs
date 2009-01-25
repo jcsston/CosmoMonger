@@ -9,7 +9,6 @@
     using CosmoMonger.Models;
     using NUnit.Framework;
     using NUnit.Framework.SyntaxHelpers;
-    using Moq;
 
     /// <summary>
     /// Summary description for ShipTest

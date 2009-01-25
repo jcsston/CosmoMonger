@@ -84,6 +84,9 @@ namespace CosmoMonger.Models
             // Remove this new ship from the pool
             this.Quantity -= 1;
 
+            // Charge the player
+            manager.CurrentPlayer.CashCredits -= totalCost;
+
             // Swap in the players new ship
             currentShip.BaseShip = this.BaseShip;
 

@@ -2779,7 +2779,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_UserId", DbType="Int NOT NULL")]
-		public int UserId
+		public virtual int UserId
 		{
 			get
 			{
@@ -2803,7 +2803,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Name", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
-		public string Name
+		public virtual string Name
 		{
 			get
 			{
@@ -2823,7 +2823,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_RaceId", DbType="Int NOT NULL")]
-		public int RaceId
+		public virtual int RaceId
 		{
 			get
 			{
@@ -2847,7 +2847,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Reputation", DbType="Int NOT NULL")]
-		public int Reputation
+		public virtual int Reputation
 		{
 			get
 			{
@@ -2867,7 +2867,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_ShipId", DbType="Int NOT NULL")]
-		public int ShipId
+		public virtual int ShipId
 		{
 			get
 			{
@@ -2891,7 +2891,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_BankCredits", DbType="Int NOT NULL")]
-		public int BankCredits
+		public virtual int BankCredits
 		{
 			get
 			{
@@ -2911,7 +2911,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_CashCredits", DbType="Int NOT NULL")]
-		public int CashCredits
+		public virtual int CashCredits
 		{
 			get
 			{
@@ -2931,7 +2931,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_TimePlayed", DbType="float NOT NULL")]
-		public double TimePlayed
+		public virtual double TimePlayed
 		{
 			get
 			{
@@ -2951,7 +2951,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_LastPlayed", DbType="DateTime NOT NULL")]
-		public System.DateTime LastPlayed
+		public virtual System.DateTime LastPlayed
 		{
 			get
 			{
@@ -2971,7 +2971,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_NetWorth", DbType="Int NOT NULL")]
-		public int NetWorth
+		public virtual int NetWorth
 		{
 			get
 			{
@@ -2991,7 +2991,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_BountyTotal", DbType="Int NOT NULL")]
-		public int BountyTotal
+		public virtual int BountyTotal
 		{
 			get
 			{
@@ -3011,7 +3011,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_HighestBounty", DbType="Int NOT NULL")]
-		public int HighestBounty
+		public virtual int HighestBounty
 		{
 			get
 			{
@@ -3031,7 +3031,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_ShipsDestroyed", DbType="Int NOT NULL")]
-		public int ShipsDestroyed
+		public virtual int ShipsDestroyed
 		{
 			get
 			{
@@ -3051,7 +3051,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_ForcedSurrenders", DbType="Int NOT NULL")]
-		public int ForcedSurrenders
+		public virtual int ForcedSurrenders
 		{
 			get
 			{
@@ -3071,7 +3071,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_ForcedFlees", DbType="Int NOT NULL")]
-		public int ForcedFlees
+		public virtual int ForcedFlees
 		{
 			get
 			{
@@ -3091,7 +3091,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_CargoLootedWorth", DbType="Int NOT NULL")]
-		public int CargoLootedWorth
+		public virtual int CargoLootedWorth
 		{
 			get
 			{
@@ -3111,7 +3111,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_ShipsLost", DbType="Int NOT NULL")]
-		public int ShipsLost
+		public virtual int ShipsLost
 		{
 			get
 			{
@@ -3131,7 +3131,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_SurrenderCount", DbType="Int NOT NULL")]
-		public int SurrenderCount
+		public virtual int SurrenderCount
 		{
 			get
 			{
@@ -3151,7 +3151,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_FleeCount", DbType="Int NOT NULL")]
-		public int FleeCount
+		public virtual int FleeCount
 		{
 			get
 			{
@@ -3171,7 +3171,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_CargoLostWorth", DbType="Int NOT NULL")]
-		public int CargoLostWorth
+		public virtual int CargoLostWorth
 		{
 			get
 			{
@@ -3191,7 +3191,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Alive", DbType="Bit NOT NULL")]
-		public bool Alive
+		public virtual bool Alive
 		{
 			get
 			{
@@ -4533,7 +4533,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="BaseShip_Ship", Storage="_BaseShip", ThisKey="BaseShipId", OtherKey="BaseShipId", IsForeignKey=true)]
-		public BaseShip BaseShip
+		public virtual BaseShip BaseShip
 		{
 			get
 			{
@@ -6153,7 +6153,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="BaseShip_SystemShip", Storage="_BaseShip", ThisKey="BaseShipId", OtherKey="BaseShipId", IsForeignKey=true)]
-		public BaseShip BaseShip
+		public virtual BaseShip BaseShip
 		{
 			get
 			{

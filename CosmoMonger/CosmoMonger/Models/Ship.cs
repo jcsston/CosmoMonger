@@ -22,7 +22,7 @@ namespace CosmoMonger.Models
         /// Gets the current free cargo space for this ship.
         /// Calculated by taking the total cargo space and subtracting all upgrades, cargo, etc.
         /// </summary>
-        public int CargoSpaceFree
+        public virtual int CargoSpaceFree
         {
             get
             {
@@ -40,7 +40,7 @@ namespace CosmoMonger.Models
         /// Currently this is just the BaseShip model CargoSpace value. 
         /// But we have this to account for possible future ship upgrades that actually upgrade your cargo space.
         /// </summary>
-        public int CargoSpaceTotal
+        public virtual int CargoSpaceTotal
         {
             get
             {
@@ -53,7 +53,7 @@ namespace CosmoMonger.Models
         /// Calculated by looking in the current system and seeing what a matching ship is selling for, if that is not found then
         /// the BaseShip.BasePrice is taken.
         /// </summary>
-        public int TradeInValue
+        public virtual int TradeInValue
         {
             get
             {

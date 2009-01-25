@@ -116,27 +116,27 @@
   <Table Name="Player" Member="Players">
     <Type Name="Player">
       <Column Name="PlayerId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="RaceId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Reputation" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ShipId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="BankCredits" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="CashCredits" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="TimePlayed" Type="System.Double" DbType="float NOT NULL" CanBeNull="false" />
-      <Column Name="LastPlayed" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="NetWorth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="BountyTotal" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="HighestBounty" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ShipsDestroyed" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ForcedSurrenders" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ForcedFlees" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="CargoLootedWorth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ShipsLost" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="SurrenderCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="FleeCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="CargoLostWorth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Alive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Modifier="Virtual" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="RaceId" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Reputation" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ShipId" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BankCredits" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CashCredits" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TimePlayed" Modifier="Virtual" Type="System.Double" DbType="float NOT NULL" CanBeNull="false" />
+      <Column Name="LastPlayed" Modifier="Virtual" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="NetWorth" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BountyTotal" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="HighestBounty" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ShipsDestroyed" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ForcedSurrenders" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ForcedFlees" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CargoLootedWorth" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ShipsLost" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SurrenderCount" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FleeCount" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CargoLostWorth" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Alive" Modifier="Virtual" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="Race_Player" Member="Race" ThisKey="RaceId" OtherKey="RaceId" Type="Race" IsForeignKey="true" />
       <Association Name="Ship_Player" Member="Ship" Modifier="Virtual" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
       <Association Name="User_Player" Member="User" ThisKey="UserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
@@ -195,7 +195,7 @@
       <Association Name="Ship_Npc" Member="Npcs" ThisKey="ShipId" OtherKey="ShipId" Type="Npc" />
       <Association Name="Ship_Player" Member="Players" Modifier="Virtual" ThisKey="ShipId" OtherKey="ShipId" Type="Player" />
       <Association Name="Ship_ShipGood" Member="ShipGoods" ThisKey="ShipId" OtherKey="ShipId" Type="ShipGood" />
-      <Association Name="BaseShip_Ship" Member="BaseShip" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="BaseShip" IsForeignKey="true" />
+      <Association Name="BaseShip_Ship" Member="BaseShip" Modifier="Virtual" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="BaseShip" IsForeignKey="true" />
       <Association Name="JumpDrive_Ship" Member="JumpDrive" Modifier="Virtual" ThisKey="JumpDriveId" OtherKey="JumpDriveId" Type="JumpDrive" IsForeignKey="true" />
       <Association Name="Shield_Ship" Member="Shield" ThisKey="ShieldId" OtherKey="ShieldId" Type="Shield" IsForeignKey="true" />
       <Association Name="Weapon_Ship" Member="Weapon" ThisKey="WeaponId" OtherKey="WeaponId" Type="Weapon" IsForeignKey="true" />
@@ -265,7 +265,7 @@
       <Column Name="BaseShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PriceMultiplier" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Association Name="BaseShip_SystemShip" Member="BaseShip" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="BaseShip" IsForeignKey="true" />
+      <Association Name="BaseShip_SystemShip" Member="BaseShip" Modifier="Virtual" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="BaseShip" IsForeignKey="true" />
       <Association Name="CosmoSystem_SystemShip" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
