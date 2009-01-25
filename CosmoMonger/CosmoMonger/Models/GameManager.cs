@@ -80,7 +80,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="userId">The user id.</param>
         /// <returns>User object, null if the user does not exist.</returns>
-        public User GetUser(int userId)
+        public virtual User GetUser(int userId)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from u in db.Users where u.UserId == userId select u).SingleOrDefault();
@@ -98,7 +98,7 @@ namespace CosmoMonger.Models
         /// </param>
         /// <param name="limit">The number of top players to return</param>
         /// <returns>Array of Player objects</returns>
-        public Player[] GetTopPlayers(string recordType, int limit)
+        public virtual Player[] GetTopPlayers(string recordType, int limit)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             switch (recordType)
