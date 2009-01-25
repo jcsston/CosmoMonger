@@ -1,16 +1,37 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
-
 <asp:Content ID="changePasswordContent" ContentPlaceHolderID="MainContent" runat="server">
+    <script type="text/javascript" src="../../Scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#passwordForm").validate({
+                rules: {
+                    newPassword: {
+                        required: true,
+                        minlength: 8
+                    },
+                    confirmPassword: {
+                        equalTo: "#newPassword"
+                    }
+                },
+                messages: {
+                    newPassword: {
+                        required: "Please enter in a new password",
+                        minlength: "Passwords need to be at least 8 characters"
+                    },
+                    confirmPassword: "Please make sure this matches the new password you entered in above"
+                }
+            });
+        });
+    </script>
+    
     <h2>Change Password</h2>
     <p>
         Use the form below to change your password. 
     </p>
-    <p>
-        New passwords are required to be a minimum of <%=Html.Encode(ViewData["PasswordLength"])%> characters in length.
-    </p>
     <%= Html.ValidationSummary() %>
 
-    <% using (Html.BeginForm()) { %>
+    <% using (Html.BeginForm("ChangePassword", "Account", FormMethod.Post, new { id = "passwordForm" }))
+       { %>
         <div>
             <table>
                 <tr>
