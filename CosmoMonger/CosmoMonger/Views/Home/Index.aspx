@@ -21,4 +21,6 @@
         The path to fame and fortune awaits YOU!&nbsp; Register today and start down the 
         path to achieving galatic domination....
     </p>
+    <br />
+    <center><img id="Logo" class="logo" alt="Logo" src="/Content/Logo.png" /></center>
 </asp:Content>
