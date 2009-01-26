@@ -3,7 +3,7 @@
 <script language="javascript" type="text/javascript">
 
 </script>
-<h1>List Records</h1>
+<h1>Top Records</h1>
 <select id="RecordType" name="Record Type">
 <% foreach (string recordType in (string[])ViewData["RecordTypes"])
    { %>
