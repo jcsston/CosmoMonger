@@ -33,7 +33,8 @@ namespace CosmoMonger.Models
         /// Buys this ship.
         /// </summary>
         /// <param name="manager">The GameManger object to use for this transaction.</param>
-        public void Buy(GameManager manager)
+        /// <exception cref="InvalidOperationException">Thrown when not enough credits to buy the new ship or not enough cargo space to hold current goods in new ship</exception>
+        public virtual void Buy(GameManager manager)
         {
             // Calcuate the total cost to the player
             int totalCost = this.Price - manager.CurrentPlayer.Ship.TradeInValue;
