@@ -124,8 +124,10 @@
   <ItemGroup>
     <Content Include="App_Data\CosmoMongerDb.xml" />
     <Content Include="Content\Logo.png" />
+    <Content Include="Content\LogoSmall.png" />
     <Content Include="Content\ShipRangeCircle.png" />
     <Content Include="Content\Stars.png" />
+    <Content Include="Content\System.png" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\digitalspaghetti.password.js" />

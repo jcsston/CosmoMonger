@@ -352,8 +352,9 @@ font-size : 10px;
 
 .logo
 {
-	height: 15em;
-	width: 20em;
+    display: inline;
+    float: left;
+    padding: 10px;
 }
 
 /* PlayerProfile CSS */
