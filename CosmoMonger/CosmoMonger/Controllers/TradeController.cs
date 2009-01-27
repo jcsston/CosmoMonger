@@ -23,6 +23,24 @@ namespace CosmoMonger.Controllers
     public class TradeController : GameController
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="TradeController"/> class.
+        /// This is the default constructor that doesn't really to anything.
+        /// </summary>
+        public TradeController()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TradeController"/> class.
+        /// This constructor is used for unit testing purposes.
+        /// </summary>
+        /// <param name="manager">The game manager object to use.</param>
+        public TradeController(GameManager manager) 
+            : base(manager)
+        {
+        }
+
+        /// <summary>
         /// Redirects to ListGoods action.
         /// </summary>
         /// <returns></returns>
@@ -41,6 +59,7 @@ namespace CosmoMonger.Controllers
             ViewData["Title"] = "List Goods";
             ViewData["SystemGoods"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetGoods();
             ViewData["ShipGoods"] = this.ControllerGame.CurrentPlayer.Ship.GetGoods();
+
             return View();
         }
 
@@ -49,13 +68,33 @@ namespace CosmoMonger.Controllers
         /// Buys goods via the SystemGood.Buy method, redirects to the ListGoods action.
         /// </summary>
         /// <param name="goodId">The good id.</param>
-        /// <param name="quantity">The quantity.</param>
-        /// <returns></returns>
+        /// <param name="quantity">The quantity of goods to buy.</param>
+        /// <returns>Redirect to ListGoods action on success, ListGoods view on error</returns>
         public ActionResult BuyGoods(int goodId, int quantity)
         {
             SystemGood systemGood = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetGood(goodId);
-            systemGood.Buy(this.ControllerGame, quantity);
-            return RedirectToAction("ListGoods");
+            if (systemGood != null)
+            {
+                try
+                {
+                    systemGood.Buy(this.ControllerGame, quantity);
+                    return RedirectToAction("ListGoods");
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    ModelState.AddModelError("quantity", ex);
+                }
+                catch (ArgumentException ex)
+                {
+                    ModelState.AddModelError("quantity", ex);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("goodId", "Good is not sold in the system");
+            }
+
+            return this.ListGoods();
         }
 
         /// <summary>
@@ -64,12 +103,32 @@ namespace CosmoMonger.Controllers
         /// </summary>
         /// <param name="goodId">The good id.</param>
         /// <param name="quantity">The quantity.</param>
-        /// <returns></returns>
+        /// <returns>Redirect to ListGoods action on success, ListGoods view on error</returns>
         public ActionResult SellGoods(int goodId, int quantity)
         {
             ShipGood shipGood = this.ControllerGame.CurrentPlayer.Ship.GetGood(goodId);
-            shipGood.Sell(this.ControllerGame, quantity);
-            return RedirectToAction("ListGoods");
+            if (shipGood != null)
+            {
+                try
+                {
+                    shipGood.Sell(this.ControllerGame, quantity);
+                    return RedirectToAction("ListGoods");
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    ModelState.AddModelError("quantity", ex);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ModelState.AddModelError("goodId", ex);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("goodId", "Good is not bought in the system");
+            }
+
+            return this.ListGoods();
         }
     }
 }

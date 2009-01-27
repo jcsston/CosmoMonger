@@ -19,11 +19,12 @@ namespace CosmoMonger.Models
     {
         /// <summary>
         /// Sells the specified quantity of goods off the ship.
-        /// If the good is not sold in the current system, an InvalidOperationException exception is thrown.
         /// </summary>
         /// <param name="manager">The current GameManager object.</param>
-        /// <param name="quantity">The quantity of goods to sell, if there are not enough goods, an ArgumentOutOfRangeException is thrown.</param>
-        public void Sell(GameManager manager, int quantity)
+        /// <param name="quantity">The quantity of goods to sell.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when trying to sell more goods than avaiable on the ship.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the good is not bought in the current system.</exception>
+        public virtual void Sell(GameManager manager, int quantity)
         {
             // Check the the good is actually sold/bought in the current system
             SystemGood sellingGood = this.Ship.CosmoSystem.GetGood(this.GoodId);

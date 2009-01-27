@@ -471,11 +471,18 @@ namespace CosmoMonger.Controllers
         {
             ViewData["Title"] = "User Profile";
             CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.Provider.GetUser(User.Identity.Name, true);
-            ViewData["Email"] = user.Email;
-            ViewData["Name"] = user.UserName;
-            ViewData["JoinDate"] = user.GetUserModel().Joined;
+            if (user != null)
+            {
+                ViewData["Email"] = user.Email;
+                ViewData["Name"] = user.UserName;
+                User userModel = user.GetUserModel();
+                ViewData["JoinDate"] = userModel.Joined;
 
-            return View();
+                return View();
+            }
+
+            // Ran into an error, redirect to login
+            return RedirectToAction("Login");
         }
 
         /// <summary>

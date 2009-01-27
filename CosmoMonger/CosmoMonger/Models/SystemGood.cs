@@ -35,7 +35,9 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="manager">The current GameManager object.</param>
         /// <param name="quantity">The quantity of the good to buy.</param>
-        public void Buy(GameManager manager, int quantity)
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when trying to buy more goods than avaiable in the system.</exception>
+        /// <exception cref="ArgumentException">Thrown when there is not enough credits or cargo space to buy the requested number of goods.</exception>
+        public virtual void Buy(GameManager manager, int quantity)
         {
             // Check that we are not trying to buy more goods than there is
             if (this.Quantity < quantity)

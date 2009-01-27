@@ -178,7 +178,7 @@ namespace CosmoMonger.Models
         /// Gets the goods on this ship
         /// </summary>
         /// <returns>Array of ShipGoods</returns>
-        public ShipGood[] GetGoods()
+        public virtual ShipGood[] GetGoods()
         {
             return this.ShipGoods.ToArray();
         }
@@ -191,7 +191,7 @@ namespace CosmoMonger.Models
         /// The ShipGood object with the matching goodId. 
         /// If there is no ShipGood for the passed in good id, null is returned.
         /// </returns>
-        public ShipGood GetGood(int goodId)
+        public virtual ShipGood GetGood(int goodId)
         {
             return (from g in this.ShipGoods where g.GoodId == goodId select g).SingleOrDefault();
         }

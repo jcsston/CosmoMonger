@@ -88,6 +88,7 @@
     <Compile Include="Controllers\PlayerControllerTest.cs" />
     <Compile Include="Controllers\PlayerRecordControllerTest.cs" />
     <Compile Include="Controllers\ShipControllerTest.cs" />
+    <Compile Include="Controllers\TradeControllerTest.cs" />
     <Compile Include="Controllers\TravelControllerTest.cs" />
     <Compile Include="Controllers\ValidationRecord.cs" />
     <Compile Include="Controllers\XhtmlValidator.cs" />
