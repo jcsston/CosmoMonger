@@ -298,8 +298,8 @@
         {
             // Arrange
             Player testPlayer = this.CreateTestPlayer();
-            // Set time played to 7 days
-            testPlayer.TimePlayed = 60 * 60 * 24 * 7;
+            // Set time played to 7 days + 1 second
+            testPlayer.TimePlayed = (60 * 60 * 24 * 7) + 1;
 
             // Act
             testPlayer.UpdatePlayTime();
