@@ -50,6 +50,20 @@ namespace CosmoMonger.Models
             }
 
             this.currentUser = matchingUsers.Single();
+
+            if (true)
+            {
+                CosmoManager manager = new CosmoManager();
+
+                // Do NPC work
+                manager.DoPendingNPCActions();
+
+                // Update system good count
+                manager.UpdateSystemGoodCount();
+
+                // Adjust system good prices
+                manager.UpdateSystemGoodPrice();
+            }
         }
 
         /// <summary>

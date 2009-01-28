@@ -34,9 +34,12 @@ namespace CosmoMonger.Controllers.Attributes
                 base.OnException(filterContext);
 
                 // Fill in the view with the exception details
-                ViewResult result = (ViewResult)filterContext.Result;
-                result.ViewData["Title"] = "Space-time anomaly detected";
-                result.ViewData["Message"] = ex.Message;
+                ViewResult result = filterContext.Result as ViewResult;
+                if (result != null)
+                {
+                    result.ViewData["Title"] = "Space-time anomaly detected";
+                    result.ViewData["Message"] = ex.Message;
+                }
             }
         }
     }

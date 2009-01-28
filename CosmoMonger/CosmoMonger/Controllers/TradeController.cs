@@ -94,7 +94,7 @@ namespace CosmoMonger.Controllers
                 ModelState.AddModelError("goodId", "Good is not sold in the system");
             }
 
-            return this.ListGoods();
+            return RedirectToAction("ListGoods");
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace CosmoMonger.Controllers
                 ModelState.AddModelError("goodId", "Good is not bought in the system");
             }
 
-            return this.ListGoods();
+            return RedirectToAction("ListGoods");
         }
     }
 }

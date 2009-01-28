@@ -486,3 +486,26 @@ div.race
 	text-align: center;
 	font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ListGoods view CSS */
+table.goods
+{
+    border-spacing: 5px;
+}
+
+table.goods th
+{
+    border-bottom: solid thin;
+}
+
+/* The follow style applies to all table cells in a good class table */
+table.goods td
+{
+    text-align: left;
+}
+
+/* The following style applies to the second and following cells in a good class table */
+table.goods td + td
+{
+    text-align: center;
+}
