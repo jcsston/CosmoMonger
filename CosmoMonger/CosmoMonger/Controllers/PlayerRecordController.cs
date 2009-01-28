@@ -62,7 +62,7 @@ namespace CosmoMonger.Controllers
         public ActionResult ListRecords(string recordType)
         {
             ViewData["Title"] = "List Top Player Records";
-            ViewData["RecordTypes"] = new string[] 
+            ViewData["recordType"] = new SelectList(new string[] 
             { 
                 "NetWorth", 
                 "BountyTotal",
@@ -75,7 +75,7 @@ namespace CosmoMonger.Controllers
                 "SurrenderCount",
                 "FleeCount",
                 "CargoLost"
-            };
+            });
             ViewData["TopRecords"] = this.ControllerGame.GetTopPlayers(recordType, 10);
             return View();
         }

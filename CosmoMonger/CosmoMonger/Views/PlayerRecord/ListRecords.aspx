@@ -4,12 +4,7 @@
 
 </script>
 <h1>Top Records</h1>
-<select id="RecordType" name="Record Type">
-<% foreach (string recordType in (string[])ViewData["RecordTypes"])
-   { %>
-    <option value="<%=recordType %>"><%=recordType %></option>
-<% } %>
-</select>
+<%=Html.DropDownList("recordType") %>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>
