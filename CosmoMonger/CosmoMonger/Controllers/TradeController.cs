@@ -60,7 +60,7 @@ namespace CosmoMonger.Controllers
             ViewData["SystemGoods"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetGoods();
             ViewData["ShipGoods"] = this.ControllerGame.CurrentPlayer.Ship.GetGoods();
 
-            return View();
+            return View("ListGoods");
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace CosmoMonger.Controllers
                 ModelState.AddModelError("goodId", "Good is not sold in the system");
             }
 
-            return RedirectToAction("ListGoods");
+            return this.ListGoods();
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace CosmoMonger.Controllers
                 ModelState.AddModelError("goodId", "Good is not bought in the system");
             }
 
-            return RedirectToAction("ListGoods");
+            return this.ListGoods();
         }
     }
 }
