@@ -53,7 +53,7 @@
             // Assert
             Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
             Assert.That(controller.ModelState.IsValid, "No errors should be returned");
-            Assert.That(controller.ViewData["RecordTypes"], Is.TypeOf(typeof(string[])), "The RecordTypes field should be a string array");
+            Assert.That(controller.ViewData["recordType"], Is.TypeOf(typeof(SelectList)), "The recordType field should be a Select object");
             Assert.That(controller.ViewData["TopRecords"], Is.EqualTo(topPlayers), "The TopRecords field should be the array of top player objects");
             
             managerMock.Verify();
