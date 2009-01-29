@@ -64,7 +64,7 @@ namespace CosmoMonger.Controllers
             ViewData["Title"] = "List Top Player Records";
             ViewData["recordType"] = new SelectList(new string[] 
             { 
-                "NetWorth", 
+                "NetWorth",   
                 "BountyTotal",
                 "HighestBounty",
                 "ShipsDestroyed",
