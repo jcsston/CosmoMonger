@@ -91,6 +91,11 @@ page width. Or, you can specify an exact pixel width. */
     margin-right: auto;
 }
 
+.bigTable
+{
+	width: 100%;
+}
+
 #header
 {
     position: relative;
@@ -508,4 +513,33 @@ table.goods td
 table.goods td + td
 {
     text-align: center;
+}
+
+/* ListRecords View */
+.lr-columnEmpty
+{
+	width: 20%;
+	
+}
+.lr-columnHeaders
+{
+	font-size: 1.5em;
+	padding: 1.0em;
+	width: 30%;
+	text-decoration: underline;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.lr-columnLeft
+{
+	font-size: 1em;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.lr-columnRight
+{
+	font-size: 1em;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
 }

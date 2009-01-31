@@ -75,8 +75,9 @@ namespace CosmoMonger.Controllers
                 "SurrenderCount",
                 "FleeCount",
                 "CargoLost"
-            });
+            }, recordType);
             ViewData["TopRecords"] = this.ControllerGame.GetTopPlayers(recordType, 10);
+            ViewData["SelectedRecordType"] = recordType;
             return View();
         }
 
