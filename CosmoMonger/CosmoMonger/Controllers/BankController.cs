@@ -48,7 +48,7 @@
             ViewData["Title"] = "Bank";
             ViewData["CurrentPlayer"] = this.ControllerGame.CurrentPlayer;
             ViewData["BankAvailable"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.HasBank;
-
+            ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
             return View();
         }
 

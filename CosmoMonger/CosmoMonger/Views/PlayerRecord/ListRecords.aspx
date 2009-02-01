@@ -12,11 +12,7 @@
 </p>
 <% } %>
 
-
-
 <table class="bigTable">
-
-
  <tr>
     <td class="lr-columnEmpty">&nbsp;</td>
     <td class="lr-columnHeaders">Player Name</td>
@@ -61,11 +57,8 @@
             }%></td>
       <td class="lr-columnEmpty">&nbsp;</td>      
  </tr>
-<% 
-
-    foreach (CosmoMonger.Models.Player player in (CosmoMonger.Models.Player[])ViewData["TopRecords"])
-{
-    %>
+<% foreach (CosmoMonger.Models.Player player in (CosmoMonger.Models.Player[])ViewData["TopRecords"])
+{  %>
  <tr>
     <td class="lr-columnEmpty">&nbsp;</td>
     <td class="lr-columnLeft"><%= player.Name %></td>
@@ -110,10 +103,7 @@
             } %></td>
     <td class="lr-columnEmpty">&nbsp;</td>
  </tr>
-    
-<% } %>
-
-
+ <% } %>
 </table>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FooterContent" runat="server">

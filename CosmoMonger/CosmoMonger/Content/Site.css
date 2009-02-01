@@ -561,3 +561,26 @@ table.goodsCenter td
 	text-align: center;
 	font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Bank View */
+.bank-columnEmpty
+{
+	width: 20%;
+	
+}
+.bank-columnHeaders
+{
+	font-size: 1.5em;
+	padding: 1.0em;
+	width: 30%;
+	text-decoration: underline;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.bank-data
+{
+	font-size: 1em;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;	
+}
