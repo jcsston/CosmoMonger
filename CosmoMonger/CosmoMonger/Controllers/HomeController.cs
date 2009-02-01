@@ -51,12 +51,6 @@ namespace CosmoMonger.Controllers
             // Do NPC work
             manager.DoPendingNPCActions();
 
-            // Update system good count
-            manager.UpdateSystemGoodCount();
-
-            // Adjust system good prices
-            manager.UpdateSystemGoodPrice();
-
             // Show the normal home page
             return RedirectToAction("Index");
         }

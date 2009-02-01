@@ -15,13 +15,11 @@ namespace CosmoMonger.Controllers
     using System.Web.Mvc.Ajax;
     using CosmoMonger.Models;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
-    using MvcContrib.Filters;
 
     /// <summary>
     /// This controller deals will all trade related actions such as listing 
     /// available goods, buying goods, and selling goods.
     /// </summary>
-    [ModelStateToTempDataAttribute]
     public class TradeController : GameController
     {
         /// <summary>

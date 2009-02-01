@@ -37,19 +37,5 @@
             CosmoManager manager = new CosmoManager();
             manager.DoPendingNPCActions();
         }
-
-        [Test]
-        public void UpdateSystemGoodCount()
-        {
-            CosmoManager manager = new CosmoManager();
-            manager.UpdateSystemGoodCount();
-        }
-
-        [Test]
-        public void UpdateSystemGoodPrice()
-        {
-            CosmoManager manager = new CosmoManager();
-            manager.UpdateSystemGoodPrice();
-        }
     }
 }

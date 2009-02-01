@@ -96,11 +96,12 @@
       <Column Name="NpcId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="NpcTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="RaceId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ShipId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RaceId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ShipId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Credits" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Badness" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Bounty" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LastActionTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" />
       <Association Name="NpcType_Npc" Member="NpcType" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="NpcType" IsForeignKey="true" />
       <Association Name="Race_Npc" Member="Race" ThisKey="RaceId" OtherKey="RaceId" Type="Race" IsForeignKey="true" />
       <Association Name="Ship_Npc" Member="Ship" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />

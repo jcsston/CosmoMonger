@@ -38,10 +38,6 @@
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging.Database, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Security.Cryptography, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="MvcContrib, Version=0.0.1.174, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\library\MvcContrib.dll</HintPath>
-    </Reference>
     <Reference Include="Recaptcha, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\library\Recaptcha.dll</HintPath>
@@ -116,6 +112,7 @@
     <Compile Include="Models\GameManager.cs" />
     <Compile Include="Controllers\Attributes\LogRequestAttribute.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\Npc.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Ship.cs" />
     <Compile Include="Models\ShipGood.cs" />

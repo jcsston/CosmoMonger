@@ -2189,15 +2189,17 @@ namespace CosmoMonger.Models
 		
 		private string _Name;
 		
-		private int _RaceId;
+		private System.Nullable<int> _RaceId;
 		
-		private int _ShipId;
+		private System.Nullable<int> _ShipId;
 		
 		private int _Credits;
 		
 		private System.Nullable<int> _Badness;
 		
 		private System.Nullable<int> _Bounty;
+		
+		private System.DateTime _LastActionTime;
 		
 		private EntityRef<NpcType> _NpcType;
 		
@@ -2215,9 +2217,9 @@ namespace CosmoMonger.Models
     partial void OnNpcTypeIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnRaceIdChanging(int value);
+    partial void OnRaceIdChanging(System.Nullable<int> value);
     partial void OnRaceIdChanged();
-    partial void OnShipIdChanging(int value);
+    partial void OnShipIdChanging(System.Nullable<int> value);
     partial void OnShipIdChanged();
     partial void OnCreditsChanging(int value);
     partial void OnCreditsChanged();
@@ -2225,6 +2227,8 @@ namespace CosmoMonger.Models
     partial void OnBadnessChanged();
     partial void OnBountyChanging(System.Nullable<int> value);
     partial void OnBountyChanged();
+    partial void OnLastActionTimeChanging(System.DateTime value);
+    partial void OnLastActionTimeChanged();
     #endregion
 		
 		public Npc()
@@ -2299,8 +2303,8 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_RaceId", DbType="Int NOT NULL")]
-		public int RaceId
+		[Column(Storage="_RaceId", DbType="Int")]
+		public System.Nullable<int> RaceId
 		{
 			get
 			{
@@ -2323,8 +2327,8 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_ShipId", DbType="Int NOT NULL")]
-		public int ShipId
+		[Column(Storage="_ShipId", DbType="Int")]
+		public System.Nullable<int> ShipId
 		{
 			get
 			{
@@ -2407,6 +2411,26 @@ namespace CosmoMonger.Models
 			}
 		}
 		
+		[Column(Storage="_LastActionTime", DbType="datetime NOT NULL")]
+		public System.DateTime LastActionTime
+		{
+			get
+			{
+				return this._LastActionTime;
+			}
+			set
+			{
+				if ((this._LastActionTime != value))
+				{
+					this.OnLastActionTimeChanging(value);
+					this.SendPropertyChanging();
+					this._LastActionTime = value;
+					this.SendPropertyChanged("LastActionTime");
+					this.OnLastActionTimeChanged();
+				}
+			}
+		}
+		
 		[Association(Name="NpcType_Npc", Storage="_NpcType", ThisKey="NpcTypeId", OtherKey="NpcTypeId", IsForeignKey=true)]
 		public NpcType NpcType
 		{
@@ -2468,7 +2492,7 @@ namespace CosmoMonger.Models
 					}
 					else
 					{
-						this._RaceId = default(int);
+						this._RaceId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("Race");
 				}
@@ -2502,7 +2526,7 @@ namespace CosmoMonger.Models
 					}
 					else
 					{
-						this._ShipId = default(int);
+						this._ShipId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("Ship");
 				}

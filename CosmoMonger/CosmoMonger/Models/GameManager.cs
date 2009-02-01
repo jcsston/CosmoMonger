@@ -57,12 +57,6 @@ namespace CosmoMonger.Models
 
                 // Do NPC work
                 manager.DoPendingNPCActions();
-
-                // Update system good count
-                manager.UpdateSystemGoodCount();
-
-                // Adjust system good prices
-                manager.UpdateSystemGoodPrice();
             }
         }
 

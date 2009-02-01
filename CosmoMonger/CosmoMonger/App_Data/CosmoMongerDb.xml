@@ -1122,4 +1122,749 @@
     </update>
     <addNotNullConstraint tableName="User" columnName="Joined" columnDataType="datetime" />
   </changeSet>
+  <changeSet author="Jory Stone" id="41">
+    <comment>Adding LastActionTime column on the NPC table to keep track of the time of the NPCs last action.</comment>
+    <addColumn tableName="Npc">
+      <column name="LastActionTime" type="datetime">
+        <constraints nullable="false" />
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="Jory Stone" id="42">
+    <comment>Changing the RaceId and ShipId columns on the NPC table to allow NULLs, this will allow 'virtual' NPC that do not have a position. Also fixing the Bounty and Badness columns to not allow NULLs.</comment>
+    <modifyColumn tableName="Npc">
+      <column name="RaceId" type="int">
+        <constraints nullable="true" />
+      </column>
+      <column name="ShipId" type="int">
+        <constraints nullable="true" />
+      </column>
+    </modifyColumn>
+    <addNotNullConstraint tableName="Npc" columnName="Bounty" defaultNullValue="0" columnDataType="int" />
+    <addNotNullConstraint tableName="Npc" columnName="Badness" defaultNullValue="0" columnDataType="int" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="43">
+    <comment>Adding the special GoodCount and GoodPrice NPCs to mantain a galaxy economy.</comment>
+    <sql>SET IDENTITY_INSERT NpcType ON</sql>
+    <insert tableName="NpcType">
+      <column name="NpcTypeId" valueNumeric="1" />
+      <column name="Name" value="GoodCount" />
+    </insert>
+    <insert tableName="NpcType">
+      <column name="NpcTypeId" valueNumeric="2" />
+      <column name="Name" value="GoodPrice" />
+    </insert>
+    <sql>SET IDENTITY_INSERT NpcType OFF</sql>
+    <sql>SET IDENTITY_INSERT Npc  ON</sql>
+    <insert tableName="Npc">
+      <column name="NpcId" valueNumeric="1" />
+      <column name="NpcTypeId" valueNumeric="1" />
+      <column name="Name" value="GoodCount NPC" />
+      <column name="Credits" valueNumeric="0" />
+      <column name="Bounty" valueNumeric="0" />
+      <column name="Badness" valueNumeric="0" />
+      <column name="LastActionTime" value="1/1/2009" />
+    </insert>
+    <insert tableName="Npc">
+      <column name="NpcId" valueNumeric="2" />
+      <column name="NpcTypeId" valueNumeric="2" />
+      <column name="Name" value="GoodPrice NPC" />
+      <column name="Credits" valueNumeric="0" />
+      <column name="Bounty" valueNumeric="0" />
+      <column name="Badness" valueNumeric="0" />
+      <column name="LastActionTime" value="1/1/2009" />
+    </insert>
+    <sql>SET IDENTITY_INSERT Npc  OFF</sql>
+  </changeSet>
+  <changeSet author="Jory Stone" id="44">
+    <comment>Adding Intial System Good Production/Consumption Factors</comment>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="1" />
+      <column name="GoodId" value="1" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.832515908" />
+      <column name="ConsumptionFactor" value="0.946869547" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="1" />
+      <column name="GoodId" value="2" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.083255184" />
+      <column name="ConsumptionFactor" value="0.823906934" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="1" />
+      <column name="GoodId" value="3" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.973577798" />
+      <column name="ConsumptionFactor" value="0.780533808" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="1" />
+      <column name="GoodId" value="4" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.184777421" />
+      <column name="ConsumptionFactor" value="0.258955181" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="1" />
+      <column name="GoodId" value="5" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.720991215" />
+      <column name="ConsumptionFactor" value="0.125319149" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="1" />
+      <column name="GoodId" value="6" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.980841029" />
+      <column name="ConsumptionFactor" value="0.710009499" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="1" />
+      <column name="GoodId" value="8" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.984884821" />
+      <column name="ConsumptionFactor" value="0.593655371" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="1" />
+      <column name="GoodId" value="9" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.852124423" />
+      <column name="ConsumptionFactor" value="0.393598264" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="1" />
+      <column name="GoodId" value="10" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.984222807" />
+      <column name="ConsumptionFactor" value="0.671470999" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="2" />
+      <column name="GoodId" value="1" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.911926608" />
+      <column name="ConsumptionFactor" value="0.745576991" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="2" />
+      <column name="GoodId" value="2" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.12695668" />
+      <column name="ConsumptionFactor" value="0.588075322" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="2" />
+      <column name="GoodId" value="3" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.541498162" />
+      <column name="ConsumptionFactor" value="0.967996437" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="2" />
+      <column name="GoodId" value="4" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.928833343" />
+      <column name="ConsumptionFactor" value="0.883577107" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="2" />
+      <column name="GoodId" value="5" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.863343866" />
+      <column name="ConsumptionFactor" value="0.824378314" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="2" />
+      <column name="GoodId" value="6" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.423795518" />
+      <column name="ConsumptionFactor" value="0.711954615" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="2" />
+      <column name="GoodId" value="7" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.790721475" />
+      <column name="ConsumptionFactor" value="0.459186838" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="2" />
+      <column name="GoodId" value="9" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.468411503" />
+      <column name="ConsumptionFactor" value="0.729952011" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="2" />
+      <column name="GoodId" value="10" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.370796527" />
+      <column name="ConsumptionFactor" value="0.605620999" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="3" />
+      <column name="GoodId" value="1" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.837886427" />
+      <column name="ConsumptionFactor" value="0.093049292" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="3" />
+      <column name="GoodId" value="2" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.642423255" />
+      <column name="ConsumptionFactor" value="0.27939731" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="3" />
+      <column name="GoodId" value="3" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.224260082" />
+      <column name="ConsumptionFactor" value="0.366497553" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="3" />
+      <column name="GoodId" value="5" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.336673637" />
+      <column name="ConsumptionFactor" value="0.164269058" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="3" />
+      <column name="GoodId" value="6" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.401074373" />
+      <column name="ConsumptionFactor" value="0.091090756" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="3" />
+      <column name="GoodId" value="7" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.267160692" />
+      <column name="ConsumptionFactor" value="0.58343852" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="3" />
+      <column name="GoodId" value="8" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.61574495" />
+      <column name="ConsumptionFactor" value="0.860567197" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="3" />
+      <column name="GoodId" value="9" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.637592309" />
+      <column name="ConsumptionFactor" value="0.081745495" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="4" />
+      <column name="GoodId" value="1" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.858645232" />
+      <column name="ConsumptionFactor" value="0.709249187" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="4" />
+      <column name="GoodId" value="2" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.731966798" />
+      <column name="ConsumptionFactor" value="0.045842937" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="4" />
+      <column name="GoodId" value="3" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.208733087" />
+      <column name="ConsumptionFactor" value="0.277301906" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="4" />
+      <column name="GoodId" value="4" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.327036501" />
+      <column name="ConsumptionFactor" value="0.084122618" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="4" />
+      <column name="GoodId" value="5" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.532427068" />
+      <column name="ConsumptionFactor" value="0.943113398" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="4" />
+      <column name="GoodId" value="6" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.280211306" />
+      <column name="ConsumptionFactor" value="0.190730285" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="4" />
+      <column name="GoodId" value="7" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.214736874" />
+      <column name="ConsumptionFactor" value="0.719551627" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="4" />
+      <column name="GoodId" value="10" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.642538311" />
+      <column name="ConsumptionFactor" value="0.813854368" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="5" />
+      <column name="GoodId" value="1" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.174387646" />
+      <column name="ConsumptionFactor" value="0.505326416" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="5" />
+      <column name="GoodId" value="2" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.773031777" />
+      <column name="ConsumptionFactor" value="0.06412172" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="5" />
+      <column name="GoodId" value="3" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.128500159" />
+      <column name="ConsumptionFactor" value="0.768953888" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="5" />
+      <column name="GoodId" value="4" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.964859693" />
+      <column name="ConsumptionFactor" value="0.724319419" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="5" />
+      <column name="GoodId" value="5" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.373036121" />
+      <column name="ConsumptionFactor" value="0.217792575" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="5" />
+      <column name="GoodId" value="6" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.170732312" />
+      <column name="ConsumptionFactor" value="0.177940854" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="5" />
+      <column name="GoodId" value="7" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.431275861" />
+      <column name="ConsumptionFactor" value="0.674657753" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="5" />
+      <column name="GoodId" value="8" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.047167971" />
+      <column name="ConsumptionFactor" value="0.023914973" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="6" />
+      <column name="GoodId" value="3" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.975475233" />
+      <column name="ConsumptionFactor" value="0.99772553" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="6" />
+      <column name="GoodId" value="4" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.45300199" />
+      <column name="ConsumptionFactor" value="0.27401321" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="6" />
+      <column name="GoodId" value="6" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.111152847" />
+      <column name="ConsumptionFactor" value="0.845138752" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="6" />
+      <column name="GoodId" value="7" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.380937109" />
+      <column name="ConsumptionFactor" value="0.334757425" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="6" />
+      <column name="GoodId" value="8" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.92796661" />
+      <column name="ConsumptionFactor" value="0.18927667" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="6" />
+      <column name="GoodId" value="9" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.991084805" />
+      <column name="ConsumptionFactor" value="0.604157836" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="6" />
+      <column name="GoodId" value="10" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.468770517" />
+      <column name="ConsumptionFactor" value="0.250415344" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="7" />
+      <column name="GoodId" value="1" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.27647501" />
+      <column name="ConsumptionFactor" value="0.163992256" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="7" />
+      <column name="GoodId" value="2" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.791178034" />
+      <column name="ConsumptionFactor" value="0.206951472" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="7" />
+      <column name="GoodId" value="3" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.147358533" />
+      <column name="ConsumptionFactor" value="0.000975586" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="7" />
+      <column name="GoodId" value="4" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.821262836" />
+      <column name="ConsumptionFactor" value="0.029775719" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="7" />
+      <column name="GoodId" value="5" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.298916218" />
+      <column name="ConsumptionFactor" value="0.914985769" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="7" />
+      <column name="GoodId" value="6" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.121642545" />
+      <column name="ConsumptionFactor" value="0.438206499" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="7" />
+      <column name="GoodId" value="7" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.580870832" />
+      <column name="ConsumptionFactor" value="0.504115455" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="7" />
+      <column name="GoodId" value="8" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.553322361" />
+      <column name="ConsumptionFactor" value="0.505377697" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="7" />
+      <column name="GoodId" value="9" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.125510382" />
+      <column name="ConsumptionFactor" value="0.037521239" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="7" />
+      <column name="GoodId" value="10" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.529395865" />
+      <column name="ConsumptionFactor" value="0.646411185" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="8" />
+      <column name="GoodId" value="1" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.196665776" />
+      <column name="ConsumptionFactor" value="0.037735774" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="8" />
+      <column name="GoodId" value="2" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.917849129" />
+      <column name="ConsumptionFactor" value="0.547670702" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="8" />
+      <column name="GoodId" value="3" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.255092206" />
+      <column name="ConsumptionFactor" value="0.799660112" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="8" />
+      <column name="GoodId" value="4" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.677720798" />
+      <column name="ConsumptionFactor" value="0.684276921" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="8" />
+      <column name="GoodId" value="5" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.411599963" />
+      <column name="ConsumptionFactor" value="0.287582592" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="8" />
+      <column name="GoodId" value="6" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.163075095" />
+      <column name="ConsumptionFactor" value="0.073856616" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="8" />
+      <column name="GoodId" value="7" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.499229477" />
+      <column name="ConsumptionFactor" value="0.414462785" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="8" />
+      <column name="GoodId" value="8" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.999289872" />
+      <column name="ConsumptionFactor" value="0.923488431" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="8" />
+      <column name="GoodId" value="9" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.616394226" />
+      <column name="ConsumptionFactor" value="0.949798179" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="8" />
+      <column name="GoodId" value="10" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.427880636" />
+      <column name="ConsumptionFactor" value="0.789463441" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="9" />
+      <column name="GoodId" value="1" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.201850017" />
+      <column name="ConsumptionFactor" value="0.740871573" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="9" />
+      <column name="GoodId" value="2" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.530497889" />
+      <column name="ConsumptionFactor" value="0.380280501" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="9" />
+      <column name="GoodId" value="3" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.911397676" />
+      <column name="ConsumptionFactor" value="0.599843778" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="9" />
+      <column name="GoodId" value="4" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.25826477" />
+      <column name="ConsumptionFactor" value="0.819436634" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="9" />
+      <column name="GoodId" value="5" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.825777538" />
+      <column name="ConsumptionFactor" value="0.11682367" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="9" />
+      <column name="GoodId" value="6" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.68210228" />
+      <column name="ConsumptionFactor" value="0.66302829" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="9" />
+      <column name="GoodId" value="7" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.637202513" />
+      <column name="ConsumptionFactor" value="0.262481741" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="9" />
+      <column name="GoodId" value="8" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.514495069" />
+      <column name="ConsumptionFactor" value="0.657671632" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="9" />
+      <column name="GoodId" value="9" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.293686376" />
+      <column name="ConsumptionFactor" value="0.358340569" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="9" />
+      <column name="GoodId" value="10" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.605098847" />
+      <column name="ConsumptionFactor" value="0.443614725" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="10" />
+      <column name="GoodId" value="3" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.258718488" />
+      <column name="ConsumptionFactor" value="0.546994463" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="10" />
+      <column name="GoodId" value="4" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.748081741" />
+      <column name="ConsumptionFactor" value="0.054423514" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="10" />
+      <column name="GoodId" value="5" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.789290732" />
+      <column name="ConsumptionFactor" value="0.630225023" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="10" />
+      <column name="GoodId" value="6" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.444207226" />
+      <column name="ConsumptionFactor" value="0.13393929" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="10" />
+      <column name="GoodId" value="8" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.866989139" />
+      <column name="ConsumptionFactor" value="0.645207848" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="10" />
+      <column name="GoodId" value="9" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.136274322" />
+      <column name="ConsumptionFactor" value="0.274549627" />
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="10" />
+      <column name="GoodId" value="10" />
+      <column name="Quantity" value="0" />
+      <column name="PriceMultiplier" value="1" />
+      <column name="ProductionFactor" value="0.450577639" />
+      <column name="ConsumptionFactor" value="0.702672207" />
+    </insert>
+  </changeSet>
 </databaseChangeLog>
