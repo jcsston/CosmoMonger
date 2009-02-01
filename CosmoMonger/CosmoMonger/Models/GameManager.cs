@@ -212,5 +212,30 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return Math.Max(db.CosmoSystems.Max(x => x.PositionX), db.CosmoSystems.Max(x => x.PositionY));
         }
+
+        /// <summary>
+        /// Gets the price table for the whole galaxy
+        /// </summary>
+        /// <returns>A List of PriceTablEntry objects</returns>
+        public virtual List<PriceTableEntry> GetPriceTable()
+        {
+            List<PriceTableEntry> priceTable = new List<PriceTableEntry>();
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            foreach (CosmoSystem system in db.CosmoSystems)
+            {
+                PriceTableEntry prices = new PriceTableEntry();
+                prices.SystemName = system.Name;
+                foreach (Good good in db.Goods)
+                {
+                    prices.GoodPrices[good.Name] = (from g in system.SystemGoods
+                                                    where g.Good == good
+                                                    select g.Price).SingleOrDefault();
+                }
+                priceTable.Add(prices);
+            }
+
+            return priceTable;
+        }
     }
 }

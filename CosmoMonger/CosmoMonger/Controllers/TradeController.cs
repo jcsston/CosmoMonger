@@ -59,7 +59,7 @@ namespace CosmoMonger.Controllers
             ViewData["BankCredits"] = this.ControllerGame.CurrentPlayer.BankCredits;
             ViewData["FreeCargoSpace"] = this.ControllerGame.CurrentPlayer.Ship.CargoSpaceFree;
 
-            return View("ListGoods");
+            return View();
         }
 
         /// <summary>
@@ -143,5 +143,19 @@ namespace CosmoMonger.Controllers
 
             return View();
         }
+
+        /// <summary>
+        /// Fetches a price table of goods showing the price of goods at all systems in the galaxy.
+        /// </summary>
+        /// <returns>The PriceTable View</returns>
+        public ActionResult PriceTable()
+        {
+            ViewData["Title"] = "Good Price Table";
+            ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
+            ViewData["PriceTable"] = this.ControllerGame.GetPriceTable();
+
+            return View();
+        }
+
     }
 }

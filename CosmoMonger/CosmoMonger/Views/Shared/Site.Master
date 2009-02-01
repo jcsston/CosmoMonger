@@ -40,6 +40,7 @@
 	                    <li><%= Html.ActionLink("System", "Index", "Trade")%>
 	                        <ul>
 	                            <li><%= Html.ActionLink("List Goods", "ListGoods", "Trade")%></li>
+	                            <li><%= Html.ActionLink("Good Price Table", "PriceTable", "Trade")%></li>
 	                            <li><%= Html.ActionLink("Visit Bank", "Bank", "Bank")%></li>
 	                            <li><%= Html.ActionLink("List Ships", "ListShips", "Ship")%></li>
                             </ul>

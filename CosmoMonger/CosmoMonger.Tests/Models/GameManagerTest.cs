@@ -140,5 +140,16 @@
 
             Assert.That(manager.GetSystem(testPlayer.Ship.SystemId), Is.EqualTo(testPlayer.Ship.CosmoSystem), "GetSystem(systemId) should return the system the test player ship is in");
         }
+
+        [Test]
+        public void GetPriceTable()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            List<PriceTableEntry> priceTable = manager.GetPriceTable();
+            Assert.That(priceTable, Is.Not.Empty, "GetPriceTable() should return the price table for the galaxy");
+        }
+        
     }
 }
