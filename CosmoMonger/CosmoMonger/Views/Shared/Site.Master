@@ -28,17 +28,20 @@
                     <ul>	
 	                    <li><%= Html.ActionLink("Player", "Index", "Player")%>
 	                        <ul>
+	                            <li><%= Html.ActionLink("User Profile", "UserProfile", "Account")%></li>
                                 <li><%= Html.ActionLink("Player Profile", "PlayerProfile", "Player")%></li>
-                                <li><%= Html.ActionLink("User Profile", "UserProfile", "Account")%></li>
+                                <li><%= Html.ActionLink("Current Ship", "ViewShip", "Ship")%></li>
+	                            <li><%= Html.ActionLink("View Record", "ViewRecord", "PlayerRecord")%></li>
+	                            <li><%= Html.ActionLink("Top Records", "ListRecords", "PlayerRecord")%></li>                                
                             </ul>
 	                    </li>
                     </ul>
                     <ul>	
-	                    <li><%= Html.ActionLink("Records", "Index", "PlayerRecord")%>
+	                    <li><%= Html.ActionLink("System", "Index", "Trade")%>
 	                        <ul>
-	                            <li><%= Html.ActionLink("View Record", "ViewRecord", "PlayerRecord")%></li>
-	                            <li><%= Html.ActionLink("Top Records", "ListRecords", "PlayerRecord")%></li>
-                                
+	                            <li><%= Html.ActionLink("List Goods", "ListGoods", "Trade")%></li>
+	                            <li><%= Html.ActionLink("Visit Bank", "Bank", "Bank")%></li>
+	                            <li><%= Html.ActionLink("List Ships", "ListShips", "Ship")%></li>
                             </ul>
 	                    </li>
                     </ul>
@@ -46,20 +49,6 @@
 	                    <li><%= Html.ActionLink("Travel", "Index", "Travel")%>
 	                        <ul>
 	                            <li><%= Html.ActionLink("Travel", "Travel", "Travel")%></li>
-                            </ul>
-	                    </li>
-                    </ul>
-                    <ul>	
-	                    <li><%= Html.ActionLink("Trade", "Index", "Trade")%>
-	                        <ul>
-	                            <li><%= Html.ActionLink("List Goods", "ListGoods", "Trade")%></li>
-                            </ul>
-	                    </li>
-                    </ul>
-                    <ul>	
-	                    <li><%= Html.ActionLink("Bank", "Index", "Bank")%>
-	                        <ul>
-	                            <li><%= Html.ActionLink("Bank", "Bank", "Bank")%></li>
                             </ul>
 	                    </li>
                     </ul>
