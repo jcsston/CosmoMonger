@@ -56,7 +56,7 @@ namespace CosmoMonger.Controllers
         {
             Race[] races = this.ControllerGame.GetRaces();
             ViewData["Title"] = "Create Player";
-            ViewData["raceId"] = new SelectList(races, "RaceId", "Name");
+            ViewData["raceId"] = new SelectList(races, "RaceId", "Name", ViewData["raceId"]);
             ViewData["Races"] = races;
 
             return View();
@@ -97,6 +97,8 @@ namespace CosmoMonger.Controllers
                     ModelState.AddModelError("_FORM", "Unknown error");
                 }
 
+                // Keep the users selected race
+                ViewData["raceId"] = raceId;
                 return this.CreatePlayer();
             }
 

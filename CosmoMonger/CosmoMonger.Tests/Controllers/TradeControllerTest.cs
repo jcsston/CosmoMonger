@@ -96,11 +96,6 @@
 
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetGoods())
-                .Returns(goods).AtMostOnce().Verifiable();
-            managerMock.Expect(m => m.CurrentPlayer.Ship.GetGoods())
-                .Returns(shipGoods).AtMostOnce().Verifiable();
-
             managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetGood(-5))
                 .Returns<SystemGood>(null).AtMostOnce().Verifiable();
             TradeController controller = new TradeController(managerMock.Object);
@@ -126,11 +121,6 @@
 
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetGoods())
-                .Returns(goods).AtMostOnce().Verifiable();
-            managerMock.Expect(m => m.CurrentPlayer.Ship.GetGoods())
-                .Returns(shipGoods).AtMostOnce().Verifiable();
-
             goodMock.Expect(m => m.Buy(managerMock.Object, 100))
                 .Throws(new ArgumentOutOfRangeException()).AtMostOnce().Verifiable();
 
@@ -159,11 +149,6 @@
 
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetGoods())
-                .Returns(goods).AtMostOnce().Verifiable();
-            managerMock.Expect(m => m.CurrentPlayer.Ship.GetGoods())
-                .Returns(shipGoods).AtMostOnce().Verifiable();
-
             goodMock.Expect(m => m.Buy(managerMock.Object, 100))
                 .Throws(new ArgumentException()).AtMostOnce().Verifiable();
 
@@ -189,7 +174,6 @@
             Mock<ShipGood> goodMock = new Mock<ShipGood>();
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
-
             goodMock.Expect(m => m.Sell(managerMock.Object, 10))
                 .AtMostOnce().Verifiable();
 
@@ -216,10 +200,6 @@
 
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetGoods())
-                .Returns(goods).AtMostOnce().Verifiable();
-            managerMock.Expect(m => m.CurrentPlayer.Ship.GetGoods())
-                .Returns(shipGoods).AtMostOnce().Verifiable();
             managerMock.Expect(m => m.CurrentPlayer.Ship.GetGood(-5))
                 .Returns<ShipGood>(null).AtMostOnce().Verifiable();
             TradeController controller = new TradeController(managerMock.Object);
@@ -245,10 +225,6 @@
 
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetGoods())
-                .Returns(goods).AtMostOnce().Verifiable();
-            managerMock.Expect(m => m.CurrentPlayer.Ship.GetGoods())
-                .Returns(shipGoods).AtMostOnce().Verifiable();
 
             goodMock.Expect(m => m.Sell(managerMock.Object, 100))
                 .Throws(new ArgumentOutOfRangeException()).AtMostOnce().Verifiable();
@@ -278,10 +254,6 @@
 
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetGoods())
-                .Returns(goods).AtMostOnce().Verifiable();
-            managerMock.Expect(m => m.CurrentPlayer.Ship.GetGoods())
-                .Returns(shipGoods).AtMostOnce().Verifiable();
 
             goodMock.Expect(m => m.Sell(managerMock.Object, 10))
                 .Throws(new InvalidOperationException()).AtMostOnce().Verifiable();

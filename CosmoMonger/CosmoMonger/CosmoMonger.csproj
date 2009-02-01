@@ -38,6 +38,10 @@
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging.Database, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Security.Cryptography, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="MvcContrib, Version=0.0.1.174, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\library\MvcContrib.dll</HintPath>
+    </Reference>
     <Reference Include="Recaptcha, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\library\Recaptcha.dll</HintPath>
@@ -119,6 +123,7 @@
     <Compile Include="Models\SystemShip.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Utility\DataContextFactory.cs" />
+    <Compile Include="Models\Utility\LoggingTextWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -132,7 +137,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\digitalspaghetti.password.js" />
     <Content Include="Scripts\digitialspaghetti.password.min.js" />
-    <Content Include="Scripts\jquery-1.2.6-vsdoc.js" />
+    <Content Include="Scripts\jquery.spin-1.0.2.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Views\Account\ChangeEmail.aspx" />
@@ -149,7 +154,9 @@
     <Content Include="Views\Player\PlayerProfile.aspx" />
     <Content Include="Views\Ship\ListShips.aspx" />
     <Content Include="Views\Ship\ViewShip.aspx" />
+    <Content Include="Views\Trade\BuyGoods.aspx" />
     <Content Include="Views\Trade\ListGoods.aspx" />
+    <Content Include="Views\Trade\SellGoods.aspx" />
     <Content Include="Views\Travel\Travel.aspx" />
     <Content Include="Views\Travel\TravelInProgress.aspx" />
     <Content Include="Web.config" />

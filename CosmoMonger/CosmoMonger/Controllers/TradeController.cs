@@ -15,11 +15,13 @@ namespace CosmoMonger.Controllers
     using System.Web.Mvc.Ajax;
     using CosmoMonger.Models;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using MvcContrib.Filters;
 
     /// <summary>
     /// This controller deals will all trade related actions such as listing 
     /// available goods, buying goods, and selling goods.
     /// </summary>
+    [ModelStateToTempDataAttribute]
     public class TradeController : GameController
     {
         /// <summary>
@@ -57,8 +59,12 @@ namespace CosmoMonger.Controllers
         public ActionResult ListGoods()
         {
             ViewData["Title"] = "List Goods";
+            ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
             ViewData["SystemGoods"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetGoods();
             ViewData["ShipGoods"] = this.ControllerGame.CurrentPlayer.Ship.GetGoods();
+            ViewData["CashCredits"] = this.ControllerGame.CurrentPlayer.CashCredits;
+            ViewData["BankCredits"] = this.ControllerGame.CurrentPlayer.BankCredits;
+            ViewData["FreeCargoSpace"] = this.ControllerGame.CurrentPlayer.Ship.CargoSpaceFree;
 
             return View("ListGoods");
         }
@@ -70,6 +76,7 @@ namespace CosmoMonger.Controllers
         /// <param name="goodId">The good id.</param>
         /// <param name="quantity">The quantity of goods to buy.</param>
         /// <returns>Redirect to ListGoods action on success, ListGoods view on error</returns>
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult BuyGoods(int goodId, int quantity)
         {
             SystemGood systemGood = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetGood(goodId);
@@ -94,7 +101,7 @@ namespace CosmoMonger.Controllers
                 ModelState.AddModelError("goodId", "Good is not sold in the system");
             }
 
-            return this.ListGoods();
+            return View();
         }
 
         /// <summary>
@@ -104,6 +111,7 @@ namespace CosmoMonger.Controllers
         /// <param name="goodId">The good id.</param>
         /// <param name="quantity">The quantity.</param>
         /// <returns>Redirect to ListGoods action on success, ListGoods view on error</returns>
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult SellGoods(int goodId, int quantity)
         {
             ShipGood shipGood = this.ControllerGame.CurrentPlayer.Ship.GetGood(goodId);
@@ -128,7 +136,7 @@ namespace CosmoMonger.Controllers
                 ModelState.AddModelError("goodId", "Good is not bought in the system");
             }
 
-            return this.ListGoods();
+            return View();
         }
     }
 }

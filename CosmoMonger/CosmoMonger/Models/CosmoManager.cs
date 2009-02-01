@@ -27,7 +27,16 @@ namespace CosmoMonger.Models
         /// <returns>LINQ CosmoMongerDbDataContext object</returns>
         public static CosmoMongerDbDataContext GetDbContext()
         {
-            return Utility.DataContextFactory.GetScopedDataContext<CosmoMongerDbDataContext>("CosmoMonger", ConfigurationManager.ConnectionStrings["CosmoMongerConnectionString"].ConnectionString);
+            CosmoMongerDbDataContext db = Utility.DataContextFactory.GetScopedDataContext<CosmoMongerDbDataContext>("CosmoMonger", ConfigurationManager.ConnectionStrings["CosmoMongerConnectionString"].ConnectionString);
+            
+            // We only add the logger to the DataContext if sql query logging is enabled
+            LogEntry sqlEntry = new LogEntry("", "SQL", 1, 0, TraceEventType.Verbose, "LINQ SQL", null);
+            if (Logger.ShouldLog(sqlEntry))
+            {
+                db.Log = new Utility.LoggingTextWriter(sqlEntry);
+            }
+
+            return db;
         }
 
         /// <summary>

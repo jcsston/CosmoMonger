@@ -30,7 +30,7 @@
         protected Player CreateTestPlayer(Race playerRace)
         {
             playerCount++;
-            return CreateTestPlayer(playerCount + this.baseTestUsername, playerCount + this.baseTestEmail, this.baseTestPlayerName, playerRace);
+            return CreateTestPlayer(playerCount + this.baseTestUsername, playerCount + this.baseTestEmail, playerCount + this.baseTestPlayerName, playerRace);
         }
 
         private Player CreateTestPlayer(string baseTestUsername, string baseTestEmail, string baseTestPlayerName)
