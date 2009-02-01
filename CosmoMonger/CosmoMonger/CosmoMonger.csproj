@@ -132,8 +132,6 @@
     <Content Include="Content\System.png" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\digitalspaghetti.password.js" />
-    <Content Include="Scripts\digitialspaghetti.password.min.js" />
     <Content Include="Scripts\jquery.spin-1.0.2.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />

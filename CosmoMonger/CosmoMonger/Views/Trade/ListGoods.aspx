@@ -28,9 +28,7 @@
     SystemGood[] systemGoods = (SystemGood[])ViewData["SystemGoods"];
     ShipGood[] shipGoods = (ShipGood[])ViewData["ShipGoods"];
 %>
-<center>
-<h1>Buy &amp; Sell in the <%=Html.Encode(currentSystem.Name) %> System</h1>
-</center>
+<h1 class="goods">Buy &amp; Sell in the <%=Html.Encode(currentSystem.Name) %> System</h1>
 <hr />
 <table class="goods">
 <tr><th>Name</th><th>Base Price</th><th>Price</th><th># in System</th><th>Buy</th><th># in Ship</th><th>Sell</th></tr>
