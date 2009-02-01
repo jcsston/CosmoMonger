@@ -309,7 +309,7 @@ namespace CosmoMonger.Models
                             { "UserId", this.user.UserId },
                             { "LoginAttemptCount", this.user.LoginAttemptCount }
                         };
-                        Logger.Write("Exception when delaying login", "Business Object", 1, 1023, TraceEventType.Error, "Exception in CosmoMongerMembershipUser.ValidatePassword", props);
+                        Logger.Write("Exception when delaying login", "Business Object", 600, 0, TraceEventType.Error, "Exception in CosmoMongerMembershipUser.ValidatePassword", props);
                     }
 
                     // Re-enable the user
@@ -424,7 +424,7 @@ namespace CosmoMonger.Models
                     { "Email", this.Email },
                     { "Message", msg }
                 };
-                Logger.Write("Failed to send e-mail with verification code", "Model", 1, 1053, TraceEventType.Error, "SmtpException in CosmoMongerMemebershipUser.SendVerificationCode", props);
+                Logger.Write("Failed to send e-mail with verification code", "Model", 700, 0, TraceEventType.Error, "SmtpException in CosmoMongerMemebershipUser.SendVerificationCode", props);
 
                 throw new InvalidOperationException("Failed to send verification e-mail. Please try again, if the problem persists, please contact admin@cosmomonger.com.", ex);
             }

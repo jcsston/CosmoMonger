@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
@@ -72,7 +73,7 @@
                     cookie.Domain = FormsAuthentication.CookieDomain;
                 }
 
-                Logger.Write("Storing user login cookie", "Controller", 10, 0, System.Diagnostics.TraceEventType.Verbose, "Storing cookie in FormsLoginResult.ExecuteResult",
+                Logger.Write("Storing user login cookie", "Controller", 10, 0, TraceEventType.Verbose, "Storing cookie in FormsLoginResult.ExecuteResult",
                     new Dictionary<string, object>
                 {
                     { "Cookie", cookie },
@@ -87,7 +88,7 @@
             }
 
             string redirectUrl = FormsAuthentication.GetRedirectUrl(this.userName, this.persistentCookie);
-            Logger.Write("Redirecting login user", "Controller", 10, 0, System.Diagnostics.TraceEventType.Verbose, "URL Redirect in FormsLoginResult.ExecuteResult",
+            Logger.Write("Redirecting login user", "Controller", 10, 0, TraceEventType.Verbose, "URL Redirect in FormsLoginResult.ExecuteResult",
                 new Dictionary<string, object>
                 {
                     { "RedirectURL", redirectUrl },

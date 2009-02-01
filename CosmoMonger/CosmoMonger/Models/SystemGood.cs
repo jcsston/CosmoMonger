@@ -59,7 +59,7 @@ namespace CosmoMonger.Models
                 throw new ArgumentException("Not enough cargo space to carry requested number of goods", "quantity");
             }
 
-            Logger.Write("Buying goods in SystemGood.Buy", "Model", 1000, 1059, TraceEventType.Information, "Buying Goods",
+            Logger.Write("Buying goods in SystemGood.Buy", "Model", 500, 0, TraceEventType.Information, "Buying Goods",
                 new Dictionary<string, object>
                 {
                     { "PlayerId", manager.CurrentPlayer.PlayerId },

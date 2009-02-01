@@ -24,7 +24,7 @@ namespace CosmoMonger.Controllers.Attributes
                 { "SessionID", filterContext.HttpContext.Session.SessionID }
             };
             string message = filterContext.RouteData.Values["controller"] + "." + filterContext.RouteData.Values["action"];
-            Logger.Write(message, "Page Log", 1, 101, TraceEventType.Information, "Action Executed", props);
+            Logger.Write(message, "Page Log", 10, 0, TraceEventType.Information, "Action Executed", props);
         }
 
         void IActionFilter.OnActionExecuting(ActionExecutingContext filterContext)
@@ -37,7 +37,7 @@ namespace CosmoMonger.Controllers.Attributes
                 { "SessionID", filterContext.HttpContext.Session.SessionID }
             };
             string message = filterContext.RouteData.Values["controller"] + "." + filterContext.RouteData.Values["action"];
-            Logger.Write(message, "Page Log", 1, 101, TraceEventType.Information, "Action Executing", props);
+            Logger.Write(message, "Page Log", 10, 0, TraceEventType.Information, "Action Executing", props);
         }
     }
 }

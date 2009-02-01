@@ -75,7 +75,7 @@ namespace CosmoMonger.Models
                 throw new ArgumentOutOfRangeException("credits", "Cannot withdraw more credits than available in the bank");
             }
 
-            Logger.Write("Withdrawing credits from bank in Player.BankWithdraw", "Model", 1000, 1075, TraceEventType.Verbose, "Withdrawing credits",
+            Logger.Write("Withdrawing credits from bank in Player.BankWithdraw", "Model", 500, 0, TraceEventType.Verbose, "Withdrawing credits",
                 new Dictionary<string, object>
                 {
                     { "PlayerId", this.PlayerId },
@@ -115,7 +115,7 @@ namespace CosmoMonger.Models
                 throw new ArgumentOutOfRangeException("credits", "Cannot deposit more credits than available in cash");
             }
 
-            Logger.Write("Depositing credits into bank in Player.BankDeposit", "Model", 1000, 1118, TraceEventType.Verbose, "Depositing credits",
+            Logger.Write("Depositing credits into bank in Player.BankDeposit", "Model", 500, 0, TraceEventType.Verbose, "Depositing credits",
                 new Dictionary<string, object>
                 {
                     { "PlayerId", this.PlayerId },
@@ -140,7 +140,7 @@ namespace CosmoMonger.Models
                 netWorth += this.Ship.TradeInValue + this.Ship.ShipGoods.Sum(x => x.Quantity * x.Good.BasePrice);
             }
 
-            Logger.Write("Updating player net worth in Player.UpdateNetWorth", "Model", 1000, 1143, TraceEventType.Verbose, "Update player networth",
+            Logger.Write("Updating player net worth in Player.UpdateNetWorth", "Model", 500, 0, TraceEventType.Verbose, "Update player networth",
                 new Dictionary<string, object>
                 {
                     { "PlayerId", this.PlayerId },
@@ -229,7 +229,7 @@ namespace CosmoMonger.Models
         /// </summary>
         public virtual void Kill()
         {
-            Logger.Write("Killing player in Player.Kill", "Model", 1000, 1232, TraceEventType.Verbose, "Kill Player",
+            Logger.Write("Killing player in Player.Kill", "Model", 600, 0, TraceEventType.Verbose, "Kill Player",
                 new Dictionary<string, object>
                 {
                     { "PlayerId", this.PlayerId },

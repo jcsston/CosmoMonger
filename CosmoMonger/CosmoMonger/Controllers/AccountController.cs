@@ -21,6 +21,7 @@ namespace CosmoMonger.Controllers
     using CosmoMonger.Controllers.Attributes;
     using CosmoMonger.Models;
     using CosmoMonger.Models.Utility;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
     using Recaptcha;
 
@@ -209,7 +210,7 @@ namespace CosmoMonger.Controllers
                         { "IsValid", humanResponse.IsValid },
                         { "ErrorCode", humanResponse.ErrorCode }
                     };
-                    Logger.Write("Failed reCAPTCHA attempt", "Controller", 100, 1042, TraceEventType.Verbose, "Failed reCAPTCHA attempt", props);
+                    Logger.Write("Failed reCAPTCHA attempt", "Controller", 200, 0, TraceEventType.Verbose, "Failed reCAPTCHA attempt", props);
                     ModelState.AddModelError("recaptcha", "reCAPTCHA failed to verify");
                 }
             }
@@ -252,6 +253,9 @@ namespace CosmoMonger.Controllers
                 }
                 catch (InvalidOperationException ex)
                 {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                     // Failed to send e-mail
                     ModelState.AddModelError("_FORM", ex);
                 }
@@ -443,6 +447,9 @@ namespace CosmoMonger.Controllers
                 }
                 catch (ArgumentException ex)
                 {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                     // Display error
                     ModelState.AddModelError("email", ex);
                 }

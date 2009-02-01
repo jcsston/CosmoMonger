@@ -54,7 +54,7 @@ namespace CosmoMonger.Models
                 throw new InvalidOperationException("Not enough cargo space on new ship to transfer over cargo");
             }
 
-            Logger.Write("Buying new ship in SystemShip.Buy", "Model", 1000, 1055, TraceEventType.Information, "Buying Ship",
+            Logger.Write("Buying new ship in SystemShip.Buy", "Model", 500, 0, TraceEventType.Information, "Buying Ship",
                 new Dictionary<string, object>
                 {
                     { "PlayerId", manager.CurrentPlayer.PlayerId },

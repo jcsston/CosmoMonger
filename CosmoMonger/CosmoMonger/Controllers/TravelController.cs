@@ -7,14 +7,9 @@
 namespace CosmoMonger.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
-    using System.Web.Mvc.Ajax;
     using CosmoMonger.Models;
-    using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     /// <summary>
     /// This controller deals with the travel related actions such as 
@@ -96,14 +91,23 @@ namespace CosmoMonger.Controllers
                 }
                 catch (InvalidOperationException ex)
                 {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                     ViewData.ModelState.AddModelError("_FORM", ex);
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                     ViewData.ModelState.AddModelError("_FORM", ex);
                 }
                 catch (ArgumentException ex)
                 {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                     ViewData.ModelState.AddModelError("_FORM", ex);
                 }
             }

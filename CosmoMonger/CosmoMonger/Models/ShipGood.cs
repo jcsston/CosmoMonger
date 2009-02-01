@@ -42,7 +42,7 @@ namespace CosmoMonger.Models
             // Calcuate how much we will make selling these goods
             int profit = quantity * sellingGood.Price;
 
-            Logger.Write("Selling goods in ShipGood.Sell", "Model", 1000, 1042, TraceEventType.Information, "Selling Goods",
+            Logger.Write("Selling goods in ShipGood.Sell", "Model", 500, 0, TraceEventType.Information, "Selling Goods",
                 new Dictionary<string, object>
                 {
                     { "PlayerId", manager.CurrentPlayer.PlayerId },

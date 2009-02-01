@@ -30,7 +30,7 @@
 
         protected void Application_Start()
         {
-            Logger.Write("CosmoMonger Application Start (r" + CosmoManager.GetCodeVersion().ToString() + " db" + CosmoManager.GetDatabaseVersion().ToString() + ")", "ASP.NET Core", 0, 0, TraceEventType.Information, "CosmoMonger Application Start");
+            Logger.Write("CosmoMonger Application Start (r" + CosmoManager.GetCodeVersion().ToString() + " db" + CosmoManager.GetDatabaseVersion().ToString() + ")", "ASP.NET Core", 1000, 0, TraceEventType.Information, "CosmoMonger Application Start");
             RegisterRoutes(RouteTable.Routes);
         }
     }

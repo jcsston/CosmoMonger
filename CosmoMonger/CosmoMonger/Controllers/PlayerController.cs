@@ -8,9 +8,11 @@
 namespace CosmoMonger.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Web.Mvc;
     using CosmoMonger.Models;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
@@ -87,13 +89,22 @@ namespace CosmoMonger.Controllers
             }
             catch (ArgumentException ex)
             {
+                // Log this exception
+                ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                 if (ex.ParamName == "name")
                 {
                     ModelState.AddModelError("name", ex.Message);
                 }
                 else
                 {
-                    Logger.Write("Unknown error when User.CreatePlayer was called with name: " + name + " and race: " + race + " Exception Details: " + ex.ToString(), "Controller", 100, 1004, TraceEventType.Error, "ArgumentException in PlayerController.CreatePlayer");
+                    Dictionary<string, object> props = new Dictionary<string, object>
+                    { 
+                        { "Name", name },
+                        { "RaceId", raceId },
+                        { "Exception", ex }
+                    };
+                    Logger.Write("Unknown error when User.CreatePlayer was called", "Controller", 800, 0, TraceEventType.Error, "ArgumentException in PlayerController.CreatePlayer");
                     ModelState.AddModelError("_FORM", "Unknown error");
                 }
 

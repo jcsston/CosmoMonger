@@ -138,7 +138,7 @@ namespace CosmoMonger.Models
         /// <param name="quantity">The quantity of the good to add.</param>
         public virtual void AddGood(int goodId, int quantity)
         {
-            Logger.Write("Adding Good to System in CosmoSystem.AddGood", "Model", 1000, 1068, TraceEventType.Verbose, "Adding Good to System", 
+            Logger.Write("Adding Good to System in CosmoSystem.AddGood", "Model", 150, 0, TraceEventType.Verbose, "Adding Good to System", 
                 new Dictionary<string, object>
                 {
                     { "GoodId", goodId },

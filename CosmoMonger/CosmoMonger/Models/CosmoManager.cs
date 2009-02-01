@@ -65,7 +65,7 @@ namespace CosmoMonger.Models
         /// </summary>
         public void DoPendingNPCActions()
         {
-            Logger.Write("Enter CosmoMonger.DoPendingNPCActions", "Model", 100, 1035, TraceEventType.Verbose);
+            Logger.Write("Enter CosmoMonger.DoPendingNPCActions", "Model", 200, 0, TraceEventType.Verbose);
 
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             foreach (Npc npc in db.Npcs)

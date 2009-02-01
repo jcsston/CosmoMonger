@@ -112,7 +112,7 @@
                         { "ProcessingTime", processingTime }
                     };
                     string message = this.ViewContext.RouteData.Values["controller"] + "." + this.ViewContext.RouteData.Values["action"];
-                    Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(message, "Page Log", props);
+                    Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(message, "Page Log", 800, props);
                 %>
                 Processing Time: <%=processingTime%> seconds
              </p>

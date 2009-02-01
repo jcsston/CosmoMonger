@@ -7,14 +7,9 @@
 namespace CosmoMonger.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
-    using System.Web.Mvc.Ajax;
     using CosmoMonger.Models;
-    using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     /// <summary>
     /// This controller deals will all trade related actions such as listing 
@@ -87,10 +82,16 @@ namespace CosmoMonger.Controllers
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                     ModelState.AddModelError("quantity", ex);
                 }
                 catch (ArgumentException ex)
                 {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                     ModelState.AddModelError("quantity", ex);
                 }
             }
@@ -122,10 +123,16 @@ namespace CosmoMonger.Controllers
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                     ModelState.AddModelError("quantity", ex);
                 }
                 catch (InvalidOperationException ex)
                 {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                     ModelState.AddModelError("goodId", ex);
                 }
             }

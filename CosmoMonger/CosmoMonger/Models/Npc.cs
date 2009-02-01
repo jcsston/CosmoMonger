@@ -34,7 +34,7 @@
         /// </summary>
         private void UpdateSystemGoodCount()
         {
-            Logger.Write("Enter Npc.UpdateSystemGoodCount", "Model", 100, 1035, TraceEventType.Verbose);
+            Logger.Write("Enter Npc.UpdateSystemGoodCount", "Model", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
             // Check if it has been long enough since the last good count update
@@ -108,7 +108,7 @@
         /// </summary>
         private void UpdateSystemGoodPrice()
         {
-            Logger.Write("Enter Npc.UpdateSystemGoodPrice", "Model", 100, 1035, TraceEventType.Verbose);
+            Logger.Write("Enter Npc.UpdateSystemGoodPrice", "Model", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Check if it has been long enough since the last good count update

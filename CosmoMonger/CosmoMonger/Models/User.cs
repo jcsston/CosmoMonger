@@ -36,7 +36,7 @@ namespace CosmoMonger.Models
                 throw new ArgumentException("Player with same name already exists", "name");
             }
 
-            Logger.Write("Creating player in User.CreatePlayer", "Model", 1000, 1039, TraceEventType.Information, "Creating Player",
+            Logger.Write("Creating player in User.CreatePlayer", "Model", 700, 0, TraceEventType.Information, "Creating Player",
                 new Dictionary<string, object>
                 {
                     { "Name", name },
@@ -63,7 +63,7 @@ namespace CosmoMonger.Models
                                  select bs).SingleOrDefault();
             if (baseShip == null)
             {
-                Logger.Write("Unable to load player starting base ship from database", "Model", 100, 1066, TraceEventType.Critical);
+                Logger.Write("Unable to load player starting base ship from database", "Model", 1000, 0, TraceEventType.Critical);
                 return null;
             }
 
@@ -73,7 +73,7 @@ namespace CosmoMonger.Models
             CosmoSystem startingSystem = race.HomeSystem;
             if (startingSystem == null)
             {
-                Logger.Write("Unable to load player starting system from database", "Model", 100, 1076, TraceEventType.Critical);
+                Logger.Write("Unable to load player starting system from database", "Model", 1000, 0, TraceEventType.Critical);
                 return null;
             }
 
@@ -109,7 +109,7 @@ namespace CosmoMonger.Models
                 throw new ArgumentException("Another user has the same e-mail", "email");
             }
 
-            Logger.Write("Changing user email in User.UpdateEmail", "Model", 1000, 1039, TraceEventType.Information, "Changing User Email",
+            Logger.Write("Changing user email in User.UpdateEmail", "Model", 500, 0, TraceEventType.Information, "Changing User Email",
                 new Dictionary<string, object>
                 {
                     { "UserId", this.UserId },
