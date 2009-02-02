@@ -229,5 +229,11 @@ namespace CosmoMonger.Models
 
             return priceTable;
         }
+
+        public virtual Good [] GetGoods()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            return (from g in db.Goods select g).ToArray();
+        }
     }
 }

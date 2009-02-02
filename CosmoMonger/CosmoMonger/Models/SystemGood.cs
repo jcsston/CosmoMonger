@@ -11,6 +11,9 @@ namespace CosmoMonger.Models
     using System.Diagnostics;
     using System.Linq;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using System.Data.SqlClient;
+    using System.Configuration;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// Extension of the partial LINQ class SystemGood
@@ -100,6 +103,39 @@ namespace CosmoMonger.Models
             // Commit changes to the database
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             db.SubmitChanges();
+        }
+
+        public virtual Dictionary<DateTime, int> GetPriceHistory()
+        {
+            Dictionary<DateTime, int> priceHistory = new Dictionary<DateTime, int>();
+            Regex priceMultiplierRegex = new Regex("PriceMultiplier: (\\d+.\\d+)");
+            SqlConnection logConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["LoggingConnectionString"].ConnectionString);
+            logConnection.Open();
+            using (logConnection)
+            {
+                SqlCommand priceHistoryCmd = logConnection.CreateCommand();
+                priceHistoryCmd.CommandText = "SELECT Timestamp, FormattedMessage FROM Log WHERE Title = 'Adjusting Good Price' AND FormattedMessage LIKE '%SystemId: " + this.SystemId + "\r%' AND FormattedMessage LIKE '%GoodId: " + this.GoodId + "\r%' ORDER BY Timestamp";
+
+                SqlDataReader reader = priceHistoryCmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    DateTime timestamp = (DateTime)reader["Timestamp"];
+                    string formattedMessage = reader["FormattedMessage"] as string;
+                    if (formattedMessage != null)
+                    {
+                        Match match = priceMultiplierRegex.Match(formattedMessage);
+                        if (match != null)
+                        {
+                            double priceMultipler = double.Parse(match.Groups[1].Value);
+                            int price = (int)(priceMultipler * this.Good.BasePrice);
+                            priceHistory[timestamp] = price;
+                        }
+                    }
+                }
+                reader.Close();
+            }
+
+            return priceHistory;
         }
     }
 }

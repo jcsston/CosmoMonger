@@ -157,5 +157,36 @@ namespace CosmoMonger.Controllers
             return View();
         }
 
+        /// <summary>
+        /// This action gets a graph of system good prices
+        /// </summary>
+        /// <returns>The Index action result</returns>
+        public ActionResult GraphGoodPrice(int systemId, int goodId)
+        {
+            CosmoSystem system = this.ControllerGame.GetSystem(systemId);
+            if (system != null)
+            {
+                SystemGood good = system.GetGood(goodId);
+                if (good != null)
+                {
+                    ViewData["Title"] = "Good Price History Graph";
+                    ViewData["goodId"] = new SelectList(this.ControllerGame.GetGoods(), "GoodId", "Name", goodId);
+                    ViewData["systemId"] = new SelectList(this.ControllerGame.GetSystems(), "SystemId", "Name", systemId);
+                    ViewData["PriceHistory"] = good.GetPriceHistory();
+                    return View();
+                }
+                else
+                {
+                    ModelState.AddModelError("goodId", "Invalid Good");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("systemId", "Invalid System");
+            }
+
+            // Show the default action
+            return RedirectToAction("Index");
+        }
     }
 }
