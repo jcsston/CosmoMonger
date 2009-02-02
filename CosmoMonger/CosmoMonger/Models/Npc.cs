@@ -65,7 +65,7 @@
                     {
                         // No systems produce this good?
                         // Continue on to the next good type
-                        continue;
+                        break;
                     }
 
                     SystemGood selectedProducingSystemGood = goodProducingSystems.ElementAt(rnd.Next(goodProducingSystems.Count()));
