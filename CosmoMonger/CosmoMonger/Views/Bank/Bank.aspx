@@ -46,7 +46,7 @@
             </div>
 <% } %>
 
-</td><td>Work In Progress!!!  Doesn't work!</td></tr>   
+</td></tr>   
 <tr><td class="bank-columnHeaders">Cash Available for Deposit</td>
 </tr>
 <tr>
@@ -64,7 +64,7 @@
             </div>
 <% } %>
 
-</td><td>Work In Progress!!!  Doesn't work!</td></tr>
+</td></tr>
 
 
 
