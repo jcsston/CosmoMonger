@@ -12,7 +12,7 @@
     /// </summary>
     public partial class Npc
     {
-        private Random rnd = new Random();
+        static private Random rnd = new Random();
 
         public virtual void DoAction()
         {
@@ -36,7 +36,7 @@
         /// </summary>
         private void UpdateSystemGoodCount()
         {
-            Logger.Write("Enter Npc.UpdateSystemGoodCount", "Model", 100, 0, TraceEventType.Verbose);
+            Logger.Write("Enter Npc.UpdateSystemGoodCount", "NPC", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
             // Check if it has been long enough since the last good count update
@@ -75,6 +75,17 @@
                     int lackingGoodCount = (int)(rnd.Next(10) * adjustedProductionFactor);
                     selectedProducingSystemGood.Quantity += lackingGoodCount;
 
+
+                    Logger.Write("Producing Goods", "NPC", 500, 0, TraceEventType.Verbose, "Producing Goods",
+                        new Dictionary<string, object>
+                        {
+                            { "SystemId", selectedProducingSystemGood.SystemId },
+                            { "GoodId", selectedProducingSystemGood.GoodId },
+                            { "Quantity", selectedProducingSystemGood.Quantity },
+                            { "AddedQuantity", lackingGoodCount }
+                        }
+                    );
+
                     // Update the total good count
                     totalSystemGoodCount += lackingGoodCount;
 
@@ -100,7 +111,18 @@
                 // Consuming the good, using the count needed and the consumption factor
                 double adjustedConsumptionFactor = (rnd.NextDouble() + selectedConsumingSystemGood.ConsumptionFactor) / 2;
                 int usageGoodCount = (int)(rnd.Next(10) * adjustedConsumptionFactor);
-                selectedConsumingSystemGood.Quantity -= Math.Min(usageGoodCount, selectedConsumingSystemGood.Quantity);
+                usageGoodCount = Math.Min(usageGoodCount, selectedConsumingSystemGood.Quantity);
+                selectedConsumingSystemGood.Quantity -= usageGoodCount;
+
+                Logger.Write("Consuming Goods", "NPC", 500, 0, TraceEventType.Verbose, "Consuming Goods",
+                    new Dictionary<string, object>
+                    {
+                        { "SystemId", selectedConsumingSystemGood.SystemId },
+                        { "GoodId", selectedConsumingSystemGood.GoodId },
+                        { "Quantity", selectedConsumingSystemGood.Quantity },
+                        { "RemovedQuantity", usageGoodCount }
+                    }
+                );
 
                 // Send changes to the database
                 db.SubmitChanges();
@@ -112,7 +134,7 @@
         /// </summary>
         private void UpdateSystemGoodPrice()
         {
-            Logger.Write("Enter Npc.UpdateSystemGoodPrice", "Model", 100, 0, TraceEventType.Verbose);
+            Logger.Write("Enter Npc.UpdateSystemGoodPrice", "NPC", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Check if it has been long enough since the last good count update
@@ -142,8 +164,21 @@
                 newPriceMultipler = Math.Max(0.25, newPriceMultipler);
                 newPriceMultipler = Math.Min(4.0, newPriceMultipler);
 
+                double oldPriceMultipler = good.PriceMultiplier;
+
                 // Take average of previous and current price multipler
                 good.PriceMultiplier = (good.PriceMultiplier + newPriceMultipler) / 2.0;
+
+                Logger.Write("Adjusting Good Price", "NPC", 500, 0, TraceEventType.Verbose, "Adjusting Good Price",
+                    new Dictionary<string, object>
+                        {
+                            { "SystemId", good.SystemId },
+                            { "GoodId", good.GoodId },
+                            { "PriceMultiplier", good.PriceMultiplier },
+                            { "NewPriceMultipler", newPriceMultipler },
+                            { "OldPriceMultipler", oldPriceMultipler }
+                        }
+                );
 
                 // Send changes to database
                 db.SubmitChanges();

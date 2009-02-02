@@ -89,7 +89,7 @@
             ActionResult result = controller.Withdraw(500);
 
             // Assert
-            Assert.That(result, Is.TypeOf(typeof(RedirectToRouteResult)), "Should return a redirect");
+            Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
             Assert.That(controller.ModelState["_FORM"].Errors, Is.Not.Empty, "Errors should be flaged on the form");
             managerMock.Verify();
@@ -110,7 +110,7 @@
             ActionResult result = controller.Withdraw(2500);
 
             // Assert
-            Assert.That(result, Is.TypeOf(typeof(RedirectToRouteResult)), "Should return a redirect");
+            Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
             Assert.That(controller.ModelState["withdrawCredits"].Errors, Is.Not.Empty, "Errors should be flaged on the withdraw credits field");
             managerMock.Verify();
@@ -131,7 +131,7 @@
             ActionResult result = controller.Withdraw(-200);
 
             // Assert
-            Assert.That(result, Is.TypeOf(typeof(RedirectToRouteResult)), "Should return a redirect");
+            Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
             Assert.That(controller.ModelState["withdrawCredits"].Errors, Is.Not.Empty, "Errors should be flaged on the withdraw credits field");
             managerMock.Verify();
@@ -171,7 +171,7 @@
             ActionResult result = controller.Deposit(500);
 
             // Assert
-            Assert.That(result, Is.TypeOf(typeof(RedirectToRouteResult)), "Should return a redirect");
+            Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
             Assert.That(controller.ModelState["_FORM"].Errors, Is.Not.Empty, "Errors should be flaged on the form");
             managerMock.Verify();
@@ -192,7 +192,7 @@
             ActionResult result = controller.Deposit(2500);
 
             // Assert
-            Assert.That(result, Is.TypeOf(typeof(RedirectToRouteResult)), "Should return a redirect");
+            Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
             Assert.That(controller.ModelState["depositCredits"].Errors, Is.Not.Empty, "Errors should be flaged on the deposit credits field");
             managerMock.Verify();
@@ -213,7 +213,7 @@
             ActionResult result = controller.Deposit(-200);
 
             // Assert
-            Assert.That(result, Is.TypeOf(typeof(RedirectToRouteResult)), "Should return a redirect");
+            Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
             Assert.That(controller.ModelState["depositCredits"].Errors, Is.Not.Empty, "Errors should be flaged on the deposit credits field");
             managerMock.Verify();

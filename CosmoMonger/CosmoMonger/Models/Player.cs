@@ -154,8 +154,7 @@ namespace CosmoMonger.Models
 
             this.NetWorth = netWorth;
 
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-            db.SubmitChanges();
+            // Do not call SubmitChanges here as this method is called during modification of the player data
         }
 
         /// <summary>
