@@ -62,6 +62,7 @@
             try
             {
                 this.ControllerGame.CurrentPlayer.BankDeposit(depositCredits);
+                return RedirectToAction("Bank");//added by roger
             }
             catch (InvalidOperationException ex)
             {
@@ -78,7 +79,8 @@
                 ModelState.AddModelError("depositCredits", ex);
             }
 
-            return RedirectToAction("Bank");
+            //return RedirectToAction("Bank");
+            return View();
         }
 
         /// <summary>
@@ -91,6 +93,7 @@
             try
             {
                 this.ControllerGame.CurrentPlayer.BankWithdraw(withdrawCredits);
+                return RedirectToAction("Bank");//added by roger
             }
             catch (InvalidOperationException ex)
             {
@@ -107,7 +110,8 @@
                 ModelState.AddModelError("withdrawCredits", ex);
             }
 
-            return RedirectToAction("Bank");
+            //return RedirectToAction("Bank");
+            return View();
         }
     }
 }

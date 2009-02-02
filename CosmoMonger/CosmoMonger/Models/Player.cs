@@ -100,13 +100,13 @@ namespace CosmoMonger.Models
             // Check that there is a bank in the current system
             if (!this.Ship.CosmoSystem.HasBank)
             {
-                throw new InvalidOperationException("No bank available for withdraw from");
+                throw new InvalidOperationException("No bank available to deposit in");
             }
 
             // Check that the credits is postive
             if (0 >= credits)
             {
-                throw new ArgumentOutOfRangeException("credits", "Cannot withdraw a negative number of credits");
+                throw new ArgumentOutOfRangeException("credits", "Cannot deposit a negative number of credits");
             }
 
             // Check that the player has enough credits to deposit

@@ -1,19 +1,27 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
+<script type="text/javascript" src="/Scripts/jquery.spin-1.0.2.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var cashCredits = $("#cashCredits").text();
+            $('#depositCredits').spin({ min: 0, max: cashCredits, timeInterval: 100, interval: 10 });
+        var bankCredits = $("#bankCredits").text();
+            $('#withdrawCredits').spin({ min: 0, max: bankCredits, timeInterval: 200, interval: 1 });
+    });
+</script>
 <% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["CurrentPlayer"]; %>
 <% CosmoMonger.Models.CosmoSystem cSystem = ViewData["CurrentSystem"] as CosmoMonger.Models.CosmoSystem; %>
 <% if (cSystem.HasBank == true)
    { %> 
-<h1><%= Html.Encode(player.Name)%>, Welcome To The Intergalactic Bank of <%= Html.Encode(cSystem.Name)%></h1>
+<h1>Welcome To The Intergalactic Bank of <%= Html.Encode(cSystem.Name)%></h1>
 <% } %>
 <% else
     { %>
-<h1><%= Html.Encode(player.Name)%>, Welcome To The Online Intergalactic Bank!!!</h1>
+<h1>Welcome To The Online Intergalactic Bank</h1>
 <% } %>
 <table style="width: 100%">
 <tr>
-    <td class="bank-columnHeaders" colspan="3"><%= Html.Encode(player.Name) %>'s Bank Account</td>
+    <td class="bank-columnHeaders"><%= Html.Encode(player.Name) %>'s Bank Account</td>
 </tr>
 <tr>
     <td>&nbsp;</td>
@@ -22,21 +30,43 @@
     <td class="bank-columnHeaders">Account Balance</td>
 </tr>
 <tr>
-    <td class="bank-data">$&nbsp;<%= Html.Encode(player.BankCredits) %></td>
+    <td class="bank-data" id="bankCredits">$&nbsp;<%= Html.Encode(player.BankCredits) %></td>
 </tr>
 <% if (cSystem.HasBank == true)
    { %>
+   
+<tr><td class="bank-data">
+<%
+        using (Html.BeginForm("Withdraw", "Bank")) { 
+%>
+            <div>
+            
+            <%=Html.TextBox("withdrawCredits", 0, new { id = "withdrawCredits", size = 2, maxlength = 3 })%>
+            <input id="withdrawCredits" type="submit" value="Withdraw" />
+            </div>
+<% } %>
+
+</td><td>Work In Progress!!!  Doesn't work!</td></tr>   
 <tr><td class="bank-columnHeaders">Cash Available for Deposit</td>
 </tr>
 <tr>
-    <td class="bank-data">$&nbsp;<%= Html.Encode(player.CashCredits) %></td>
+    <td class="bank-data" id="cashCredits">$&nbsp;<%= Html.Encode(player.CashCredits) %></td>
 </tr>
-<tr>
-    <td class="bank-data"><%= Html.ActionLink("Deposit Credits", "Deposit", "Bank")%></td>
-</tr>
-<tr>
-    <td class="bank-data"><%= Html.ActionLink("Withdraw Credits", "Withdraw", "Bank")%></td>
-</tr>
+
+<tr><td class="bank-data">
+<%
+        using (Html.BeginForm("Deposit", "Bank")) { 
+%>
+            <div>
+            
+            <%=Html.TextBox("depositCredits", 0, new { id = "depositCredits", size = 2, maxlength = 3 })%>
+            <input id="depositCredits" type="submit" value="Deposit" />
+            </div>
+<% } %>
+
+</td><td>Work In Progress!!!  Doesn't work!</td></tr>
+
+
 
 <% } %> 
 <% else
