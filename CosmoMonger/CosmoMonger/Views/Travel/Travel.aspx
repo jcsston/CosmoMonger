@@ -85,23 +85,56 @@
                     <div id="system<%=system.SystemId %>" class="system-info">
                     <b><%=Html.Encode(system.Name) %></b>
                     <hr />
-                    <% if (system.Races.Count > 0)
-                       { %>
+                    <% 
+                        if (system.Races.Count > 0)
+                        { 
+                    %>
                     <p>Home System of the <%=Html.Encode(system.Races.First().Name)%> Race</p>
-                    <% } %>
-                    Bank: <%=system.HasBank ? "Yes" : "No" %> <br />
+                    <% 
+                        }
+                    %>
+                    Bank: 
+                    <%
+                        if (system.HasBank)
+                        {
+                            if (system == ViewData["CurrentSystem"])
+                            {
+                                %><%=Html.ActionLink("Yes", "Bank", "Bank")%><%
+                            }
+                            else
+                            {
+                                %>Yes<%
+                            }
+                        }
+                        else
+                        {
+                            %>No<%
+                        }
+                    %>
+                    <br />
                     <% 
                         if (system.GetGoods().Length > 0)
                         {
+                            if (system == ViewData["CurrentSystem"])
+                            {
+                                %><%=Html.ActionLink("Traded Goods", "ListGoods", "Trade") %><%
+                            }
+                            else
+                            {
                     %>
                     Traded Goods
+                    <%
+                            }
+                    %>
                     <ul>
                     <%
                             foreach (CosmoMonger.Models.SystemGood good in system.GetGoods())
                             {
                     %>
                         <li><%=Html.Encode(good.Good.Name)%> @ <%=good.Price%></li>
-                    <%     } %>
+                    <%     
+                            } 
+                    %>
                     </ul>
                     <%  } 
                         if (system == ViewData["CurrentSystem"])  

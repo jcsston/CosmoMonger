@@ -43,20 +43,11 @@ namespace CosmoMonger.Controllers
         /// This action processes pending background events that need processing.
         /// Such as NPC actions or good production/consumption.
         /// </summary>
-        /// <param name="count">The count of actions to process.</param>
         /// <returns>The Index action result</returns>
-        public ActionResult ProcessEvents(int count)
+        public ActionResult ProcessEvents()
         {
-            CosmoManager manager = new CosmoManager();
-
-            // Make sure the count is postive
-            count = Math.Abs(count);
-            while (count > 0)
-            {
-                // Do NPC work
-                manager.DoPendingNPCActions();
-                count--;
-            }
+            // Do NPC work
+            CosmoManager.DoPendingNPCActions();
 
             // Show the normal home page
             return RedirectToAction("Index");

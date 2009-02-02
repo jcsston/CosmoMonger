@@ -7,6 +7,7 @@
 namespace CosmoMonger.Controllers
 {
     using System;
+    using System.Threading;
     using System.Web.Mvc;
     using CosmoMonger.Controllers.Attributes;
     using CosmoMonger.Models;
@@ -55,6 +56,23 @@ namespace CosmoMonger.Controllers
                     if (User != null && this.User.Identity.IsAuthenticated)
                     {
                         this.gameManager = new GameManager(this.User.Identity.Name);
+
+                        // Check if we need to do NPC AI processing
+                        lock (this.ControllerContext.HttpContext.Application.SyncRoot) 
+                        {
+                            object lastNpcUpdate = this.ControllerContext.HttpContext.Application["LastNpcUpdate"];
+                            if (lastNpcUpdate == null || (DateTime.Now - (DateTime)lastNpcUpdate).TotalSeconds > 5)
+                            {
+                                // Spawn thread to do NPC actions
+                                Thread npcThread = new Thread(new ThreadStart(CosmoManager.DoPendingNPCActions));
+                                npcThread.Name = "NPC Thread";
+                                npcThread.Start();
+
+                                // Update NPC Counter
+                                this.ControllerContext.HttpContext.Application["LastNpcUpdate"] = DateTime.Now;
+                            }
+                        }
+
                     }
                     else
                     {

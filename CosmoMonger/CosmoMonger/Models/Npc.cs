@@ -12,6 +12,8 @@
     /// </summary>
     public partial class Npc
     {
+        private Random rnd = new Random();
+
         public virtual void DoAction()
         {
             switch (this.NpcTypeId)
@@ -47,14 +49,13 @@
             this.LastActionTime = DateTime.Now;
             db.SubmitChanges();
 
-            Random rnd = new Random();
             foreach (Good good in db.Goods)
             {
                 // Get the total number of this good type avaiable in all systems
                 int totalSystemGoodCount = good.SystemGoods.Sum(x => x.Quantity);
 
                 // Check if we need to add some of this good to the galaxy
-                if (totalSystemGoodCount < good.TargetCount)
+                while (totalSystemGoodCount < good.TargetCount)
                 {
                     // Randomly select a good at a system to produce
                     var goodProducingSystems = (from g in good.SystemGoods
@@ -73,6 +74,9 @@
                     double adjustedProductionFactor = (rnd.NextDouble() + selectedProducingSystemGood.ProductionFactor) / 2;
                     int lackingGoodCount = (int)(rnd.Next(10) * adjustedProductionFactor);
                     selectedProducingSystemGood.Quantity += lackingGoodCount;
+
+                    // Update the total good count
+                    totalSystemGoodCount += lackingGoodCount;
 
                     // Send changes to the database
                     db.SubmitChanges();
@@ -121,7 +125,6 @@
             this.LastActionTime = DateTime.Now;
             db.SubmitChanges();
 
-            Random rnd = new Random();
             foreach (SystemGood good in db.SystemGoods)
             {
                 // Get the total number of this good type avaiable in all systems
@@ -133,7 +136,7 @@
                 double newPriceMultipler = (1.0 * targetTotal / systemsWithGood) / currentSystemGoodCount;
 
                 // Give a little bit of randomization to the price multipler
-                newPriceMultipler = newPriceMultipler * (rnd.NextDouble() + 0.5);
+                //newPriceMultipler = newPriceMultipler * (rnd.NextDouble() + 0.5);
 
                 // Limit the price multipler to between 0.5 and 3.0
                 newPriceMultipler = Math.Max(0.25, newPriceMultipler);

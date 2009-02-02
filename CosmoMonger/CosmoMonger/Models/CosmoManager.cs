@@ -60,10 +60,10 @@ namespace CosmoMonger.Models
 
         /// <summary>
         /// Calls DoAction on all NPCs in the galaxy. 
-        /// This method will be called every 5 seconds via Cache Expirations to keep the NPCs 
-        /// busy in the galaxy even when no human players are hitting pages.
+        /// This method will be called every 5 seconds to keep the NPCs 
+        /// busy in the galaxy.
         /// </summary>
-        public void DoPendingNPCActions()
+        public static void DoPendingNPCActions()
         {
             Logger.Write("Enter CosmoMonger.DoPendingNPCActions", "Model", 200, 0, TraceEventType.Verbose);
 

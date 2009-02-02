@@ -50,14 +50,6 @@ namespace CosmoMonger.Models
             }
 
             this.currentUser = matchingUsers.Single();
-
-            if (true)
-            {
-                CosmoManager manager = new CosmoManager();
-
-                // Do NPC work
-                manager.DoPendingNPCActions();
-            }
         }
 
         /// <summary>

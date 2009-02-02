@@ -34,8 +34,7 @@
         [Test]
         public void DoPendingNPCActions()
         {
-            CosmoManager manager = new CosmoManager();
-            manager.DoPendingNPCActions();
+            CosmoManager.DoPendingNPCActions();
         }
     }
 }

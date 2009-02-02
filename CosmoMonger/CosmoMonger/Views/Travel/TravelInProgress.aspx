@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <script language="javascript" type="text/javascript">
+    <script type="text/javascript">
         function checkIfTraveling() {
             var timeLeftSpan = document.getElementById('TimeLeft');
             var timeLeft = parseInt(timeLeftSpan.innerHTML) - 1;
