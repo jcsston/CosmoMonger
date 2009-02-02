@@ -127,6 +127,9 @@ namespace CosmoMonger.Models
 
             this.CashCredits -= credits;
             this.BankCredits += credits;
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            db.SubmitChanges();
         }
 
         /// <summary>
@@ -150,6 +153,9 @@ namespace CosmoMonger.Models
             );
 
             this.NetWorth = netWorth;
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            db.SubmitChanges();
         }
 
         /// <summary>

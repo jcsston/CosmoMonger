@@ -4,9 +4,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var cashCredits = $("#cashCredits").text();
-            $('#depositCredits').spin({ min: 0, max: cashCredits, timeInterval: 100, interval: 10 });
+        $('#depositCredits').spin({ min: 0, max: cashCredits, timeInterval: 100, interval: 10 });
         var bankCredits = $("#bankCredits").text();
-            $('#withdrawCredits').spin({ min: 0, max: bankCredits, timeInterval: 200, interval: 1 });
+        $('#withdrawCredits').spin({ min: 0, max: bankCredits, timeInterval: 200, interval: 1 });
     });
 </script>
 <% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["CurrentPlayer"]; %>
@@ -41,8 +41,8 @@
 %>
             <div>
             
-            <%=Html.TextBox("withdrawCredits", 0, new { id = "withdrawCredits", size = 2, maxlength = 3 })%>
-            <input id="withdrawCredits" type="submit" value="Withdraw" />
+            <%=Html.TextBox("withdrawCredits", 0, new { size = 2, maxlength = 3 })%>
+            <input type="submit" value="Withdraw" />
             </div>
 <% } %>
 
@@ -59,8 +59,8 @@
 %>
             <div>
             
-            <%=Html.TextBox("depositCredits", 0, new { id = "depositCredits", size = 2, maxlength = 3 })%>
-            <input id="depositCredits" type="submit" value="Deposit" />
+            <%=Html.TextBox("depositCredits", 0, new { size = 2, maxlength = 3 })%>
+            <input type="submit" value="Deposit" />
             </div>
 <% } %>
 
