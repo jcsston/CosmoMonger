@@ -87,6 +87,9 @@ namespace CosmoMonger.Models
 
             this.BankCredits -= credits;
             this.CashCredits += credits;
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            db.SubmitChanges();
         }
 
         /// <summary>
