@@ -7,6 +7,7 @@
 namespace CosmoMonger.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
     using CosmoMonger.Models;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
@@ -161,24 +162,21 @@ namespace CosmoMonger.Controllers
         /// This action gets a graph of system good prices
         /// </summary>
         /// <returns>The Index action result</returns>
-        public ActionResult GraphGoodPrice(int systemId, int goodId)
+        public ActionResult GraphGoodPrice(int systemId)
         {
             CosmoSystem system = this.ControllerGame.GetSystem(systemId);
             if (system != null)
             {
-                SystemGood good = system.GetGood(goodId);
-                if (good != null)
-                {
-                    ViewData["Title"] = "Good Price History Graph";
-                    ViewData["goodId"] = new SelectList(this.ControllerGame.GetGoods(), "GoodId", "Name", goodId);
-                    ViewData["systemId"] = new SelectList(this.ControllerGame.GetSystems(), "SystemId", "Name", systemId);
-                    ViewData["PriceHistory"] = good.GetPriceHistory();
-                    return View();
-                }
-                else
-                {
-                    ModelState.AddModelError("goodId", "Invalid Good");
-                }
+                SystemGood [] goods = system.GetGoods();
+                
+                ViewData["Title"] = "Good Price History Graph";
+                //ViewData["goodId"] = new SelectList(this.ControllerGame.GetGoods(), "GoodId", "Name", goodId);
+                ViewData["systemId"] = new SelectList(this.ControllerGame.GetSystems(), "SystemId", "Name", systemId);
+                ViewData["Goods"] = goods;
+                // Get the price history for each system good
+                ViewData["PriceHistory"] = goods.Select(g => g.GetPriceHistory());
+                
+                return View();
             }
             else
             {
