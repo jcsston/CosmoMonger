@@ -3,9 +3,9 @@
 <script type="text/javascript" src="/Scripts/jquery.spin-1.0.2.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        var cashCredits = $("#cashCredits").text();
+        var cashCredits = $.trim($("#cashCredits").text().replace('$', ''));
         $('#depositCredits').spin({ min: 0, max: cashCredits, timeInterval: 100, interval: 10 });
-        var bankCredits = $("#bankCredits").text();
+        var bankCredits = $.trim($("#bankCredits").text().replace('$', ''));
         $('#withdrawCredits').spin({ min: 0, max: bankCredits, timeInterval: 100, interval: 10 });
     });
 </script>
