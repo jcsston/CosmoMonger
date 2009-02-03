@@ -92,7 +92,7 @@ namespace CosmoMonger.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             // Check if the user has a current player and is not trying to create a player
-            if (this.ControllerGame.CurrentPlayer == null && filterContext.Controller.GetType() != typeof(PlayerController) && filterContext.RouteData.Values["action"].ToString() != "CreatePlayer")
+            if (this.ControllerGame.CurrentPlayer == null && filterContext.Controller.GetType() != typeof(PlayerController))
             {
                 // Redirect to the CreatePlayer action
                 filterContext.HttpContext.Response.Redirect(this.Url.Action("CreatePlayer", "Player"));

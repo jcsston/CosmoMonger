@@ -123,12 +123,15 @@ namespace CosmoMonger.Controllers
         /// <returns></returns>
         public ActionResult KillPlayer(int playerId)
         {
-            if (this.ControllerGame.CurrentPlayer.PlayerId != playerId)
+            if (this.ControllerGame.CurrentPlayer != null)
             {
-                throw new InvalidOperationException("Tried to kill a player other than the current player");
-            }
+                if (this.ControllerGame.CurrentPlayer.PlayerId != playerId)
+                {
+                    throw new InvalidOperationException("Tried to kill a player other than the current player");
+                }
 
-            this.ControllerGame.CurrentPlayer.Kill();
+                this.ControllerGame.CurrentPlayer.Kill();
+            }
 
             return RedirectToAction("CreatePlayer");
         }
