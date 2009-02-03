@@ -23,7 +23,9 @@ namespace CosmoMonger.Models
         /// <returns>Array of SystemShip available in the system</returns>
         public virtual SystemShip[] GetAvailableShips()
         {
-            return this.SystemShips.ToArray();
+            return (from ss in this.SystemShips
+                    where ss.Quantity > 0
+                    select ss).ToArray();
         }
 
         /// <summary>

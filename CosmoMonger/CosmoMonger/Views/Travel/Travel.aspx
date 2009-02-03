@@ -60,7 +60,7 @@
                             alt="<%=Html.AttributeEncode(system.Name)%>"
                             title="<%=Html.AttributeEncode(system.Name)%>"
                             src="/Content/System.png"
-                            width="20px" height="20px" />
+                            width="20" height="20" />
                      </a>
                 <% } %>
                 <%
@@ -72,8 +72,8 @@
                 %>
                 <img id="shipRange" src="/Content/ShipRangeCircle.png" alt="Ship Range" 
                     style="position: absolute; left: <%=shipRangeX %>px; top: <%=shipRangeY%>px; z-index: -1;" 
-                    width="<%=shipRangeSize %>px" 
-                    height="<%=shipRangeSize %>px" />
+                    width="<%=shipRangeSize %>" 
+                    height="<%=shipRangeSize %>" />
                 </div>
             </td>
             <td valign="top">

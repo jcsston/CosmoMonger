@@ -578,3 +578,23 @@ table.goodsCenter td
 	text-align: center;
 	font-family: Arial, Helvetica, sans-serif;	
 }
+
+/* ViewShip View CSS */
+table.equipment
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table.equipment table
+{
+    display: inline;
+    margin: 5px;
+    border-spacing: 3px;
+}
+
+table.equipment caption
+{
+    font-weight: bold;
+    border-bottom: solid thin;
+}

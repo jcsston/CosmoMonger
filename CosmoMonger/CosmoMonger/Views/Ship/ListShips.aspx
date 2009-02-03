@@ -1,6 +1,39 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h1>List Ships</h1>
+<h1>Ships for Purchase</h1>
+<table class="goods">
+<tr><th>Name</th><th>Price</th><th>Buy</th></tr>
+<%
+    Ship currentShip = (Ship)ViewData["CurrentShip"];
+    SystemShip[] ships = (SystemShip[])ViewData["Ships"];
+
+    foreach (SystemShip ship in ships)
+    {
+%>
+    <tr>
+        <td><%=Html.Encode(ship.BaseShip.Name) %></td>
+        <td>$<%=ship.Price %></td>
+        <td>
+        <%
+            if (ship.BaseShip != currentShip.BaseShip)
+            {
+                using (Html.BeginForm("BuyShip", "Ship"))
+                {
+                    %><%=Html.Hidden("shipId", ship.BaseShipId, new { id = "shipId" + ship.BaseShipId })
+                    %><input type="submit" value="Buy" /><%
+                }
+            }
+            else
+            {
+                %>Current<%
+            }
+        %>
+        </td>
+    </tr>
+<%
+    }        
+%>
+</table>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>

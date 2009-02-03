@@ -150,6 +150,7 @@
     <Content Include="Views\PlayerRecord\ViewRecord.aspx" />
     <Content Include="Views\Player\CreatePlayer.aspx" />
     <Content Include="Views\Player\PlayerProfile.aspx" />
+    <Content Include="Views\Ship\BuyShip.aspx" />
     <Content Include="Views\Ship\ListShips.aspx" />
     <Content Include="Views\Ship\ViewShip.aspx" />
     <Content Include="Views\Trade\BuyGoods.aspx" />

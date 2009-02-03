@@ -66,6 +66,7 @@ namespace CosmoMonger.Controllers
         public ActionResult ListShips()
         {
             ViewData["Title"] = "Available Ships";
+            ViewData["CurrentShip"] = this.ControllerGame.CurrentPlayer.Ship;
             ViewData["Ships"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetAvailableShips();
             return View();
         }
