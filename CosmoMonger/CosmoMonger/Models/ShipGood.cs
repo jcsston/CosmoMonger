@@ -11,6 +11,8 @@ namespace CosmoMonger.Models
     using System.Linq;
     using System.Diagnostics;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
+    using System.Data.Linq;
 
     /// <summary>
     /// Extension of the partial LINQ class ShipGood
@@ -53,6 +55,32 @@ namespace CosmoMonger.Models
                 }
             );
 
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Transfer the good(s) to the system
+            sellingGood.Quantity += quantity;
+
+            try
+            {
+                // Commit changes to the database
+                db.SubmitChanges();
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to the SystemGood row, 
+                // which could be from the number of goods or the price changing 
+                // Best case to toss our changes and try to sell the good again
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    occ.Resolve(RefreshMode.OverwriteCurrentValues);
+                }
+                // This does have the chance of a stack overflow, we should find out in testing
+                this.Sell(manager, quantity);
+                return;
+            }
+
             // Remove good(s) from the ship
             this.Quantity -= quantity;
             if (this.Quantity == 0)
@@ -60,15 +88,26 @@ namespace CosmoMonger.Models
                 // TODO: Should we delete this object?
             }
 
-            // Transfer the good(s) to the system
-            sellingGood.Quantity += quantity;
-
             // Add to the players cash credits account
             manager.CurrentPlayer.CashCredits += profit;
-            
-            // Commits changes to the database
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-            db.SubmitChanges();
+
+            try
+            {
+                // Commit changes to the database
+                db.SubmitChanges();
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to the players record, this is invalid
+                // and so we use our values and ignore the new data
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    // Refresh current values from database
+                    occ.Resolve(RefreshMode.KeepCurrentValues);
+                }
+            }
         }
     }
 }
