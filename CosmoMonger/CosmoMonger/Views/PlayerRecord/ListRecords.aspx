@@ -6,7 +6,7 @@
 <h1>Top Records</h1>
 <br />
 <h3>Please select a record for display...</h3> 
-<% using (Html.BeginForm("ListRecords", "PlayerRecord",FormMethod.Post, new{enctype="multipart/form-data"})) { %>
+<% using (Html.BeginForm("ListRecords", "PlayerRecord")) { %>
 
 <p>
 <%=Html.DropDownList("recordType")%>

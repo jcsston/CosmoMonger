@@ -1,8 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Travel in Progress...</title>
-</asp:Content>
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <script type="text/javascript">
         function checkIfTraveling() {
             var timeLeftSpan = document.getElementById('TimeLeft');
@@ -17,6 +15,8 @@
         }
         setTimeout(checkIfTraveling, 1000);
     </script>
+</asp:Content>
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h1>Travel In Progress...</h1>
     <p>Jump in <span id="TimeLeft"><%=ViewData["TravelTime"] %></span> seconds.</p>
 </asp:Content>

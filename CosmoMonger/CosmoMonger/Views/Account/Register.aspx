@@ -2,7 +2,7 @@
 <%@ Register TagPrefix="recaptcha" Namespace="Recaptcha" Assembly="Recaptcha" %>
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Register</title>
-    <script type="text/javascript" src="../../Scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.validate.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#regForm").validate({

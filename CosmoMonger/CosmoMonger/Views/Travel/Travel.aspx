@@ -1,11 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Travel Map</title>
-</asp:Content>
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h1>Travel</h1>
     <%
-        CosmoMonger.Models.CosmoSystem currentSystem = ViewData["CurrentSystem"] as CosmoMonger.Models.CosmoSystem;
+        CosmoSystem currentSystem = ViewData["CurrentSystem"] as CosmoSystem;
     %>
     <script type="text/javascript">
         function selectSystem(selectedSystemId) {
@@ -23,6 +20,9 @@
             selectSystem(<%=currentSystem.SystemId %>);
         });
     </script>
+</asp:Content>
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <h1>Travel</h1>
     <% using (Html.BeginForm()) { %>
     <div>
         <%=Html.Hidden("targetSystem")%>
@@ -32,7 +32,7 @@
         <tr>
             <td>
                 <%
-                    CosmoMonger.Models.CosmoSystem[] inRangeSystems = ViewData["InRangeSystems"] as CosmoMonger.Models.CosmoSystem[];
+                    CosmoSystem[] inRangeSystems = ViewData["InRangeSystems"] as CosmoSystem[];
                     int galaxySize = (int)ViewData["GalaxySize"];
                     int displaySize = 400;
                     int currentPositionX = 0;
@@ -41,7 +41,7 @@
                 %>
                 <div id="map" class="galaxy-map">
                 <% 
-                    foreach (CosmoMonger.Models.CosmoSystem system in (ViewData["Systems"] as CosmoMonger.Models.CosmoSystem[]))
+                    foreach (CosmoSystem system in (ViewData["Systems"] as CosmoSystem[]))
                     {
                         int x = (int)(system.PositionX * pixelPerPoint);
                         int y = (int)(system.PositionY * pixelPerPoint);
@@ -82,7 +82,7 @@
             <td valign="top">
                 Selected system details:
                 <% 
-                   foreach (CosmoMonger.Models.CosmoSystem system in (CosmoMonger.Models.CosmoSystem[])ViewData["Systems"])
+                   foreach (CosmoSystem system in (CosmoSystem[])ViewData["Systems"])
                    {
                 %>
                     <div id="system<%=system.SystemId %>" class="system-info">

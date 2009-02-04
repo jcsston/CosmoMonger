@@ -3,7 +3,7 @@
     <title>CosmoMonger</title>
 </asp:Content>
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2><img class="logo" alt="CosmoMonger Logo" src="../../Content/Logo.png" />Welcome to CosmoMonger <i class="error">(Under Development)</i></h2>
+    <h2><img class="logo" alt="CosmoMonger Logo" src="/Content/Logo.png" />Welcome to CosmoMonger <i class="error">(Under Development)</i></h2>
     <p>
         CosmoMonger is an on-line space-based trading game featuring real-time 
         multi-player interaction.&nbsp; Players own a starship which they use to visit 
