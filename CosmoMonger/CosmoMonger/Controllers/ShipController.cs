@@ -91,12 +91,12 @@ namespace CosmoMonger.Controllers
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("_FORM", ex);
+                    this.AddModelError("_FORM", ex, "");
                 }
             }
             else
             {
-                ModelState.AddModelError("shipId", "Ship is no longer for sell in system");
+                this.AddModelError("shipId", "Ship is no longer for sell in system", shipId);
             }
 
             // If we got down here, then an error was encountered

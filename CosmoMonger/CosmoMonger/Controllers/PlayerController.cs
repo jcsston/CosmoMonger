@@ -78,7 +78,7 @@ namespace CosmoMonger.Controllers
             Race race = this.ControllerGame.GetRace(raceId);
             if (race == null)
             {
-                ModelState.AddModelError("raceId", "Invalid Race selected");
+                this.AddModelError("raceId", "Invalid Race selected", raceId);
                 return this.CreatePlayer();
             }
 
@@ -94,7 +94,7 @@ namespace CosmoMonger.Controllers
 
                 if (ex.ParamName == "name")
                 {
-                    ModelState.AddModelError("name", ex.Message);
+                    this.AddModelError("name", ex, name);
                 }
                 else
                 {
@@ -105,7 +105,7 @@ namespace CosmoMonger.Controllers
                         { "Exception", ex }
                     };
                     Logger.Write("Unknown error when User.CreatePlayer was called", "Controller", 800, 0, TraceEventType.Error, "ArgumentException in PlayerController.CreatePlayer");
-                    ModelState.AddModelError("_FORM", "Unknown error");
+                    this.AddModelError("_FORM", "Unknown error", "");
                 }
 
                 // Keep the users selected race

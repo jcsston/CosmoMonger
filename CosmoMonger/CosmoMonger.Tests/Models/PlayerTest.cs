@@ -16,6 +16,44 @@
     [TestFixture]
     public class PlayerTest : BasePlayerTest
     {
+        [Explicit("This test is for creating users inorder to stress test a site")]
+        [Test]
+        public void Create10000Players()
+        {
+            string baseEmail = "stressTest@cosmomonger.com";
+            string baseUserName = "stressTest";
+            string basePlayerName = "stressTestPlayer";
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+
+            Race skummRace = (from r in db.Races
+                              where r.Name == "Skumm"
+                              select r).SingleOrDefault();
+
+            for (int i = 1001; i < 50000; i++)
+            {
+                CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(i + baseUserName, "test1000", i + baseEmail, null, null, true, null, out status);
+                Assert.IsNotNull(testUser, "Test User was created. status = {0}", new object[] { status });
+
+                User testUserModel = testUser.GetUserModel();
+                Assert.IsNotNull(testUserModel, "Able to get model object for user");
+
+                Player testPlayer = testUserModel.CreatePlayer(i + basePlayerName, skummRace);
+                foreach (Good good in db.Goods)
+                {
+                    ShipGood shipGood = new ShipGood();
+                    shipGood.Ship = testPlayer.Ship;
+                    shipGood.Good = good;
+                    shipGood.Quantity = 0;
+
+                    db.ShipGoods.InsertOnSubmit(shipGood);
+                }
+                db.SubmitChanges();
+            }
+        }
+
         [Test]
         public void SkummHomeSystem()
         {

@@ -91,26 +91,26 @@ namespace CosmoMonger.Controllers
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ViewData.ModelState.AddModelError("_FORM", ex);
+                    this.AddModelError("_FORM", ex, "");
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ViewData.ModelState.AddModelError("_FORM", ex);
+                    this.AddModelError("_FORM", ex, "");
                 }
                 catch (ArgumentException ex)
                 {
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ViewData.ModelState.AddModelError("_FORM", ex);
+                    this.AddModelError("_FORM", ex, "");
                 }
             }
             else
             {
-                ViewData.ModelState.AddModelError("_FORM", "The target system is invalid");
+                this.AddModelError("targetSystem", "The target system is invalid", targetSystem);
             }
 
             // If we got down here, then an error was thrown
