@@ -57,7 +57,7 @@ namespace CosmoMonger.Controllers
         public ActionResult CreatePlayer()
         {
             Race[] races = this.ControllerGame.GetRaces();
-            ViewData["Title"] = "Create Player";
+
             ViewData["raceId"] = new SelectList(races, "RaceId", "Name", ViewData["raceId"]);
             ViewData["Races"] = races;
 
@@ -174,7 +174,6 @@ namespace CosmoMonger.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult PlayerProfile(int playerId)
         {
-            ViewData["Title"] = "View Player Profile";
             ViewData["Player"] = this.ControllerGame.GetPlayer(playerId);
             return View();
         }

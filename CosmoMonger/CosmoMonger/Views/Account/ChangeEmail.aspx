@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <script type="text/javascript" src="../../Scripts/jquery.validate.min.js"></script>
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <title>Change E-Mail</title>
+    <script type="text/javascript" src="/Scripts/jquery.validate.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#changeEmailForm").validate({
@@ -19,7 +20,8 @@
             });
         });
     </script>
-    
+</asp:Content>
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Change Email</h2>
     
     <%= Html.ValidationSummary() %>

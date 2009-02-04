@@ -1,4 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <title>Dead Player</title>
+</asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 <h1>Your Player's Seven Day Time Limit Has Expired!!</h1>
 <br />

@@ -1,4 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <title>View Player Record</title>
+</asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 <h1>View Record</h1>
 <% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["Player"]; %>

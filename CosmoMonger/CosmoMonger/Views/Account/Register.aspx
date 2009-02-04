@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <%@ Register TagPrefix="recaptcha" Namespace="Recaptcha" Assembly="Recaptcha" %>
-
-<asp:Content ID="registerContent" ContentPlaceHolderID="MainContent" runat="server">
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <title>Register</title>
     <script type="text/javascript" src="../../Scripts/jquery.validate.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -35,7 +35,8 @@
             });
         });
     </script>
-
+</asp:Content>
+<asp:Content ID="registerContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Account Creation</h2>
     <p>
         Use the form below to create a new account. 

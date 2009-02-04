@@ -23,8 +23,6 @@ namespace CosmoMonger.Controllers
         /// <returns>The Index View</returns>
         public ActionResult Index()
         {
-            ViewData["Title"] = "CosmoMonger";
-            
             return View();
         }
 
@@ -34,8 +32,6 @@ namespace CosmoMonger.Controllers
         /// <returns>The About View</returns>
         public ActionResult About()
         {
-            ViewData["Title"] = "About CosmoMonger";
-
             return View();
         }
 

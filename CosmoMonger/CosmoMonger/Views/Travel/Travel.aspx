@@ -1,4 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <title>Travel Map</title>
+</asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h1>Travel</h1>
     <%
@@ -8,7 +11,7 @@
         function selectSystem(selectedSystemId) {
             // Store the selected system in the input form field
             $('#targetSystem').val(selectedSystemId);
-            
+
             // Only display the selected system information
             selectedSystemId = 'system' + selectedSystemId;
             $("div.system-info:not(#" + selectedSystemId + ")").css("display", "none");

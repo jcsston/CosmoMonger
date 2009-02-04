@@ -70,7 +70,6 @@ namespace CosmoMonger.Controllers
         /// <returns>The Login view</returns>
         public ActionResult Login()
         {
-            ViewData["Title"] = "Login";
             return View();
         }
 
@@ -85,8 +84,6 @@ namespace CosmoMonger.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Login(string username, string password, bool rememberMe, string returnUrl)
         {
-            ViewData["Title"] = "Login";
-
             // Basic parameter validation
             if (String.IsNullOrEmpty(username))
             {
@@ -149,7 +146,6 @@ namespace CosmoMonger.Controllers
         /// <returns>Returns the Register view</returns>
         public ActionResult Register()
         {
-            ViewData["Title"] = "Register";
             return View();
         }
 
@@ -164,8 +160,6 @@ namespace CosmoMonger.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Register(string username, string email, string password, string confirmPassword)
         {
-            ViewData["Title"] = "Register";
-
             // Basic parameter validation
             if (String.IsNullOrEmpty(username))
             {
@@ -267,7 +261,6 @@ namespace CosmoMonger.Controllers
             }
 
             // If we got this far, something failed
-            ViewData["Title"] = "Send Verification Code";
             return View();
         }
 
@@ -277,7 +270,6 @@ namespace CosmoMonger.Controllers
         /// <returns>Returns the SendVerificationCodeSuccess View</returns>
         public ActionResult SendVerificationCodeSuccess()
         {
-            ViewData["Title"] = "Sent Verification Code";
             return View();
         }
 
@@ -306,7 +298,6 @@ namespace CosmoMonger.Controllers
                 ModelState.AddModelError("username", "Invalid username");
             }
 
-            ViewData["Title"] = "Verify Email";
             return View();
         }
 
@@ -317,7 +308,6 @@ namespace CosmoMonger.Controllers
         /// <returns>Returns the VerifyEmailSuccess View.</returns>
         public ActionResult VerifyEmailSuccess(string email)
         {
-            ViewData["Title"] = "Verified Email";
             ViewData["Email"] = email;
             return View();
         }
@@ -329,7 +319,6 @@ namespace CosmoMonger.Controllers
         [Authorize]
         public ActionResult ChangePassword()
         {
-            ViewData["Title"] = "Change Password";
             return View();
         }
 
@@ -341,11 +330,9 @@ namespace CosmoMonger.Controllers
         /// <param name="confirmPassword">The confirm password.</param>
         /// <returns>The ChangePassword view on error, redirects to the ChangePasswordSuccess action on success.</returns>
         [Authorize]
-        [AcceptVerbs(HttpVerbs.Post)]
+        [AcceptVerbs(HttpVerbs.Post), ValidateAntiForgeryToken]
         public ActionResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
         {
-            ViewData["Title"] = "Change Password";
-
             // Basic parameter validation
             if (String.IsNullOrEmpty(currentPassword))
             {
@@ -396,7 +383,6 @@ namespace CosmoMonger.Controllers
         /// <returns>The ChangePasswordSuccess view</returns>
         public ActionResult ChangePasswordSuccess()
         {
-            ViewData["Title"] = "Change Password";
             return View();
         }
 
@@ -409,7 +395,6 @@ namespace CosmoMonger.Controllers
         [Authorize]
         public ActionResult ChangeEmail()
         {
-            ViewData["Title"] = "Change E-Mail";
             MembershipUser user = this.Provider.GetUser(User.Identity.Name, true);
             ViewData["Email"] = user.Email;
 
@@ -427,8 +412,6 @@ namespace CosmoMonger.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ChangeEmail(string email)
         {
-            ViewData["Title"] = "Change Email";
-
             // Basic parameter validation
             if (String.IsNullOrEmpty(email))
             {
@@ -465,8 +448,6 @@ namespace CosmoMonger.Controllers
         /// <returns>The ChangeEmailSuccess View</returns>
         public ActionResult ChangeEmailSuccess()
         {
-            ViewData["Title"] = "Change Email Success";
-
             return View();
         }
 
@@ -476,7 +457,6 @@ namespace CosmoMonger.Controllers
         /// <returns>The UserProfile view</returns>
         public ActionResult UserProfile()
         {
-            ViewData["Title"] = "User Profile";
             CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.Provider.GetUser(User.Identity.Name, true);
             if (user != null)
             {

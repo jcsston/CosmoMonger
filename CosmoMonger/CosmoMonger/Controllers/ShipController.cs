@@ -53,7 +53,6 @@ namespace CosmoMonger.Controllers
         /// <returns>The ViewShip view filled in with the model data for the players current ship</returns>
         public ActionResult ViewShip()
         {
-            ViewData["Title"] = "Current Ship";
             ViewData["Ship"] = this.ControllerGame.CurrentPlayer.Ship;
             return View();
         }
@@ -65,7 +64,6 @@ namespace CosmoMonger.Controllers
         /// <returns>The ListShips view filled with the ships available for purchase</returns>
         public ActionResult ListShips()
         {
-            ViewData["Title"] = "Available Ships";
             ViewData["CurrentShip"] = this.ControllerGame.CurrentPlayer.Ship;
             ViewData["Ships"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetAvailableShips();
             return View();

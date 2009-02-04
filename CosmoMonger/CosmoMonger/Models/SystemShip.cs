@@ -91,6 +91,11 @@ namespace CosmoMonger.Models
             // Swap in the players new ship
             currentShip.BaseShip = this.BaseShip;
 
+            // Swap in the new equipment
+            currentShip.JumpDrive = this.BaseShip.InitialJumpDrive;
+            currentShip.Shield = this.BaseShip.InitialShield;
+            currentShip.Weapon = this.BaseShip.InitialWeapon;
+
             // Commit changes to the database
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             db.SubmitChanges();

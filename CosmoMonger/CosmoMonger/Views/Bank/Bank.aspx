@@ -1,14 +1,17 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <title>Bank</title>
+    <script type="text/javascript" src="/Scripts/jquery.spin-1.0.2.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var cashCredits = $.trim($("#cashCredits").text().replace('$', ''));
+            $('#depositCredits').spin({ min: 0, max: cashCredits, timeInterval: 100, interval: 10 });
+            var bankCredits = $.trim($("#bankCredits").text().replace('$', ''));
+            $('#withdrawCredits').spin({ min: 0, max: bankCredits, timeInterval: 100, interval: 10 });
+        });
+    </script>
+</asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-<script type="text/javascript" src="/Scripts/jquery.spin-1.0.2.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        var cashCredits = $.trim($("#cashCredits").text().replace('$', ''));
-        $('#depositCredits').spin({ min: 0, max: cashCredits, timeInterval: 100, interval: 10 });
-        var bankCredits = $.trim($("#bankCredits").text().replace('$', ''));
-        $('#withdrawCredits').spin({ min: 0, max: bankCredits, timeInterval: 100, interval: 10 });
-    });
-</script>
 <% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["CurrentPlayer"]; %>
 <% CosmoMonger.Models.CosmoSystem cSystem = ViewData["CurrentSystem"] as CosmoMonger.Models.CosmoSystem; %>
 <% if (cSystem.HasBank == true)

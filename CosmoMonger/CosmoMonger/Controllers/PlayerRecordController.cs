@@ -61,7 +61,6 @@ namespace CosmoMonger.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ListRecords(string recordType)
         {
-            ViewData["Title"] = "List Top Player Records";
             ViewData["recordType"] = new SelectList(new string[] 
             { 
                 "NetWorth",   
@@ -108,7 +107,6 @@ namespace CosmoMonger.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ViewRecord(int playerId)
         {
-            ViewData["Title"] = "View Player Record";
             ViewData["Player"] = this.ControllerGame.GetPlayer(playerId);
             return View();
         }

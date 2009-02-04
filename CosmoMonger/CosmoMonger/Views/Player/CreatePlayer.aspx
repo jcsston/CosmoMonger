@@ -1,66 +1,60 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div>
-        <p>
-            <span class="cp-topLines">
-            Welcome! Before you can begin playing, you 
-            need to set up a player profile.
-            </span>
-        </p>
-        <script type="text/javascript">
-            function UpdateRaceImage() {
-                var raceSelect = document.getElementById('raceId');
-                var raceOption = raceSelect.options[raceSelect.selectedIndex];
-                document.getElementById('RaceImg').src = '../Content/Races/' + raceOption.text + '.jpg';
-                //setting the display style to "none" for all racial divs
-                document.getElementById("SkummWeapon").style.display = "none";
-                document.getElementById("SkummShield").style.display = "none";
-                document.getElementById("SkummAccuracy").style.display = "none";
-                document.getElementById("SkummEngine").style.display = "none";
-                document.getElementById("SkummHomeSystem").style.display = "none";
-                document.getElementById("SkummDescription").style.display = "none";
-                document.getElementById("SkummRacialEnemy").style.display = "none";
-                document.getElementById("SkummRacialPreference").style.display = "none";
-                
-                document.getElementById("DecapodianWeapon").style.display = "none";
-                document.getElementById("DecapodianShield").style.display = "none";
-                document.getElementById("DecapodianAccuracy").style.display = "none";
-                document.getElementById("DecapodianEngine").style.display = "none";
-                document.getElementById("DecapodianHomeSystem").style.display = "none";
-                document.getElementById("DecapodianDescription").style.display = "none";
-                document.getElementById("DecapodianRacialEnemy").style.display = "none";
-                document.getElementById("DecapodianRacialPreference").style.display = "none";
-                
-                document.getElementById("BinariteWeapon").style.display = "none";
-                document.getElementById("BinariteShield").style.display = "none";
-                document.getElementById("BinariteAccuracy").style.display = "none";
-                document.getElementById("BinariteEngine").style.display = "none";
-                document.getElementById("BinariteHomeSystem").style.display = "none";
-                document.getElementById("BinariteDescription").style.display = "none";
-                document.getElementById("BinariteRacialEnemy").style.display = "none";
-                document.getElementById("BinariteRacialPreference").style.display = "none";
-                
-                document.getElementById("ShrodinoidWeapon").style.display = "none";
-                document.getElementById("ShrodinoidShield").style.display = "none";
-                document.getElementById("ShrodinoidAccuracy").style.display = "none";
-                document.getElementById("ShrodinoidEngine").style.display = "none";
-                document.getElementById("ShrodinoidHomeSystem").style.display = "none";
-                document.getElementById("ShrodinoidDescription").style.display = "none";
-                document.getElementById("ShrodinoidRacialEnemy").style.display = "none";
-                document.getElementById("ShrodinoidRacialPreference").style.display = "none";
-                
-                document.getElementById("HumanWeapon").style.display = "none";
-                document.getElementById("HumanShield").style.display = "none";
-                document.getElementById("HumanAccuracy").style.display = "none";
-                document.getElementById("HumanEngine").style.display = "none";
-                document.getElementById("HumanHomeSystem").style.display = "none";
-                document.getElementById("HumanDescription").style.display = "none";
-                document.getElementById("HumanRacialEnemy").style.display = "none";
-                document.getElementById("HumanRacialPreference").style.display = "none";
-                
-                //setting the display style to "inline" for the selected race's divs
-                if (raceOption.value == 1)//if true, Skumm has been selected
-                {
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <title>Create Player</title>
+    <script type="text/javascript">
+        function UpdateRaceImage() {
+            var raceSelect = document.getElementById('raceId');
+            var raceOption = raceSelect.options[raceSelect.selectedIndex];
+            document.getElementById('RaceImg').src = '../Content/Races/' + raceOption.text + '.jpg';
+            //setting the display style to "none" for all racial divs
+            document.getElementById("SkummWeapon").style.display = "none";
+            document.getElementById("SkummShield").style.display = "none";
+            document.getElementById("SkummAccuracy").style.display = "none";
+            document.getElementById("SkummEngine").style.display = "none";
+            document.getElementById("SkummHomeSystem").style.display = "none";
+            document.getElementById("SkummDescription").style.display = "none";
+            document.getElementById("SkummRacialEnemy").style.display = "none";
+            document.getElementById("SkummRacialPreference").style.display = "none";
+
+            document.getElementById("DecapodianWeapon").style.display = "none";
+            document.getElementById("DecapodianShield").style.display = "none";
+            document.getElementById("DecapodianAccuracy").style.display = "none";
+            document.getElementById("DecapodianEngine").style.display = "none";
+            document.getElementById("DecapodianHomeSystem").style.display = "none";
+            document.getElementById("DecapodianDescription").style.display = "none";
+            document.getElementById("DecapodianRacialEnemy").style.display = "none";
+            document.getElementById("DecapodianRacialPreference").style.display = "none";
+
+            document.getElementById("BinariteWeapon").style.display = "none";
+            document.getElementById("BinariteShield").style.display = "none";
+            document.getElementById("BinariteAccuracy").style.display = "none";
+            document.getElementById("BinariteEngine").style.display = "none";
+            document.getElementById("BinariteHomeSystem").style.display = "none";
+            document.getElementById("BinariteDescription").style.display = "none";
+            document.getElementById("BinariteRacialEnemy").style.display = "none";
+            document.getElementById("BinariteRacialPreference").style.display = "none";
+
+            document.getElementById("ShrodinoidWeapon").style.display = "none";
+            document.getElementById("ShrodinoidShield").style.display = "none";
+            document.getElementById("ShrodinoidAccuracy").style.display = "none";
+            document.getElementById("ShrodinoidEngine").style.display = "none";
+            document.getElementById("ShrodinoidHomeSystem").style.display = "none";
+            document.getElementById("ShrodinoidDescription").style.display = "none";
+            document.getElementById("ShrodinoidRacialEnemy").style.display = "none";
+            document.getElementById("ShrodinoidRacialPreference").style.display = "none";
+
+            document.getElementById("HumanWeapon").style.display = "none";
+            document.getElementById("HumanShield").style.display = "none";
+            document.getElementById("HumanAccuracy").style.display = "none";
+            document.getElementById("HumanEngine").style.display = "none";
+            document.getElementById("HumanHomeSystem").style.display = "none";
+            document.getElementById("HumanDescription").style.display = "none";
+            document.getElementById("HumanRacialEnemy").style.display = "none";
+            document.getElementById("HumanRacialPreference").style.display = "none";
+
+            //setting the display style to "inline" for the selected race's divs
+            if (raceOption.value == 1)//if true, Skumm has been selected
+            {
                 document.getElementById("SkummWeapon").style.display = "inline";
                 document.getElementById("SkummShield").style.display = "inline";
                 document.getElementById("SkummAccuracy").style.display = "inline";
@@ -69,9 +63,9 @@
                 document.getElementById("SkummDescription").style.display = "inline";
                 document.getElementById("SkummRacialEnemy").style.display = "inline";
                 document.getElementById("SkummRacialPreference").style.display = "inline";
-                }
-                else if (raceOption.value == 2)//if true, Decapodian has been selected
-                {
+            }
+            else if (raceOption.value == 2)//if true, Decapodian has been selected
+            {
                 document.getElementById("DecapodianWeapon").style.display = "inline";
                 document.getElementById("DecapodianShield").style.display = "inline";
                 document.getElementById("DecapodianAccuracy").style.display = "inline";
@@ -80,9 +74,9 @@
                 document.getElementById("DecapodianDescription").style.display = "inline";
                 document.getElementById("DecapodianRacialEnemy").style.display = "inline";
                 document.getElementById("DecapodianRacialPreference").style.display = "inline";
-                }
-                else if (raceOption.value == 4)//if true, Shrodinoid has been selected
-                {
+            }
+            else if (raceOption.value == 4)//if true, Shrodinoid has been selected
+            {
                 document.getElementById("ShrodinoidWeapon").style.display = "inline";
                 document.getElementById("ShrodinoidShield").style.display = "inline";
                 document.getElementById("ShrodinoidAccuracy").style.display = "inline";
@@ -91,9 +85,9 @@
                 document.getElementById("ShrodinoidDescription").style.display = "inline";
                 document.getElementById("ShrodinoidRacialEnemy").style.display = "inline";
                 document.getElementById("ShrodinoidRacialPreference").style.display = "inline";
-                }
-                else if (raceOption.value == 3)//if true, Binarite has been selected
-                {
+            }
+            else if (raceOption.value == 3)//if true, Binarite has been selected
+            {
                 document.getElementById("BinariteWeapon").style.display = "inline";
                 document.getElementById("BinariteShield").style.display = "inline";
                 document.getElementById("BinariteAccuracy").style.display = "inline";
@@ -102,9 +96,9 @@
                 document.getElementById("BinariteDescription").style.display = "inline";
                 document.getElementById("BinariteRacialEnemy").style.display = "inline";
                 document.getElementById("BinariteRacialPreference").style.display = "inline";
-                }
-                else if (raceOption.value == 5)//if true, Human has been selected
-                {
+            }
+            else if (raceOption.value == 5)//if true, Human has been selected
+            {
                 document.getElementById("HumanWeapon").style.display = "inline";
                 document.getElementById("HumanShield").style.display = "inline";
                 document.getElementById("HumanAccuracy").style.display = "inline";
@@ -113,11 +107,20 @@
                 document.getElementById("HumanDescription").style.display = "inline";
                 document.getElementById("HumanRacialEnemy").style.display = "inline";
                 document.getElementById("HumanRacialPreference").style.display = "inline";
-                }  
-                
             }
-            window.onload = UpdateRaceImage;
-        </script>
+
+        }
+        window.onload = UpdateRaceImage;
+    </script>
+</asp:Content>
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <div>
+        <p>
+            <span class="cp-topLines">
+            Welcome! Before you can begin playing, you 
+            need to set up a player profile.
+            </span>
+        </p>
         <p>
             <span class="cp-topLines">
             You may wish to glance at the rules before selecting your character's race.
@@ -183,7 +186,7 @@ foreach (Race race in (Race[])ViewData["Races"])
                 <tr>
                     <td class=".cp-leftHeaders">Race:</td>
                     <td class="cp-leftData">
-                        <%= Html.DropDownList("raceId", new { onchange = "UpdateRaceImage();" })%>
+                        <%= Html.DropDownList("raceId", (SelectList)ViewData["raceId"], new { onchange = "UpdateRaceImage();" })%>
                         <%= Html.ValidationMessage("raceId")%> 
                     </td>
                     <td class="cp-rightHeaders">Racial Enemy</td>

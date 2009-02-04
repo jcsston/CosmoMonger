@@ -134,6 +134,8 @@
     <Content Include="Content\tombstone1.png" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\jquery-1.2.6-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.2.6.min-vsdoc.js" />
     <Content Include="Scripts\jquery.spin-1.0.2.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -203,9 +205,11 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+<Target Name="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+  <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)\..\$(ProjectName)" />
+</Target>
+
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
@@ -226,6 +230,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
+  <MvcBuildViews>true</MvcBuildViews>
     <PostBuildEvent>
     </PostBuildEvent>
     <PreBuildEvent>SubWCRev ..\.. "$(ProjectDir)Properties\AssemblyInfo.template.cs" "$(ProjectDir)Properties\AssemblyInfo.cs"</PreBuildEvent>

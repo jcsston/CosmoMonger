@@ -1,28 +1,31 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-<script type="text/javascript" src="/Scripts/jquery.spin-1.0.2.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('input[name=quantity]').map(function(index, domElement) {
-            var goodId = null;
-            var goodQuantity = 0;
-            if (this.id.indexOf("buyQuantity") == 0) {
-                // buyQuantity is 11 chars long
-                goodId = parseInt(this.id.substring(11));
-                goodQuantity = $("#goodQuantity" + goodId).text();
-            } else if (this.id.indexOf("sellQuantity") == 0) {
-                goodId = parseInt(this.id.substring(12));
-                goodQuantity = $("#shipGoodQuantity" + goodId).text();
-            }
-            var goodSubmitButton = $(this).next("input");
-            if (goodQuantity == 0) {
-                $(this).attr("disabled", "disabled");
-                goodSubmitButton.attr("disabled", "disabled");
-            }
-            $(this).spin({ min: 0, max: goodQuantity, timeInterval: 300 });
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <title>List Goods</title>
+    <script type="text/javascript" src="/Scripts/jquery.spin-1.0.2.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('input[name=quantity]').map(function(index, domElement) {
+                var goodId = null;
+                var goodQuantity = 0;
+                if (this.id.indexOf("buyQuantity") == 0) {
+                    // buyQuantity is 11 chars long
+                    goodId = parseInt(this.id.substring(11));
+                    goodQuantity = $("#goodQuantity" + goodId).text();
+                } else if (this.id.indexOf("sellQuantity") == 0) {
+                    goodId = parseInt(this.id.substring(12));
+                    goodQuantity = $("#shipGoodQuantity" + goodId).text();
+                }
+                var goodSubmitButton = $(this).next("input");
+                if (goodQuantity == 0) {
+                    $(this).attr("disabled", "disabled");
+                    goodSubmitButton.attr("disabled", "disabled");
+                }
+                $(this).spin({ min: 0, max: goodQuantity, timeInterval: 300 });
+            });
         });
-    });
-</script>
+    </script>
+</asp:Content>
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 <%
     CosmoSystem currentSystem = (CosmoSystem)ViewData["CurrentSystem"];
     SystemGood[] systemGoods = (SystemGood[])ViewData["SystemGoods"];

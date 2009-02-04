@@ -52,7 +52,6 @@ namespace CosmoMonger.Controllers
         /// <returns></returns>
         public ActionResult ListGoods()
         {
-            ViewData["Title"] = "List Goods";
             ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
             ViewData["SystemGoods"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetGoods();
             ViewData["ShipGoods"] = this.ControllerGame.CurrentPlayer.Ship.GetGoods();
@@ -151,7 +150,6 @@ namespace CosmoMonger.Controllers
         /// <returns>The PriceTable View</returns>
         public ActionResult PriceTable()
         {
-            ViewData["Title"] = "Good Price Table";
             ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
             ViewData["PriceTable"] = this.ControllerGame.GetPriceTable();
 
@@ -168,8 +166,7 @@ namespace CosmoMonger.Controllers
             if (system != null)
             {
                 SystemGood [] goods = system.GetGoods();
-                
-                ViewData["Title"] = "Good Price History Graph";
+
                 //ViewData["goodId"] = new SelectList(this.ControllerGame.GetGoods(), "GoodId", "Name", goodId);
                 ViewData["systemId"] = new SelectList(this.ControllerGame.GetSystems(), "SystemId", "Name", systemId);
                 ViewData["Goods"] = goods;

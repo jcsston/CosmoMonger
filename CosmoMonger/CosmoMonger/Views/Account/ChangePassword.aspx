@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
-<asp:Content ID="changePasswordContent" ContentPlaceHolderID="MainContent" runat="server">
+<asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
+    <title>Change Password</title>
     <script type="text/javascript" src="../../Scripts/jquery.validate.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -23,7 +24,8 @@
             });
         });
     </script>
-    
+</asp:Content>
+<asp:Content ID="changePasswordContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Change Password</h2>
     <p>
         Use the form below to change your password. 
@@ -56,7 +58,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td><%=Html.AntiForgeryToken() %></td>
                     <td><input type="submit" value="Change Password" /></td>
                 </tr>
             </table>

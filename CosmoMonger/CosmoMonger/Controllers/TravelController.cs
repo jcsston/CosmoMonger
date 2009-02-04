@@ -50,8 +50,6 @@ namespace CosmoMonger.Controllers
         /// <returns></returns>
         public ActionResult Travel()
         {
-            ViewData["Title"] = "Travel Map";
-
             // Check if the player is still traveling
             ViewData["IsTraveling"] = this.ControllerGame.CurrentPlayer.Ship.CheckIfTraveling();
 
@@ -85,7 +83,6 @@ namespace CosmoMonger.Controllers
                 {
                     int travelTime = this.ControllerGame.CurrentPlayer.Ship.Travel(targetSystemModel);
 
-                    ViewData["Title"] = "Travel in Progress...";
                     ViewData["TravelTime"] = travelTime;
                     return View("TravelInProgress");
                 }
