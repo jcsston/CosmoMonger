@@ -25,22 +25,22 @@ namespace CosmoMonger.Tests.Controllers
             string testPassword = "TestPassword";
 
             // Setup the mock objects
-            Mock<MembershipProvider> mockMembership = new Mock<MembershipProvider>();
-            Mock<MembershipUser> mockUser = new Mock<MembershipUser>();
+            Mock<CosmoMongerMembershipProvider> mockMembership = new Mock<CosmoMongerMembershipProvider>();
+            Mock<User> mockUserModel = new Mock<User>();
+            Mock<CosmoMongerMembershipUser> mockUser = new Mock<CosmoMongerMembershipUser>(mockUserModel.Object);
             mockMembership.Expect<MembershipUser>(m => m.GetUser(testUserName, true))
                 .Returns(mockUser.Object).AtMostOnce().Verifiable();
 
             mockMembership.Expect<bool>(m => m.ValidateUser(testUserName, testPassword))
                .Returns(true).AtMostOnce().Verifiable();
-
             AccountController controller = new AccountController(mockMembership.Object);
-            ActionResult result = controller.Login(testUserName, testPassword, false, "");
+            ActionResult result = controller.Login(testUserName, testPassword, "");
 
             Assert.That(result, Is.TypeOf(typeof(FormsLoginResult)));
 
             FormsLoginResult loginResult = (FormsLoginResult)result;
             Assert.That(loginResult.UserName, Is.EqualTo(testUserName));
-            Assert.That(loginResult.PersistentCookie, Is.False);
+            Assert.That(loginResult.PersistentCookie, Is.True);
         }
 
         [Test]
@@ -49,15 +49,16 @@ namespace CosmoMonger.Tests.Controllers
             string testUserName = "TestUser";
             string testPassword = "TestPassword";
 
-            Mock<MembershipProvider> mockMembership = new Mock<MembershipProvider>();
-            Mock<MembershipUser> mockUser = new Mock<MembershipUser>();
+            Mock<CosmoMongerMembershipProvider> mockMembership = new Mock<CosmoMongerMembershipProvider>();
+            Mock<User> mockUserModel = new Mock<User>();
+            Mock<CosmoMongerMembershipUser> mockUser = new Mock<CosmoMongerMembershipUser>(mockUserModel.Object);
             mockMembership.Expect<MembershipUser>(m => m.GetUser(testUserName, true))
                 .Returns(mockUser.Object).AtMostOnce().Verifiable();
             mockMembership.Expect<bool>(m => m.ValidateUser(testUserName, testPassword))
                .Returns(true).AtMostOnce().Verifiable();
 
             AccountController controller = new AccountController(mockMembership.Object);
-            ActionResult result = controller.Login(testUserName, "badPassword", false, "");
+            ActionResult result = controller.Login(testUserName, "badPassword", "");
 
             Assert.That(result, Is.TypeOf(typeof(ViewResult)));
         }

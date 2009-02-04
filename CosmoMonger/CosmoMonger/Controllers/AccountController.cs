@@ -12,15 +12,12 @@ namespace CosmoMonger.Controllers
     using System.Configuration;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Net.Mail;
-    using System.Security.Principal;
     using System.Web.Mvc;
     using System.Web.Routing;
     using System.Web.Security;
     using System.Web.UI;
     using CosmoMonger.Controllers.Attributes;
     using CosmoMonger.Models;
-    using CosmoMonger.Models.Utility;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
     using Recaptcha;
@@ -78,11 +75,10 @@ namespace CosmoMonger.Controllers
         /// </summary>
         /// <param name="username">The username.</param>
         /// <param name="password">The password.</param>
-        /// <param name="rememberMe">if set to <c>true</c> [remember me].</param>
         /// <param name="returnUrl">The return URL.</param>
         /// <returns>A redirection if successful, the Login view on failure.</returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Login(string username, string password, bool rememberMe, string returnUrl)
+        public ActionResult Login(string username, string password, string returnUrl)
         {
             // Basic parameter validation
             if (String.IsNullOrEmpty(username))
@@ -98,14 +94,21 @@ namespace CosmoMonger.Controllers
             if (ViewData.ModelState.IsValid)
             {
                 // Attempt to login
-                MembershipUser user = this.Provider.GetUser(username, true);
+                CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.Provider.GetUser(username, true);
                 if (user != null)
                 {
                     bool loginSuccessful = this.Provider.ValidateUser(username, password);
 
                     if (loginSuccessful)
                     {
-                        return new FormsLoginResult(username, rememberMe);
+                        if (this.Session != null)
+                        {
+                            // Store something in the session to make the SessionID static
+                            this.Session["UserName"] = username;
+
+                            user.UpdateSession(this.Session.SessionID);
+                        }
+                        return new FormsLoginResult(username);
                     }
                     else if (!user.IsApproved)
                     {
@@ -127,7 +130,6 @@ namespace CosmoMonger.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            ViewData["rememberMe"] = rememberMe;
             return View();
         }
 
@@ -139,7 +141,7 @@ namespace CosmoMonger.Controllers
         {
             return new FormsLogoutResult();
         }
-
+        
         /// <summary>
         /// Registers a new user.
         /// </summary>
@@ -257,6 +259,7 @@ namespace CosmoMonger.Controllers
             else
             {
                 // Username is invalid
+                ModelState.SetModelValue("username", new ValueProviderResult(username, username, null));
                 ModelState.AddModelError("username", "Invalid username");
             }
 
@@ -290,11 +293,13 @@ namespace CosmoMonger.Controllers
                 }
                 else
                 {
+                    //ModelState.SetModelValue("username", new ValueProviderResult(username, username, null));
                     ModelState.AddModelError("verificationCode", "Invalid verification code");
                 }
             }
             else
             {
+                ModelState.SetModelValue("username", new ValueProviderResult(username, username, null));
                 ModelState.AddModelError("username", "Invalid username");
             }
 

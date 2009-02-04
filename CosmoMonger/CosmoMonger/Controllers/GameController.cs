@@ -16,8 +16,7 @@ namespace CosmoMonger.Controllers
     /// This is the base controller for all game related controllers.
     /// Any user has to be authorized to access this controller.
     /// </summary>
-    [Authorize]
-    [ExceptionPolicyAttribute]
+    [ExceptionPolicy]
     public class GameController : Controller
     {
         /// <summary>
@@ -96,20 +95,27 @@ namespace CosmoMonger.Controllers
             {
                 // Redirect to the CreatePlayer action
                 filterContext.HttpContext.Response.Redirect(this.Url.Action("CreatePlayer", "Player"));
-
             }
             else
             {
+                // Check that the session for the user matches
+                if (this.Session.SessionID != this.ControllerGame.CurrentUser.SessionID)
+                {
+                    // Redirect to the Logout page
+                    filterContext.HttpContext.Response.Redirect(this.Url.Action("Logout", "Account"));
+                }
+
                 // Update the player playtime
                 Player currentPlayer = this.ControllerGame.CurrentPlayer;
                 if (currentPlayer != null)
                 {
                     currentPlayer.UpdatePlayTime();
+
+                    // Redirect to the dead screen if the player has died
                     if (!currentPlayer.Alive)
                     {
                         filterContext.HttpContext.Response.Redirect(this.Url.Action("Dead", "Player"));
                     }
-
                 }
 
                 base.OnActionExecuting(filterContext);

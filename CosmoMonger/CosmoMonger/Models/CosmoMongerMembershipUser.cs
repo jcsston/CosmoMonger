@@ -266,20 +266,15 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
             bool validPassword = Cryptographer.CompareHash("SHA512", password, this.user.Password);
-            if (validPassword && this.IsApproved && !this.IsLockedOut)
+            if (validPassword && this.IsApproved)
             {
                 this.user.LoginAttemptCount = 0;
                 this.user.LastLogin = DateTime.Now;
                 db.SubmitChanges();
                 return true;
             }
-            else
+            else if (!this.IsLockedOut)
             {
-                if (!this.user.Active)
-                {
-                    throw new InvalidOperationException("The user has to be active to validate the password");
-                }
-
                 this.user.LoginAttemptCount += 1;
                 
                 // If login attempts reaches 3, we start adding a delay to the login process
@@ -317,8 +312,8 @@ namespace CosmoMonger.Models
                 }
 
                 db.SubmitChanges();
-                return false;
             }
+            return false;
         }
 
         /// <summary>
@@ -382,6 +377,8 @@ namespace CosmoMonger.Models
         /// <exception cref="InvalidOperationException">Thrown if not enough time has passed since the last verification e-mail for this user.</exception>
         public virtual void SendVerificationCode(string baseVerificationCodeUrl)
         {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
             // Check that is has been at least 5 minutes since the last
             if (this.user.LastVerificationSent.HasValue)
             {
@@ -431,6 +428,17 @@ namespace CosmoMonger.Models
 
             // Update datetime of last verification e-mail sent
             this.user.LastVerificationSent = DateTime.Now;
+
+            db.SubmitChanges();
+        }
+
+        public void UpdateSession(string sessionId)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            this.user.SessionID = sessionId;
+
+            db.SubmitChanges();
         }
     }
 }

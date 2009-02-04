@@ -6511,6 +6511,8 @@ namespace CosmoMonger.Models
 		
 		private System.DateTime _Joined;
 		
+		private string _SessionID;
+		
 		private EntitySet<BuddyList> _BuddyLists;
 		
 		private EntitySet<IgnoreList> _IgnoreLists;
@@ -6547,6 +6549,8 @@ namespace CosmoMonger.Models
     partial void OnLastVerificationSentChanged();
     partial void OnJoinedChanging(System.DateTime value);
     partial void OnJoinedChanged();
+    partial void OnSessionIDChanging(string value);
+    partial void OnSessionIDChanged();
     #endregion
 		
 		public User()
@@ -6794,6 +6798,26 @@ namespace CosmoMonger.Models
 					this._Joined = value;
 					this.SendPropertyChanged("Joined");
 					this.OnJoinedChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_SessionID", DbType="varchar(128)")]
+		public string SessionID
+		{
+			get
+			{
+				return this._SessionID;
+			}
+			set
+			{
+				if ((this._SessionID != value))
+				{
+					this.OnSessionIDChanging(value);
+					this.SendPropertyChanging();
+					this._SessionID = value;
+					this.SendPropertyChanged("SessionID");
+					this.OnSessionIDChanged();
 				}
 			}
 		}

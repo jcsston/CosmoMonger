@@ -15,7 +15,7 @@
         private bool persistentCookie;
 
         public FormsLoginResult(string userName)
-            : this(userName, /* persistentCookie */ false)
+            : this(userName, /* persistentCookie */ true)
         {
         }
 

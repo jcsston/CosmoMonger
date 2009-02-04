@@ -2171,4 +2171,10 @@
       <column name="PriceMultiplier" value="1.0" />
     </insert>
   </changeSet>
+  <changeSet author="Jory Stone" id="46">
+    <comment>Added a SessionID column to the User table</comment>
+    <addColumn tableName="User">
+      <column name="SessionID" type="varchar(255)" />
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

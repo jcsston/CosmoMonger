@@ -29,10 +29,6 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><%= Html.CheckBox("rememberMe") %> Remember me?</td>
-                </tr>
-                <tr>
-                    <td></td>
                     <td><input type="submit" value="Login" /></td>
                 </tr>
             </table>
