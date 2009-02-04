@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Linq;
     using System.Diagnostics;
     using System.Linq;
     using System.Web;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     /// <summary>
     /// Extends the partial LINQ NPC class.
@@ -39,15 +41,35 @@
             Logger.Write("Enter Npc.UpdateSystemGoodCount", "NPC", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
+            /*
             // Check if it has been long enough since the last good count update
             TimeSpan timeDelay = DateTime.Now - this.LastActionTime;
             if (timeDelay.TotalMinutes < 5)
             {
                 return;
             }
+            */
 
             this.LastActionTime = DateTime.Now;
-            db.SubmitChanges();
+            try
+            {
+                // Send changes to database
+                db.SubmitChanges();
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to this Npc object, 
+                // which means another thread has already started recalculating the good quantity.
+                // We shouldn't redo that work, and so we exit
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    // Refresh values from database
+                    occ.Resolve(RefreshMode.OverwriteCurrentValues);
+                }
+                return;
+            }
 
             foreach (Good good in db.Goods)
             {
@@ -89,12 +111,30 @@
                     // Update the total good count
                     totalSystemGoodCount += lackingGoodCount;
 
-                    // Send changes to the database
-                    db.SubmitChanges();
+                    try
+                    {
+                        // Send changes to database
+                        db.SubmitChanges();
+                    }
+                    catch (ChangeConflictException ex)
+                    {
+                        ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                        // Another thread has made changes to this SystemGood row, 
+                        // which could be from someone buying or selling the good at a system
+                        // Best case to resolve this would be to simply start over in the good production,
+                        // because the good quantity has been changed by another method.
+                        foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                        {
+                            // Refresh values from database
+                            occ.Resolve(RefreshMode.OverwriteCurrentValues);
+                        }
+                        continue;
+                    }
                 }
 
                 // Now consume some of this good in the galaxy
-                // Randomly select a good at a system to produce
+                // Randomly select a good at a system to consume
                 var goodConsumingSystems = (from g in good.SystemGoods
                                             where g.ConsumptionFactor > 0
                                             && g.Quantity > 0
@@ -124,8 +164,25 @@
                     }
                 );
 
-                // Send changes to the database
-                db.SubmitChanges();
+                try
+                {
+                    // Send changes to database
+                    db.SubmitChanges();
+                }
+                catch (ChangeConflictException ex)
+                {
+                    ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                    // Another thread has made changes to this SystemGood row, 
+                    // which could be from someone buying or selling the good at a system
+                    // Best case to resolve this would be to simply ignore the good consumption,
+                    // we like to produce more than we consume
+                    foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                    {
+                        // Refresh values from database
+                        occ.Resolve(RefreshMode.OverwriteCurrentValues);
+                    }
+                }
             }
         }
 
@@ -137,15 +194,35 @@
             Logger.Write("Enter Npc.UpdateSystemGoodPrice", "NPC", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
+            /*
             // Check if it has been long enough since the last good count update
             TimeSpan timeDelay = DateTime.Now - this.LastActionTime;
             if (timeDelay.TotalMinutes < 5)
             {
                 return;
             }
+            */
 
             this.LastActionTime = DateTime.Now;
-            db.SubmitChanges();
+            try
+            {
+                // Send changes to database
+                db.SubmitChanges();
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to this Npc object, 
+                // which means another thread has already started recalculating the good prices.
+                // We shouldn't redo that work, and so we exit
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    // Refresh current values from database
+                    occ.Resolve(RefreshMode.OverwriteCurrentValues);
+                }
+                return;
+            }
 
             foreach (SystemGood good in db.SystemGoods)
             {
@@ -158,14 +235,16 @@
                 double newPriceMultipler = (1.0 * targetTotal / systemsWithGood) / currentSystemGoodCount;
 
                 // Give a little bit of randomization to the price multipler
-                //newPriceMultipler = newPriceMultipler * (rnd.NextDouble() + 0.5);
+                // By doing a slight random adjustment of the new price multipler by -/+ 0.10
+                double rndPriceMultiplerAdjust = 0.10 - (rnd.NextDouble() / 5);
+                newPriceMultipler += rndPriceMultiplerAdjust;
 
-                // Limit the price multipler to between 0.5 and 3.0
-                newPriceMultipler = Math.Max(0.25, newPriceMultipler);
-                newPriceMultipler = Math.Min(4.0, newPriceMultipler);
+                // Limit the price multipler to between 0.33 and 3.0
+                newPriceMultipler = Math.Max(0.33, newPriceMultipler);
+                newPriceMultipler = Math.Min(3.0, newPriceMultipler);
 
                 double oldPriceMultipler = good.PriceMultiplier;
-
+                
                 // Take average of previous and current price multipler
                 good.PriceMultiplier = (good.PriceMultiplier + newPriceMultipler) / 2.0;
 
@@ -180,8 +259,26 @@
                         }
                 );
 
-                // Send changes to database
-                db.SubmitChanges();
+                try
+                {
+                    // Send changes to database
+                    db.SubmitChanges();
+                }
+                catch (ChangeConflictException ex)
+                {
+                    ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                    // Another thread has made changes to this SystemGood row, 
+                    // which could be from someone buying or selling the good at a system
+                    // Best case to resolve this would be to simply start over in the price calculatation,
+                    // the previous price no longer valid.
+                    foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                    {
+                        // Refresh current values from database
+                        occ.Resolve(RefreshMode.OverwriteCurrentValues);
+                    }
+                    continue;
+                }
             }
         }
     }
