@@ -136,6 +136,18 @@ namespace CosmoMonger.Controllers
             return RedirectToAction("CreatePlayer");
         }
 
+
+        /// <summary>
+        /// Dead from old age.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Dead()
+        {
+
+
+            return View();
+        }
+
         /// <summary>
         /// Looks up the profile data for the current player and returns the PlayerProfile view.
         /// </summary>

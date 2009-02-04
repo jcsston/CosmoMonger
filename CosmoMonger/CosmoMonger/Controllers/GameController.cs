@@ -96,13 +96,20 @@ namespace CosmoMonger.Controllers
             {
                 // Redirect to the CreatePlayer action
                 filterContext.HttpContext.Response.Redirect(this.Url.Action("CreatePlayer", "Player"));
+
             }
             else
             {
                 // Update the player playtime
-                if (this.ControllerGame.CurrentPlayer != null)
+                Player currentPlayer = this.ControllerGame.CurrentPlayer;
+                if (currentPlayer != null)
                 {
-                    this.ControllerGame.CurrentPlayer.UpdatePlayTime();
+                    currentPlayer.UpdatePlayTime();
+                    if (!currentPlayer.Alive)
+                    {
+                        filterContext.HttpContext.Response.Redirect(this.Url.Action("Dead", "Player"));
+                    }
+
                 }
 
                 base.OnActionExecuting(filterContext);

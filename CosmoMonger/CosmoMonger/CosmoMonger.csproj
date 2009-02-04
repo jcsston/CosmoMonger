@@ -131,6 +131,7 @@
     <Content Include="Content\ShipRangeCircle.png" />
     <Content Include="Content\Stars.png" />
     <Content Include="Content\System.png" />
+    <Content Include="Content\tombstone1.png" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\jquery.spin-1.0.2.js" />
@@ -149,6 +150,7 @@
     <Content Include="Views\PlayerRecord\ListRecords.aspx" />
     <Content Include="Views\PlayerRecord\ViewRecord.aspx" />
     <Content Include="Views\Player\CreatePlayer.aspx" />
+    <Content Include="Views\Player\Dead.aspx" />
     <Content Include="Views\Player\PlayerProfile.aspx" />
     <Content Include="Views\Ship\BuyShip.aspx" />
     <Content Include="Views\Ship\ListShips.aspx" />

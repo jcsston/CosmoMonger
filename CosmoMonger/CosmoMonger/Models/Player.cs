@@ -190,7 +190,7 @@ namespace CosmoMonger.Models
             {
                 // Calcuate time since last play
                 TimeSpan playTimeLength = DateTime.Now - this.LastPlayed;
-                
+
                 // Login timeout is 5 minutes, so we ignore times greater than 5 minutes
                 if (playTimeLength.TotalMinutes < 5)
                 {
@@ -212,6 +212,7 @@ namespace CosmoMonger.Models
                 CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
                 db.SubmitChanges();
             }
+
         }
 
         /// <summary>
