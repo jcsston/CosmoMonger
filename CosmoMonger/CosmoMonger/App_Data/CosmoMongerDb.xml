@@ -2177,4 +2177,8 @@
       <column name="SessionID" type="varchar(255)" />
     </addColumn>
   </changeSet>
+  <changeSet author="Jory Stone" id="47">
+    <comment>Renamed LastActionTime column to NextActionTime on the Npc table. This changes the meaning from an passive to an active.</comment>
+    <renameColumn tableName="Npc" oldColumnName="LastActionTime" newColumnName="NextActionTime" />
+  </changeSet>
 </databaseChangeLog>

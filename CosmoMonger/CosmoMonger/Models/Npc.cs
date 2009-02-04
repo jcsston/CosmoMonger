@@ -40,17 +40,9 @@
         {
             Logger.Write("Enter Npc.UpdateSystemGoodCount", "NPC", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-            
-            /*
-            // Check if it has been long enough since the last good count update
-            TimeSpan timeDelay = DateTime.Now - this.LastActionTime;
-            if (timeDelay.TotalMinutes < 5)
-            {
-                return;
-            }
-            */
 
-            this.LastActionTime = DateTime.Now;
+            // Mark the next time the system good count will need to be updated
+            this.NextActionTime = DateTime.Now.AddMinutes(5);
             try
             {
                 // Send changes to database
@@ -61,11 +53,11 @@
                 ExceptionPolicy.HandleException(ex, "SQL Policy");
 
                 // Another thread has made changes to this Npc object, 
-                // which means another thread has already started recalculating the good quantity.
+                // which means another thread has already started recalculating the good prices.
                 // We shouldn't redo that work, and so we exit
                 foreach (ObjectChangeConflict occ in db.ChangeConflicts)
                 {
-                    // Refresh values from database
+                    // Refresh current values from database
                     occ.Resolve(RefreshMode.OverwriteCurrentValues);
                 }
                 return;
@@ -194,16 +186,8 @@
             Logger.Write("Enter Npc.UpdateSystemGoodPrice", "NPC", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
-            /*
-            // Check if it has been long enough since the last good count update
-            TimeSpan timeDelay = DateTime.Now - this.LastActionTime;
-            if (timeDelay.TotalMinutes < 5)
-            {
-                return;
-            }
-            */
-
-            this.LastActionTime = DateTime.Now;
+            // Mark the next time the system good prices will need to be updated
+            this.NextActionTime = DateTime.Now.AddMinutes(5);
             try
             {
                 // Send changes to database

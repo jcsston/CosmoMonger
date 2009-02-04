@@ -57,7 +57,7 @@
             {
                 FormsAuthenticationTicket ticket =
                     new FormsAuthenticationTicket(1, this.userName,
-                                                  DateTime.Now, DateTime.Now.AddMinutes(15),
+                                                  DateTime.Now, DateTime.Now.AddMinutes(5),
                                                   this.persistentCookie,
                                                   this.userData,
                                                   FormsAuthentication.FormsCookiePath);

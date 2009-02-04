@@ -2227,8 +2227,8 @@ namespace CosmoMonger.Models
     partial void OnBadnessChanged();
     partial void OnBountyChanging(System.Nullable<int> value);
     partial void OnBountyChanged();
-    partial void OnLastActionTimeChanging(System.DateTime value);
-    partial void OnLastActionTimeChanged();
+    partial void OnNextActionTimeChanging(System.DateTime value);
+    partial void OnNextActionTimeChanged();
     #endregion
 		
 		public Npc()
@@ -2412,7 +2412,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_LastActionTime", DbType="datetime NOT NULL")]
-		public System.DateTime LastActionTime
+		public System.DateTime NextActionTime
 		{
 			get
 			{
@@ -2422,11 +2422,11 @@ namespace CosmoMonger.Models
 			{
 				if ((this._LastActionTime != value))
 				{
-					this.OnLastActionTimeChanging(value);
+					this.OnNextActionTimeChanging(value);
 					this.SendPropertyChanging();
 					this._LastActionTime = value;
-					this.SendPropertyChanged("LastActionTime");
-					this.OnLastActionTimeChanged();
+					this.SendPropertyChanged("NextActionTime");
+					this.OnNextActionTimeChanged();
 				}
 			}
 		}

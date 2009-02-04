@@ -104,8 +104,6 @@
                     Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(message, "Page Log", 800, props);
                 %>
                 Processing Time: <%=processingTime%> seconds
-                <br />
-                SessionID: <%=Session.SessionID %>
              </p>
         </div>
     </div>

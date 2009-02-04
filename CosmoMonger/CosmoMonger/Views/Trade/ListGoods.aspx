@@ -2,25 +2,65 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>List Goods</title>
     <script type="text/javascript" src="/Scripts/jquery.spin-1.0.2.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.validate.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $('input[name=quantity]').map(function(index, domElement) {
+                var buyGood = false;
                 var goodId = null;
                 var goodQuantity = 0;
                 if (this.id.indexOf("buyQuantity") == 0) {
                     // buyQuantity is 11 chars long
                     goodId = parseInt(this.id.substring(11));
                     goodQuantity = $("#goodQuantity" + goodId).text();
+                    buyGood = true;
                 } else if (this.id.indexOf("sellQuantity") == 0) {
                     goodId = parseInt(this.id.substring(12));
                     goodQuantity = $("#shipGoodQuantity" + goodId).text();
                 }
+                
+                var goodQuantityMax = goodQuantity;
+                var goodQuantityMin = 1;
+                var freeCargoSpace;
+                if (buyGood) {
+                    freeCargoSpace = parseInt($('#FreeCargoSpace').text());
+                    if (goodQuantityMax > freeCargoSpace) {
+                        goodQuantityMax = freeCargoSpace;
+                    }
+                }
+                
+                // Check if we need to disable the buttons due to the lack of goods
                 var goodSubmitButton = $(this).next("input");
-                if (goodQuantity == 0) {
+                if (goodQuantity == 0 || (buyGood && freeCargoSpace == 0)) {
                     $(this).attr("disabled", "disabled");
                     goodSubmitButton.attr("disabled", "disabled");
+                    goodQuantityMin = 0;
+                } else {
+                    // We only add validatation to the goods the user can buy/sell
+                    $(this).parent().parent('form').validate({
+                        rules: {
+                            quantity: {
+                                required: true,
+                                digits: true,
+                                min: goodQuantityMin,
+                                max: goodQuantityMax
+                            },
+                        },
+                        // Dummy error placement option, we don't want to show the error message to the user
+                        errorPlacement: function (label, element) {
+                            label.insertAfter(element.siblings('input[type=submit]'));
+                            label.before('<br />');
+                        }
+                    });
                 }
-                $(this).spin({ min: 0, max: goodQuantity, timeInterval: 300 });
+
+                // Add the good quantity spinner
+                $(this).spin({ min: goodQuantityMin, max: goodQuantityMax, timeInterval: 300 });
+                
+                // Set the default value to buy the min number of goods
+                if ($(this).val() == 0) {
+                    $(this).val(goodQuantityMin);
+                }
             });
         });
     </script>
@@ -68,7 +108,7 @@
 %>
             <div>
             <%=Html.Hidden("goodId", good.GoodId, new { id = "sellGoodId" + good.GoodId })%>
-            <%=Html.TextBox("quantity", 0, new { id = "sellQuantity" + good.GoodId, size = 2, maxlength = 3 })%>
+            <%=Html.TextBox("quantity", shipGoodQuantity, new { id = "sellQuantity" + good.GoodId, size = 2, maxlength = 3 })%>
             <input id="sellGood<%=good.GoodId %>" type="submit" value="Sell" />
             </div>
 <% 
@@ -83,7 +123,7 @@
 <hr />
 <table class="goods goodsCenter">
     <tr><th>Cash Credits</th><th>Bank Credits</th><th>Cargo Space Free</th></tr>
-    <tr><td><%= ViewData["CashCredits"] %></td><td><%= ViewData["BankCredits"]%></td><td><%= ViewData["FreeCargoSpace"] %></td></tr>
+    <tr><td>$<%= ViewData["CashCredits"] %></td><td>$<%= ViewData["BankCredits"]%></td><td id="FreeCargoSpace"><%= ViewData["FreeCargoSpace"] %></td></tr>
 </table>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FooterContent" runat="server">
