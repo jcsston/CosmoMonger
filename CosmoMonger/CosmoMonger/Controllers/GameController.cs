@@ -16,6 +16,7 @@ namespace CosmoMonger.Controllers
     /// This is the base controller for all game related controllers.
     /// Any user has to be authorized to access this controller.
     /// </summary>
+    [Authorize]
     [ExceptionPolicy]
     public class GameController : Controller
     {
