@@ -1867,4 +1867,308 @@
       <column name="ConsumptionFactor" value="0.702672207" />
     </insert>
   </changeSet>
+  <changeSet author="Jory Stone" id="45">
+    <comment>Clear out the SystemShip table and populate with base ship models at all systems.</comment>
+    <delete tableName="SystemShip" />
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="1" />
+      <column name="BaseShipId" value="4" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="2" />
+      <column name="BaseShipId" value="4" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="3" />
+      <column name="BaseShipId" value="4" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="4" />
+      <column name="BaseShipId" value="4" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="5" />
+      <column name="BaseShipId" value="4" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="6" />
+      <column name="BaseShipId" value="4" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="7" />
+      <column name="BaseShipId" value="4" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="8" />
+      <column name="BaseShipId" value="4" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="9" />
+      <column name="BaseShipId" value="4" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="10" />
+      <column name="BaseShipId" value="4" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="1" />
+      <column name="BaseShipId" value="1" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="2" />
+      <column name="BaseShipId" value="1" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="3" />
+      <column name="BaseShipId" value="1" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="4" />
+      <column name="BaseShipId" value="1" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="5" />
+      <column name="BaseShipId" value="1" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="6" />
+      <column name="BaseShipId" value="1" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="7" />
+      <column name="BaseShipId" value="1" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="8" />
+      <column name="BaseShipId" value="1" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="9" />
+      <column name="BaseShipId" value="1" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="10" />
+      <column name="BaseShipId" value="1" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="1" />
+      <column name="BaseShipId" value="2" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="2" />
+      <column name="BaseShipId" value="2" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="3" />
+      <column name="BaseShipId" value="2" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="4" />
+      <column name="BaseShipId" value="2" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="5" />
+      <column name="BaseShipId" value="2" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="6" />
+      <column name="BaseShipId" value="2" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="7" />
+      <column name="BaseShipId" value="2" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="8" />
+      <column name="BaseShipId" value="2" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="9" />
+      <column name="BaseShipId" value="2" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="10" />
+      <column name="BaseShipId" value="2" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="1" />
+      <column name="BaseShipId" value="5" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="2" />
+      <column name="BaseShipId" value="5" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="3" />
+      <column name="BaseShipId" value="5" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="4" />
+      <column name="BaseShipId" value="5" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="5" />
+      <column name="BaseShipId" value="5" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="6" />
+      <column name="BaseShipId" value="5" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="7" />
+      <column name="BaseShipId" value="5" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="8" />
+      <column name="BaseShipId" value="5" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="9" />
+      <column name="BaseShipId" value="5" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="10" />
+      <column name="BaseShipId" value="5" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="1" />
+      <column name="BaseShipId" value="3" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="2" />
+      <column name="BaseShipId" value="3" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="3" />
+      <column name="BaseShipId" value="3" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="4" />
+      <column name="BaseShipId" value="3" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="5" />
+      <column name="BaseShipId" value="3" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="6" />
+      <column name="BaseShipId" value="3" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="7" />
+      <column name="BaseShipId" value="3" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="8" />
+      <column name="BaseShipId" value="3" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="9" />
+      <column name="BaseShipId" value="3" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+    <insert tableName="SystemShip">
+      <column name="SystemId" value="10" />
+      <column name="BaseShipId" value="3" />
+      <column name="Quantity" value="2" />
+      <column name="PriceMultiplier" value="1.0" />
+    </insert>
+  </changeSet>
 </databaseChangeLog>
