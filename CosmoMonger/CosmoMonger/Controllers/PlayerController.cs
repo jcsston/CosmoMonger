@@ -56,6 +56,12 @@ namespace CosmoMonger.Controllers
         /// <returns>The CreatePlayer view</returns>
         public ActionResult CreatePlayer()
         {
+            if (this.ControllerGame.CurrentPlayer != null)
+            {
+                // User already has a player, redirecting to player profile
+                return RedirectToAction("PlayerProfile");
+            }
+
             Race[] races = this.ControllerGame.GetRaces();
 
             ViewData["raceId"] = new SelectList(races, "RaceId", "Name", ViewData["raceId"]);
@@ -120,7 +126,7 @@ namespace CosmoMonger.Controllers
         /// Kills the player.
         /// </summary>
         /// <param name="playerId">The player id.</param>
-        /// <returns></returns>
+        /// <returns>A redirect to the CreatePlayer action</returns>
         public ActionResult KillPlayer(int playerId)
         {
             if (this.ControllerGame.CurrentPlayer != null)
@@ -136,15 +142,12 @@ namespace CosmoMonger.Controllers
             return RedirectToAction("CreatePlayer");
         }
 
-
         /// <summary>
         /// Dead from old age.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The Dead view</returns>
         public ActionResult Dead()
         {
-
-
             return View();
         }
 
@@ -177,7 +180,5 @@ namespace CosmoMonger.Controllers
             ViewData["Player"] = this.ControllerGame.GetPlayer(playerId);
             return View();
         }
-
-
     }
 }
