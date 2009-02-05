@@ -139,7 +139,7 @@
                         <%= Html.ValidationMessage("name")%>
                     </td>
                     <td rowspan="3" style="width: 40%" align="center">
-                        <img id="RaceImg" src="" alt="Race Image" width="100px" height="100px" style="margin-left: 0px"/>
+                        <img id="RaceImg" src="" alt="Race Image" width="100" height="100" style="margin-left: 0px"/>
                     </td>
                     <td  class="cp-rightHeaders">Home System:</td>
                     <% 

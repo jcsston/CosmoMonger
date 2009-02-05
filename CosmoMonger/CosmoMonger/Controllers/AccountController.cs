@@ -235,41 +235,44 @@ namespace CosmoMonger.Controllers
         /// Sends the verification code to the users email.
         /// </summary>
         /// <returns>The SendVerificationCode view on error, redirects to SendVerificationCodeSuccess on success.</returns>
-        public ActionResult SendVerificationCode()
+        /*public ActionResult SendVerificationCode()
         {
             return View();
-        }
+        }*/
 
         /// <summary>
         /// Sends the verification code to the users email.
         /// </summary>
         /// <param name="username">The username to send the verification code for.</param>
         /// <returns>The SendVerificationCode view on error, redirects to SendVerificationCodeSuccess on success.</returns>
-        [AcceptVerbs(HttpVerbs.Post)]
+        //[AcceptVerbs(HttpVerbs.Post)]
         public ActionResult SendVerificationCode(string username)
         {
-            CosmoMongerMembershipUser verifyUser = (CosmoMongerMembershipUser)this.Provider.GetUser(username, false);
-            if (verifyUser != null)
+            if (!String.IsNullOrEmpty(username))
             {
-                string baseVerificationUrl = this.Request.Url.GetLeftPart(UriPartial.Authority)  + this.Url.Action("VerifyEmail") + "?username=" + this.Url.Encode(username) + "&verificationCode=";
-                try
+                CosmoMongerMembershipUser verifyUser = (CosmoMongerMembershipUser)this.Provider.GetUser(username, false);
+                if (verifyUser != null)
                 {
-                    verifyUser.SendVerificationCode(baseVerificationUrl);
-                    return RedirectToAction("SendVerificationCodeSuccess");
-                }
-                catch (InvalidOperationException ex)
-                {
-                    // Log this exception
-                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+                    string baseVerificationUrl = this.Request.Url.GetLeftPart(UriPartial.Authority) + this.Url.Action("VerifyEmail") + "?username=" + this.Url.Encode(username) + "&verificationCode=";
+                    try
+                    {
+                        verifyUser.SendVerificationCode(baseVerificationUrl);
+                        return RedirectToAction("SendVerificationCodeSuccess");
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    // Failed to send e-mail
-                    ModelState.AddModelError("_FORM", ex);
+                        // Failed to send e-mail
+                        ModelState.AddModelError("_FORM", ex);
+                    }
                 }
-            }
-            else
-            {
-                // Username is invalid
-                ModelState.AddModelError("username", "Invalid username");
+                else
+                {
+                    // Username is invalid
+                    ModelState.AddModelError("username", "Invalid username");
+                }
             }
 
             // If we got this far, something failed
@@ -302,13 +305,13 @@ namespace CosmoMonger.Controllers
                 }
                 else
                 {
-                    ModelState.SetModelValue("username", new ValueProviderResult(verificationCode, verificationCode, null));
+                    //ModelState.SetModelValue("username", new ValueProviderResult(verificationCode, verificationCode, null));
                     ModelState.AddModelError("verificationCode", "Invalid verification code");
                 }
             }
             else
             {
-                ModelState.SetModelValue("username", new ValueProviderResult(username, username, null));
+                //ModelState.SetModelValue("username", new ValueProviderResult(username, username, null));
                 ModelState.AddModelError("username", "Invalid username");
             }
 
@@ -344,7 +347,7 @@ namespace CosmoMonger.Controllers
         /// <param name="confirmPassword">The confirm password.</param>
         /// <returns>The ChangePassword view on error, redirects to the ChangePasswordSuccess action on success.</returns>
         [Authorize]
-        [AcceptVerbs(HttpVerbs.Post), ValidateAntiForgeryToken]
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
         {
             // Basic parameter validation

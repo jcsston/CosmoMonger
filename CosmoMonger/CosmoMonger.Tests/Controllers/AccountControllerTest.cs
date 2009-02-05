@@ -107,5 +107,19 @@ namespace CosmoMonger.Tests.Controllers
             // Assert
             Assert.That(result.ViewName, Is.EqualTo("SentVerificationCode"), "Should have returned the SentVerificationCode view");
         }
+
+        [Test]
+        public void ChangePasswordGetReturnsView()
+        {
+            // Arrange
+            Mock<CosmoMongerMembershipProvider> mockMembership = new Mock<CosmoMongerMembershipProvider>();
+            AccountController controller = new AccountController(mockMembership.Object);
+
+            // Act
+            ViewResult result = (ViewResult)controller.ChangePassword();
+
+            // Assert
+            Assert.That(result.ViewData.ModelState.IsValid, "No errors should be returned");
+        }
     }
 }

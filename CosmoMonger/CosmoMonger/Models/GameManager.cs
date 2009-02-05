@@ -104,37 +104,37 @@ namespace CosmoMonger.Models
             switch (recordType)
             {
                 case "NetWorth":
-                    return (from p in db.Players orderby p.NetWorth descending select p).Take(limit).ToArray();
+                    return (from p in db.Players orderby p.NetWorth descending, p.Name select p).Take(limit).ToArray();
 
                 case "BountyTotal":
-                    return (from p in db.Players orderby p.BountyTotal descending select p).Take(limit).ToArray();
+                    return (from p in db.Players orderby p.BountyTotal descending, p.Name select p).Take(limit).ToArray();
 
                 case "HighestBounty":
-                    return (from p in db.Players orderby p.HighestBounty descending select p).Take(limit).ToArray();
+                    return (from p in db.Players orderby p.HighestBounty descending, p.Name select p).Take(limit).ToArray();
 
                 case "ShipsDestroyed":
-                    return (from p in db.Players orderby p.ShipsDestroyed descending select p).Take(limit).ToArray();
+                    return (from p in db.Players orderby p.ShipsDestroyed descending, p.Name select p).Take(limit).ToArray();
 
                 case "ForcedSurrenders":
-                    return (from p in db.Players orderby p.ForcedSurrenders descending select p).Take(limit).ToArray();
+                    return (from p in db.Players orderby p.ForcedSurrenders descending, p.Name select p).Take(limit).ToArray();
 
                 case "ForcedFlees":
-                    return (from p in db.Players orderby p.ForcedFlees descending select p).Take(limit).ToArray();
+                    return (from p in db.Players orderby p.ForcedFlees descending, p.Name select p).Take(limit).ToArray();
 
                 case "CargoLooted":
-                    return (from p in db.Players orderby p.CargoLootedWorth descending select p).Take(limit).ToArray();
+                    return (from p in db.Players orderby p.CargoLootedWorth descending, p.Name select p).Take(limit).ToArray();
 
                 case "ShipsLost":
-                    return (from p in db.Players orderby p.ShipsLost descending select p).Take(limit).ToArray();
+                    return (from p in db.Players orderby p.ShipsLost descending, p.Name select p).Take(limit).ToArray();
 
                 case "SurrenderCount":
-                    return (from p in db.Players orderby p.SurrenderCount descending select p).Take(limit).ToArray();
+                    return (from p in db.Players orderby p.SurrenderCount descending, p.Name select p).Take(limit).ToArray();
 
                 case "FleeCount":
-                    return (from p in db.Players orderby p.FleeCount descending select p).Take(limit).ToArray();
+                    return (from p in db.Players orderby p.FleeCount descending, p.Name select p).Take(limit).ToArray();
 
                 case "CargoLost":
-                    return (from p in db.Players orderby p.CargoLostWorth descending select p).Take(limit).ToArray();
+                    return (from p in db.Players orderby p.CargoLostWorth descending, p.Name select p).Take(limit).ToArray();
 
                 default:
                     throw new ArgumentException("Invalid recordType in GetTopPlayers", "recordType");

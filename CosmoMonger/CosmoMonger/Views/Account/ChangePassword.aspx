@@ -60,7 +60,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><%=Html.AntiForgeryToken() %></td>
+                    <td></td>
                     <td><input type="submit" value="Change Password" /></td>
                 </tr>
             </table>

@@ -73,6 +73,7 @@
 
             // Assert
             Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
+            Assert.That(((ViewResult)result).ViewName, Is.SubsetOf(new string[] { "", "Travel" }), "Should return the Travel View");
             Assert.That(controller.ModelState.IsValid, "No error should be returned");
             Assert.That(controller.ViewData["IsTraveling"], Is.False, "The IsTraveling field should be false");
             Assert.That(controller.ViewData["GalaxySize"], Is.EqualTo(30), "The GalaxySize field should be 30");
@@ -177,7 +178,7 @@
             // Assert
             Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
             ViewResult viewResult = (ViewResult)result;
-            Assert.That(viewResult.ViewName, Is.EqualTo("Travel"), "Should return the Travel View");
+            Assert.That(viewResult.ViewName, Is.SubsetOf(new string[] { "", "Travel" }), "Should return the Travel View");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
             Assert.That(controller.ModelState["_FORM"].Errors[0].Exception, Is.TypeOf(typeof(ArgumentOutOfRangeException)), "Error for form should be ArgumentOutOfRangeException");
             Assert.That(controller.ViewData["IsTraveling"], Is.False, "The IsTraveling field should be false");
@@ -235,7 +236,7 @@
             // Assert
             Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
             ViewResult viewResult = (ViewResult)result;
-            Assert.That(viewResult.ViewName, Is.EqualTo("Travel"), "Should return the Travel View");
+            Assert.That(viewResult.ViewName, Is.SubsetOf(new string[]{"", "Travel"}), "Should return the Travel View");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
             Assert.That(controller.ModelState["_FORM"].Errors[0].Exception, Is.TypeOf(typeof(InvalidOperationException)), "Error for form should be InvalidOperationException");
             Assert.That(controller.ViewData["IsTraveling"], Is.True, "The IsTraveling field should be true");
@@ -288,7 +289,7 @@
             // Assert
             Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
             ViewResult viewResult = (ViewResult)result;
-            Assert.That(viewResult.ViewName, Is.EqualTo("Travel"), "Should return the Travel View");
+            Assert.That(viewResult.ViewName, Is.SubsetOf(new string[] { "", "Travel" }), "Should return the Travel View");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
             Assert.That(controller.ModelState["_FORM"].Errors[0].Exception, Is.TypeOf(typeof(ArgumentException)), "Error for form should be ArgumentException");
             Assert.That(controller.ViewData["IsTraveling"], Is.False, "The IsTraveling field should be false");
