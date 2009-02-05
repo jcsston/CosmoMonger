@@ -2,6 +2,7 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Travel in Progress...</title>
     <script type="text/javascript">
+    <!--
         function checkIfTraveling() {
             var timeLeftSpan = document.getElementById('TimeLeft');
             var timeLeft = parseInt(timeLeftSpan.innerHTML) - 1;
@@ -14,6 +15,7 @@
             
         }
         setTimeout(checkIfTraveling, 1000);
+    -->
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">

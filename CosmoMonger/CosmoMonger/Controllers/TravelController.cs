@@ -62,7 +62,7 @@ namespace CosmoMonger.Controllers
             ViewData["InRangeSystems"] = this.ControllerGame.CurrentPlayer.Ship.GetInRangeSystems();
             ViewData["Systems"] = this.ControllerGame.GetSystems();
 
-            return View("Travel");
+            return View();
         }
 
         /// <summary>
