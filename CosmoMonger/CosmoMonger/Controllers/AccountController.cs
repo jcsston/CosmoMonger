@@ -234,8 +234,18 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Sends the verification code to the users email.
         /// </summary>
+        /// <returns>The SendVerificationCode view on error, redirects to SendVerificationCodeSuccess on success.</returns>
+        public ActionResult SendVerificationCode()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Sends the verification code to the users email.
+        /// </summary>
         /// <param name="username">The username to send the verification code for.</param>
         /// <returns>The SendVerificationCode view on error, redirects to SendVerificationCodeSuccess on success.</returns>
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult SendVerificationCode(string username)
         {
             CosmoMongerMembershipUser verifyUser = (CosmoMongerMembershipUser)this.Provider.GetUser(username, false);
@@ -259,7 +269,6 @@ namespace CosmoMonger.Controllers
             else
             {
                 // Username is invalid
-                ModelState.SetModelValue("username", new ValueProviderResult(username, username, null));
                 ModelState.AddModelError("username", "Invalid username");
             }
 
@@ -293,7 +302,7 @@ namespace CosmoMonger.Controllers
                 }
                 else
                 {
-                    //ModelState.SetModelValue("username", new ValueProviderResult(username, username, null));
+                    ModelState.SetModelValue("username", new ValueProviderResult(verificationCode, verificationCode, null));
                     ModelState.AddModelError("verificationCode", "Invalid verification code");
                 }
             }

@@ -56,6 +56,7 @@
         /// </summary>
         /// <param name="depositCredits">The number of credits to deposit.</param>
         /// <returns>A redirect to the Index action</returns>
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Deposit(int depositCredits)
         {
             try
@@ -68,14 +69,14 @@
                 // Log this exception
                 ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                this.AddModelError("_FORM", ex, "");
+                ModelState.AddModelError("_FORM", ex);
             }
             catch (ArgumentOutOfRangeException ex)
             {
                 // Log this exception
                 ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                this.AddModelError("depositCredits", ex, depositCredits);
+                ModelState.AddModelError("depositCredits", ex);
             }
 
             //return RedirectToAction("Bank");
@@ -87,6 +88,7 @@
         /// </summary>
         /// <param name="withdrawCredits">The number of credits to withdraw.</param>
         /// <returns>A redirect to the Index action</returns>
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Withdraw(int withdrawCredits)
         {
             try
@@ -99,14 +101,14 @@
                 // Log this exception
                 ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                this.AddModelError("_FORM", ex, "");
+                ModelState.AddModelError("_FORM", ex);
             }
             catch (ArgumentOutOfRangeException ex)
             {
                 // Log this exception
                 ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                this.AddModelError("withdrawCredits", ex, withdrawCredits);
+                ModelState.AddModelError("withdrawCredits", ex);
             }
 
             //return RedirectToAction("Bank");

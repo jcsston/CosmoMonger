@@ -75,6 +75,7 @@ namespace CosmoMonger.Controllers
         /// </summary>
         /// <param name="shipId">The base ship id of the SystemShip to buy.</param>
         /// <returns>Redirect back to the ViewShip action if successful, returns the ListShips view on error</returns>
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult BuyShip(int shipId)
         {
             SystemShip shipToBuy = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetShip(shipId);
@@ -91,12 +92,12 @@ namespace CosmoMonger.Controllers
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    this.AddModelError("_FORM", ex, "");
+                    ModelState.AddModelError("_FORM", ex);
                 }
             }
             else
             {
-                this.AddModelError("shipId", "Ship is no longer for sell in system", shipId);
+                ModelState.AddModelError("shipId", "Ship is no longer for sell in system");
             }
 
             // If we got down here, then an error was encountered

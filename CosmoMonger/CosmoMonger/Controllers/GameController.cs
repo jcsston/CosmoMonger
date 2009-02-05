@@ -84,18 +84,6 @@ namespace CosmoMonger.Controllers
             }
         }
 
-        protected void AddModelError(string key, string message, object value)
-        {
-            ModelState.SetModelValue(key, new ValueProviderResult(value, value.ToString(), null));
-            ModelState.AddModelError(key, message);
-        }
-
-        protected void AddModelError(string key, Exception ex, object value)
-        {
-            ModelState.SetModelValue(key, new ValueProviderResult(value, value.ToString(), null));
-            ModelState.AddModelError(key, ex);
-        }
-
         /// <summary>
         /// Called before an action has executed.
         /// This override is used to redirect users without an active player to the PlayerController.CreatePlayer action.
