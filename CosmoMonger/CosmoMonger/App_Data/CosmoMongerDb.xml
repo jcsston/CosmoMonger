@@ -2181,4 +2181,169 @@
     <comment>Renamed LastActionTime column to NextActionTime on the Npc table. This changes the meaning from an passive to an active.</comment>
     <renameColumn tableName="Npc" oldColumnName="LastActionTime" newColumnName="NextActionTime" />
   </changeSet>
+  <changeSet author="Jory Stone" id="48">
+    <comment>Adding Description properties to table columns</comment>
+    <sql>
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'User', N'COLUMN',N'Email'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'used for login and administrative contact' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'User', @level2type=N'COLUMN',@level2name=N'Email'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'User', N'COLUMN',N'UserName'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'used for login' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'User', @level2type=N'COLUMN',@level2name=N'UserName'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'User', N'COLUMN',N'Validated'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Flag to signal if the User has Validated their e-mail address by clicking on the link' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'User', @level2type=N'COLUMN',@level2name=N'Validated'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'User', N'COLUMN',N'Active'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Flag to signal if User is active and can login' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'User', @level2type=N'COLUMN',@level2name=N'Active'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'User', N'COLUMN',N'Admin'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'true for administrators, default to false' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'User', @level2type=N'COLUMN',@level2name=N'Admin'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'User', N'COLUMN',N'Password'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sha1 salted hash base 64 coded' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'User', @level2type=N'COLUMN',@level2name=N'Password'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'User', N'COLUMN',N'LastVerificationSent'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'date last email verification was sent' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'User', @level2type=N'COLUMN',@level2name=N'LastVerificationSent'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'User', N'COLUMN',N'Joined'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'date user registers' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'User', @level2type=N'COLUMN',@level2name=N'Joined'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Good', N'COLUMN',N'BasePrice'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'price, unmodified by PriceMultiplier' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Good', @level2type=N'COLUMN',@level2name=N'BasePrice'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'JumpDrive', N'COLUMN',N'Speed'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'The Speed or Charge Time of the JumpDrive' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'JumpDrive', @level2type=N'COLUMN',@level2name=N'Speed'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'JumpDrive', N'COLUMN',N'Range'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'The radius length of a circle depicting systems in range.' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'JumpDrive', @level2type=N'COLUMN',@level2name=N'Range'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'JumpDrive', N'COLUMN',N'CargoCost'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'How many cargo spaces the drive occupies.' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'JumpDrive', @level2type=N'COLUMN',@level2name=N'CargoCost'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'JumpDrive', N'COLUMN',N'BasePrice'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'price, unmodified by PriceMultiplier' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'JumpDrive', @level2type=N'COLUMN',@level2name=N'BasePrice'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'NpcType', N'COLUMN',N'NpcTypeId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Pirate, Trader, or Police?' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'NpcType', @level2type=N'COLUMN',@level2name=N'NpcTypeId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Shield', N'COLUMN',N'Strength'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'defensive value, higher is better' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Shield', @level2type=N'COLUMN',@level2name=N'Strength'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Shield', N'COLUMN',N'BasePrice'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'price, unmodified by PriceMultiplier' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Shield', @level2type=N'COLUMN',@level2name=N'BasePrice'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Shield', N'COLUMN',N'CargoCost'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'How many cargo spaces the shield occupies.' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Shield', @level2type=N'COLUMN',@level2name=N'CargoCost'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'System', N'COLUMN',N'PositionX'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'X-coordinate of system, 0 = upper left, no negative values' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'System', @level2type=N'COLUMN',@level2name=N'PositionX'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'System', N'COLUMN',N'PositionY'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Y-coordinate of system, 0 = upper left, no negative values' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'System', @level2type=N'COLUMN',@level2name=N'PositionY'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'System', N'COLUMN',N'HasBank'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'1= has a bank, 0 = no bank' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'System', @level2type=N'COLUMN',@level2name=N'HasBank'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Weapon', N'COLUMN',N'Power'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'attack strength' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Weapon', @level2type=N'COLUMN',@level2name=N'Power'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Weapon', N'COLUMN',N'TurnCost'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'turn units consumed by firing' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Weapon', @level2type=N'COLUMN',@level2name=N'TurnCost'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Weapon', N'COLUMN',N'CargoCost'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'number of cargo spaces used by weapon' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Weapon', @level2type=N'COLUMN',@level2name=N'CargoCost'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Weapon', N'COLUMN',N'BasePrice'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'price, unmodified by PriceMultiplier' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Weapon', @level2type=N'COLUMN',@level2name=N'BasePrice'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'UserId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User who owns this player character' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'UserId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'Name'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Player''s name' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'Name'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'Reputation'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'high positive = good, 0 = neutral, low negative = bad' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'Reputation'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'BankCredits'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'player credits in bank' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'BankCredits'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'CashCredits'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'player credits on ship' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'CashCredits'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'TimePlayed'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'seconds since player was created' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'TimePlayed'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'NetWorth'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'total worth of player credits + items' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'NetWorth'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'BountyTotal'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'sum of all bounties collected' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'BountyTotal'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'HighestBounty'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'to date, highest bounty placed on player' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'HighestBounty'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'ShipsDestroyed'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Opponent''s Destroyed' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'ShipsDestroyed'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'ForcedSurrenders'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Surrendered Opponents' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'ForcedSurrenders'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'ForcedFlees'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Fled Opponents' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'ForcedFlees'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'CargoLootedWorth'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Captured Cargo' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'CargoLootedWorth'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'ShipsLost'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Ships Lost in Combat' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'ShipsLost'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'SurrenderCount'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Times Surrendered' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'SurrenderCount'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'FleeCount'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Times Fled' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'FleeCount'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'CargoLostWorth'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Lost Cargo' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'CargoLostWorth'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Player', N'COLUMN',N'Alive'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'True = hasn''t reached time limit, False = past time limit' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Player', @level2type=N'COLUMN',@level2name=N'Alive'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Message', N'COLUMN',N'Content'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'body of the message' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Message', @level2type=N'COLUMN',@level2name=N'Content'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Message', N'COLUMN',N'Received'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'1 = message received, 0 = message not received' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Message', @level2type=N'COLUMN',@level2name=N'Received'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'IgnoreList', N'COLUMN',N'AntiFriendId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'UserId of blocked user' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'IgnoreList', @level2type=N'COLUMN',@level2name=N'AntiFriendId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'BuddyList', N'COLUMN',N'FriendId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'User id of the buddy on the buddy list' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'BuddyList', @level2type=N'COLUMN',@level2name=N'FriendId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'SystemGood', N'COLUMN',N'PriceMultiplier'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'used to calculate price by adjusting base price' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemGood', @level2type=N'COLUMN',@level2name=N'PriceMultiplier'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'SystemGood', N'COLUMN',N'ProductionFactor'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'0 = not produced, 1 = max produced' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemGood', @level2type=N'COLUMN',@level2name=N'ProductionFactor'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'SystemGood', N'COLUMN',N'ConsumptionFactor'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'0 = not consumed, 1 = max consumed' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemGood', @level2type=N'COLUMN',@level2name=N'ConsumptionFactor'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'BaseShip', N'COLUMN',N'BasePrice'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'price, unmodified by PriceMultiplier' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'BaseShip', @level2type=N'COLUMN',@level2name=N'BasePrice'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'SystemJumpDriveUpgrade', N'COLUMN',N'PriceMultiplier'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'used to calculate price by adjusting base price' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemJumpDriveUpgrade', @level2type=N'COLUMN',@level2name=N'PriceMultiplier'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Ship', N'COLUMN',N'SystemId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'CurrentSystemId is the system the ship is currently in.' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Ship', @level2type=N'COLUMN',@level2name=N'SystemId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Ship', N'COLUMN',N'WeaponId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'type of weapon used by ship' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Ship', @level2type=N'COLUMN',@level2name=N'WeaponId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Ship', N'COLUMN',N'JumpDriveId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'type of jumpDrive used by ship' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Ship', @level2type=N'COLUMN',@level2name=N'JumpDriveId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Ship', N'COLUMN',N'ShieldId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'type of shield used by ship' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Ship', @level2type=N'COLUMN',@level2name=N'ShieldId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Ship', N'COLUMN',N'DamageEngine'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Percentage damaged, 0 = no damage, 100 = engine destroyed' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Ship', @level2type=N'COLUMN',@level2name=N'DamageEngine'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Ship', N'COLUMN',N'DamageWeapon'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Percentage damaged, 0 = no damage, 100 =  weapon destroyed' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Ship', @level2type=N'COLUMN',@level2name=N'DamageWeapon'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Ship', N'COLUMN',N'DamageShield'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Percentage damaged, 0 = no damage, 100 = shield destroyed' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Ship', @level2type=N'COLUMN',@level2name=N'DamageShield'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Ship', N'COLUMN',N'DamageHull'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Percentage damaged, 0 = no damage, 100 = ship destroyed' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Ship', @level2type=N'COLUMN',@level2name=N'DamageHull'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Ship', N'COLUMN',N'TargetSystemId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'TargetSystemId is the destination system' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Ship', @level2type=N'COLUMN',@level2name=N'TargetSystemId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Ship', N'COLUMN',N'CurrentJumpDriveCharge'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'0 = empty, 100 = full charge' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Ship', @level2type=N'COLUMN',@level2name=N'CurrentJumpDriveCharge'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Npc', N'COLUMN',N'NpcTypeId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Is the NPC a pirate, trader, or police type?' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Npc', @level2type=N'COLUMN',@level2name=N'NpcTypeId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Npc', N'COLUMN',N'Credits'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Cash credits carried on ship' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Npc', @level2type=N'COLUMN',@level2name=N'Credits'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Npc', N'COLUMN',N'Badness'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'0 = good, high positive = evil, this measures potential to attack players' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Npc', @level2type=N'COLUMN',@level2name=N'Badness'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Npc', N'COLUMN',N'Bounty'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'if NPC surrenders or is destroyed, victor receives this many credits' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Npc', @level2type=N'COLUMN',@level2name=N'Bounty'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'SystemShieldUpgrade', N'COLUMN',N'PriceMultiplier'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'used to calculate price by adjusting base price' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemShieldUpgrade', @level2type=N'COLUMN',@level2name=N'PriceMultiplier'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'InProgressCombat', N'COLUMN',N'Turn'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Current player turn. 0 = attacker, 1 = defender.' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'InProgressCombat', @level2type=N'COLUMN',@level2name=N'Turn'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'InProgressCombat', N'COLUMN',N'TurnPointsLeft'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Turn points remaining for current player' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'InProgressCombat', @level2type=N'COLUMN',@level2name=N'TurnPointsLeft'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'InProgressCombat', N'COLUMN',N'Surrender'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Surrender is the flag that a player is surrendering. If the player starts a turn and the surrender flag is set, the other player has surrendered. If the player does not accept the surrender, the flag is reset and combat continues.' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'InProgressCombat', @level2type=N'COLUMN',@level2name=N'Surrender'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'InProgressCombat', N'COLUMN',N'JettisonCargo'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'The JettisonCargo flag works the same way as the Surrender flag. If the player chooses not to pickup the cargo, the cargo from the other player''s ship is deleted from the database.' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'InProgressCombat', @level2type=N'COLUMN',@level2name=N'JettisonCargo'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Race', N'COLUMN',N'Weapons'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'positive = stronger weapon power than average, 0 = average, negative = weaker weapon power than average' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Race', @level2type=N'COLUMN',@level2name=N'Weapons'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Race', N'COLUMN',N'Shields'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'positive = stronger shields than average, 0 = average, negative = weaker shields than average' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Race', @level2type=N'COLUMN',@level2name=N'Shields'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Race', N'COLUMN',N'Engine'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'positive = faster charge rate than average, 0 = average, negative = slower charge rate than average' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Race', @level2type=N'COLUMN',@level2name=N'Engine'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Race', N'COLUMN',N'Accuracy'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'positive = more accurate than average, 0 = average, negative = less accurate than average' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Race', @level2type=N'COLUMN',@level2name=N'Accuracy'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Race', N'COLUMN',N'RacialEnemyId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'racial enemies charge more and pay less for goods, more inclined to attack' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Race', @level2type=N'COLUMN',@level2name=N'RacialEnemyId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Race', N'COLUMN',N'RacialPreferenceId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'racial preferences charge less and pay more for goods, less inclined to attack' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Race', @level2type=N'COLUMN',@level2name=N'RacialPreferenceId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Race', N'COLUMN',N'Description'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'background on a particular race' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Race', @level2type=N'COLUMN',@level2name=N'Description'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'Race', N'COLUMN',N'HomeSystemId'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'indicates which system the race originated from' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Race', @level2type=N'COLUMN',@level2name=N'HomeSystemId'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'SystemShip', N'COLUMN',N'PriceMultiplier'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'used to calculate price by adjusting base price' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemShip', @level2type=N'COLUMN',@level2name=N'PriceMultiplier'
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'SystemWeaponUpgrade', N'COLUMN',N'PriceMultiplier'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'used to calculate price by adjusting base price' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemWeaponUpgrade', @level2type=N'COLUMN',@level2name=N'PriceMultiplier'
+    </sql>
+  </changeSet>
 </databaseChangeLog>
