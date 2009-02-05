@@ -21,24 +21,62 @@
     [TestFixture]
     public class HomeControllerTest
     {
-        //[Test]
+        [Test]
         public void TestDefaultRoute()
         {
             // Arrange
-            RouteCollection routes = new RouteCollection();
-            CosmoMonger.MvcApplication.RegisterRoutes(routes);
+            // Mock the HTTP request also
+            HttpRequestMock mockRequest = new HttpRequestMock();
+            Uri mockUrl = new Uri("http://www.cosmomonger.com/");
+            mockRequest.Expect(r => r.Url)
+                .Returns(mockUrl);
+            mockRequest.Expect(r => r.HttpMethod)
+                .Returns("GET");
+            mockRequest.Expect(r => r.AppRelativeCurrentExecutionFilePath)
+                .Returns("~/");
+
+            HttpContextMock mockHttpContext = new HttpContextMock();
+            mockHttpContext.Expect(c => c.Request)
+                .Returns(mockRequest.Object);
 
             // Act
-            HttpContextMock context = new HttpContextMock();
-            context.HttpRequest.Expect(r => r.HttpMethod).Returns("GET");
-            context.HttpRequest.Expect(r => r.Path).Returns("~/");
-            RouteData routeData = routes.GetRouteData(context.Object);
+            RouteCollection routeCollection = new RouteCollection();
+            MvcApplication.RegisterRoutes(routeCollection);
+            RouteData routeData = routeCollection.GetRouteData(mockHttpContext.Object);
 
             // Assert
             Assert.AreEqual("Home", routeData.Values["controller"], "Default controller is HomeController");
             Assert.AreEqual("Index", routeData.Values["action"], "Default action is Index");
             Assert.AreEqual(String.Empty, routeData.Values["id"], "Default Id is empty string");
+
+            /*
+            // This code can almost render a view
+            HttpRequestMock mockRequest = new HttpRequestMock();
+            Uri mockUrl = new Uri("http://www.cosmomonger.com/");
+            mockRequest.Expect(r => r.Url)
+                .Returns(mockUrl);
+            mockRequest.Expect(r => r.HttpMethod)
+                .Returns("GET");
+            mockRequest.Expect(r => r.AppRelativeCurrentExecutionFilePath)
+                .Returns("~/");
+
+            HttpContextMock mockHttpContext = new HttpContextMock();
+            mockHttpContext.Expect(c => c.Request)
+                .Returns(mockRequest.Object);
+
+            RouteCollection routeCollection = new RouteCollection();
+            MvcApplication.RegisterRoutes(routeCollection);
+            RouteData routeData = routeCollection.GetRouteData(mockHttpContext.Object);
+
+            ControllerContext controllerContext = new ControllerContext(mockHttpContext.Object, routeData, controller);
+            StringWriter writer = new StringWriter();
+            result.ExecuteResult(controllerContext);
+            ViewContext viewContext = new ViewContext(controllerContext, result.View, result.ViewData, result.TempData);
+            result.View.Render(viewContext, writer);
+            Assert.Fail(writer.ToString());
+            */
         }
+
         [Test]
         public void Index()
         {
@@ -51,14 +89,6 @@
             // Assert
             ViewDataDictionary viewData = result.ViewData;
             Assert.That(result.ViewName, Is.EqualTo(""), "The correct view is returned");
-
-            /*
-            HttpContextMock httpContext = new HttpContextMock();
-            RouteData routeData = new RouteData();
-            StringWriter writer = new StringWriter();
-            ViewContext viewContext = new ViewContext(httpContext.Object, routeData, controller, result.View, result.ViewData, result.TempData);
-            result.View.Render(viewContext, writer);
-             * */
         }
 
         [Test]

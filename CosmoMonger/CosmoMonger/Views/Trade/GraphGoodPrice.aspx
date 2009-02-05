@@ -4,6 +4,7 @@
     <!--[if IE]><script type="text/javascript" src="/Scripts/excanvas.pack.js"></script><![endif]-->
     <script type="text/javascript" src="/Scripts/jquery.flot.js"></script>
     <script type="text/javascript">
+    <!--
         $(function() {
             var datasets = {
 <%
@@ -101,6 +102,7 @@
             });
 
         });
+     -->
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">

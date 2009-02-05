@@ -3,6 +3,7 @@
     <title>Change Password</title>
     <script type="text/javascript" src="/Scripts/jquery.validate.min.js"></script>
     <script type="text/javascript">
+    <!--
         $(document).ready(function() {
             $("#passwordForm").validate({
                 rules: {
@@ -23,6 +24,7 @@
                 }
             });
         });
+    -->
     </script>
 </asp:Content>
 <asp:Content ID="changePasswordContent" ContentPlaceHolderID="MainContent" runat="server">

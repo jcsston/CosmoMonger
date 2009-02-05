@@ -3,6 +3,7 @@
     <title>Change E-Mail</title>
     <script type="text/javascript" src="/Scripts/jquery.validate.min.js"></script>
     <script type="text/javascript">
+    <!--
         $(document).ready(function() {
             $("#changeEmailForm").validate({
                 rules: {
@@ -19,6 +20,7 @@
                 }
             });
         });
+     -->
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">

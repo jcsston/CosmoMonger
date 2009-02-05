@@ -4,6 +4,7 @@
     <title>Register</title>
     <script type="text/javascript" src="/Scripts/jquery.validate.min.js"></script>
     <script type="text/javascript">
+    <!--
         $(document).ready(function() {
             $("#regForm").validate({
                 rules: {
@@ -34,6 +35,7 @@
                 }
             });
         });
+     -->
     </script>
 </asp:Content>
 <asp:Content ID="registerContent" ContentPlaceHolderID="MainContent" runat="server">

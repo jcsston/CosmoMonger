@@ -37,7 +37,6 @@ namespace CosmoMonger.Controllers.Attributes
                 ViewResult result = filterContext.Result as ViewResult;
                 if (result != null)
                 {
-                    result.ViewData["Title"] = "Space-time anomaly detected";
                     result.ViewData["Message"] = ex.Message;
                 }
             }

@@ -8,7 +8,7 @@
 <table class="bigTable">
 <tr>
 <td class="columns45">&nbsp;</td>
-<td><img id="tombstone"  src="../../Content/tombstone1.png" alt="tombstone image" width="100px" height="100px" style="margin-left: 0px; align=center;"/></td>
+<td><img id="tombstone"  src="/Content/tombstone1.png" alt="tombstone image" width="100" height="100" style="margin-left: 0px; align=center;"/></td>
 <td class="columns45">&nbsp;</td>
 </tr>
 </table>

@@ -4,6 +4,7 @@
     <script type="text/javascript" src="/Scripts/jquery.spin-1.0.2.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.validate.js"></script>
     <script type="text/javascript">
+    <!--
         $(document).ready(function() {
             $('input[name=quantity]').map(function(index, domElement) {
                 var buyGood = false;
@@ -63,6 +64,7 @@
                 }
             });
         });
+    -->
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
