@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.8 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.8.xsd">
   <changeSet author="Jory Stone" id="1">
     <comment>Create Inital Tables</comment>
@@ -2346,4 +2346,59 @@
       EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'used to calculate price by adjusting base price' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemWeaponUpgrade', @level2type=N'COLUMN',@level2name=N'PriceMultiplier'
     </sql>
   </changeSet>
-</databaseChangeLog>
+  <changeSet author="Roger Boykin" id="49">
+    <comment>Adding and populating RaceId column to System Table</comment>
+    <addColumn tableName="System">
+      <column name="RaceId" type="int"/>
+    </addColumn>  
+    <addForeignKeyConstraint baseColumnNames="RaceId" baseTableName="Race" constraintName="FK_RaceId_Race"       deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"            referencedColumnNames="RaceId" referencedTableName="Race"/>
+    <update tableName="System">
+      <column name="RaceId" value="5"/>
+      <where>SystemId='1'</where>
+    </update>
+    <update tableName="System">
+      <column name="RaceId" value="4"/>
+      <where>SystemId='2'</where>
+    </update>
+    <update tableName="System">
+      <column name="RaceId" value="2"/>
+      <where>SystemId='3'</where>
+    </update>
+    <update tableName="System">
+      <column name="RaceId" value="5"/>
+      <where>SystemId='4'</where>
+    </update>
+    <update tableName="System">
+      <column name="RaceId" value="4"/>
+      <where>SystemId='5'</where>
+    </update>
+    <update tableName="System">
+      <column name="RaceId" value="3"/>
+      <where>SystemId='6'</where>
+    </update>
+    <update tableName="System">
+      <column name="RaceId" value="1"/>
+      <where>SystemId='7'</where>
+    </update>
+    <update tableName="System">
+      <column name="RaceId" value="1"/>
+      <where>SystemId='8'</where>
+    </update>
+    <update tableName="System">
+      <column name="RaceId" value="2"/>
+      <where>SystemId='9'</where>
+    </update>
+    <update tableName="System">
+      <column name="RaceId" value="3"/>
+      <where>SystemId='10'</where>
+    </update>
+  </changeSet>
+  <changeSet author="Roger Boykin" id="50">
+    <comment>Adding nullable=false to RaceId column in System Table</comment>
+    <modifyColumn tableName="System">
+      <column name="RaceId" type="int" defaultValueNumeric="1">
+        <constraints nullable="false" />
+      </column>
+    </modifyColumn>
+  </changeSet>
+ </databaseChangeLog>
