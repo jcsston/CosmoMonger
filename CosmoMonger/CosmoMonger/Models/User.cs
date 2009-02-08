@@ -100,6 +100,8 @@ namespace CosmoMonger.Models
             db.Ships.InsertOnSubmit(playerShip);
             player.Ship = playerShip;
 
+            player.UpdateNetWorth();
+
             db.Players.InsertOnSubmit(player);
             db.SubmitChanges();
 
