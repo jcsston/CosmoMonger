@@ -7,11 +7,13 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Ajax;
     using CosmoMonger.Models;
+    using MvcContrib.Pagination;
+    using MvcContrib.EnumerableExtensions;
 
     /// <summary>
-    /// This controller handles chatting between players
+    /// This controller handles communication between players
     /// </summary>
-    public class ChatController : GameController
+    public class CommunicationController : GameController
     {
         /// <summary>
         /// Redirects to the Chat action
@@ -19,34 +21,29 @@
         /// <returns>A redirection to the Chat action</returns>
         public ActionResult Index()
         {
-            BuddyList[] buddies = this.ControllerGame.CurrentUser.GetBuddyList();
-            ViewData["BuddyList"] = buddies;
-            ViewData["friendId"] = new SelectList(buddies, "FriendId", "Friend.Username");
+            return RedirectToAction("Inbox");
+        }
+
+        /// <summary>
+        /// This action displays the users messages
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Inbox(int? page)
+        {
+            ViewData["Messages"] = this.ControllerGame.CurrentUser.Messages.OrderBy(m => m.Time).AsPagination(page ?? 1);
 
             return View();
         }
 
         /// <summary>
-        /// Chats this instance.
+        /// This action views all sent messages
         /// </summary>
         /// <returns></returns>
-        public ActionResult Chat(int friendId)
+        public ActionResult Sent(int? page)
         {
-            ViewData["friendId"] = friendId;
+            ViewData["Messages"] = this.ControllerGame.CurrentUser.MessagesSent.OrderBy(m => m.Time).AsPagination(page ?? 1);
 
             return View();
-        }
-
-        /// <summary>
-        /// This action fetches any unread messages via the User.GetUnreadMessages method and 
-        /// returns the data in JSON format
-        /// </summary>
-        /// <returns></returns>
-        public JsonResult FetchMessages()
-        {
-            Message [] messages = this.ControllerGame.CurrentUser.FetchUnreadMessages();
-
-            return Json(messages);
         }
 
         /// <summary>

@@ -408,7 +408,7 @@
                 testUserModel1.SendMessage(testUserModel2, "Hello world!");
             }
 
-            Message[] messages = testUserModel1.FetchUnreadMessages();
+            IEnumerable<Message> messages = testUserModel1.FetchUnreadMessages();
             foreach (Message msg in messages)
             {
                 Assert.AreEqual(msg.RecipientUserId, testUserModel1.UserId, "Recipient user should match the user the message is stored under");

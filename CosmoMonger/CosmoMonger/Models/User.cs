@@ -250,13 +250,23 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// This returns any unread messages for the User. 
+        /// This returns any unread messages for the User. Marking each as read.
         /// If no unread messages exist an empty array is returned.
         /// </summary>
         /// <returns>Array of Message objects</returns>
-        public Message[] FetchUnreadMessages()
+        public IEnumerable<Message> FetchUnreadMessages()
         {
-            return (from m in Messages where !m.Received select m).ToArray();
+            IEnumerable<Message> messages = (from m in this.Messages 
+                                             where !m.Received 
+                                             select m);
+
+            // Mark all these messages are read now
+            foreach (Message msg in messages)
+            {
+                msg.MarkAsReceived();
+            }
+
+            return messages;
         }
 
         /// <summary>
