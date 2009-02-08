@@ -31,7 +31,14 @@
                                 <li><%= Html.ActionLink("Player Profile", "PlayerProfile", "Player")%></li>
                                 <li><%= Html.ActionLink("Current Ship", "ViewShip", "Ship")%></li>
 	                            <li><%= Html.ActionLink("View Record", "ViewRecord", "PlayerRecord")%></li>
-	                            <li><%= Html.ActionLink("Top Records", "ListRecords", "PlayerRecord")%></li>                                
+	                            <li><%= Html.ActionLink("Top Records", "ListRecords", "PlayerRecord")%></li>
+	                            <li><%= Html.ActionLink("Buddy List", "Index", "BuddyList")%>
+	                                <ul>
+	                                    <li><%= Html.ActionLink("Buddy List", "BuddyList", "BuddyList")%></li>
+                                        <li><%= Html.ActionLink("Ignore List", "IgnoreList", "BuddyList")%></li>                             
+                                    </ul>
+	                            </li>
+
                             </ul>
 	                    </li>
                     </ul>

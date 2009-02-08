@@ -35,6 +35,10 @@ namespace CosmoMonger.Models
             {
                 db.Log = new Utility.LoggingTextWriter(sqlEntry);
             }
+            else
+            {
+                //db.Log = Console.Error;
+            }
 
             return db;
         }

@@ -32,7 +32,7 @@
                               where r.Name == "Skumm"
                               select r).SingleOrDefault();
 
-            for (int i = 1001; i < 50000; i++)
+            for (int i = 0; i < 50000; i++)
             {
                 CosmoMongerMembershipUser testUser = (CosmoMongerMembershipUser)provider.CreateUser(i + baseUserName, "test1000", i + baseEmail, null, null, true, null, out status);
                 Assert.IsNotNull(testUser, "Test User was created. status = {0}", new object[] { status });

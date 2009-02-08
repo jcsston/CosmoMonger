@@ -38,6 +38,10 @@
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging.Database, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Security.Cryptography, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="MvcContrib, Version=0.0.1.174, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\library\MvcContrib.dll</HintPath>
+    </Reference>
     <Reference Include="Recaptcha, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\library\Recaptcha.dll</HintPath>
@@ -82,8 +86,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\Attributes\ExceptionPolicyAttribute.cs" />
     <Compile Include="Controllers\BankController.cs" />
+    <Compile Include="Controllers\BuddyListController.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\FormsLoginResult.cs" />
     <Compile Include="Controllers\FormsLogoutResult.cs" />
     <Compile Include="Controllers\GameController.cs" />
@@ -150,9 +157,22 @@
     <Content Include="Views\Account\UserProfile.aspx" />
     <Content Include="Views\Account\VerifyEmail.aspx" />
     <Content Include="Views\Account\VerifyEmailSuccess.aspx" />
+    <Content Include="Views\Admin\BanUser.aspx" />
+    <Content Include="Views\Admin\Index.aspx" />
+    <Content Include="Views\Admin\FindUser.aspx" />
+    <Content Include="Views\Admin\UnbanUser.aspx" />
     <Content Include="Views\Bank\Bank.aspx" />
     <Content Include="Views\Bank\Withdraw.aspx" />
     <Content Include="Views\Bank\Deposit.aspx" />
+    <Content Include="Views\BuddyList\AddBuddy.aspx" />
+    <Content Include="Views\BuddyList\AddIgnore.aspx" />
+    <Content Include="Views\BuddyList\BuddyList.aspx" />
+    <Content Include="Views\BuddyList\FindBuddy.aspx" />
+    <Content Include="Views\BuddyList\IgnoreList.aspx" />
+    <Content Include="Views\BuddyList\RemoveBuddy.aspx" />
+    <Content Include="Views\BuddyList\RemoveIgnore.aspx" />
+    <Content Include="Views\Chat\Chat.aspx" />
+    <Content Include="Views\Chat\Index.aspx" />
     <Content Include="Views\PlayerRecord\ListRecords.aspx" />
     <Content Include="Views\PlayerRecord\ViewRecord.aspx" />
     <Content Include="Views\Player\CreatePlayer.aspx" />

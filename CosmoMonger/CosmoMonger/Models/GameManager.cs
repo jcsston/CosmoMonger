@@ -235,5 +235,37 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from g in db.Goods select g).ToArray();
         }
+
+        /// <summary>
+        /// Finds a player by their username or active player name.
+        /// </summary>
+        /// <param name="name">The name to search for.</param>
+        /// <returns>The IEnumerable of Player objects for the matching user/players.</returns>
+        public virtual IEnumerable<Player> FindPlayer(string name)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // We search active player names and their usernames
+            return (from p in db.Players
+                    where p.Alive
+                    && (p.Name.Contains(name) || p.User.UserName.Contains(name))
+                    select p);
+        }
+
+        /// <summary>
+        /// Finds a user by username or past player name
+        /// </summary>
+        /// <param name="name">The name to search for.</param>
+        /// <returns>The IEnumerable of User objects for the matching users.</returns>
+        public virtual IEnumerable<User> FindUser(string name)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // We search users and their player names
+            return (from u in db.Users
+                    where u.UserName.Contains(name)
+                    || u.Players.Where(p => p.Name.Contains(name)).Any()
+                    select u);
+        }
     }
 }

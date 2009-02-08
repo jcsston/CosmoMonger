@@ -174,19 +174,6 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Gets the verification code sent to the users e-mail address to verify their e-mail.
-        /// </summary>
-        /// <value>The verification code.</value>
-        public string VerificationCode
-        {
-            get
-            {
-                string code = this.user.UserId.ToString();
-                return code;
-            }
-        }
-
-        /// <summary>
         /// Creates a new user.
         /// </summary>
         /// <param name="username">The username of the new user.</param>
@@ -328,7 +315,7 @@ namespace CosmoMonger.Models
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
-            if (this.VerificationCode == verificationCode)
+            if (this.user.VerificationCode == verificationCode)
             {
                 // Verify the user
                 this.user.Validated = true;
@@ -399,7 +386,7 @@ namespace CosmoMonger.Models
             msg.Body =
                 "Welcome to CosmoMonger. To activate your account and verify your e-mail\n" +
                 "address, please click on the following link:\n\n" +
-                baseVerificationCodeUrl + this.VerificationCode + "\n\n" + 
+                baseVerificationCodeUrl + this.user.VerificationCode + "\n\n" + 
                 "If you have received this mail in error, you do not need to take any\n" +
                 "action to cancel the account. The account will not be activated, and\n" +
                 "you will not receive any further emails.\n\n" +

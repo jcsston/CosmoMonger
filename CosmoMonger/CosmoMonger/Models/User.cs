@@ -21,6 +21,19 @@ namespace CosmoMonger.Models
     public partial class User
     {
         /// <summary>
+        /// Gets the verification code sent to the users e-mail address to verify their e-mail.
+        /// </summary>
+        /// <value>The verification code.</value>
+        public string VerificationCode
+        {
+            get
+            {
+                string code = this.UserId.ToString();
+                return code;
+            }
+        }
+
+        /// <summary>
         /// This creates a player in the database and returns a reference to the new player. 
         /// If the player already exists an ArgumentException will be thrown, referencing the name argument.
         /// </summary>
@@ -137,10 +150,16 @@ namespace CosmoMonger.Models
         /// Adds the passed in user to the users buddy list. 
         /// If the user is already in the list an ArgumentException is thrown.
         /// </summary>
-        /// <param name="buddy">The buddy.</param>
+        /// <param name="buddy">The buddy to add.</param>
+        /// <exception cref="ArgumentException">Thrown when buddy is already in the buddy list</exception>
         public void AddBuddy(User buddy)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            if (buddy == this)
+            {
+                throw new ArgumentException("Cannot add self to buddy list", "buddy");
+            }
+
             bool matchingBuddy = (from bl in this.BuddyLists where bl.FriendId == buddy.UserId select bl).Any();
             if (matchingBuddy)
             {
@@ -150,7 +169,8 @@ namespace CosmoMonger.Models
             BuddyList buddyEntry = new BuddyList();
             buddyEntry.User = this;
             buddyEntry.FriendId = buddy.UserId;
-            this.BuddyLists.Add(buddyEntry);
+            db.BuddyLists.InsertOnSubmit(buddyEntry);
+
             db.SubmitChanges();
         }
 
@@ -158,7 +178,8 @@ namespace CosmoMonger.Models
         /// Removes the passed in user from the users buddy list. 
         /// If the user is not in the buddy list, an ArgumentException is thrown.
         /// </summary>
-        /// <param name="buddy">The buddy.</param>
+        /// <param name="buddy">The buddy to remove.</param>
+        /// <exception cref="ArgumentException">Thrown when buddy not in the buddy list</exception>
         public void RemoveBuddy(User buddy)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
@@ -168,7 +189,7 @@ namespace CosmoMonger.Models
                 throw new ArgumentException("User is not in the buddy list", "buddy");
             }
 
-            this.BuddyLists.Remove(buddyToRemove);
+            db.BuddyLists.DeleteOnSubmit(buddyToRemove);
             db.SubmitChanges();
         }
 
@@ -184,10 +205,16 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Adds the passed in user to the users ignore list. If the user is already in the list an ArgumentException is thrown.
         /// </summary>
-        /// <param name="ignoreUser">The ignore user.</param>
+        /// <param name="ignoreUser">The user to add to the ignore list.</param>
+        /// <exception cref="ArgumentException">Thrown when the ignore user is already in the ignore list</exception>
         public void AddIgnore(User ignoreUser)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            if (ignoreUser == this)
+            {
+                throw new ArgumentException("Cannot add self to ignore list", "ignoreUser");
+            }
+
             bool matchingAntiFriend = (from il in this.IgnoreLists where il.AntiFriendId == ignoreUser.UserId select il).Any();
             if (matchingAntiFriend)
             {
@@ -197,7 +224,8 @@ namespace CosmoMonger.Models
             IgnoreList ignoreEntry = new IgnoreList();
             ignoreEntry.User = this;
             ignoreEntry.AntiFriendId = ignoreUser.UserId;
-            this.IgnoreLists.Add(ignoreEntry);
+            db.IgnoreLists.InsertOnSubmit(ignoreEntry);
+
             db.SubmitChanges();
         }
 
@@ -205,16 +233,17 @@ namespace CosmoMonger.Models
         /// Removes the passed in user from the users ignore list. If the user is not in the ignore list, an ArgumentException is thrown.
         /// </summary>
         /// <param name="ignoreUser">The ignore user.</param>
+        /// <exception cref="ArgumentException">Thrown when the ignore user is not in the ignore list</exception>
         public void RemoveIgnore(User ignoreUser)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             IgnoreList antiFriendToRemove = (from il in this.IgnoreLists where il.AntiFriendId == ignoreUser.UserId select il).SingleOrDefault();
             if (antiFriendToRemove == null)
             {
-                throw new ArgumentException("User is not in the buddy list", "buddy");
+                throw new ArgumentException("User is not in the ignore list", "ignoreUser");
             }
 
-            this.IgnoreLists.Remove(antiFriendToRemove);
+            db.IgnoreLists.DeleteOnSubmit(antiFriendToRemove);
             db.SubmitChanges();
         }
 
@@ -229,23 +258,23 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Send a message to be added to this Users message queue
+        /// Send a message to the toUser message queue
         /// </summary>
-        /// <param name="fromUser">From user.</param>
+        /// <param name="toUser">The user to send the message to.</param>
         /// <param name="message">The message to send.</param>
-        public void SendMessage(User fromUser, string message)
+        public void SendMessage(User toUser, string message)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Build the message
             Message msg = new Message();
-            msg.RecipientUser = this;
-            msg.SenderUserId = fromUser.UserId;
+            msg.RecipientUser = toUser;
+            msg.SenderUser = this;
             msg.Content = message;
             msg.Time = DateTime.Now;
 
-            // Add the message to this user
-            this.Messages.Add(msg);
+            // Add the message to the database
+            db.Messages.InsertOnSubmit(msg);
 
             // Save changes to database
             db.SubmitChanges();
@@ -256,7 +285,25 @@ namespace CosmoMonger.Models
         /// </summary>
         public void Ban()
         {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
             this.Active = false;
+
+            // Save changes to database
+            db.SubmitChanges();
+        }
+
+        /// <summary>
+        /// Unbans the user by setting the Active field to true.
+        /// </summary>
+        public void Unban()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            this.Active = true;
+
+            // Save changes to database
+            db.SubmitChanges();
         }
     }
 }

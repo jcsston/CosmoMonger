@@ -607,3 +607,14 @@ table.equipment caption
     font-weight: bold;
     border-bottom: solid thin;
 }
+
+/* BuddyList CSS */
+table.grid
+{
+    border-spacing: 5px;
+}
+
+table.grid th
+{
+    border-bottom: solid thin;
+}

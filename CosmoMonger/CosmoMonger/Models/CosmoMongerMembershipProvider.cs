@@ -243,6 +243,14 @@ namespace CosmoMonger.Models
                                                        select c);
                 db.ShipGoods.DeleteAllOnSubmit(from g in db.ShipGoods where playerShips.Contains(g.Ship) select g);
                 db.Ships.DeleteAllOnSubmit(playerShips);
+                db.BuddyLists.DeleteAllOnSubmit(from b in db.BuddyLists
+                                              where b.FriendId == matchingUser.UserId
+                                              || b.UserId == matchingUser.UserId
+                                              select b);
+                db.IgnoreLists.DeleteAllOnSubmit(from i in db.IgnoreLists
+                                                where i.AntiFriendId == matchingUser.UserId
+                                                || i.UserId == matchingUser.UserId
+                                                select i);
                 db.Messages.DeleteAllOnSubmit(from m in db.Messages
                                               where m.RecipientUserId == matchingUser.UserId
                                               || m.SenderUserId == matchingUser.UserId

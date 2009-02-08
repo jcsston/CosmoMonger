@@ -7,6 +7,7 @@
     using System.Web.Security;
     using CosmoMonger.Models;
     using NUnit.Framework;
+    using NUnit.Framework.SyntaxHelpers;
     
     /// <summary>
     /// Summary description for UserTest
@@ -141,6 +142,246 @@
             Assert.AreEqual(this.baseTestEmail, testUser.Email, "Test User actually has orignal e-mail");
         }
 
+        [Test]
+        public void AddBuddy()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            CosmoMongerMembershipUser testUser2 = (CosmoMongerMembershipUser)provider.CreateUser("2" + this.baseTestUsername, "test1000", "2" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser2, "Test User 2 was created. status = {0}", new object[] { status });
+
+            User testUserModel2 = testUser2.GetUserModel();
+            Assert.IsNotNull(testUserModel2, "Able to get model object for user 2");
+
+            testUserModel1.AddBuddy(testUserModel2);
+
+            BuddyList[] buddies = testUserModel1.GetBuddyList();
+            Assert.That(buddies.Where(b => b.FriendId == testUserModel2.UserId), Is.Not.Empty, "User 2 should be User 1's buddy list now");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), MatchType = MessageMatch.Contains, ExpectedMessage = "User is already")]
+        public void AddBuddyTwice()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            CosmoMongerMembershipUser testUser2 = (CosmoMongerMembershipUser)provider.CreateUser("2" + this.baseTestUsername, "test1000", "2" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser2, "Test User 2 was created. status = {0}", new object[] { status });
+
+            User testUserModel2 = testUser2.GetUserModel();
+            Assert.IsNotNull(testUserModel2, "Able to get model object for user 2");
+
+            testUserModel1.AddBuddy(testUserModel2);
+            testUserModel1.AddBuddy(testUserModel2);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), MatchType = MessageMatch.Contains, ExpectedMessage = "Cannot add self")]
+        public void AddBuddySelf()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            testUserModel1.AddBuddy(testUserModel1);
+        }
+
+        [Test]
+        public void RemoveBuddy()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            CosmoMongerMembershipUser testUser2 = (CosmoMongerMembershipUser)provider.CreateUser("2" + this.baseTestUsername, "test1000", "2" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser2, "Test User 2 was created. status = {0}", new object[] { status });
+
+            User testUserModel2 = testUser2.GetUserModel();
+            Assert.IsNotNull(testUserModel2, "Able to get model object for user 2");
+
+            testUserModel1.AddBuddy(testUserModel2);
+            testUserModel1.RemoveBuddy(testUserModel2);
+
+            BuddyList[] buddies = testUserModel1.GetBuddyList();
+            Assert.That(buddies, Is.Empty, "User 1's buddy list should be empty");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), MatchType = MessageMatch.Contains, ExpectedMessage = "User is not in")]
+        public void RemoveBuddyNotPresent()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            CosmoMongerMembershipUser testUser2 = (CosmoMongerMembershipUser)provider.CreateUser("2" + this.baseTestUsername, "test1000", "2" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser2, "Test User 2 was created. status = {0}", new object[] { status });
+
+            User testUserModel2 = testUser2.GetUserModel();
+            Assert.IsNotNull(testUserModel2, "Able to get model object for user 2");
+
+            testUserModel1.RemoveBuddy(testUserModel2);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), MatchType = MessageMatch.Contains, ExpectedMessage = "User is not in")]
+        public void RemoveBuddySelf()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            testUserModel1.RemoveBuddy(testUserModel1);
+        }
+
+        [Test]
+        public void AddIgnore()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            CosmoMongerMembershipUser testUser2 = (CosmoMongerMembershipUser)provider.CreateUser("2" + this.baseTestUsername, "test1000", "2" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser2, "Test User 2 was created. status = {0}", new object[] { status });
+
+            User testUserModel2 = testUser2.GetUserModel();
+            Assert.IsNotNull(testUserModel2, "Able to get model object for user 2");
+
+            testUserModel1.AddIgnore(testUserModel2);
+
+            IgnoreList[] antiFriends = testUserModel1.GetIgnoreList();
+            Assert.That(antiFriends.Where(i => i.AntiFriendId == testUserModel2.UserId), Is.Not.Empty, "User 2 should be User 1's ignore list now");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), MatchType = MessageMatch.Contains, ExpectedMessage = "User is already")]
+        public void AddIgnoreTwice()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            CosmoMongerMembershipUser testUser2 = (CosmoMongerMembershipUser)provider.CreateUser("2" + this.baseTestUsername, "test1000", "2" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser2, "Test User 2 was created. status = {0}", new object[] { status });
+
+            User testUserModel2 = testUser2.GetUserModel();
+            Assert.IsNotNull(testUserModel2, "Able to get model object for user 2");
+
+            testUserModel1.AddIgnore(testUserModel2);
+            testUserModel1.AddIgnore(testUserModel2);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), MatchType = MessageMatch.Contains, ExpectedMessage = "Cannot add self")]
+        public void AddIgnoreSelf()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            testUserModel1.AddIgnore(testUserModel1);
+        }
+
+        [Test]
+        public void RemoveIgnore()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            CosmoMongerMembershipUser testUser2 = (CosmoMongerMembershipUser)provider.CreateUser("2" + this.baseTestUsername, "test1000", "2" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser2, "Test User 2 was created. status = {0}", new object[] { status });
+
+            User testUserModel2 = testUser2.GetUserModel();
+            Assert.IsNotNull(testUserModel2, "Able to get model object for user 2");
+
+            testUserModel1.AddIgnore(testUserModel2);
+            testUserModel1.RemoveIgnore(testUserModel2);
+
+            IgnoreList[] antiFriends = testUserModel1.GetIgnoreList();
+            Assert.That(antiFriends, Is.Empty, "User 1's ignore list should be empty");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), MatchType = MessageMatch.Contains, ExpectedMessage = "User is not in")]
+        public void RemoveIgnoreNotPresent()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            CosmoMongerMembershipUser testUser2 = (CosmoMongerMembershipUser)provider.CreateUser("2" + this.baseTestUsername, "test1000", "2" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser2, "Test User 2 was created. status = {0}", new object[] { status });
+
+            User testUserModel2 = testUser2.GetUserModel();
+            Assert.IsNotNull(testUserModel2, "Able to get model object for user 2");
+
+            testUserModel1.RemoveIgnore(testUserModel2);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), MatchType = MessageMatch.Contains, ExpectedMessage = "User is not in")]
+        public void RemoveIgnoreSelf()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            testUserModel1.RemoveIgnore(testUserModel1);
+        }
+
         /// <summary>
         /// Tests the send message.
         /// </summary>
@@ -177,6 +418,22 @@
                 msg.MarkAsReceived();
                 Assert.IsTrue(msg.Received, "This message should now be read.");
             }
+        }
+
+        [Test]
+        public void Ban()
+        {
+            CosmoMongerMembershipProvider provider = new CosmoMongerMembershipProvider();
+            MembershipCreateStatus status;
+            CosmoMongerMembershipUser testUser1 = (CosmoMongerMembershipUser)provider.CreateUser("1" + this.baseTestUsername, "test1000", "1" + this.baseTestEmail, null, null, true, null, out status);
+            Assert.IsNotNull(testUser1, "Test User 1 was created. status = {0}", new object[] { status });
+
+            User testUserModel1 = testUser1.GetUserModel();
+            Assert.IsNotNull(testUserModel1, "Able to get model object for user 1");
+
+            testUserModel1.Ban();
+
+            Assert.That(testUserModel1.Active, Is.False, "User should now be inactive");
         }
     }
 }

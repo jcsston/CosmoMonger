@@ -5,6 +5,7 @@
         CosmoSystem currentSystem = ViewData["CurrentSystem"] as CosmoSystem;
     %>
     <script type="text/javascript">
+    <!--
         function selectSystem(selectedSystemId) {
             // Store the selected system in the input form field
             $('#targetSystem').val(selectedSystemId);
@@ -19,6 +20,7 @@
         $(document).ready(function() {
             selectSystem(<%=currentSystem.SystemId %>);
         });
+    -->
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">

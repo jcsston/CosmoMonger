@@ -150,6 +150,27 @@
             List<PriceTableEntry> priceTable = manager.GetPriceTable();
             Assert.That(priceTable, Is.Not.Empty, "GetPriceTable() should return the price table for the galaxy");
         }
-        
+
+        [Test]
+        public void FindPlayer()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            IEnumerable<Player> players = manager.FindPlayer(testPlayer.User.UserName);
+
+            Assert.That(players, Is.Not.Empty, "Should at find our own player");
+        }
+
+        [Test]
+        public void FindUser()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            IEnumerable<User> users = manager.FindUser(testPlayer.User.UserName);
+
+            Assert.That(users, Is.Not.Empty, "Should at find our own user");
+        }
     }
 }
