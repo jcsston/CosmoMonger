@@ -2424,4 +2424,14 @@
       <where>JumpDriveId='4'</where>
     </update>
   </changeSet>
+  <changeSet author="Jory Stone" id="52">
+    <comment>Making the RaceId column not nullable in the System table. Adding not null constraint to the Password column in the User table.</comment>
+    <addNotNullConstraint tableName="System" columnName="RaceId" defaultNullValue="1" columnDataType="int" />
+	<addNotNullConstraint tableName="User" columnName="Password" defaultNullValue="" columnDataType="varchar(160)" />
+	<addNotNullConstraint tableName="Player" columnName="TimePlayed" defaultNullValue="0" columnDataType="float" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="53">
+    <comment>Adding Unique Constraint to the Player table</comment>
+    <addUniqueConstraint tableName="Player" columnNames="Name" constraintName="UQ_Player_Name" />
+  </changeSet>
  </databaseChangeLog>
