@@ -2401,4 +2401,27 @@
       </column>
     </modifyColumn>
   </changeSet>
+  <changeSet author="Roger Boykin" id="51">
+    <comment>Making changes to JumpDrive Table</comment>
+    <update tableName="JumpDrive">
+      <column name="BasePrice" value="100000"/>
+      <where>JumpDriveId='4'</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="Speed" value="1"/>
+      <where>JumpDriveId='1'</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="Speed" value="3"/>
+      <where>JumpDriveId='2'</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="Speed" value="4"/>
+      <where>JumpDriveId='3'</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="Speed" value="5"/>
+      <where>JumpDriveId='4'</where>
+    </update>
+  </changeSet>
  </databaseChangeLog>
