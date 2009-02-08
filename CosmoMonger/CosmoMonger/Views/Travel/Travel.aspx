@@ -98,6 +98,14 @@
                     <% 
                         }
                     %>
+                    <%
+                        else { 
+                    %>
+                    <p>Dominant Race: <%=Html.Encode(system.Race.Name)%></p>
+                    
+                    <% 
+                        } 
+                    %>
                     Bank: 
                     <%
                         if (system.HasBank)
