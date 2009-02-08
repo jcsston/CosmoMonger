@@ -94,6 +94,7 @@
             </script>
             <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             </script>
+            <script src="http://cosmomonger.uservoice.com/pages/general/widgets/tab.js?alignment=right&amp;color=000000" type="text/javascript"></script>
         <% } %>
             <p>
                 <%= Html.ActionLink("CosmoMonger", "About", "Home") %> &copy; Copyright 2008-2009<br />
