@@ -101,6 +101,7 @@
     <Compile Include="Models\ShipGoodTest.cs" />
     <Compile Include="Models\ShipTest.cs" />
     <Compile Include="Models\ShipTravelTest.cs" />
+    <Compile Include="Models\SpeedTest.cs" />
     <Compile Include="Models\SystemGoodTest.cs" />
     <Compile Include="Models\SystemShipTest.cs" />
     <Compile Include="Models\UserTest.cs" />

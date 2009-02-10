@@ -18,6 +18,7 @@
 
         public virtual void DoAction()
         {
+            Logger.Write("Enter Npc.DoAction", "NPC", 200, 0, TraceEventType.Verbose);
             switch (this.NpcTypeId)
             {
                 case 1:

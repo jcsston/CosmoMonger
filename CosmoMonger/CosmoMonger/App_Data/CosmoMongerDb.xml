@@ -2441,4 +2441,13 @@
     </addColumn>
     <addNotNullConstraint tableName="Message" columnName="Subject" defaultNullValue="subject" columnDataType="varchar(255)" />
   </changeSet>
+  <changeSet author="Jory Stone" id="55">
+    <comment>Adding RecipientUserVisible and SenderUserVisible column to the Message table</comment>
+    <addColumn tableName="Message">
+      <column name="VisibleToRecipient" type="bit" />
+      <column name="VisibleToSender" type="bit" />
+    </addColumn>
+    <addNotNullConstraint tableName="Message" columnName="VisibleToRecipient" defaultNullValue="1" columnDataType="bit" />
+    <addNotNullConstraint tableName="Message" columnName="VisibleToSender" defaultNullValue="1" columnDataType="bit" />
+  </changeSet>
  </databaseChangeLog>

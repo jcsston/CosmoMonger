@@ -273,6 +273,7 @@ namespace CosmoMonger.Models
         /// Send a message to the toUser message queue
         /// </summary>
         /// <param name="toUser">The user to send the message to.</param>
+        /// <param name="subject">The message subject.</param>
         /// <param name="message">The message to send.</param>
         public void SendMessage(User toUser, string subject, string message)
         {
@@ -328,6 +329,7 @@ namespace CosmoMonger.Models
         {
             Message message = (from m in this.Messages
                                where m.MessageId == messageId
+                               && m.VisibleToRecipient
                                select m).SingleOrDefault();
             
             // If the message was not found, look in sent messages
@@ -335,10 +337,68 @@ namespace CosmoMonger.Models
             {
                 message = (from m in this.MessagesSent
                            where m.MessageId == messageId
+                           && m.VisibleToSender
                            select m).SingleOrDefault();
             }
 
             return message;
+        }
+
+
+        /// <summary>
+        /// Deletes this message from the database.
+        /// </summary>
+        /// <param name="messageId">The message id to delete.</param>
+        /// <exception cref="ArgumentException">Thrown if the message id is not found.</exception>
+        public void DeleteMessage(int messageId)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            Message message = (from m in this.Messages
+                               where m.MessageId == messageId
+                               select m).SingleOrDefault();
+            if (message != null)
+            {
+                message.VisibleToRecipient = false;
+            }
+            else
+            {
+                // If the message was not found, look in sent messages
+                message = (from m in this.MessagesSent
+                           where m.MessageId == messageId
+                           select m).SingleOrDefault();
+                if (message == null)
+                {
+                    throw new ArgumentException("Invalid Message Id", "messageId");
+                }
+                message.VisibleToSender = false;
+            }
+
+            db.SubmitChanges();
+        }
+
+        /// <summary>
+        /// Gets the visible messages for this user.
+        /// </summary>
+        /// <returns>IEnumerable of Messages</returns>
+        public IEnumerable<Message> GetMessages()
+        {
+            return (from m in this.Messages
+                    where m.VisibleToRecipient
+                    orderby m.Time descending
+                    select m);
+        }
+
+        /// <summary>
+        /// Gets the visible messages sent by this user.
+        /// </summary>
+        /// <returns>IEnumerable of Messages</returns>
+        public IEnumerable<Message> GetMessagesSent()
+        {
+            return (from m in this.MessagesSent
+                    where m.VisibleToSender
+                    orderby m.Time descending
+                    select m);
         }
     }
 }

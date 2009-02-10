@@ -91,6 +91,8 @@
       <Column Name="Time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="Received" Storage="_Read" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="Subject" Type="System.String" DbType="varchar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="VisibleToRecipient" Type="System.Boolean" DbType="bit NOT NULL" CanBeNull="false" />
+      <Column Name="VisibleToSender" Type="System.Boolean" DbType="bit NOT NULL" CanBeNull="false" />
       <Association Name="User_Message" Member="RecipientUser" Storage="_User1" ThisKey="RecipientUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
       <Association Name="User_Message1" Member="SenderUser" ThisKey="SenderUserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
     </Type>

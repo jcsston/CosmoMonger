@@ -2056,6 +2056,10 @@ namespace CosmoMonger.Models
 		
 		private string _Subject;
 		
+		private bool _VisibleToRecipient;
+		
+		private bool _VisibleToSender;
+		
 		private EntityRef<User> _User1;
 		
 		private EntityRef<User> _SenderUser;
@@ -2078,6 +2082,10 @@ namespace CosmoMonger.Models
     partial void OnReceivedChanged();
     partial void OnSubjectChanging(string value);
     partial void OnSubjectChanged();
+    partial void OnVisibleToRecipientChanging(bool value);
+    partial void OnVisibleToRecipientChanged();
+    partial void OnVisibleToSenderChanging(bool value);
+    partial void OnVisibleToSenderChanged();
     #endregion
 		
 		public Message()
@@ -2231,6 +2239,46 @@ namespace CosmoMonger.Models
 					this._Subject = value;
 					this.SendPropertyChanged("Subject");
 					this.OnSubjectChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_VisibleToRecipient", DbType="bit NOT NULL")]
+		public bool VisibleToRecipient
+		{
+			get
+			{
+				return this._VisibleToRecipient;
+			}
+			set
+			{
+				if ((this._VisibleToRecipient != value))
+				{
+					this.OnVisibleToRecipientChanging(value);
+					this.SendPropertyChanging();
+					this._VisibleToRecipient = value;
+					this.SendPropertyChanged("VisibleToRecipient");
+					this.OnVisibleToRecipientChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_VisibleToSender", DbType="bit NOT NULL")]
+		public bool VisibleToSender
+		{
+			get
+			{
+				return this._VisibleToSender;
+			}
+			set
+			{
+				if ((this._VisibleToSender != value))
+				{
+					this.OnVisibleToSenderChanging(value);
+					this.SendPropertyChanging();
+					this._VisibleToSender = value;
+					this.SendPropertyChanged("VisibleToSender");
+					this.OnVisibleToSenderChanged();
 				}
 			}
 		}

@@ -16,9 +16,9 @@
     public class CommunicationController : GameController
     {
         /// <summary>
-        /// Redirects to the Chat action
+        /// Redirects to the Inbox action
         /// </summary>
-        /// <returns>A redirection to the Chat action</returns>
+        /// <returns>A redirection to the Inbox action</returns>
         public ActionResult Index()
         {
             return RedirectToAction("Inbox");
@@ -27,10 +27,10 @@
         /// <summary>
         /// This action displays the users messages
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The Inbox view</returns>
         public ActionResult Inbox(int? page)
         {
-            ViewData["Messages"] = this.ControllerGame.CurrentUser.Messages.OrderByDescending(m => m.Time).AsPagination(page ?? 1);
+            ViewData["Messages"] = this.ControllerGame.CurrentUser.GetMessages().AsPagination(page ?? 1);
 
             return View();
         }
@@ -38,21 +38,33 @@
         /// <summary>
         /// This action views all sent messages
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The Sent view</returns>
         public ActionResult Sent(int? page)
         {
-            ViewData["Messages"] = this.ControllerGame.CurrentUser.MessagesSent.OrderByDescending(m => m.Time).AsPagination(page ?? 1);
+            ViewData["Messages"] = this.ControllerGame.CurrentUser.GetMessagesSent().AsPagination(page ?? 1);
 
             return View();
         }
 
-        public ActionResult Compose()
+        /// <summary>
+        /// Composes the specified to user id.
+        /// </summary>
+        /// <param name="toUserId">Optional to user id.</param>
+        /// <returns>The Compose view filled in with the target user id, if any.</returns>
+        public ActionResult Compose(int? toUserId)
         {
-            ViewData["toUserId"] = new SelectList(this.ControllerGame.CurrentUser.BuddyLists, "FriendId", "Friend.UserName"); 
+            ViewData["toUserId"] = new SelectList(this.ControllerGame.CurrentUser.BuddyLists, "FriendId", "Friend.UserName", toUserId); 
 
             return View();
         }
 
+        /// <summary>
+        /// Composes the specified to user id.
+        /// </summary>
+        /// <param name="toUserId">To user id.</param>
+        /// <param name="subject">The subject of the messageg.</param>
+        /// <param name="message">The message content.</param>
+        /// <returns>A Redirect to the Sent action</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Compose(int toUserId, string subject, string message)
         {
@@ -66,12 +78,10 @@
         }
 
         /// <summary>
-        /// This action sends the passed in message to the target user via the User.SendMessage method 
-        /// and returns a true or false flag in JSON format
+        /// This action fetches the message and passes it to the ViewMessage view
         /// </summary>
-        /// <param name="toUserId">To user id.</param>
-        /// <param name="message">The message.</param>
-        /// <returns></returns>
+        /// <param name="messageId">The message id of the message to view.</param>
+        /// <returns>The ViewMessage view</returns>
         public ActionResult ViewMessage(int messageId)
         {
             Message message = this.ControllerGame.CurrentUser.GetMessage(messageId);
@@ -89,6 +99,25 @@
             }
 
             return View();
+        }
+
+        /// <summary>
+        /// Deletes the message.
+        /// </summary>
+        /// <param name="messageId">The message id to delete.</param>
+        /// <returns>A redirect to the Inbox if successful. The DeleteMessage view otherwise.</returns>
+        public ActionResult DeleteMessage(int messageId)
+        {
+            try
+            {
+                this.ControllerGame.CurrentUser.DeleteMessage(messageId);
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError("messageId", ex);
+            }
+
+            return RedirectToAction("Inbox");
         }
     }
 }
