@@ -274,7 +274,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="toUser">The user to send the message to.</param>
         /// <param name="message">The message to send.</param>
-        public void SendMessage(User toUser, string message)
+        public void SendMessage(User toUser, string subject, string message)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
@@ -282,6 +282,7 @@ namespace CosmoMonger.Models
             Message msg = new Message();
             msg.RecipientUser = toUser;
             msg.SenderUser = this;
+            msg.Subject = subject;
             msg.Content = message;
             msg.Time = DateTime.Now;
 
@@ -316,6 +317,28 @@ namespace CosmoMonger.Models
 
             // Save changes to database
             db.SubmitChanges();
+        }
+
+        /// <summary>
+        /// Gets a message recieved or sent by this user.
+        /// </summary>
+        /// <param name="messageId">The message id.</param>
+        /// <returns>A Message object if found. Null if no message was found.</returns>
+        public Message GetMessage(int messageId)
+        {
+            Message message = (from m in this.Messages
+                               where m.MessageId == messageId
+                               select m).SingleOrDefault();
+            
+            // If the message was not found, look in sent messages
+            if (message == null)
+            {
+                message = (from m in this.MessagesSent
+                           where m.MessageId == messageId
+                           select m).SingleOrDefault();
+            }
+
+            return message;
         }
     }
 }

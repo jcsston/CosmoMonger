@@ -13,7 +13,7 @@ Html.Grid<Message>(
         column.For(m => m.Time);
         column.For(m => m.SenderUser.UserName, "From");
         column.For(m => m.Received, "Read");
-        column.For(m => m.Content);
+        column.For(m => Html.ActionLink(m.Subject, "ViewMessage", new { messageId = m.MessageId }), "Subject").DoNotEncode();
 	}
 );
 %>

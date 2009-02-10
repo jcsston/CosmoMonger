@@ -171,6 +171,7 @@
     <Content Include="Views\BuddyList\IgnoreList.aspx" />
     <Content Include="Views\BuddyList\RemoveBuddy.aspx" />
     <Content Include="Views\BuddyList\RemoveIgnore.aspx" />
+    <Content Include="Views\Communication\ViewMessage.aspx" />
     <Content Include="Views\Communication\Chat.aspx" />
     <Content Include="Views\Communication\Compose.aspx" />
     <Content Include="Views\Communication\Inbox.aspx" />

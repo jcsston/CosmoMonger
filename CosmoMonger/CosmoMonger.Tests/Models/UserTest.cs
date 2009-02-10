@@ -405,7 +405,7 @@
 
             for (int i = 0; i < 10; i++)
             {
-                testUserModel1.SendMessage(testUserModel2, "Hello world!");
+                testUserModel1.SendMessage(testUserModel2, "Test Message", "Hello world!");
             }
 
             IEnumerable<Message> messages = testUserModel1.FetchUnreadMessages();

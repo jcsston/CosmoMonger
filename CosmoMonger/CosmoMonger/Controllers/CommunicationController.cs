@@ -30,7 +30,7 @@
         /// <returns></returns>
         public ActionResult Inbox(int? page)
         {
-            ViewData["Messages"] = this.ControllerGame.CurrentUser.Messages.OrderBy(m => m.Time).AsPagination(page ?? 1);
+            ViewData["Messages"] = this.ControllerGame.CurrentUser.Messages.OrderByDescending(m => m.Time).AsPagination(page ?? 1);
 
             return View();
         }
@@ -41,7 +41,7 @@
         /// <returns></returns>
         public ActionResult Sent(int? page)
         {
-            ViewData["Messages"] = this.ControllerGame.CurrentUser.MessagesSent.OrderBy(m => m.Time).AsPagination(page ?? 1);
+            ViewData["Messages"] = this.ControllerGame.CurrentUser.MessagesSent.OrderByDescending(m => m.Time).AsPagination(page ?? 1);
 
             return View();
         }
@@ -54,12 +54,12 @@
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Compose(int toUserId, string message)
+        public ActionResult Compose(int toUserId, string subject, string message)
         {
             User toUser = this.ControllerGame.GetUser(toUserId);
             if (toUser != null)
             {
-                this.ControllerGame.CurrentUser.SendMessage(toUser, message);
+                this.ControllerGame.CurrentUser.SendMessage(toUser, subject, message);
             }
 
             return RedirectToAction("Sent");
@@ -72,15 +72,23 @@
         /// <param name="toUserId">To user id.</param>
         /// <param name="message">The message.</param>
         /// <returns></returns>
-        public JsonResult SendMessage(int toUserId, string message)
+        public ActionResult ViewMessage(int messageId)
         {
-            User toUser = this.ControllerGame.GetUser(toUserId);
-            if (toUser != null)
+            Message message = this.ControllerGame.CurrentUser.GetMessage(messageId);
+            if (message != null)
             {
-                this.ControllerGame.CurrentUser.SendMessage(toUser, message);
-                return Json(true);
+                ViewData["From"] = message.SenderUser.UserName;
+                ViewData["To"] = message.RecipientUser.UserName;
+                ViewData["Subject"] = message.Subject;
+                ViewData["Time"] = message.Time;
+                ViewData["Content"] = message.Content;
             }
-            return Json(false);
+            else
+            {
+                ModelState.AddModelError("messageId", "Invalid Message Id");
+            }
+
+            return View();
         }
     }
 }

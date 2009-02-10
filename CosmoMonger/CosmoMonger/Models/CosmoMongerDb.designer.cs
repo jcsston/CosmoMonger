@@ -2048,11 +2048,13 @@ namespace CosmoMonger.Models
 		
 		private int _SenderUserId;
 		
-		private string _Content;
+		private System.Data.Linq.Link<string> _Content;
 		
 		private System.DateTime _Time;
 		
 		private bool _Read;
+		
+		private string _Subject;
 		
 		private EntityRef<User> _User1;
 		
@@ -2074,6 +2076,8 @@ namespace CosmoMonger.Models
     partial void OnTimeChanged();
     partial void OnReceivedChanging(bool value);
     partial void OnReceivedChanged();
+    partial void OnSubjectChanging(string value);
+    partial void OnSubjectChanged();
     #endregion
 		
 		public Message()
@@ -2156,15 +2160,15 @@ namespace CosmoMonger.Models
 		{
 			get
 			{
-				return this._Content;
+				return this._Content.Value;
 			}
 			set
 			{
-				if ((this._Content != value))
+				if ((this._Content.Value != value))
 				{
 					this.OnContentChanging(value);
 					this.SendPropertyChanging();
-					this._Content = value;
+					this._Content.Value = value;
 					this.SendPropertyChanged("Content");
 					this.OnContentChanged();
 				}
@@ -2207,6 +2211,26 @@ namespace CosmoMonger.Models
 					this._Read = value;
 					this.SendPropertyChanged("Received");
 					this.OnReceivedChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Subject", DbType="varchar(255) NOT NULL", CanBeNull=false)]
+		public string Subject
+		{
+			get
+			{
+				return this._Subject;
+			}
+			set
+			{
+				if ((this._Subject != value))
+				{
+					this.OnSubjectChanging(value);
+					this.SendPropertyChanging();
+					this._Subject = value;
+					this.SendPropertyChanged("Subject");
+					this.OnSubjectChanged();
 				}
 			}
 		}
@@ -6739,9 +6763,9 @@ namespace CosmoMonger.Models
 		
 		private EntitySet<Message> _Messages1;
 		
-		private EntitySet<Player> _Players;
-		
 		private EntitySet<Message> _MessagesSent;
+		
+		private EntitySet<Player> _Players;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -6782,8 +6806,8 @@ namespace CosmoMonger.Models
 			this._IgnoreLists = new EntitySet<IgnoreList>(new Action<IgnoreList>(this.attach_IgnoreLists), new Action<IgnoreList>(this.detach_IgnoreLists));
 			this._IgnoreListsOn = new EntitySet<IgnoreList>(new Action<IgnoreList>(this.attach_IgnoreListsOn), new Action<IgnoreList>(this.detach_IgnoreListsOn));
 			this._Messages1 = new EntitySet<Message>(new Action<Message>(this.attach_Messages1), new Action<Message>(this.detach_Messages1));
-			this._Players = new EntitySet<Player>(new Action<Player>(this.attach_Players), new Action<Player>(this.detach_Players));
 			this._MessagesSent = new EntitySet<Message>(new Action<Message>(this.attach_MessagesSent), new Action<Message>(this.detach_MessagesSent));
+			this._Players = new EntitySet<Player>(new Action<Player>(this.attach_Players), new Action<Player>(this.detach_Players));
 			OnCreated();
 		}
 		
@@ -7112,19 +7136,6 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Association(Name="User_Player", Storage="_Players", ThisKey="UserId", OtherKey="UserId")]
-		public EntitySet<Player> Players
-		{
-			get
-			{
-				return this._Players;
-			}
-			set
-			{
-				this._Players.Assign(value);
-			}
-		}
-		
 		[Association(Name="User_Message1", Storage="_MessagesSent", ThisKey="UserId", OtherKey="SenderUserId")]
 		public EntitySet<Message> MessagesSent
 		{
@@ -7135,6 +7146,19 @@ namespace CosmoMonger.Models
 			set
 			{
 				this._MessagesSent.Assign(value);
+			}
+		}
+		
+		[Association(Name="User_Player", Storage="_Players", ThisKey="UserId", OtherKey="UserId")]
+		public EntitySet<Player> Players
+		{
+			get
+			{
+				return this._Players;
+			}
+			set
+			{
+				this._Players.Assign(value);
 			}
 		}
 		
@@ -7218,18 +7242,6 @@ namespace CosmoMonger.Models
 			entity.RecipientUser = null;
 		}
 		
-		private void attach_Players(Player entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_Players(Player entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
-		}
-		
 		private void attach_MessagesSent(Message entity)
 		{
 			this.SendPropertyChanging();
@@ -7240,6 +7252,18 @@ namespace CosmoMonger.Models
 		{
 			this.SendPropertyChanging();
 			entity.SenderUser = null;
+		}
+		
+		private void attach_Players(Player entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Players(Player entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
 		}
 	}
 }

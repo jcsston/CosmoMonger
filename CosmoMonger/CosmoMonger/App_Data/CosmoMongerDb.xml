@@ -2434,4 +2434,11 @@
     <comment>Adding Unique Constraint to the Player table</comment>
     <addUniqueConstraint tableName="Player" columnNames="Name" constraintName="UQ_Player_Name" />
   </changeSet>
+  <changeSet author="Jory Stone" id="54">
+    <comment>Adding Subject column to the Message table</comment>
+    <addColumn tableName="Message">
+      <column name="Subject" type="varchar(255)" />
+    </addColumn>
+    <addNotNullConstraint tableName="Message" columnName="Subject" defaultNullValue="subject" columnDataType="varchar(255)" />
+  </changeSet>
  </databaseChangeLog>

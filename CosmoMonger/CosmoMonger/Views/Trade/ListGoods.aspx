@@ -47,7 +47,7 @@
                                 max: goodQuantityMax
                             },
                         },
-                        // Dummy error placement option, we don't want to show the error message to the user
+                        // Error placement option, we want to show the error message to the user on a new line after the problem form element
                         errorPlacement: function (label, element) {
                             label.insertAfter(element.siblings('input[type=submit]'));
                             label.before('<br />');
