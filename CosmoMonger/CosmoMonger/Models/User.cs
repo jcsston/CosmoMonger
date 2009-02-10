@@ -250,23 +250,16 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// This returns any unread messages for the User. Marking each as read.
+        /// This returns any unread messages for the User.
         /// If no unread messages exist an empty array is returned.
         /// </summary>
         /// <returns>Array of Message objects</returns>
-        public IEnumerable<Message> FetchUnreadMessages()
+        public IEnumerable<Message> GetUnreadMessages()
         {
-            IEnumerable<Message> messages = (from m in this.Messages 
-                                             where !m.Received 
-                                             select m);
-
-            // Mark all these messages are read now
-            foreach (Message msg in messages)
-            {
-                msg.MarkAsReceived();
-            }
-
-            return messages;
+            return (from m in this.Messages 
+                    where !m.Received
+                    && m.VisibleToRecipient
+                    select m);
         }
 
         /// <summary>
@@ -279,6 +272,16 @@ namespace CosmoMonger.Models
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
+            // Check if this user is on the to user's ignore list
+            bool presentOnIgnoreList = (from ilo in this.IgnoreListsOn
+                                        where ilo.User == toUser
+                                        select ilo).Any();
+            if (presentOnIgnoreList)
+            {
+                // Don't send the message
+                return;
+            }
+
             // Build the message
             Message msg = new Message();
             msg.RecipientUser = toUser;
@@ -286,6 +289,8 @@ namespace CosmoMonger.Models
             msg.Subject = subject;
             msg.Content = message;
             msg.Time = DateTime.Now;
+            msg.VisibleToRecipient = true;
+            msg.VisibleToSender = true;
 
             // Add the message to the database
             db.Messages.InsertOnSubmit(msg);

@@ -49,6 +49,22 @@ p, ul
     line-height: 1.6em;
 }
 
+.notice 
+{
+    width: 250px;
+    margin: 20px 20px 0 0;
+    padding: 20px;
+    color: black;
+    background: #eee;
+}
+
+#purr-container 
+{
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
 /* HEADINGS   
 ----------------------------------------------------------*/
 h1, h2, h3, h4, h5, h6

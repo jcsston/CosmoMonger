@@ -119,5 +119,20 @@
 
             return RedirectToAction("Inbox");
         }
+
+        public JsonResult UnreadMessages()
+        {
+            IEnumerable<Message> messages = this.ControllerGame.CurrentUser.GetUnreadMessages();
+            
+            /*
+            List<object> msgs = new List<object>();
+            foreach (Message message in messages)
+            {
+                msgs.Add(new { id = message.MessageId, from = message.SenderUser.UserName, subject = message.Subject });
+            }
+             * */
+
+            return Json(new { length = messages.Count() });
+        }
     }
 }
