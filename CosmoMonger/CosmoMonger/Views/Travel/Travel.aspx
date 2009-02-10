@@ -13,7 +13,7 @@
             // Only display the selected system information
             selectedSystemId = 'system' + selectedSystemId;
             $("div.system-info:not(#" + selectedSystemId + ")").css("display", "none");
-            $("#" + selectedSystemId).css("display", "");
+            $("#" + selectedSystemId).css("display", "inline");
         }
         
         // On-load function to select the system the player currently is in

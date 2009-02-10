@@ -46,6 +46,25 @@
             return View();
         }
 
+        public ActionResult Compose()
+        {
+            ViewData["toUserId"] = new SelectList(this.ControllerGame.CurrentUser.BuddyLists, "FriendId", "Friend.UserName"); 
+
+            return View();
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult Compose(int toUserId, string message)
+        {
+            User toUser = this.ControllerGame.GetUser(toUserId);
+            if (toUser != null)
+            {
+                this.ControllerGame.CurrentUser.SendMessage(toUser, message);
+            }
+
+            return RedirectToAction("Sent");
+        }
+
         /// <summary>
         /// This action sends the passed in message to the target user via the User.SendMessage method 
         /// and returns a true or false flag in JSON format

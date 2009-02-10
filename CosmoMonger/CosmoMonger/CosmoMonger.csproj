@@ -90,7 +90,7 @@
     <Compile Include="Controllers\Attributes\ExceptionPolicyAttribute.cs" />
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\BuddyListController.cs" />
-    <Compile Include="Controllers\ChatController.cs" />
+    <Compile Include="Controllers\CommunicationController.cs" />
     <Compile Include="Controllers\FormsLoginResult.cs" />
     <Compile Include="Controllers\FormsLogoutResult.cs" />
     <Compile Include="Controllers\GameController.cs" />
@@ -130,20 +130,6 @@
     <Compile Include="Models\Utility\DataContextFactory.cs" />
     <Compile Include="Models\Utility\LoggingTextWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Chat\Inbox.aspx.cs">
-      <DependentUpon>Inbox.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Chat\Inbox.aspx.designer.cs">
-      <DependentUpon>Inbox.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Chat\Sent.aspx.cs">
-      <DependentUpon>Sent.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Chat\Sent.aspx.designer.cs">
-      <DependentUpon>Sent.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\CosmoMongerDb.xml" />
@@ -185,10 +171,11 @@
     <Content Include="Views\BuddyList\IgnoreList.aspx" />
     <Content Include="Views\BuddyList\RemoveBuddy.aspx" />
     <Content Include="Views\BuddyList\RemoveIgnore.aspx" />
-    <Content Include="Views\Chat\Chat.aspx" />
-    <Content Include="Views\Chat\Inbox.aspx" />
-    <Content Include="Views\Chat\Index.aspx" />
-    <Content Include="Views\Chat\Sent.aspx" />
+    <Content Include="Views\Communication\Chat.aspx" />
+    <Content Include="Views\Communication\Compose.aspx" />
+    <Content Include="Views\Communication\Inbox.aspx" />
+    <Content Include="Views\Communication\Index.aspx" />
+    <Content Include="Views\Communication\Sent.aspx" />
     <Content Include="Views\PlayerRecord\ListRecords.aspx" />
     <Content Include="Views\PlayerRecord\ViewRecord.aspx" />
     <Content Include="Views\Player\CreatePlayer.aspx" />
