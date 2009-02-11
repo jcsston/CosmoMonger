@@ -73,7 +73,7 @@ namespace CosmoMonger.Models
 
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             var npcsNeedingAction = (from n in db.Npcs
-                                    where n.NextActionTime > DateTime.Now
+                                    where n.NextActionTime < DateTime.Now
                                     select n);
             foreach (Npc npc in npcsNeedingAction)
             {
