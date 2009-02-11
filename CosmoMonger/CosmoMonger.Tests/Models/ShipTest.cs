@@ -91,12 +91,87 @@
             Assert.That(ship.TradeInValue, Is.EqualTo(1600), "Trade in value should equal 80% of 2x BaseShip value amount");
         }
 
+        private int player1Id;
+        private int player2Id;
+        private int player1AttackCount;
+        private int player2AttackCount;
+
+        public void AttackAtSameTimeThread()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            Player player1 = db.Players.Where(p => p.PlayerId == player1Id).Single();
+            Player player2 = db.Players.Where(p => p.PlayerId == player2Id).Single();
+
+            for (int i = 0; i < 100; i++)
+            {
+                try
+                {
+                    player1.Ship.Attack(player2.Ship);
+                    player1.Ship.InProgressCombat.End();
+                    player1AttackCount++;
+                }
+                catch (ArgumentException ex)
+                {
+
+                }
+                catch (InvalidOperationException ex)
+                {
+
+                }
+            }
+        }
+
+        [Test]
+        public void AttackAtSameTime()
+        {
+            Player player1 = this.CreateTestPlayer();
+            Player player2 = this.CreateTestPlayer();
+            player1Id = player1.PlayerId;
+            player2Id = player2.PlayerId;
+            player1AttackCount = 0;
+            player2AttackCount = 0;
+
+            Thread t = new Thread(new ThreadStart(this.AttackAtSameTimeThread));
+            t.Start();
+            
+            for (int i = 0; i < 100; i++)
+            {
+                try
+                {
+                    player2.Ship.Attack(player1.Ship);
+                    player2.Ship.InProgressCombat.End();
+                    player2AttackCount++;
+                }
+                catch (ArgumentException ex)
+                {
+                    // Good
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Good
+                }
+            }
+
+            t.Join();
+            Console.WriteLine("Attacked Player 1: {0} Player 2: {1}", player1AttackCount, player2AttackCount);
+        }
+
         [Test]
         public void Attack()
         {
             Player player1 = this.CreateTestPlayer();
             Player player2 = this.CreateTestPlayer();
+
             player1.Ship.Attack(player2.Ship);
+            while (player2.Ship.DamageHull < 100)
+            {
+                Console.WriteLine("Player 2 Shield {0} Hull: {1}", player2.Ship.DamageShield, player2.Ship.DamageHull);
+                player1.Ship.InProgressCombat.FireWeapon();
+                // Max out turn points for testing
+                player1.Ship.InProgressCombat.TurnPointsLeft = 999;
+            }
+            player1.Ship.InProgressCombat.End();
         }
     }
 }

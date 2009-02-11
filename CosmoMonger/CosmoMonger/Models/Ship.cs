@@ -7,14 +7,11 @@
 namespace CosmoMonger.Models
 {
     using System;
-    using System.ComponentModel;
-    using System.Configuration;
-    using System.Data;
+    using System.Data.Linq;
     using System.Diagnostics;
     using System.Linq;
-    using System.Transactions;
-using System.Data.Linq;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
+    using System.Data.SqlClient;
 
     /// <summary>
     /// Extension of the partial LINQ class Ship
@@ -74,6 +71,18 @@ using System.Data.Linq;
 
                 // Take 20% off the face value of the ship to account for wear and tear
                 return (int)(shipValue * 0.80);
+            }
+        }
+
+        /// <summary>
+        /// Gets the current in progress combat if any
+        /// </summary>
+        /// <value>The in progress combat object, null if no combat is taking place.</value>
+        public virtual InProgressCombat InProgressCombat
+        {
+            get
+            {
+                return this.InProgressCombatsAttacker.Union(this.InProgressCombatsDefender).SingleOrDefault();
             }
         }
 
@@ -220,10 +229,11 @@ using System.Data.Linq;
             {
                 throw new ArgumentException("Target ship is already in combat", "target");
             }
-            
+
             InProgressCombat combat = new InProgressCombat();
             combat.AttackerShip = this;
             combat.DefenderShip = target;
+            combat.TurnPointsLeft = InProgressCombat.PointsPerTurn;
 
             // Save changes to the database
             db.InProgressCombats.InsertOnSubmit(combat);
@@ -231,6 +241,13 @@ using System.Data.Linq;
             try
             {
                 db.SubmitChanges();
+            }
+            catch (SqlException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // A combat must already be in-progress
+                throw new InvalidOperationException("Ship is already in combat");
             }
             catch (DuplicateKeyException ex)
             {

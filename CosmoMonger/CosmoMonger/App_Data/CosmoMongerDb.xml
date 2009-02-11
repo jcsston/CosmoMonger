@@ -2450,4 +2450,9 @@
     <addNotNullConstraint tableName="Message" columnName="VisibleToRecipient" defaultNullValue="1" columnDataType="bit" />
     <addNotNullConstraint tableName="Message" columnName="VisibleToSender" defaultNullValue="1" columnDataType="bit" />
   </changeSet>
+  <changeSet author="Jory Stone" id="56">
+    <comment>Adding Unique constraints to the InProgressCombat table to try to limit ships to one combat</comment>
+    <addUniqueConstraint tableName="InProgressCombat" columnNames="AttackerShipId" constraintName="UQ_InProgressCombat_AttackerShipId" />
+	<addUniqueConstraint tableName="InProgressCombat" columnNames="DefenderShipId" constraintName="UQ_InProgressCombat_DefenderShipId" />
+  </changeSet>
  </databaseChangeLog>
