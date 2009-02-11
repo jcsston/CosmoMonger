@@ -1682,7 +1682,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Ship_InProgressCombat", Storage="_Ship", ThisKey="AttackerShipId", OtherKey="ShipId", IsForeignKey=true)]
-		public Ship Ship
+		public Ship AttackerShip
 		{
 			get
 			{
@@ -1698,25 +1698,25 @@ namespace CosmoMonger.Models
 					if ((previousValue != null))
 					{
 						this._Ship.Entity = null;
-						previousValue.InProgressCombats.Remove(this);
+						previousValue.InProgressCombatsAttacker.Remove(this);
 					}
 					this._Ship.Entity = value;
 					if ((value != null))
 					{
-						value.InProgressCombats.Add(this);
+						value.InProgressCombatsAttacker.Add(this);
 						this._AttackerShipId = value.ShipId;
 					}
 					else
 					{
 						this._AttackerShipId = default(int);
 					}
-					this.SendPropertyChanged("Ship");
+					this.SendPropertyChanged("AttackerShip");
 				}
 			}
 		}
 		
 		[Association(Name="Ship_InProgressCombat1", Storage="_Ship1", ThisKey="DefenderShipId", OtherKey="ShipId", IsForeignKey=true)]
-		public Ship Ship1
+		public Ship DefenderShip
 		{
 			get
 			{
@@ -1732,19 +1732,19 @@ namespace CosmoMonger.Models
 					if ((previousValue != null))
 					{
 						this._Ship1.Entity = null;
-						previousValue.InProgressCombats1.Remove(this);
+						previousValue.InProgressCombatsDefender.Remove(this);
 					}
 					this._Ship1.Entity = value;
 					if ((value != null))
 					{
-						value.InProgressCombats1.Add(this);
+						value.InProgressCombatsDefender.Add(this);
 						this._DefenderShipId = value.ShipId;
 					}
 					else
 					{
 						this._DefenderShipId = default(int);
 					}
-					this.SendPropertyChanged("Ship1");
+					this.SendPropertyChanged("DefenderShip");
 				}
 			}
 		}
@@ -4715,7 +4715,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Ship_InProgressCombat", Storage="_InProgressCombats", ThisKey="ShipId", OtherKey="AttackerShipId")]
-		public EntitySet<InProgressCombat> InProgressCombats
+		public EntitySet<InProgressCombat> InProgressCombatsAttacker
 		{
 			get
 			{
@@ -4728,7 +4728,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Ship_InProgressCombat1", Storage="_InProgressCombats1", ThisKey="ShipId", OtherKey="DefenderShipId")]
-		public EntitySet<InProgressCombat> InProgressCombats1
+		public EntitySet<InProgressCombat> InProgressCombatsDefender
 		{
 			get
 			{
@@ -4972,25 +4972,25 @@ namespace CosmoMonger.Models
 		private void attach_InProgressCombats(InProgressCombat entity)
 		{
 			this.SendPropertyChanging();
-			entity.Ship = this;
+			entity.AttackerShip = this;
 		}
 		
 		private void detach_InProgressCombats(InProgressCombat entity)
 		{
 			this.SendPropertyChanging();
-			entity.Ship = null;
+			entity.AttackerShip = null;
 		}
 		
 		private void attach_InProgressCombats1(InProgressCombat entity)
 		{
 			this.SendPropertyChanging();
-			entity.Ship1 = this;
+			entity.DefenderShip = this;
 		}
 		
 		private void detach_InProgressCombats1(InProgressCombat entity)
 		{
 			this.SendPropertyChanging();
-			entity.Ship1 = null;
+			entity.DefenderShip = null;
 		}
 		
 		private void attach_Npcs(Npc entity)

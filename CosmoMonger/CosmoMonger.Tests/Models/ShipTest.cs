@@ -90,5 +90,13 @@
             // Assert
             Assert.That(ship.TradeInValue, Is.EqualTo(1600), "Trade in value should equal 80% of 2x BaseShip value amount");
         }
+
+        [Test]
+        public void Attack()
+        {
+            Player player1 = this.CreateTestPlayer();
+            Player player2 = this.CreateTestPlayer();
+            player1.Ship.Attack(player2.Ship);
+        }
     }
 }

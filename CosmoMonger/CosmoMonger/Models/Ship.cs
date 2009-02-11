@@ -12,6 +12,9 @@ namespace CosmoMonger.Models
     using System.Data;
     using System.Diagnostics;
     using System.Linq;
+    using System.Transactions;
+using System.Data.Linq;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     /// <summary>
     /// Extension of the partial LINQ class Ship
@@ -194,6 +197,48 @@ namespace CosmoMonger.Models
         public virtual ShipGood GetGood(int goodId)
         {
             return (from g in this.ShipGoods where g.GoodId == goodId select g).SingleOrDefault();
+        }
+
+        /// <summary>
+        /// Attacks the target ship.
+        /// </summary>
+        /// <param name="target">The target ship to attack.</param>
+        /// <exception cref="InvalidOperationException">Thrown when this ship is already in combat</exception>
+        /// <exception cref="ArgumentException">Thrown when target ship is already in combat</exception>
+        public virtual void Attack(Ship target)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Check if this ship is already in combat
+            if (this.InProgressCombatsAttacker.Union(this.InProgressCombatsDefender).Any())
+            {
+                throw new InvalidOperationException("Current ship is already in combat");
+            }
+
+            // Check that the target ship is not in combat
+            if (target.InProgressCombatsAttacker.Union(target.InProgressCombatsDefender).Any())
+            {
+                throw new ArgumentException("Target ship is already in combat", "target");
+            }
+            
+            InProgressCombat combat = new InProgressCombat();
+            combat.AttackerShip = this;
+            combat.DefenderShip = target;
+
+            // Save changes to the database
+            db.InProgressCombats.InsertOnSubmit(combat);
+
+            try
+            {
+                db.SubmitChanges();
+            }
+            catch (DuplicateKeyException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // A combat must already be in-progress
+                throw new InvalidOperationException("Ship is already in combat");
+            }
         }
 
         /// <summary>
