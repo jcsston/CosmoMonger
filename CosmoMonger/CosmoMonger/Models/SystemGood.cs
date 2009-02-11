@@ -102,24 +102,10 @@ namespace CosmoMonger.Models
             }
 
             // Add the goods to the player ship
-            ShipGood playerGood = (from sg in playerShip.ShipGoods
-                                   where sg.Good == this.Good
-                                   select sg).SingleOrDefault();
-            if (playerGood == null)
-            {
-                // Ship is not already carrying this good, so we have to create a new ShipGood
-                playerGood = new ShipGood();
-                playerGood.Ship = playerShip;
-                playerGood.Good = this.Good;
-                playerGood.Quantity = quantity;
-                playerShip.ShipGoods.Add(playerGood);
-            }
-            else
-            {
-                // Ship is already carrying this good, add to the existing ShipGood
-                playerGood.Quantity += quantity;
-            }
-
+            int addedQuantity = playerShip.AddGood(this.GoodId, quantity);
+            
+            // We should have checked that the ship had enough space to hold the good already
+            Debug.Assert(addedQuantity == quantity);
 
             // Charge the player for the goods
             manager.CurrentPlayer.CashCredits -= totalCost;
@@ -137,8 +123,8 @@ namespace CosmoMonger.Models
                 // and so we use our values and ignore the new data
                 foreach (ObjectChangeConflict occ in db.ChangeConflicts)
                 {
-                    // Refresh current values from database
-                    occ.Resolve(RefreshMode.KeepCurrentValues);
+                    // Keep our changes, but update other data
+                    occ.Resolve(RefreshMode.KeepChanges);
                 }
             }
         }

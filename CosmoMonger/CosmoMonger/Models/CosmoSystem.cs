@@ -167,5 +167,16 @@ namespace CosmoMonger.Models
             // Save changes to the database
             db.SubmitChanges();
         }
+
+        /// <summary>
+        /// Gets the ships that are leaving the system.
+        /// </summary>
+        /// <returns>An array of Ship objects that are leaving the system</returns>
+        public virtual IEnumerable<Ship> GetLeavingShips()
+        {
+            return (from s in this.Ships
+                    where s.TargetSystemId.HasValue
+                    select s);
+        }
     }
 }

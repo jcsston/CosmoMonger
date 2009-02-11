@@ -12,6 +12,8 @@ namespace CosmoMonger.Models
     using System.Linq;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using System.Data.SqlClient;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Extension of the partial LINQ class Ship
@@ -83,6 +85,18 @@ namespace CosmoMonger.Models
             get
             {
                 return this.InProgressCombatsAttacker.Union(this.InProgressCombatsDefender).SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="Ship"/> is destroyed.
+        /// </summary>
+        /// <value><c>true</c> if destroyed; otherwise, <c>false</c>.</value>
+        public virtual bool Destroyed
+        {
+            get
+            {
+                return this.DamageHull >= 100;
             }
         }
 
@@ -304,6 +318,68 @@ namespace CosmoMonger.Models
             {
                 player.UpdateNetWorth();
             }
+        }
+
+        /// <summary>
+        /// Add the good to this ship.
+        /// </summary>
+        /// <param name="goodId">The good type to add to this ship.</param>
+        /// <param name="quantity">The quantity of the good to add.</param>
+        /// <returns>The number of goods actually added to the ship. 0 is returned when ship cargo is full.</returns>
+        public virtual int AddGood(int goodId, int quantity)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Limit the quantity to the amount of free cargo space
+            int actualQuantity = Math.Min(quantity, this.CargoSpaceFree);
+
+            Logger.Write("Adding Good to Ship in Ship.AddGood", "Model", 150, 0, TraceEventType.Verbose, "Adding Good to Ship",
+                new Dictionary<string, object>
+                {
+                    { "GoodId", goodId },
+                    { "Quantity", quantity },
+                    { "ActualQuantity", actualQuantity },
+                    { "ShipId", this.ShipId }
+                }
+            );
+
+            ShipGood shipGood = this.GetGood(goodId);
+            if (shipGood == null)
+            {
+                // Ship is not already carrying this good, so we have to create a new ShipGood
+                shipGood = new ShipGood();
+                shipGood.Ship = this;
+                shipGood.GoodId = goodId;
+                shipGood.Quantity = actualQuantity;
+
+                db.ShipGoods.InsertOnSubmit(shipGood);
+            }
+            else
+            {
+                // Add the correct number of goods to the ship
+                shipGood.Quantity += actualQuantity;
+            }
+
+            try
+            {
+                // Save changes to the database
+                db.SubmitChanges();
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to the ShipGood row, this is invalid
+                // and so we use our values and ignore the new data
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    // Keep our changes, but update other data
+                    occ.Resolve(RefreshMode.KeepChanges);
+                }
+            }
+
+            // Return the number of goods added to the ship
+            return actualQuantity;
         }
     }
 }

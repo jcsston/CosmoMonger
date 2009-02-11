@@ -77,6 +77,10 @@
                 Player [] players = (from p in db.Players
                                     where p.Alive
                                     select p).ToArray();
+                foreach (Player player in players)
+                {
+                    player.NetWorth++;
+                }
             }
         }
 
@@ -90,6 +94,10 @@
                 List<Player> players = (from p in db.Players
                                         where p.Alive
                                         select p).ToList();
+                foreach (Player player in players)
+                {
+                    player.NetWorth++;
+                }
             }
         }
 
@@ -103,6 +111,10 @@
                 IEnumerable<Player> players = (from p in db.Players
                                                where p.Alive
                                                select p);
+                foreach (Player player in players)
+                {
+                    player.NetWorth++;
+                }
             }
         }
     }

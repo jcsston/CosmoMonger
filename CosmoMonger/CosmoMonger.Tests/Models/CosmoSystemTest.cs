@@ -11,8 +11,21 @@
     using NUnit.Framework.SyntaxHelpers;
 
     [TestFixture]
-    public class CosmoSystemTest
+    public class CosmoSystemTest : BasePlayerTest
     {
+        [Test]
+        public void GetLeavingShips()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+
+            CosmoSystem firstInRangeSystem = testPlayer.Ship.GetInRangeSystems()[0];
+            testPlayer.Ship.Travel(firstInRangeSystem);
+
+            // See if the traveling ship shows in the leaving list
+            IEnumerable<Ship> leavingShips = testPlayer.Ship.CosmoSystem.GetLeavingShips();
+            Assert.That(leavingShips, Has.Member(testPlayer.Ship), "Test Ship should be in the leaving list");
+        }
+
         [Test]
         public void AddGood()
         {
