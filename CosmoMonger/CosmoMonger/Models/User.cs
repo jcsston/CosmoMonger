@@ -113,7 +113,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="email">The e-mail to set.</param>
         /// <exception cref="ArgumentException">Thrown if the e-mail is already taken by another user</exception>
-        public void UpdateEmail(string email)
+        public virtual void UpdateEmail(string email)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
@@ -143,7 +143,7 @@ namespace CosmoMonger.Models
         /// Returns an list of BuddyList objects for this User
         /// </summary>
         /// <returns>Array of BuddyList objects</returns>
-        public BuddyList[] GetBuddyList()
+        public virtual BuddyList[] GetBuddyList()
         {
             return this.BuddyLists.ToArray();
         }
@@ -154,7 +154,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="buddy">The buddy to add.</param>
         /// <exception cref="ArgumentException">Thrown when buddy is already in the buddy list</exception>
-        public void AddBuddy(User buddy)
+        public virtual void AddBuddy(User buddy)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             if (buddy == this)
@@ -182,7 +182,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="buddy">The buddy to remove.</param>
         /// <exception cref="ArgumentException">Thrown when buddy not in the buddy list</exception>
-        public void RemoveBuddy(User buddy)
+        public virtual void RemoveBuddy(User buddy)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             BuddyList buddyToRemove = (from bl in this.BuddyLists where bl.FriendId == buddy.UserId select bl).SingleOrDefault();
@@ -199,7 +199,7 @@ namespace CosmoMonger.Models
         /// Returns an list of IgnoreList objects for this User
         /// </summary>
         /// <returns>Array of IgnoreList objects</returns>
-        public IgnoreList[] GetIgnoreList()
+        public virtual IgnoreList[] GetIgnoreList()
         {
             return this.IgnoreLists.ToArray();
         }
@@ -209,7 +209,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="ignoreUser">The user to add to the ignore list.</param>
         /// <exception cref="ArgumentException">Thrown when the ignore user is already in the ignore list</exception>
-        public void AddIgnore(User ignoreUser)
+        public virtual void AddIgnore(User ignoreUser)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             if (ignoreUser == this)
@@ -236,7 +236,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="ignoreUser">The ignore user.</param>
         /// <exception cref="ArgumentException">Thrown when the ignore user is not in the ignore list</exception>
-        public void RemoveIgnore(User ignoreUser)
+        public virtual void RemoveIgnore(User ignoreUser)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             IgnoreList antiFriendToRemove = (from il in this.IgnoreLists where il.AntiFriendId == ignoreUser.UserId select il).SingleOrDefault();
@@ -254,7 +254,7 @@ namespace CosmoMonger.Models
         /// If no unread messages exist an empty array is returned.
         /// </summary>
         /// <returns>Array of Message objects</returns>
-        public IEnumerable<Message> GetUnreadMessages()
+        public virtual IEnumerable<Message> GetUnreadMessages()
         {
             return (from m in this.Messages 
                     where !m.Received
@@ -268,7 +268,7 @@ namespace CosmoMonger.Models
         /// <param name="toUser">The user to send the message to.</param>
         /// <param name="subject">The message subject.</param>
         /// <param name="message">The message to send.</param>
-        public void SendMessage(User toUser, string subject, string message)
+        public virtual void SendMessage(User toUser, string subject, string message)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
@@ -302,7 +302,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Bans the user by setting the Active field to false.
         /// </summary>
-        public void Ban()
+        public virtual void Ban()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
@@ -315,7 +315,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Unbans the user by setting the Active field to true.
         /// </summary>
-        public void Unban()
+        public virtual void Unban()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
@@ -330,7 +330,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="messageId">The message id.</param>
         /// <returns>A Message object if found. Null if no message was found.</returns>
-        public Message GetMessage(int messageId)
+        public virtual Message GetMessage(int messageId)
         {
             Message message = (from m in this.Messages
                                where m.MessageId == messageId
@@ -355,7 +355,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="messageId">The message id to delete.</param>
         /// <exception cref="ArgumentException">Thrown if the message id is not found.</exception>
-        public void DeleteMessage(int messageId)
+        public virtual void DeleteMessage(int messageId)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
@@ -386,7 +386,7 @@ namespace CosmoMonger.Models
         /// Gets the visible messages for this user.
         /// </summary>
         /// <returns>IEnumerable of Messages</returns>
-        public IEnumerable<Message> GetMessages()
+        public virtual IEnumerable<Message> GetMessages()
         {
             return (from m in this.Messages
                     where m.VisibleToRecipient
@@ -398,7 +398,7 @@ namespace CosmoMonger.Models
         /// Gets the visible messages sent by this user.
         /// </summary>
         /// <returns>IEnumerable of Messages</returns>
-        public IEnumerable<Message> GetMessagesSent()
+        public virtual IEnumerable<Message> GetMessagesSent()
         {
             return (from m in this.MessagesSent
                     where m.VisibleToSender

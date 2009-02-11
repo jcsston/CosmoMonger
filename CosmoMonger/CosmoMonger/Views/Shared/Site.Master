@@ -11,31 +11,40 @@
     <script type="text/javascript" src="/Scripts/jquery.purr.js"></script>
     <script type="text/javascript">
     <!--
+        lastMessageCount = 0;
+        function updateUnreadMessageCount() {
+            $.getJSON('/Communication/UnreadMessages', displayUnreadMessageCount);
+        }
+        
         function displayUnreadMessageCount(data) {
             var messageCount = data.length;
-            var notice = 
-                '<div class="notice">'
-              + '<p>You have ' + messageCount + ' unread messages.</p>'
-              + '<p><a href="/Communication/Inbox">Inbox</a></p>'
-              + '<div class="notice-bottom">'
-              + '</div>'
-              + '</div>';
+            if (messageCount != lastMessageCount) {
+                lastMessageCount = messageCount;
+                var notice = 
+                    '<div class="notice">'
+                  + '<p>You have ' + messageCount + ' unread messages.</p>'
+                  + '<p><a href="/Communication/Inbox">Inbox</a></p>'
+                  + '<div class="notice-bottom">'
+                  + '</div>'
+                  + '</div>';
 
-            $(notice).purr(
-                {
-                    fadeInSpeed: 200,
-                    fadeOutSpeed: 2000,
-                    removeTimer: 5000
-                }
-            );
+                $(notice).purr(
+                    {
+                        fadeInSpeed: 200,
+                        fadeOutSpeed: 2000,
+                        removeTimer: 5000
+                    }
+                );
             }
+            setTimeout(updateUnreadMessageCount, 60 * 1000);
+        }
 
-            $(document).ready(function() {
-                // Only nag the user if they are not in the Communication area
-                if (location.pathname.indexOf("Communication") == -1) {
-                    $.getJSON('/Communication/UnreadMessages', displayUnreadMessageCount);
-                }
-            });
+        $(document).ready(function() {
+            // Only nag the user if they are not in the Communication area
+            if (location.pathname.indexOf("Communication") == -1) {
+                updateUnreadMessageCount();
+            }
+        });
     //-->
     </script>
 <%

@@ -2164,7 +2164,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Content", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string Content
+		public virtual string Content
 		{
 			get
 			{
@@ -2184,7 +2184,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Time", DbType="DateTime NOT NULL")]
-		public System.DateTime Time
+		public virtual System.DateTime Time
 		{
 			get
 			{
@@ -2224,7 +2224,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Subject", DbType="varchar(255) NOT NULL", CanBeNull=false)]
-		public string Subject
+		public virtual string Subject
 		{
 			get
 			{
@@ -2284,7 +2284,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="User_Message", Storage="_User1", ThisKey="RecipientUserId", OtherKey="UserId", IsForeignKey=true)]
-		public User RecipientUser
+		public virtual User RecipientUser
 		{
 			get
 			{
@@ -2318,7 +2318,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="User_Message1", Storage="_SenderUser", ThisKey="SenderUserId", OtherKey="UserId", IsForeignKey=true)]
-		public User SenderUser
+		public virtual User SenderUser
 		{
 			get
 			{
@@ -6900,7 +6900,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_UserName", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
-		public string UserName
+		public virtual string UserName
 		{
 			get
 			{
@@ -6980,7 +6980,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Admin", DbType="Bit NOT NULL")]
-		public bool Admin
+		public virtual bool Admin
 		{
 			get
 			{

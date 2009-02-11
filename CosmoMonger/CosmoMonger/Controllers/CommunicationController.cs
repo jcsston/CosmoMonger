@@ -16,6 +16,24 @@
     public class CommunicationController : GameController
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="CommunicationController"/> class.
+        /// This is the default constructor that doesn't really to anything.
+        /// </summary>
+        public CommunicationController()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommunicationController"/> class.
+        /// This constructor is used for unit testing purposes.
+        /// </summary>
+        /// <param name="manager">The game manager object to use.</param>
+        public CommunicationController(GameManager manager) 
+            : base(manager)
+        {
+        }
+
+        /// <summary>
         /// Redirects to the Inbox action
         /// </summary>
         /// <returns>A redirection to the Inbox action</returns>
@@ -87,6 +105,12 @@
             Message message = this.ControllerGame.CurrentUser.GetMessage(messageId);
             if (message != null)
             {
+                // If these message is for the user, mark it read
+                if (message.RecipientUser == this.ControllerGame.CurrentUser)
+                {
+                    message.MarkAsReceived();
+                }
+
                 ViewData["From"] = message.SenderUser.UserName;
                 ViewData["To"] = message.RecipientUser.UserName;
                 ViewData["Subject"] = message.Subject;
@@ -120,19 +144,15 @@
             return RedirectToAction("Inbox");
         }
 
+        /// <summary>
+        /// Checks if there are any unread messages.
+        /// </summary>
+        /// <returns>A JSON result containing the number of unread messages.</returns>
         public JsonResult UnreadMessages()
         {
             IEnumerable<Message> messages = this.ControllerGame.CurrentUser.GetUnreadMessages();
             
-            /*
-            List<object> msgs = new List<object>();
-            foreach (Message message in messages)
-            {
-                msgs.Add(new { id = message.MessageId, from = message.SenderUser.UserName, subject = message.Subject });
-            }
-             * */
-
-            return Json(new { length = messages.Count() });
+            return Json(messages.Count());
         }
     }
 }

@@ -8,8 +8,29 @@
     using CosmoMonger.Models;
     using MvcContrib.Pagination;
 
+    /// <summary>
+    /// This controller handles all the admin features
+    /// </summary>
     public class AdminController : GameController
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdminController"/> class.
+        /// This is the default constructor that doesn't really to anything.
+        /// </summary>
+        public AdminController()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdminController"/> class.
+        /// This constructor is used for unit testing purposes.
+        /// </summary>
+        /// <param name="manager">The game manager object to use.</param>
+        public AdminController(GameManager manager) 
+            : base(manager)
+        {
+        }
+
         public ActionResult Index()
         {
             // Check for non-admin users
