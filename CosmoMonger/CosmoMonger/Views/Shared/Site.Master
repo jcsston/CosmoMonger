@@ -17,7 +17,7 @@
         }
         
         function displayUnreadMessageCount(data) {
-            var messageCount = data.length;
+            var messageCount = data;
             if (messageCount != lastMessageCount) {
                 lastMessageCount = messageCount;
                 var notice = 
