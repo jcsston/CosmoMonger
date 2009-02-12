@@ -66,7 +66,7 @@
 
             foreach (Good good in db.Goods)
             {
-                // Get the total number of this good type avaiable in all systems
+                // Get the total number of this good type available in all systems
                 int totalSystemGoodCount = good.SystemGoods.Sum(x => x.Quantity);
 
                 // Check if we need to add some of this good to the galaxy
