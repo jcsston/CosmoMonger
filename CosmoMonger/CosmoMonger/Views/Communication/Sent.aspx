@@ -12,8 +12,8 @@ Html.Grid<Message>(
 	column => {
         column.For(m => m.Time);
         column.For(m => m.RecipientUser.UserName, "To");
-        column.For(m => Html.ActionLink(m.Subject, "ViewMessage", new { messageId = m.MessageId }), "Subject").DoNotEncode();
-        column.For(m => Html.ActionLink("Delete", "DeleteMessage", new { messageId = m.MessageId })).DoNotEncode();
+        column.For(m => Html.ActionLink(m.Subject, "ViewMessage", new { messageId = m.MessageId, sent = true }), "Subject").DoNotEncode();
+        column.For(m => Html.ActionLink("Delete", "DeleteMessage", new { messageId = m.MessageId, sent = true })).DoNotEncode();
 	}
 );
 %>

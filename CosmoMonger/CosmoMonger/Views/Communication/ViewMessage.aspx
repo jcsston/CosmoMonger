@@ -21,6 +21,18 @@
         <td colspan="4"><pre style="font-size: 1.5em;"><%=Html.Encode(ViewData["Content"]) %></pre></td>
     </tr>
 </table>
+<p>
+Back to <% 
+    if ((bool)ViewData["Sent"])
+    { 
+        %><%=Html.ActionLink("Sent", "Sent") %><% 
+    }
+    else
+    { 
+        %><%=Html.ActionLink("Inbox", "Inbox")%><% 
+    }
+%> messages.
+</p>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>

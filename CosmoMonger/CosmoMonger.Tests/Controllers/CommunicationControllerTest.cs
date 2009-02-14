@@ -153,7 +153,7 @@
             CommunicationController controller = new CommunicationController(managerMock.Object);
 
             // Act
-            ActionResult result = controller.ViewMessage(50);
+            ActionResult result = controller.ViewMessage(50, false);
 
             // Assert
             Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
@@ -179,7 +179,7 @@
             CommunicationController controller = new CommunicationController(managerMock.Object);
 
             // Act
-            ActionResult result = controller.DeleteMessage(50);
+            ActionResult result = controller.DeleteMessage(50, true);
 
             // Assert
             Assert.That(result, Is.TypeOf(typeof(RedirectToRouteResult)), "Should return a redirect");

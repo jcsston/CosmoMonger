@@ -90,6 +90,7 @@
     <Compile Include="Controllers\Attributes\ExceptionPolicyAttribute.cs" />
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\BuddyListController.cs" />
+    <Compile Include="Controllers\CombatController.cs" />
     <Compile Include="Controllers\CommunicationController.cs" />
     <Compile Include="Controllers\FormsLoginResult.cs" />
     <Compile Include="Controllers\FormsLogoutResult.cs" />
@@ -169,16 +170,14 @@
     <Content Include="Views\BuddyList\AddBuddy.aspx" />
     <Content Include="Views\BuddyList\AddIgnore.aspx" />
     <Content Include="Views\BuddyList\BuddyList.aspx" />
-    <Content Include="Views\BuddyList\FindBuddy.aspx" />
+    <Content Include="Views\BuddyList\FindPlayer.aspx" />
     <Content Include="Views\BuddyList\IgnoreList.aspx" />
     <Content Include="Views\BuddyList\RemoveBuddy.aspx" />
     <Content Include="Views\BuddyList\RemoveIgnore.aspx" />
     <Content Include="Views\Communication\DeleteMessage.aspx" />
     <Content Include="Views\Communication\ViewMessage.aspx" />
-    <Content Include="Views\Communication\Chat.aspx" />
     <Content Include="Views\Communication\Compose.aspx" />
     <Content Include="Views\Communication\Inbox.aspx" />
-    <Content Include="Views\Communication\Index.aspx" />
     <Content Include="Views\Communication\Sent.aspx" />
     <Content Include="Views\PlayerRecord\ListRecords.aspx" />
     <Content Include="Views\PlayerRecord\ViewRecord.aspx" />
@@ -229,6 +228,9 @@
     <None Include="Models\CosmoMongerDb.dbml.layout">
       <DependentUpon>CosmoMongerDb.dbml</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Combat\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />

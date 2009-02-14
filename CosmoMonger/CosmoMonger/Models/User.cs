@@ -67,21 +67,6 @@ namespace CosmoMonger.Models
             // Starting credits is 2000
             player.CashCredits = 2000;
 
-            // Create a new ship for this player
-            Ship playerShip = new Ship();
-
-            // Assign the default base ship type
-            BaseShip baseShip = (from bs in db.BaseShips
-                                 where bs.Name == "Glorified Trash Can"
-                                 select bs).SingleOrDefault();
-            if (baseShip == null)
-            {
-                Logger.Write("Unable to load player starting base ship from database", "Model", 1000, 0, TraceEventType.Critical);
-                return null;
-            }
-
-            playerShip.BaseShip = baseShip;
-
             // Assign the default starting location based on the race
             CosmoSystem startingSystem = race.HomeSystem;
             if (startingSystem == null)
@@ -90,15 +75,8 @@ namespace CosmoMonger.Models
                 return null;
             }
 
-            playerShip.CosmoSystem = startingSystem;
-
-            // Setup default upgrades
-            playerShip.JumpDrive = playerShip.BaseShip.InitialJumpDrive;
-            playerShip.Shield = playerShip.BaseShip.InitialShield;
-            playerShip.Weapon = playerShip.BaseShip.InitialWeapon;
-
-            db.Ships.InsertOnSubmit(playerShip);
-            player.Ship = playerShip;
+            // Create a new ship for this player
+            player.CreateStartingShip(startingSystem);
 
             player.UpdateNetWorth();
 

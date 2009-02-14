@@ -38,10 +38,9 @@
         /// <param name="name">The name to search by.</param>
         /// <param name="page">The page of the results to display.</param>
         /// <returns>
-        /// The FindBuddy view filled in with matches
+        /// The FindUser view filled in with matches
         /// </returns>
-        //[AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult FindBuddy(string name, int? page)
+        public ActionResult FindPlayer(string name, int? page)
         {
             ViewData["Matches"] = this.ControllerGame.FindPlayer(name).AsPagination(page ?? 1);
             ViewData["name"] = name;
@@ -120,9 +119,9 @@
         /// this action is called from the IgnoreList view and redirects back to the IgnoreList action.
         /// </summary>
         /// <param name="antiBuddyId"></param>
-        public ActionResult AddIgnore(int antiBuddyId)
+        public ActionResult AddIgnore(int userId)
         {
-            User player = this.ControllerGame.GetUser(antiBuddyId);
+            User player = this.ControllerGame.GetUser(userId);
             if (player != null)
             {
                 try
@@ -134,7 +133,7 @@
                 {
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("antiBuddyId", ex);
+                    ModelState.AddModelError("userId", ex);
                 }
             }
 

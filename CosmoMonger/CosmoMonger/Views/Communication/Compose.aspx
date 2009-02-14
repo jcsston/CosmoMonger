@@ -23,6 +23,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <h1>Messaging</h1>
 <p><%=Html.ActionLink("Inbox", "Inbox") %> | <%=Html.ActionLink("Sent", "Sent")%> | <b>Compose</b></p>
+<p>Note: You can only send messages to users on your <%=Html.ActionLink("Buddy List", "BuddyList", "BuddyList") %>.</p>
 <%
     using (Html.BeginForm()) 
     {

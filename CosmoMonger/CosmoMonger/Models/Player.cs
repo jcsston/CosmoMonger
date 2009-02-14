@@ -244,5 +244,44 @@ namespace CosmoMonger.Models
             // Send changes to the database
             db.SubmitChanges();
         }
+
+        /// <summary>
+        /// Creates the starting ship.
+        /// Note, changes are not submitted to database
+        /// </summary>
+        /// <param name="startingSystem">The starting system.</param>
+        public void CreateStartingShip(CosmoSystem startingSystem)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            if (this.Ship != null)
+            {
+                throw new InvalidOperationException("Player already has a ship");
+            }
+
+            // Create a new ship for the player
+            Ship playerShip = new Ship();
+
+            // Assign the default base ship type
+            BaseShip baseShip = (from bs in db.BaseShips
+                                 where bs.Name == "Glorified Trash Can"
+                                 select bs).SingleOrDefault();
+            if (baseShip == null)
+            {
+                Logger.Write("Unable to load player starting base ship from database", "Model", 1000, 0, TraceEventType.Critical);
+                throw new NotSupportedException("Unable to load base ship model from database");
+            }
+
+            playerShip.BaseShip = baseShip;
+            playerShip.CosmoSystem = startingSystem;
+
+            // Setup default upgrades
+            playerShip.JumpDrive = playerShip.BaseShip.InitialJumpDrive;
+            playerShip.Shield = playerShip.BaseShip.InitialShield;
+            playerShip.Weapon = playerShip.BaseShip.InitialWeapon;
+
+            db.Ships.InsertOnSubmit(playerShip);
+            this.Ship = playerShip;
+        }
     }
 }

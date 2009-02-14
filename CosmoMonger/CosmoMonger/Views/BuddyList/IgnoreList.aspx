@@ -4,6 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <h1>Ignore List</h1>
+    <p>Messages sent by users on your ignore list are ignored and discarded. The ignored user is not notified.</p>
     <ul>
 <% 
     IgnoreList[] ignoreList = (IgnoreList[])ViewData["IgnoreList"];
@@ -22,6 +23,18 @@
     }
 %>
 </ul>
+<h3>Add user to ignore list</h3>
+<%
+    using (Html.BeginForm("FindPlayer", "BuddyList", FormMethod.Get))
+    {
+%>
+    <p>
+        <label for="name">Name: </label><%=Html.TextBox("name") %>
+        <input type="submit" value="Find" />
+    </p>
+<%
+    }        
+%>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>

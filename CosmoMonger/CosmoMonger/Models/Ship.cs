@@ -381,5 +381,31 @@ namespace CosmoMonger.Models
             // Return the number of goods added to the ship
             return actualQuantity;
         }
+
+        /// <summary>
+        /// Gets the distance from the ship to the target system
+        /// </summary>
+        /// <param name="targetSystem">The target system to measure to.</param>
+        /// <returns>A floating-point distance</returns>
+        public double GetSystemDistance(CosmoSystem targetSystem)
+        {
+            return Math.Sqrt(Math.Pow(targetSystem.PositionX - this.CosmoSystem.PositionX, 2) + Math.Pow(targetSystem.PositionY - this.CosmoSystem.PositionY, 2));
+        }
+
+        /// <summary>
+        /// Gets the nearest system with a bank. May return the system the ship currently is in.
+        /// </summary>
+        /// <returns>The a reference to the nearest system with a bank</returns>
+        public CosmoSystem GetNearestBankSystem()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            var systemsWithBank = (from s in db.CosmoSystems
+                                   where s.HasBank
+                                   orderby (Math.Sqrt(Math.Pow(this.CosmoSystem.PositionX - s.PositionX, 2) 
+                                            + Math.Pow(this.CosmoSystem.PositionY - s.PositionY, 2)))
+                                   select s);
+            return systemsWithBank.First();
+        }
     }
 }

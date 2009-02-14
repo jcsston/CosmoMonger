@@ -99,8 +99,9 @@
         /// This action fetches the message and passes it to the ViewMessage view
         /// </summary>
         /// <param name="messageId">The message id of the message to view.</param>
+        /// <param name="sent">A flag signaling if the message to view was a sent message.</param>
         /// <returns>The ViewMessage view</returns>
-        public ActionResult ViewMessage(int messageId)
+        public ActionResult ViewMessage(int messageId, bool? sent)
         {
             Message message = this.ControllerGame.CurrentUser.GetMessage(messageId);
             if (message != null)
@@ -121,6 +122,7 @@
             {
                 ModelState.AddModelError("messageId", "Invalid Message Id");
             }
+            ViewData["Sent"] = sent ?? false;
 
             return View();
         }
@@ -129,8 +131,11 @@
         /// Deletes the message.
         /// </summary>
         /// <param name="messageId">The message id to delete.</param>
-        /// <returns>A redirect to the Inbox if successful. The DeleteMessage view otherwise.</returns>
-        public ActionResult DeleteMessage(int messageId)
+        /// <param name="sent">A flag signaling if the message to delete was a sent message.</param>
+        /// <returns>
+        /// A redirect to the Inbox if successful. The DeleteMessage view otherwise.
+        /// </returns>
+        public ActionResult DeleteMessage(int messageId, bool? sent)
         {
             try
             {
@@ -141,7 +146,16 @@
                 ModelState.AddModelError("messageId", ex);
             }
 
-            return RedirectToAction("Inbox");
+            // If sent is null, default to false
+            if (sent ?? false)
+            {
+                return RedirectToAction("Sent");
+            }
+            else
+            {
+                return RedirectToAction("Inbox");
+                
+            }
         }
 
         /// <summary>

@@ -11,6 +11,8 @@ namespace CosmoMonger.Models
     using System.Linq;
     using System.Data.Linq;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using System.Diagnostics;
 
     /// <summary>
     /// Extension of the partial LINQ class InProgressCombat.
@@ -110,13 +112,17 @@ namespace CosmoMonger.Models
             // which means 0% damage gives full power, 50% damage gives half power, 100% damage gives no shield power
             double shieldStrength = this.ShipOther.Shield.Strength * (1.0 - (this.ShipOther.DamageShield / 100.0));
 
+            // Weapon: 8
+            // Shield: 10
+
             // Power up weapon
             // Damage should be at least 1, even with powerful shields
-            double weaponDamage = Math.Max(firingWeapon.Power - shieldStrength, 1.0);
+            double weaponDamage = Math.Max(this.ShipTurn.Weapon.Power - shieldStrength, 1.0);
 
             // Apply damage
             // Half goes to shields and the rest goes to the hull
             // Max damage is 100%
+            // TODO: Divide by .5?
             double newDamageShield = Math.Ceiling(this.ShipOther.DamageShield + (weaponDamage / 0.5));
             this.ShipOther.DamageShield = (int)Math.Min(newDamageShield, 100);
             
@@ -126,6 +132,19 @@ namespace CosmoMonger.Models
 
             // Deduct turn points
             this.TurnPointsLeft -= firingWeapon.TurnCost;
+
+            Logger.Write("Attacking ship fired weapon", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.FireWeapon",
+                new Dictionary<string, object>
+                {
+                    { "TurnShipId", this.ShipTurn.ShipId},
+                    { "OtherShipId", this.ShipOther.ShipId },
+                    { "ShieldStrength", shieldStrength },
+                    { "WeaponDamage", weaponDamage },
+                    { "NewDamageShield", newDamageShield },
+                    { "NewDamageHull", newDamageHull },
+                    { "TurnPointsLeft", this.TurnPointsLeft }
+                }
+            );
 
             try
             {
@@ -148,14 +167,92 @@ namespace CosmoMonger.Models
             // Did we destory the other ship?
             if (this.ShipOther.Destroyed)
             {
-                // Automaticly end this players turn
-                this.EndTurn();
+                this.OtherShipDestroyed();
             }
 
             if (this.TurnPointsLeft <= 0)
             {
                 // No more turn points left, end turn
                 this.EndTurn();
+            }
+        }
+
+        /// <summary>
+        /// Called when the other ship has been destroyed. Current turn ship has won
+        /// </summary>
+        private void OtherShipDestroyed()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Move cargo into our cargo bays
+            foreach (ShipGood cargo in this.ShipOther.ShipGoods)
+            {
+                this.ShipTurn.AddGood(cargo.GoodId, cargo.Quantity);
+            }
+
+            // Delete the extra cargo from the database
+            db.ShipGoods.DeleteAllOnSubmit(this.ShipOther.ShipGoods);
+
+            Player turnPlayer = this.ShipTurn.Players.SingleOrDefault();
+            Player otherPlayer = this.ShipOther.Players.SingleOrDefault();
+            if (turnPlayer != null && otherPlayer != null)
+            {
+                Logger.Write("Transfering losing player credits to winner", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed",
+                    new Dictionary<string, object>
+                    {
+                        { "TurnPlayerId", turnPlayer.PlayerId },
+                        { "OtherPlayerId", otherPlayer.PlayerId },
+                        { "OtherPlayerCashCredits", otherPlayer.CashCredits },
+                        { "TurnPlayerCashCredits", turnPlayer.CashCredits }
+                    }
+                );
+
+                // Take the other players credits
+                turnPlayer.CashCredits += otherPlayer.CashCredits;
+                otherPlayer.CashCredits = 0;
+
+                db.SubmitChanges();
+
+                // Relocate other player to nearest system with a bank
+                CosmoSystem bankSystem = this.ShipOther.GetNearestBankSystem();
+
+                // Save a reference to the players old ship
+                otherPlayer.Ship = null;
+
+                Logger.Write("Relocating losing player to nearest system with bank", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed",
+                    new Dictionary<string, object>
+                    {
+                        { "TurnPlayerId", turnPlayer.PlayerId },
+                        { "OtherPlayerId", otherPlayer.PlayerId },
+                        { "BankSystemId", bankSystem.SystemId }
+                    }
+                );
+
+                // Give the player a new ship in the bank system
+                otherPlayer.CreateStartingShip(bankSystem);
+
+                // Give the player some starting credits
+                int cloneCredits = (2000 - ((otherPlayer.BankCredits + 1) / 5000)) * 2000;
+
+                // Ignore negative values
+                otherPlayer.CashCredits = Math.Max(cloneCredits, 0);
+
+                Logger.Write("Giving losing player starting cash credits", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed",
+                    new Dictionary<string, object>
+                    {
+                        { "TurnPlayerId", turnPlayer.PlayerId },
+                        { "OtherPlayerId", otherPlayer.PlayerId },
+                        { "CalculatedCloneCredits", cloneCredits },
+                        { "CashCredits", otherPlayer.CashCredits }
+                    }
+                );
+
+                // Save changes
+                db.SubmitChanges();
+            }
+            else
+            {
+                throw new NotImplementedException("Non-player ship or NPC combat not supported");
             }
         }
 
@@ -173,6 +270,14 @@ namespace CosmoMonger.Models
             }
 
             this.Surrender = true;
+
+            Logger.Write("Offered surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OfferSurrender",
+                new Dictionary<string, object>
+                {
+                    { "TurnShipId", this.ShipTurn.ShipId},
+                    { "OtherShipId", this.ShipOther.ShipId }
+                }
+            );
 
             db.SubmitChanges();
 
@@ -193,6 +298,14 @@ namespace CosmoMonger.Models
             {
                 throw new InvalidOperationException("No surrender offered");
             }
+
+            Logger.Write("Accepted surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.AcceptSurrender",
+                new Dictionary<string, object>
+                {
+                    { "TurnShipId", this.ShipTurn.ShipId},
+                    { "OtherShipId", this.ShipOther.ShipId }
+                }
+            );
 
             // Move enemy cargo into our cargo bays
             foreach (ShipGood cargo in this.ShipOther.ShipGoods)
@@ -223,7 +336,21 @@ namespace CosmoMonger.Models
                 throw new InvalidOperationException("There is already cargo jettisoned");
             }
 
+            // Check that the ship has cargo to jettison
+            if (this.ShipTurn.ShipGoods.Sum(g => g.Quantity) == 0)
+            {
+                throw new InvalidOperationException("No ship cargo to jettison");
+            }
+
             this.JettisonCargo = true;
+
+            Logger.Write("Jettisoned cargo", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.JettisonShipCargo",
+                new Dictionary<string, object>
+                {
+                    { "TurnShipId", this.ShipTurn.ShipId},
+                    { "OtherShipId", this.ShipOther.ShipId }
+                }
+            );
 
             db.SubmitChanges();
 
@@ -261,6 +388,15 @@ namespace CosmoMonger.Models
             // Delete the space cargo from the database
             db.ShipGoods.DeleteAllOnSubmit(pickCargo);
 
+            Logger.Write("Picked up cargo", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.PickupCargo",
+                new Dictionary<string, object>
+                {
+                    { "TurnShipId", this.ShipTurn.ShipId },
+                    { "OtherShipId", this.ShipOther.ShipId },
+                    { "TotalCargoCount", pickCargo.Sum(g => g.Quantity) }
+                }
+            );
+
             db.SubmitChanges();
 
             // Combat is ended
@@ -286,6 +422,7 @@ namespace CosmoMonger.Models
             if (this.ShipTurn.CurrentJumpDriveCharge >= 100)
             {
                 // TODO: This ship escapes combat
+                throw new NotImplementedException();
             }
 
             db.SubmitChanges();

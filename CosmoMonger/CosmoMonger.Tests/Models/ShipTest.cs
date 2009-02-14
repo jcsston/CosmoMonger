@@ -113,11 +113,11 @@
                 }
                 catch (ArgumentException ex)
                 {
-
+                    Assert.That(ex.Message, Is.Not.Null, "Check for exception message");
                 }
                 catch (InvalidOperationException ex)
                 {
-
+                    Assert.That(ex.Message, Is.Not.Null, "Check for exception message");
                 }
             }
         }
@@ -146,10 +146,12 @@
                 catch (ArgumentException ex)
                 {
                     // Good
+                    Assert.That(ex.Message, Is.Not.Null, "Check for exception message");
                 }
                 catch (InvalidOperationException ex)
                 {
                     // Good
+                    Assert.That(ex.Message, Is.Not.Null, "Check for exception message");
                 }
             }
 
@@ -158,6 +160,7 @@
         }
 
         [Test]
+        [Ignore("Code still in development")]
         public void Attack()
         {
             Player player1 = this.CreateTestPlayer();
@@ -172,6 +175,35 @@
                 player1.Ship.InProgressCombat.TurnPointsLeft = 999;
             }
             player1.Ship.InProgressCombat.End();
+        }
+
+        [Test]
+        public void GetSystemDistance()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            Player testPlayer = this.CreateTestPlayer();
+            CosmoSystem [] inRangeSystems = testPlayer.Ship.GetInRangeSystems();
+            int range = testPlayer.Ship.JumpDrive.Range;
+
+            // Check the distance of all the in-range systems
+            foreach (CosmoSystem system in inRangeSystems)
+            {
+                double distance = testPlayer.Ship.GetSystemDistance(system);
+                Assert.That(distance, Is.LessThan(range), "All in range systems should be within JumpDrive range");
+            }
+        }
+
+        [Test]
+        public void GetNearestBankSystem()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+
+            CosmoSystem bankSystem = testPlayer.Ship.GetNearestBankSystem();
+            double bankDistance = testPlayer.Ship.GetSystemDistance(bankSystem);
+            Console.WriteLine("Bank is {0} sectors away", bankDistance);
+
+            Assert.That(bankSystem.HasBank, Is.True, "System should have a bank");
         }
     }
 }

@@ -4,6 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <h1>Buddy List</h1>
+    <p>You can only send messages to users on your buddy list.</p>
     <ul>
 <% 
     BuddyList[] buddyList = (BuddyList[])ViewData["BuddyList"];
@@ -24,7 +25,7 @@
 </ul>
 <h3>Add another Buddy</h3>
 <%
-    using (Html.BeginForm("FindBuddy", "BuddyList", FormMethod.Get))
+    using (Html.BeginForm("FindPlayer", "BuddyList", FormMethod.Get))
     {
 %>
     <p>

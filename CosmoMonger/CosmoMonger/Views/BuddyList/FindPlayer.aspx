@@ -1,13 +1,14 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeaderContent" runat="server">
-    <title>Find Buddy</title>
+    <title>Find Player</title>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <h1>Search Results</h1>
 <%
+// Note: if your tag is a reserved work, like "class", use the standard @ reserved word prefix: "@class"
 Html.Grid<Player>(
 	"Matches",
-    new Hash(empty => "No matches"),
+    new Hash(empty => "No matches", @class => "grid"),
 	column => {
         column.For(p => p.Name, "Player Name").DoNotEncode();
 		column.For(p => p.User.UserName);
@@ -20,7 +21,7 @@ Html.Grid<Player>(
 
 <h2>Search Again</h2>
 <%
-    using (Html.BeginForm("FindBuddy", "BuddyList", FormMethod.Get))
+    using (Html.BeginForm("FindPlayer", "BuddyList", FormMethod.Get))
     {
 %>
     <p>
