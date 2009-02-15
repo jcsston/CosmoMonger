@@ -108,7 +108,7 @@
                 try
                 {
                     player1.Ship.Attack(player2.Ship);
-                    player1.Ship.InProgressCombat.End();
+                    player1.Ship.InProgressCombat.Status = Combat.CombatStatus.ShipDestroyed;
                     player1AttackCount++;
                 }
                 catch (ArgumentException ex)
@@ -140,7 +140,7 @@
                 try
                 {
                     player2.Ship.Attack(player1.Ship);
-                    player2.Ship.InProgressCombat.End();
+                    player1.Ship.InProgressCombat.Status = Combat.CombatStatus.ShipDestroyed;
                     player2AttackCount++;
                 }
                 catch (ArgumentException ex)
@@ -160,21 +160,55 @@
         }
 
         [Test]
-        [Ignore("Code still in development")]
+        public void InProgressCombat()
+        {
+            Player player1 = this.CreateTestPlayer();
+            Player player2 = this.CreateTestPlayer();
+
+            player1.Ship.Attack(player2.Ship);
+
+            Assert.That(player1.Ship.InProgressCombat, Is.Not.Null, "Player 1 ship should be in combat");
+            Assert.That(player2.Ship.InProgressCombat, Is.Not.Null, "Player 2 ship should be in combat");
+        }
+
+        [Test]
+        public void InProgressCombatEnded()
+        {
+            Player player1 = this.CreateTestPlayer();
+            Player player2 = this.CreateTestPlayer();
+
+            player1.Ship.Attack(player2.Ship);
+            player1.Ship.InProgressCombat.Status = Combat.CombatStatus.ShipDestroyed;
+
+            Assert.That(player1.Ship.InProgressCombat, Is.Null, "Player 1 ship should no longer be in combat");
+            Assert.That(player2.Ship.InProgressCombat, Is.Null, "Player 2 ship should no longer be in combat");
+        }
+
+        [Test]
+        public void InProgressCombatNull()
+        {
+            Player player1 = this.CreateTestPlayer();
+
+            Assert.That(player1.Ship.InProgressCombat, Is.Null, "Starting ships shouldn't have any in-progress combats");
+        }
+
+        [Test]
+        //[Ignore("Code still in development")]
         public void Attack()
         {
             Player player1 = this.CreateTestPlayer();
             Player player2 = this.CreateTestPlayer();
 
             player1.Ship.Attack(player2.Ship);
-            while (player2.Ship.DamageHull < 100)
+            Combat combat = player1.Ship.InProgressCombat;
+
+            while (combat.Status == Combat.CombatStatus.Incomplete)
             {
                 Console.WriteLine("Player 2 Shield {0} Hull: {1}", player2.Ship.DamageShield, player2.Ship.DamageHull);
-                player1.Ship.InProgressCombat.FireWeapon();
                 // Max out turn points for testing
                 player1.Ship.InProgressCombat.TurnPointsLeft = 999;
+                player1.Ship.InProgressCombat.FireWeapon();
             }
-            player1.Ship.InProgressCombat.End();
         }
 
         [Test]

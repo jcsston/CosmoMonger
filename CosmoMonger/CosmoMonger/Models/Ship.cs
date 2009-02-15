@@ -7,13 +7,13 @@
 namespace CosmoMonger.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Linq;
+    using System.Data.SqlClient;
     using System.Diagnostics;
     using System.Linq;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
-    using System.Data.SqlClient;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Extension of the partial LINQ class Ship
@@ -80,11 +80,24 @@ namespace CosmoMonger.Models
         /// Gets the current in progress combat if any
         /// </summary>
         /// <value>The in progress combat object, null if no combat is taking place.</value>
-        public virtual InProgressCombat InProgressCombat
+        public virtual Combat InProgressCombat
         {
             get
             {
-                return this.InProgressCombatsAttacker.Union(this.InProgressCombatsDefender).SingleOrDefault();
+                /* This is a more optimized query, results in a single query to the database with Complete in the where clause
+                CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+                return (from c in db.Combats
+                        where !c.Complete
+                        && (c.AttackerShip == this || c.DefenderShip == this)
+                        select c).SingleOrDefault();
+                */
+                // This query seems to pull in all combats the ship has ever been in, Complete is not part of the where clause
+                return (from c in this.CombatsAttacker
+                        where c.Status == Combat.CombatStatus.Incomplete
+                        select c).Union(
+                        (from c in this.CombatsDefender
+                         where c.Status == Combat.CombatStatus.Incomplete
+                        select c)).SingleOrDefault();
             }
         }
 
@@ -233,24 +246,28 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Check if this ship is already in combat
-            if (this.InProgressCombatsAttacker.Union(this.InProgressCombatsDefender).Any())
+            if (this.InProgressCombat != null)
             {
                 throw new InvalidOperationException("Current ship is already in combat");
             }
 
             // Check that the target ship is not in combat
-            if (target.InProgressCombatsAttacker.Union(target.InProgressCombatsDefender).Any())
+            if (target.InProgressCombat != null)
             {
                 throw new ArgumentException("Target ship is already in combat", "target");
             }
 
-            InProgressCombat combat = new InProgressCombat();
+            Combat combat = new Combat();
             combat.AttackerShip = this;
             combat.DefenderShip = target;
-            combat.TurnPointsLeft = InProgressCombat.PointsPerTurn;
+            combat.TurnPointsLeft = Combat.PointsPerTurn;
+            combat.Status = Combat.CombatStatus.Incomplete;
+            combat.Surrender = false;
+            combat.Turn = 0;
+            combat.JettisonCargo = false;
 
             // Save changes to the database
-            db.InProgressCombats.InsertOnSubmit(combat);
+            db.Combats.InsertOnSubmit(combat);
 
             try
             {

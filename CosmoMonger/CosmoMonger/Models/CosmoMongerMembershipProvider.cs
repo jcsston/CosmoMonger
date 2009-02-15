@@ -237,7 +237,7 @@ namespace CosmoMonger.Models
                 var playerShips = (from p in db.Players where p.User == matchingUser select p.Ship);
                 var playerShipIds = (from p in db.Players where p.User == matchingUser select p.Ship.ShipId);
                 db.Players.DeleteAllOnSubmit(from p in db.Players where p.User == matchingUser select p);
-                db.InProgressCombats.DeleteAllOnSubmit(from c in db.InProgressCombats
+                db.Combats.DeleteAllOnSubmit(from c in db.Combats
                                                        where playerShipIds.Contains(c.AttackerShipId)
                                                        || playerShipIds.Contains(c.DefenderShipId)
                                                        select c);

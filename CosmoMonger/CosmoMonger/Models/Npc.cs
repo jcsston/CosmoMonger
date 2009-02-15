@@ -1,4 +1,10 @@
-﻿namespace CosmoMonger.Models
+﻿//-----------------------------------------------------------------------
+// <copyright file="Npc.cs" company="CosmoMonger">
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
@@ -6,15 +12,23 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Web;
-    using Microsoft.Practices.EnterpriseLibrary.Logging;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
     /// Extends the partial LINQ NPC class.
     /// </summary>
     public partial class Npc
     {
-        static private Random rnd = new Random();
+        /// <summary>
+        /// Constant for the number of minutes to schedule between system good price and quanitity updates.
+        /// </summary>
+        public const int MinutesBetweenSystemGoodUpdates = 5;
+
+        /// <summary>
+        /// A persitant random number generator for Npc code.
+        /// </summary>
+        private static Random rnd = new Random();
 
         public virtual void DoAction()
         {
@@ -43,7 +57,7 @@
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Mark the next time the system good count will need to be updated
-            this.NextActionTime = DateTime.Now.AddMinutes(5);
+            this.NextActionTime = DateTime.Now.AddMinutes(Npc.MinutesBetweenSystemGoodUpdates);
             try
             {
                 // Send changes to database
@@ -188,7 +202,7 @@
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Mark the next time the system good prices will need to be updated
-            this.NextActionTime = DateTime.Now.AddMinutes(5);
+            this.NextActionTime = DateTime.Now.AddMinutes(Npc.MinutesBetweenSystemGoodUpdates);
             try
             {
                 // Send changes to database

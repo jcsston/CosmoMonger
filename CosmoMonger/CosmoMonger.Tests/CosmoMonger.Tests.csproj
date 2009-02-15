@@ -99,7 +99,7 @@
     <Compile Include="Models\CosmoMongerMembershipProviderTest.cs" />
     <Compile Include="Models\CosmoSystemTest.cs" />
     <Compile Include="Models\GameManagerTest.cs" />
-    <Compile Include="Models\InProgressCombatTest.cs" />
+    <Compile Include="Models\CombatTest.cs" />
     <Compile Include="Models\PlayerTest.cs" />
     <Compile Include="Models\ShipGoodTest.cs" />
     <Compile Include="Models\ShipTest.cs" />

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="InProgressCombat.cs" company="CosmoMonger">
+// <copyright file="Combat.cs" company="CosmoMonger">
 //     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
@@ -8,17 +8,17 @@ namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Data.Linq;
+    using System.Diagnostics;
+    using System.Linq;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
-    using System.Diagnostics;
 
     /// <summary>
-    /// Extension of the partial LINQ class InProgressCombat.
+    /// Extension of the partial LINQ class Combat.
     /// This class handles the combat conditions and scenerios.
     /// </summary>
-    public partial class InProgressCombat
+    public partial class Combat
     {
         /// <summary>
         /// The default number of points given per turn
@@ -26,7 +26,39 @@ namespace CosmoMonger.Models
         public const int PointsPerTurn = 20;
 
         /// <summary>
-        /// This is an list of Goods that can be picked up by the opposing player.
+        /// This enum describes the meaning of the Combat.Status field
+        /// </summary>
+        public enum CombatStatus
+        {
+            /// <summary>
+            /// Combat is still in progress
+            /// </summary>
+            Incomplete = 0,
+
+            /// <summary>
+            /// Combat is over. Current Turn Ship has destroyed the other ship.
+            /// </summary>
+            ShipDestroyed = 1,
+
+            /// <summary>
+            /// Combat is over. Current Turn Ship chose to pickup cargo jettisoned by the other ship. 
+            /// This has allowed the other ship to escape.
+            /// </summary>
+            CargoPickup = 2,
+
+            /// <summary>
+            /// Combat is over. Current Turn Ship has escaped combat by fully charging JumpDrive.
+            /// </summary>
+            ShipFled = 3,
+
+            /// <summary>
+            /// Combat is over. Current Turn Ship has accepted the other ships surrender.
+            /// </summary>
+            ShipSurrendered = 4
+        }
+
+        /// <summary>
+        /// Gets a list of Goods that can be picked up by the opposing player.
         /// If the goods are not picked up, the goods are deleted from the system.
         /// </summary>
         /// <value>The cargo to pickup. Null if there is no cargo jettisoned</value>
@@ -38,12 +70,13 @@ namespace CosmoMonger.Models
                 {
                     return this.ShipOther.GetGoods();
                 }
+
                 return null;
             }
         }
 
         /// <summary>
-        /// A reference to the current Ship ('Player') turn.
+        /// Gets a reference to the current Ship ('Player') turn.
         /// We reference Ships rather than Players because NPCs are not considered Players,
         /// but do own Ships and can fight.
         /// </summary>
@@ -61,12 +94,13 @@ namespace CosmoMonger.Models
                 {
                     return this.DefenderShip;
                 }
+
                 throw new ArgumentOutOfRangeException("Turn");
             }
         }
 
         /// <summary>
-        /// A reference to the other Ship.
+        /// Gets a reference to the other Ship.
         /// We reference Ships rather than Players because NPCs are not considered Players,
         /// but do own Ships and can fight.
         /// </summary>
@@ -84,10 +118,10 @@ namespace CosmoMonger.Models
                 {
                     return this.AttackerShip;
                 }
+
                 throw new ArgumentOutOfRangeException("Turn");
             }
         }
-
 
         /// <summary>
         /// Fires the primary weapon at the opposing ship. 
@@ -97,6 +131,12 @@ namespace CosmoMonger.Models
         /// </summary>
         public void FireWeapon()
         {
+            // Check that the combat is still in-progress
+            if (this.Status != CombatStatus.Incomplete)
+            {
+                throw new InvalidOperationException("Combat is over");
+            }
+
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             Weapon firingWeapon = this.ShipTurn.Weapon;
@@ -167,14 +207,289 @@ namespace CosmoMonger.Models
             // Did we destory the other ship?
             if (this.ShipOther.Destroyed)
             {
+                // Victory
                 this.OtherShipDestroyed();
-            }
-
-            if (this.TurnPointsLeft <= 0)
+            } 
+            else if (this.TurnPointsLeft <= 0)
             {
                 // No more turn points left, end turn
                 this.EndTurn();
             }
+        }
+
+        /// <summary>
+        /// Gives up the rest of the turn and signals that the current ship is surrendering to the opposing ship.
+        /// </summary>
+        public void OfferSurrender()
+        {
+            // Check that the combat is still in-progress
+            if (this.Status != CombatStatus.Incomplete)
+            {
+                throw new InvalidOperationException("Combat is over");
+            }
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Surrender flag must be not set
+            if (this.Surrender)
+            {
+                throw new InvalidOperationException("Other ship already offered surrender");
+            }
+
+            this.Surrender = true;
+
+            Logger.Write("Offered surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OfferSurrender",
+                new Dictionary<string, object>
+                {
+                    { "TurnShipId", this.ShipTurn.ShipId},
+                    { "OtherShipId", this.ShipOther.ShipId }
+                }
+            );
+
+            db.SubmitChanges();
+
+            // Turn is ended
+            this.SwapTurn();
+        }
+
+        /// <summary>
+        /// Accept the surrender of the opposing ship. 
+        /// This gives all the goods and credits aboard the opposing ship to the current ship and ends combat.
+        /// </summary>
+        public void AcceptSurrender()
+        {
+            // Check that the combat is still in-progress
+            if (this.Status != CombatStatus.Incomplete)
+            {
+                throw new InvalidOperationException("Combat is over");
+            }
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Surrender flag must be set
+            if (!this.Surrender)
+            {
+                throw new InvalidOperationException("No surrender offered");
+            }
+
+            Logger.Write("Accepted surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.AcceptSurrender",
+                new Dictionary<string, object>
+                {
+                    { "TurnShipId", this.ShipTurn.ShipId},
+                    { "OtherShipId", this.ShipOther.ShipId }
+                }
+            );
+
+            // Move enemy cargo into our cargo bays
+            foreach (ShipGood cargo in this.ShipOther.ShipGoods)
+            {
+                this.ShipTurn.AddGood(cargo.GoodId, cargo.Quantity);
+            }
+
+            // Delete the cargo from the other ship
+            db.ShipGoods.DeleteAllOnSubmit(this.ShipOther.ShipGoods);
+
+            // Combat has ended
+            this.Status = CombatStatus.ShipSurrendered;
+
+            db.SubmitChanges();
+        }
+
+        /// <summary>
+        /// Jettison all of the ships current cargo. 
+        /// This will allow the ship to escape if the opposing ship picks up the cargo.
+        /// </summary>
+        public void JettisonShipCargo()
+        {
+            // Check that the combat is still in-progress
+            if (this.Status != CombatStatus.Incomplete)
+            {
+                throw new InvalidOperationException("Combat is over");
+            }
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Jettison Cargo flag must be not set
+            if (this.JettisonCargo)
+            {
+                throw new InvalidOperationException("There is already cargo jettisoned");
+            }
+
+            // Check that the ship has cargo to jettison
+            if (this.ShipTurn.ShipGoods.Sum(g => g.Quantity) == 0)
+            {
+                throw new InvalidOperationException("No ship cargo to jettison");
+            }
+
+            this.JettisonCargo = true;
+
+            Logger.Write("Jettisoned cargo", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.JettisonShipCargo",
+                new Dictionary<string, object>
+                {
+                    { "TurnShipId", this.ShipTurn.ShipId},
+                    { "OtherShipId", this.ShipOther.ShipId }
+                }
+            );
+
+            db.SubmitChanges();
+
+            // Turn is ended
+            this.SwapTurn();
+        }
+
+        /// <summary>
+        /// Pickup cargo jettisoned by opposing ship, this will end combat as the other ship will escape. 
+        /// If the cargo is not picked up, it is deleted on the next turn.
+        /// </summary>
+        public void PickupCargo()
+        {
+            // Check that the combat is still in-progress
+            if (this.Status != CombatStatus.Incomplete)
+            {
+                throw new InvalidOperationException("Combat is over");
+            }
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Jettison Cargo flag must be set
+            if (!this.JettisonCargo)
+            {
+                throw new InvalidOperationException("No cargo jettisoned");
+            }
+
+            // Find cargo to pickup
+            ShipGood[] pickCargo = this.CargoToPickup;
+            if (pickCargo == null)
+            {
+                throw new InvalidOperationException("No cargo jettisoned");
+            }
+
+            // Move cargo into our cargo bays
+            foreach (ShipGood cargo in pickCargo) 
+            {
+                this.ShipTurn.AddGood(cargo.GoodId, cargo.Quantity);
+            }
+
+            // Delete the space cargo from the database
+            db.ShipGoods.DeleteAllOnSubmit(pickCargo);
+
+            Logger.Write("Picked up cargo", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.PickupCargo",
+                new Dictionary<string, object>
+                {
+                    { "TurnShipId", this.ShipTurn.ShipId },
+                    { "OtherShipId", this.ShipOther.ShipId },
+                    { "TotalCargoCount", pickCargo.Sum(g => g.Quantity) }
+                }
+            );
+
+            // Combat has ended
+            this.Status = CombatStatus.CargoPickup;
+
+            db.SubmitChanges();
+        }
+
+        /// <summary>
+        /// Uses the rest of the current turn points to charge the jump drive. 
+        /// If the jump drive becomes completely charged, the ship escapes and combat is ended.
+        /// </summary>
+        public void ChargeJumpdrive()
+        {
+            // Check that the combat is still in-progress
+            if (this.Status != CombatStatus.Incomplete)
+            {
+                throw new InvalidOperationException("Combat is over");
+            }
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Get the current jumpdrive charge if any
+            int currentCharge = this.ShipTurn.CurrentJumpDriveCharge ?? 0;
+
+            // Alloc turn points to the charge of the JumpDrive
+            this.ShipTurn.CurrentJumpDriveCharge = currentCharge + this.TurnPointsLeft;
+            this.TurnPointsLeft = 0;
+
+            // Did the jumpdrive fully charge?
+            if (this.ShipTurn.CurrentJumpDriveCharge >= 100)
+            {
+                // TODO: This ship escapes combat
+                this.Status = CombatStatus.ShipFled;
+                throw new NotImplementedException();
+            }
+
+            db.SubmitChanges();
+
+            this.SwapTurn();
+        }
+
+        /// <summary>
+        /// Ends the current ships turn. Giving control to the other ship.
+        /// This does check the surrender and cargo flags.
+        /// </summary>
+        public void EndTurn()
+        {
+            // Check that the combat is still in-progress
+            if (this.Status != CombatStatus.Incomplete)
+            {
+                throw new InvalidOperationException("Combat is over");
+            }
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            this.SwapTurn();
+
+            // Check if surrender was not accepted
+            if (this.Surrender)
+            {
+                // Reset flag
+                this.Surrender = false;
+            }
+
+            // Check if cargo was not picked up
+            if (this.JettisonCargo)
+            {
+                // Delete ignored space goods
+                db.ShipGoods.DeleteAllOnSubmit(this.CargoToPickup);
+
+                // Reset flag
+                this.JettisonCargo = false;
+            }
+
+            db.SubmitChanges();
+        }
+
+        /// <summary>
+        /// Swaps the turn to the other ship, giving up any turn points left.
+        /// This does not check the surrender or cargo flags.
+        /// </summary>
+        private void SwapTurn()
+        {
+            // Check that the combat is still in-progress
+            if (this.Status != CombatStatus.Incomplete)
+            {
+                throw new InvalidOperationException("Combat is over");
+            }
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Swap the turn
+            if (this.Turn == 0)
+            {
+                this.Turn = 1;
+            }
+            else if (this.Turn == 1)
+            {
+                this.Turn = 0;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException("Turn");
+            }
+
+            // Rest the turn point counter
+            this.TurnPointsLeft = Combat.PointsPerTurn;
+
+            db.SubmitChanges();
         }
 
         /// <summary>
@@ -185,6 +500,7 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Move cargo into our cargo bays
+            int cargoWorth = this.ShipOther.ShipGoods.Sum(g => (g.Quantity * g.Good.BasePrice));
             foreach (ShipGood cargo in this.ShipOther.ShipGoods)
             {
                 this.ShipTurn.AddGood(cargo.GoodId, cargo.Quantity);
@@ -247,6 +563,16 @@ namespace CosmoMonger.Models
                     }
                 );
 
+                // Update player stats
+                otherPlayer.ShipsLost++;
+                otherPlayer.CargoLostWorth += cargoWorth;
+
+                turnPlayer.ShipsDestroyed++;
+                turnPlayer.CargoLootedWorth += cargoWorth;
+
+                // Combat has ended
+                this.Status = CombatStatus.ShipDestroyed;
+
                 // Save changes
                 db.SubmitChanges();
             }
@@ -254,248 +580,6 @@ namespace CosmoMonger.Models
             {
                 throw new NotImplementedException("Non-player ship or NPC combat not supported");
             }
-        }
-
-        /// <summary>
-        /// Gives up the rest of the turn and signals that the current ship is surrendering to the opposing ship.
-        /// </summary>
-        public void OfferSurrender()
-        {
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-
-            // Surrender flag must be not set
-            if (this.Surrender)
-            {
-                throw new InvalidOperationException("Other ship already offered surrender");
-            }
-
-            this.Surrender = true;
-
-            Logger.Write("Offered surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OfferSurrender",
-                new Dictionary<string, object>
-                {
-                    { "TurnShipId", this.ShipTurn.ShipId},
-                    { "OtherShipId", this.ShipOther.ShipId }
-                }
-            );
-
-            db.SubmitChanges();
-
-            // Turn is ended
-            this.SwapTurn();
-        }
-
-        /// <summary>
-        /// Accept the surrender of the opposing ship. 
-        /// This gives all the goods and credits aboard the opposing ship to the current ship and ends combat.
-        /// </summary>
-        public void AcceptSurrender()
-        {
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-
-            // Surrender flag must be set
-            if (!this.Surrender)
-            {
-                throw new InvalidOperationException("No surrender offered");
-            }
-
-            Logger.Write("Accepted surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.AcceptSurrender",
-                new Dictionary<string, object>
-                {
-                    { "TurnShipId", this.ShipTurn.ShipId},
-                    { "OtherShipId", this.ShipOther.ShipId }
-                }
-            );
-
-            // Move enemy cargo into our cargo bays
-            foreach (ShipGood cargo in this.ShipOther.ShipGoods)
-            {
-                this.ShipTurn.AddGood(cargo.GoodId, cargo.Quantity);
-            }
-
-            // Delete the cargo from the other ship
-            db.ShipGoods.DeleteAllOnSubmit(this.ShipOther.ShipGoods);
-
-            db.SubmitChanges();
-
-            // Combat is ended
-            this.End();
-        }
-
-        /// <summary>
-        /// Jettison all of the ships current cargo. 
-        /// This will allow the ship to escape if the opposing ship picks up the cargo.
-        /// </summary>
-        public void JettisonShipCargo()
-        {
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-
-            // Jettison Cargo flag must be not set
-            if (this.JettisonCargo)
-            {
-                throw new InvalidOperationException("There is already cargo jettisoned");
-            }
-
-            // Check that the ship has cargo to jettison
-            if (this.ShipTurn.ShipGoods.Sum(g => g.Quantity) == 0)
-            {
-                throw new InvalidOperationException("No ship cargo to jettison");
-            }
-
-            this.JettisonCargo = true;
-
-            Logger.Write("Jettisoned cargo", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.JettisonShipCargo",
-                new Dictionary<string, object>
-                {
-                    { "TurnShipId", this.ShipTurn.ShipId},
-                    { "OtherShipId", this.ShipOther.ShipId }
-                }
-            );
-
-            db.SubmitChanges();
-
-            // Turn is ended
-            this.SwapTurn();
-        }
-
-        /// <summary>
-        /// Pickup cargo jettisoned by opposing ship, this will end combat as the other ship will escape. 
-        /// If the cargo is not picked up, it is deleted on the next turn.
-        /// </summary>
-        public void PickupCargo()
-        {
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-
-            // Jettison Cargo flag must be set
-            if (!this.JettisonCargo)
-            {
-                throw new InvalidOperationException("No cargo jettisoned");
-            }
-
-            // Find cargo to pickup
-            ShipGood[] pickCargo = this.CargoToPickup;
-            if (pickCargo == null)
-            {
-                throw new InvalidOperationException("No cargo jettisoned");
-            }
-
-            // Move cargo into our cargo bays
-            foreach (ShipGood cargo in pickCargo) 
-            {
-                this.ShipTurn.AddGood(cargo.GoodId, cargo.Quantity);
-            }
-
-            // Delete the space cargo from the database
-            db.ShipGoods.DeleteAllOnSubmit(pickCargo);
-
-            Logger.Write("Picked up cargo", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.PickupCargo",
-                new Dictionary<string, object>
-                {
-                    { "TurnShipId", this.ShipTurn.ShipId },
-                    { "OtherShipId", this.ShipOther.ShipId },
-                    { "TotalCargoCount", pickCargo.Sum(g => g.Quantity) }
-                }
-            );
-
-            db.SubmitChanges();
-
-            // Combat is ended
-            this.End();
-        }
-
-        /// <summary>
-        /// Uses the rest of the current turn points to charge the jump drive. 
-        /// If the jump drive becomes completely charged, the ship escapes and combat is ended.
-        /// </summary>
-        public void ChargeJumpdrive()
-        {
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-
-            // Get the current jumpdrive charge if any
-            int currentCharge = this.ShipTurn.CurrentJumpDriveCharge ?? 0;
-
-            // Alloc turn points to the charge of the JumpDrive
-            this.ShipTurn.CurrentJumpDriveCharge = currentCharge + this.TurnPointsLeft;
-            this.TurnPointsLeft = 0;
-
-            // Did the jumpdrive fully charge?
-            if (this.ShipTurn.CurrentJumpDriveCharge >= 100)
-            {
-                // TODO: This ship escapes combat
-                throw new NotImplementedException();
-            }
-
-            db.SubmitChanges();
-
-            this.SwapTurn();
-        }
-
-        /// <summary>
-        /// Swaps the turn to the other ship, giving up any turn points left.
-        /// This does not check the surrender or cargo flags.
-        /// </summary>
-        private void SwapTurn()
-        {
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-
-            // Swap the turn
-            if (this.Turn == 0)
-            {
-                this.Turn = 1;
-            }
-            else if (this.Turn == 1)
-            {
-                this.Turn = 0;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException("Turn");
-            }
-
-            // Rest the turn point counter
-            this.TurnPointsLeft = InProgressCombat.PointsPerTurn;
-
-            db.SubmitChanges();
-        }
-
-        /// <summary>
-        /// Ends the current ships turn. Giving control to the other ship.
-        /// This does check the surrender and cargo flags.
-        /// </summary>
-        public void EndTurn()
-        {
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-
-            this.SwapTurn();
-
-            // Check if surrender was not accepted
-            if (this.Surrender)
-            {
-                // Reset flag
-                this.Surrender = false;
-            }
-
-            // Check if cargo was not picked up
-            if (this.JettisonCargo)
-            {
-                // Delete ignored space goods
-                db.ShipGoods.DeleteAllOnSubmit(this.CargoToPickup);
-
-                // Reset flag
-                this.JettisonCargo = false;
-            }
-
-            db.SubmitChanges();
-        }
-
-        /// <summary>
-        /// Ends this combat.
-        /// </summary>
-        public void End()
-        {
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-            db.InProgressCombats.DeleteOnSubmit(this);
-            db.SubmitChanges();
         }
     }
 }

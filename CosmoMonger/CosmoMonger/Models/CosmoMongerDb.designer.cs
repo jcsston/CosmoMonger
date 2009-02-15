@@ -45,9 +45,9 @@ namespace CosmoMonger.Models
     partial void InsertIgnoreList(IgnoreList instance);
     partial void UpdateIgnoreList(IgnoreList instance);
     partial void DeleteIgnoreList(IgnoreList instance);
-    partial void InsertInProgressCombat(InProgressCombat instance);
-    partial void UpdateInProgressCombat(InProgressCombat instance);
-    partial void DeleteInProgressCombat(InProgressCombat instance);
+    partial void InsertCombat(Combat instance);
+    partial void UpdateCombat(Combat instance);
+    partial void DeleteCombat(Combat instance);
     partial void InsertJumpDrive(JumpDrive instance);
     partial void UpdateJumpDrive(JumpDrive instance);
     partial void DeleteJumpDrive(JumpDrive instance);
@@ -168,11 +168,11 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<InProgressCombat> InProgressCombats
+		public System.Data.Linq.Table<Combat> Combats
 		{
 			get
 			{
-				return this.GetTable<InProgressCombat>();
+				return this.GetTable<Combat>();
 			}
 		}
 		
@@ -1507,7 +1507,7 @@ namespace CosmoMonger.Models
 	}
 	
 	[Table()]
-	public partial class InProgressCombat : INotifyPropertyChanging, INotifyPropertyChanged
+	public partial class Combat : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
@@ -1523,6 +1523,10 @@ namespace CosmoMonger.Models
 		private bool _Surrender;
 		
 		private bool _JettisonCargo;
+		
+		private int _CombatId;
+		
+		private Combat.CombatStatus _Complete;
 		
 		private EntityRef<Ship> _Ship;
 		
@@ -1544,16 +1548,20 @@ namespace CosmoMonger.Models
     partial void OnSurrenderChanged();
     partial void OnJettisonCargoChanging(bool value);
     partial void OnJettisonCargoChanged();
+    partial void OnCombatIdChanging(int value);
+    partial void OnCombatIdChanged();
+    partial void OnStatusChanging(Combat.CombatStatus value);
+    partial void OnStatusChanged();
     #endregion
 		
-		public InProgressCombat()
+		public Combat()
 		{
 			this._Ship = default(EntityRef<Ship>);
 			this._Ship1 = default(EntityRef<Ship>);
 			OnCreated();
 		}
 		
-		[Column(Storage="_AttackerShipId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_AttackerShipId", DbType="Int NOT NULL")]
 		public int AttackerShipId
 		{
 			get
@@ -1577,7 +1585,7 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_DefenderShipId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[Column(Storage="_DefenderShipId", DbType="Int NOT NULL")]
 		public int DefenderShipId
 		{
 			get
@@ -1681,7 +1689,47 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Association(Name="Ship_InProgressCombat", Storage="_Ship", ThisKey="AttackerShipId", OtherKey="ShipId", IsForeignKey=true)]
+		[Column(Storage="_CombatId", AutoSync=AutoSync.OnInsert, DbType="int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int CombatId
+		{
+			get
+			{
+				return this._CombatId;
+			}
+			set
+			{
+				if ((this._CombatId != value))
+				{
+					this.OnCombatIdChanging(value);
+					this.SendPropertyChanging();
+					this._CombatId = value;
+					this.SendPropertyChanged("CombatId");
+					this.OnCombatIdChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Complete", DbType="int NOT NULL", CanBeNull=false)]
+		public Combat.CombatStatus Status
+		{
+			get
+			{
+				return this._Complete;
+			}
+			set
+			{
+				if ((this._Complete != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Complete = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[Association(Name="Ship_Combat", Storage="_Ship", ThisKey="AttackerShipId", OtherKey="ShipId", IsForeignKey=true)]
 		public Ship AttackerShip
 		{
 			get
@@ -1698,12 +1746,12 @@ namespace CosmoMonger.Models
 					if ((previousValue != null))
 					{
 						this._Ship.Entity = null;
-						previousValue.InProgressCombatsAttacker.Remove(this);
+						previousValue.CombatsAttacker.Remove(this);
 					}
 					this._Ship.Entity = value;
 					if ((value != null))
 					{
-						value.InProgressCombatsAttacker.Add(this);
+						value.CombatsAttacker.Add(this);
 						this._AttackerShipId = value.ShipId;
 					}
 					else
@@ -1715,7 +1763,7 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Association(Name="Ship_InProgressCombat1", Storage="_Ship1", ThisKey="DefenderShipId", OtherKey="ShipId", IsForeignKey=true)]
+		[Association(Name="Ship_Combat1", Storage="_Ship1", ThisKey="DefenderShipId", OtherKey="ShipId", IsForeignKey=true)]
 		public Ship DefenderShip
 		{
 			get
@@ -1732,12 +1780,12 @@ namespace CosmoMonger.Models
 					if ((previousValue != null))
 					{
 						this._Ship1.Entity = null;
-						previousValue.InProgressCombatsDefender.Remove(this);
+						previousValue.CombatsDefender.Remove(this);
 					}
 					this._Ship1.Entity = value;
 					if ((value != null))
 					{
-						value.InProgressCombatsDefender.Add(this);
+						value.CombatsDefender.Add(this);
 						this._DefenderShipId = value.ShipId;
 					}
 					else
@@ -4367,9 +4415,9 @@ namespace CosmoMonger.Models
 		
 		private System.Nullable<System.DateTime> _TargetSystemArrivalTime;
 		
-		private EntitySet<InProgressCombat> _InProgressCombats;
+		private EntitySet<Combat> _InProgressCombats;
 		
-		private EntitySet<InProgressCombat> _InProgressCombats1;
+		private EntitySet<Combat> _InProgressCombats1;
 		
 		private EntitySet<Npc> _Npcs;
 		
@@ -4421,8 +4469,8 @@ namespace CosmoMonger.Models
 		
 		public Ship()
 		{
-			this._InProgressCombats = new EntitySet<InProgressCombat>(new Action<InProgressCombat>(this.attach_InProgressCombats), new Action<InProgressCombat>(this.detach_InProgressCombats));
-			this._InProgressCombats1 = new EntitySet<InProgressCombat>(new Action<InProgressCombat>(this.attach_InProgressCombats1), new Action<InProgressCombat>(this.detach_InProgressCombats1));
+			this._InProgressCombats = new EntitySet<Combat>(new Action<Combat>(this.attach_InProgressCombats), new Action<Combat>(this.detach_InProgressCombats));
+			this._InProgressCombats1 = new EntitySet<Combat>(new Action<Combat>(this.attach_InProgressCombats1), new Action<Combat>(this.detach_InProgressCombats1));
 			this._Npcs = new EntitySet<Npc>(new Action<Npc>(this.attach_Npcs), new Action<Npc>(this.detach_Npcs));
 			this._Players = new EntitySet<Player>(new Action<Player>(this.attach_Players), new Action<Player>(this.detach_Players));
 			this._ShipGoods = new EntitySet<ShipGood>(new Action<ShipGood>(this.attach_ShipGoods), new Action<ShipGood>(this.detach_ShipGoods));
@@ -4714,8 +4762,8 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Association(Name="Ship_InProgressCombat", Storage="_InProgressCombats", ThisKey="ShipId", OtherKey="AttackerShipId")]
-		public EntitySet<InProgressCombat> InProgressCombatsAttacker
+		[Association(Name="Ship_Combat", Storage="_InProgressCombats", ThisKey="ShipId", OtherKey="AttackerShipId")]
+		public EntitySet<Combat> CombatsAttacker
 		{
 			get
 			{
@@ -4727,8 +4775,8 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Association(Name="Ship_InProgressCombat1", Storage="_InProgressCombats1", ThisKey="ShipId", OtherKey="DefenderShipId")]
-		public EntitySet<InProgressCombat> InProgressCombatsDefender
+		[Association(Name="Ship_Combat1", Storage="_InProgressCombats1", ThisKey="ShipId", OtherKey="DefenderShipId")]
+		public EntitySet<Combat> CombatsDefender
 		{
 			get
 			{
@@ -4969,25 +5017,25 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		private void attach_InProgressCombats(InProgressCombat entity)
+		private void attach_InProgressCombats(Combat entity)
 		{
 			this.SendPropertyChanging();
 			entity.AttackerShip = this;
 		}
 		
-		private void detach_InProgressCombats(InProgressCombat entity)
+		private void detach_InProgressCombats(Combat entity)
 		{
 			this.SendPropertyChanging();
 			entity.AttackerShip = null;
 		}
 		
-		private void attach_InProgressCombats1(InProgressCombat entity)
+		private void attach_InProgressCombats1(Combat entity)
 		{
 			this.SendPropertyChanging();
 			entity.DefenderShip = this;
 		}
 		
-		private void detach_InProgressCombats1(InProgressCombat entity)
+		private void detach_InProgressCombats1(Combat entity)
 		{
 			this.SendPropertyChanging();
 			entity.DefenderShip = null;

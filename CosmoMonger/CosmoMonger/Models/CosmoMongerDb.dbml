@@ -57,16 +57,18 @@
       <Association Name="User_IgnoreList1" Member="AntiFriend" ThisKey="AntiFriendId" OtherKey="UserId" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="InProgressCombat" Member="InProgressCombats">
-    <Type Name="InProgressCombat">
-      <Column Name="AttackerShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="DefenderShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+  <Table Name="Combat" Member="Combats">
+    <Type Name="Combat">
+      <Column Name="AttackerShipId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DefenderShipId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Turn" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TurnPointsLeft" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Surrender" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="JettisonCargo" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="Ship_InProgressCombat" Member="AttackerShip" Storage="_Ship" ThisKey="AttackerShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
-      <Association Name="Ship_InProgressCombat1" Member="DefenderShip" Storage="_Ship1" ThisKey="DefenderShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
+      <Column Name="CombatId" Type="System.Int32" DbType="int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Status" Storage="_Complete" Type="Combat.CombatStatus" DbType="int NOT NULL" CanBeNull="false" />
+      <Association Name="Ship_Combat" Member="AttackerShip" Storage="_Ship" ThisKey="AttackerShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
+      <Association Name="Ship_Combat1" Member="DefenderShip" Storage="_Ship1" ThisKey="DefenderShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="JumpDrive" Member="JumpDrives">
@@ -198,8 +200,8 @@
       <Column Name="TargetSystemId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="CurrentJumpDriveCharge" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="TargetSystemArrivalTime" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
-      <Association Name="Ship_InProgressCombat" Member="InProgressCombatsAttacker" Storage="_InProgressCombats" ThisKey="ShipId" OtherKey="AttackerShipId" Type="InProgressCombat" />
-      <Association Name="Ship_InProgressCombat1" Member="InProgressCombatsDefender" Storage="_InProgressCombats1" ThisKey="ShipId" OtherKey="DefenderShipId" Type="InProgressCombat" />
+      <Association Name="Ship_Combat" Member="CombatsAttacker" Storage="_InProgressCombats" ThisKey="ShipId" OtherKey="AttackerShipId" Type="Combat" />
+      <Association Name="Ship_Combat1" Member="CombatsDefender" Storage="_InProgressCombats1" ThisKey="ShipId" OtherKey="DefenderShipId" Type="Combat" />
       <Association Name="Ship_Npc" Member="Npcs" ThisKey="ShipId" OtherKey="ShipId" Type="Npc" />
       <Association Name="Ship_Player" Member="Players" Modifier="Virtual" ThisKey="ShipId" OtherKey="ShipId" Type="Player" />
       <Association Name="Ship_ShipGood" Member="ShipGoods" ThisKey="ShipId" OtherKey="ShipId" Type="ShipGood" />

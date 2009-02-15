@@ -119,7 +119,7 @@
     <Compile Include="Models\CosmoSystem.cs" />
     <Compile Include="Models\GameManager.cs" />
     <Compile Include="Controllers\Attributes\LogRequestAttribute.cs" />
-    <Compile Include="Models\InProgressCombat.cs" />
+    <Compile Include="Models\Combat.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Npc.cs" />
     <Compile Include="Models\Player.cs" />

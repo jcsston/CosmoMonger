@@ -2453,6 +2453,47 @@
   <changeSet author="Jory Stone" id="56">
     <comment>Adding Unique constraints to the InProgressCombat table to try to limit ships to one combat</comment>
     <addUniqueConstraint tableName="InProgressCombat" columnNames="AttackerShipId" constraintName="UQ_InProgressCombat_AttackerShipId" />
-	<addUniqueConstraint tableName="InProgressCombat" columnNames="DefenderShipId" constraintName="UQ_InProgressCombat_DefenderShipId" />
+	  <addUniqueConstraint tableName="InProgressCombat" columnNames="DefenderShipId" constraintName="UQ_InProgressCombat_DefenderShipId" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="57">
+    <comment>Drop InProgressCombat table and re-create as Combat table</comment>
+    <dropTable tableName="InProgressCombat" />
+    <createTable tableName="Combat">
+      <column name="CombatId" type="int" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="PK_Combat"/>
+      </column>
+      <column name="AttackerShipId" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DefenderShipId" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="Turn" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TurnPointsLeft" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="Surrender" type="bit">
+        <constraints nullable="false"/>
+      </column>
+      <column name="JettisonCargo" type="bit">
+        <constraints nullable="false"/>
+      </column>
+      <column name="Complete" type="bit">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="AttackerShipId" baseTableName="Combat" constraintName="FK_Ship_Combat_AttackerShipId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+    <addForeignKeyConstraint baseColumnNames="DefenderShipId" baseTableName="Combat" constraintName="FK_Ship_Combat_DefenderShipId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+  </changeSet>
+  <changeSet author="Jory Stone" id="58">
+    <comment>Dropping Complete column and adding Status column to the Combat table</comment>
+    <dropColumn tableName="Combat" columnName="Complete" />
+    <addColumn tableName="Combat">
+      <column name="Status" type="int">
+        <constraints nullable="false" />
+      </column>
+    </addColumn>
   </changeSet>
  </databaseChangeLog>

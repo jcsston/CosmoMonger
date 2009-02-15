@@ -11,9 +11,9 @@
     using NUnit.Framework.SyntaxHelpers;
 
     [TestFixture]
-    public class InProgressCombatTest : BasePlayerTest
+    public class CombatTest : BasePlayerTest
     {
-        private InProgressCombat combat;
+        private Combat combat;
         private Player player1;
         private Player player2;
 
@@ -30,7 +30,7 @@
             Assert.That(combat.DefenderShip, Is.EqualTo(player2.Ship), "Player 2 is the defender");
             Assert.That(combat.ShipTurn, Is.EqualTo(player1.Ship), "It is player 1's turn");
             Assert.That(combat.ShipOther, Is.EqualTo(player2.Ship), "Player 2 is the other ship");
-            Assert.That(combat.TurnPointsLeft, Is.EqualTo(InProgressCombat.PointsPerTurn), "Turn points left should match points per turn");
+            Assert.That(combat.TurnPointsLeft, Is.EqualTo(Combat.PointsPerTurn), "Turn points left should match points per turn");
         }
 
         [Test]
@@ -39,7 +39,7 @@
             combat.FireWeapon();
 
             Assert.That(combat.ShipTurn, Is.EqualTo(player1.Ship), "Should still be player 1's turn");
-            Assert.That(combat.TurnPointsLeft, Is.LessThan(InProgressCombat.PointsPerTurn), "Should have fewer turn points left now");
+            Assert.That(combat.TurnPointsLeft, Is.LessThan(Combat.PointsPerTurn), "Should have fewer turn points left now");
         }
 
         [Test]
@@ -51,7 +51,7 @@
             combat.FireWeapon();
 
             Assert.That(combat.ShipTurn, Is.EqualTo(player2.Ship), "Should now be player 2's turn");
-            Assert.That(combat.TurnPointsLeft, Is.EqualTo(InProgressCombat.PointsPerTurn), "Player 2's turn points left should match points per turn");
+            Assert.That(combat.TurnPointsLeft, Is.EqualTo(Combat.PointsPerTurn), "Player 2's turn points left should match points per turn");
         }
 
         [Test]
@@ -70,7 +70,7 @@
             combat.OfferSurrender();
 
             Assert.That(combat.ShipTurn, Is.EqualTo(player2.Ship), "Should now be player 2's turn");
-            Assert.That(combat.TurnPointsLeft, Is.EqualTo(InProgressCombat.PointsPerTurn), "Player 2's turn points left should match points per turn");
+            Assert.That(combat.TurnPointsLeft, Is.EqualTo(Combat.PointsPerTurn), "Player 2's turn points left should match points per turn");
             Assert.That(combat.Surrender, Is.True, "Player 1 should have surrendered");
         }
 
@@ -121,8 +121,8 @@
             combat.ChargeJumpdrive();
 
             Assert.That(combat.ShipTurn, Is.EqualTo(player2.Ship), "Should now be Player 2's turn");
-            Assert.That(combat.TurnPointsLeft, Is.EqualTo(InProgressCombat.PointsPerTurn), "Player 2's turn points left should match points per turn");
-            Assert.That(player1.Ship.CurrentJumpDriveCharge, Is.EqualTo(InProgressCombat.PointsPerTurn), "Player 1 Jumpdrive should be charged by the number of turn points in a turn");
+            Assert.That(combat.TurnPointsLeft, Is.EqualTo(Combat.PointsPerTurn), "Player 2's turn points left should match points per turn");
+            Assert.That(player1.Ship.CurrentJumpDriveCharge, Is.EqualTo(Combat.PointsPerTurn), "Player 1 Jumpdrive should be charged by the number of turn points in a turn");
         }
     }
 }
