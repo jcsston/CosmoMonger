@@ -11,6 +11,8 @@ namespace CosmoMonger.Models
     using System.Diagnostics;
     using System.Linq;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using System.Data.Linq;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     /// <summary>
     /// Extension of the partial LINQ class Player
@@ -177,6 +179,7 @@ namespace CosmoMonger.Models
         /// </summary>
         public virtual void UpdatePlayTime()
         {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             if (this.Alive)
             {
                 // Calcuate time since last play
@@ -199,9 +202,24 @@ namespace CosmoMonger.Models
                 // Update last play datetime
                 this.LastPlayed = DateTime.Now;
 
-                // Send changes to database
-                CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-                db.SubmitChanges();
+                try
+                {
+                    // Send changes to database
+                    db.SubmitChanges();
+                }
+                catch (ChangeConflictException ex)
+                {
+                    ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                    // Another thread has made changes to this Player row, 
+                    // Most likely from browsing multiple pages at once.
+                    // We will toss this update of playtime since the previous one was
+                    // very recent
+                    foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                    {
+                        occ.Resolve(RefreshMode.OverwriteCurrentValues);
+                    }
+                }
             }
         }
 

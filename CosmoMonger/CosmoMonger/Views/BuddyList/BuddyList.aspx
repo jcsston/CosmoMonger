@@ -14,7 +14,7 @@
         foreach (BuddyList buddy in buddyList)
         {
             %><li><%=buddy.Friend.UserName %> 
-            <%=Html.ActionLink("Remove", "RemoveBuddy", new { buddyId = buddy.FriendId }) %></li><% 
+            <%=Html.ActionLink("Remove", "RemoveBuddy", new { buddyId = buddy.FriendId })%></li><% 
         }
     }
     else

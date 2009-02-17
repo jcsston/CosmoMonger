@@ -93,7 +93,7 @@
                 .Returns(true).AtMostOnce().Verifiable();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
             managerMock.Expect(m => m.FindUser("search string"))
-                .Returns(new List<User>()).AtMostOnce().Verifiable();
+                .Returns((new User[0]).AsQueryable<User>()).AtMostOnce().Verifiable();
             AdminController controller = new AdminController(managerMock.Object);
 
             // Act

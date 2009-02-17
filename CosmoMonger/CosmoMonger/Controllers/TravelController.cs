@@ -116,5 +116,19 @@ namespace CosmoMonger.Controllers
             // If we got down here, then an error was thrown
             return this.Travel();
         }
+
+        /// <summary>
+        /// Check the travel and return the number of seconds left.
+        /// </summary>
+        /// <returns>A JSON data object with combat, travel, and travelTime fields.</returns>
+        public JsonResult TravelProgress()
+        {
+            Ship currentShip = this.ControllerGame.CurrentPlayer.Ship;
+            bool inCombat = (currentShip.InProgressCombat != null);
+            bool inTravel = currentShip.CheckIfTraveling();
+            TimeSpan travelTime = (currentShip.TargetSystemArrivalTime ?? DateTime.Now) - DateTime.Now;
+
+            return Json(new { combat = inCombat, travel = inTravel, travelTime = travelTime.TotalSeconds });
+        }
     }
 }

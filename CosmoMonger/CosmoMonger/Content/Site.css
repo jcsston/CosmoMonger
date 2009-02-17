@@ -12,8 +12,9 @@ body
 	margin: 0;
 	padding: 0;
 	color: white; 
-	background-image: url(Stars.png);
+	background-image: url('Stars.png');
 }
+
 .center
 {
 	text-align: center;
@@ -634,4 +635,10 @@ table.grid
 table.grid th
 {
     border-bottom: solid thin;
+}
+
+table.combat
+{
+    width: 100%;
+    text-align: center;
 }

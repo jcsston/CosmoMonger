@@ -124,11 +124,13 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Fires the primary weapon at the opposing ship. 
-        /// If the opposing ship is destoryed then the non-destoryed cargo and credits are 
-        /// picked up and victory is declared. If the opposing ship is player driven then 
+        /// Fires the primary weapon at the opposing ship.
+        /// If the opposing ship is destoryed then the non-destoryed cargo and credits are
+        /// picked up and victory is declared. If the opposing ship is player driven then
         /// the player is cloned on a nearby planet with a bank and given a small ship to get started again.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if combat is over</exception>
+        /// /// <exception cref="ArgumentOutOfRangeException">Thrown if not enough turn points are left to fire weapon</exception>
         public void FireWeapon()
         {
             // Check that the combat is still in-progress
@@ -527,7 +529,33 @@ namespace CosmoMonger.Models
                 turnPlayer.CashCredits += otherPlayer.CashCredits;
                 otherPlayer.CashCredits = 0;
 
-                db.SubmitChanges();
+                try
+                {
+                    db.SubmitChanges();
+                }
+                catch (ChangeConflictException ex)
+                {
+                    ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                    // Another thread has made changes to one of the player records
+                    // Overwrite those changes
+                    foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                    {
+                        foreach (MemberChangeConflict mcc in occ.MemberConflicts)
+                        {
+                            // For Cash credits updates, use our update
+                            if (mcc.Member.Name == "CashCredits")
+                            {
+                                mcc.Resolve(RefreshMode.KeepChanges);
+                            }
+                            else
+                            {
+                                // For others, use the database value
+                                mcc.Resolve(RefreshMode.OverwriteCurrentValues);
+                            }
+                        }
+                    }
+                }
 
                 // Relocate other player to nearest system with a bank
                 CosmoSystem bankSystem = this.ShipOther.GetNearestBankSystem();
@@ -573,8 +601,21 @@ namespace CosmoMonger.Models
                 // Combat has ended
                 this.Status = CombatStatus.ShipDestroyed;
 
-                // Save changes
-                db.SubmitChanges();
+                try
+                {
+                    db.SubmitChanges();
+                }
+                catch (ChangeConflictException ex)
+                {
+                    ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                    // Another thread has made changes to the player or combat records
+                    // Overwrite those changes
+                    foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                    {
+                        occ.Resolve(RefreshMode.KeepChanges);
+                    }
+                }
             }
             else
             {

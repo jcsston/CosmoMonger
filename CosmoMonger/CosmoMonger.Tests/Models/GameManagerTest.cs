@@ -9,6 +9,7 @@
     using CosmoMonger.Models;
     using NUnit.Framework;
     using NUnit.Framework.SyntaxHelpers;
+    using MvcContrib.Pagination;
 
     [TestFixture]
     public class GameManagerTest : BasePlayerTest
@@ -171,6 +172,26 @@
             IEnumerable<User> users = manager.FindUser(testPlayer.User.UserName);
 
             Assert.That(users, Is.Not.Empty, "Should at find our own user");
+        }
+
+        [Test]
+        [Explicit("Test case for odd search bug #112")]
+        public void FindUserJory()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            
+            db.Log = Console.Error;
+
+            IEnumerable<User> users = manager.FindUser("jory");
+            IPagination<User> usersPaged =  users.AsPagination(1);
+            usersPaged.ToArray();
+
+            db.Log = null;
+
+            Assert.That(users, Is.Not.Empty, "Should find me");
         }
     }
 }

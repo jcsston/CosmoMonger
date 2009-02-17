@@ -264,8 +264,28 @@ namespace CosmoMonger.Models
             // We search users and their player names
             return (from u in db.Users
                     where u.UserName.Contains(name)
-                    || u.Players.Where(p => p.Name.Contains(name)).Any()
-                    select u);
+                    || u.Email.Contains(name)
+                    select u)
+                    .Union(
+                   (from p in db.Players
+                    where p.Name.Contains(name)
+                    select p.User));
+        }
+
+        public virtual Ship GetShip(int shipId)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            return (from s in db.Ships
+                    where s.ShipId == shipId
+                    select s).SingleOrDefault();
+        }
+
+        public Combat GetCombat(int combatId)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            return (from c in db.Combats
+                    where c.CombatId == combatId
+                    select c).SingleOrDefault();
         }
     }
 }
