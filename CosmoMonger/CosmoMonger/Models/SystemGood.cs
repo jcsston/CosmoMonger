@@ -22,6 +22,30 @@ namespace CosmoMonger.Models
     /// </summary>
     public partial class SystemGood
     {
+        public enum Demand
+        {
+            /// <summary>
+            /// This good is not bought or sold at this system
+            /// </summary>
+            Prohibited = 0,
+
+            /// <summary>
+            /// The demand for this good is average
+            /// </summary>
+            Average = 1,
+
+            /// <summary>
+            /// The demand for this good is higher than average
+            /// </summary>
+            Increased = 2,
+
+            /// <summary>
+            /// The demand for this good is lower than average
+            /// </summary>
+            Decreased = 3
+        }
+        
+        
         /// <summary>
         /// Gets the actual price of the good.
         /// Calcuated by taking the Good.BasePrice and the SystemGood.PriceMultiplier
