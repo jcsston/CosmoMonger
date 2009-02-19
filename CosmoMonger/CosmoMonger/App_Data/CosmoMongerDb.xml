@@ -2496,4 +2496,11 @@
       </column>
     </addColumn>
   </changeSet>
+  <changeSet author="Jory Stone" id="59">
+    <comment>Dropped Unique index on Player Name column.</comment>
+    <dropUniqueConstraint tableName="Player" constraintName="UQ_Player_Name" />
+    <createIndex tableName="Player" indexName="IDX_Player__Name">
+      <column name="Name" />
+    </createIndex>
+  </changeSet>
  </databaseChangeLog>

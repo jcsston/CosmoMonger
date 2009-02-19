@@ -43,10 +43,13 @@ namespace CosmoMonger.Models
         public virtual Player CreatePlayer(string name, Race race)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-            bool existingPlayerName = (from p in db.Players where p.Name == name select p).Any();
-            if (existingPlayerName)
+            bool otherPlayerName = (from p in db.Players 
+                                       where p.Name == name 
+                                       && p.User != this
+                                       select p).Any();
+            if (otherPlayerName)
             {
-                throw new ArgumentException("Player with same name already exists", "name");
+                throw new ArgumentException("Player by another user with the same name already exists", "name");
             }
 
             Logger.Write("Creating player in User.CreatePlayer", "Model", 700, 0, TraceEventType.Information, "Creating Player",
