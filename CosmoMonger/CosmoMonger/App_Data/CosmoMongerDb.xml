@@ -2503,4 +2503,1276 @@
       <column name="Name" />
     </createIndex>
   </changeSet>
+  <changeSet author="Roger Boykin" id="60">
+    <comment>
+      Adding Demand column to SystemGood Table. Making changes to SystemGood Table to stabilize the
+
+      economy.
+    </comment>
+    <addColumn tableName="SystemGood">
+      <column name="Demand" type="int">
+      </column>
+    </addColumn>
+    <addNotNullConstraint tableName="SystemGood" columnName="Demand" defaultNullValue="1" columnDataType="int" />
+    <sql>
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo',
+
+      N'TABLE',N'SystemGood', N'COLUMN',N'Demand'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'0=prohibited, 1=average, 2=increased,
+
+      3=decreased' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemGood',
+
+      @level2type=N'COLUMN',@level2name=N'Demand'
+    </sql>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=1 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=1 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=1 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=1 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=1 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=1 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=1 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=1 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.0"/>
+      <column name="ConsumptionFactor" value="0.0"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="0"/>
+      <where>SystemId=1 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=1 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=2 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=2 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=2 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.0"/>
+      <column name="ConsumptionFactor" value="0.0"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="0"/>
+      <where>SystemId=2 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=2 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=2 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=2 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=2 AND GoodId=8</where>
+
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=2 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=2 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=3 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=3 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=3 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=3 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=3 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=3 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.0"/>
+      <column name="ConsumptionFactor" value="0.0"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="0"/>
+      <where>SystemId=3 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=3 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=3 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=3 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=4 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=4 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=4 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=4 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=4 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=4 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=4 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=4 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.0"/>
+      <column name="ConsumptionFactor" value="0.0"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="0"/>
+      <where>SystemId=4 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=4 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=5 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=5 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=5 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.0"/>
+      <column name="ConsumptionFactor" value="0.0"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="0"/>
+      <where>SystemId=5 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=5 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=5 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=5 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=5 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=5 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=5 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=6 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=6 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=6 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=6 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=6 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=6 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=6 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=6 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=6 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.0"/>
+      <column name="ConsumptionFactor" value="0.0"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="0"/>
+      <where>SystemId=6 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=7 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=7 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=7 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=7 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.0"/>
+      <column name="ConsumptionFactor" value="0.0"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="0"/>
+      <where>SystemId=7 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=7 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=7 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=7 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=7 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=7 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=8 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=8 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=8 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=8 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.0"/>
+      <column name="ConsumptionFactor" value="0.0"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="0"/>
+      <where>SystemId=8 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=8 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=8 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=8 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=8 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=8 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=9 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=9 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=9 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=9 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=9 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=9 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.0"/>
+      <column name="ConsumptionFactor" value="0.0"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="0"/>
+      <where>SystemId=9 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=9 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=9 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=9 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=10 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="3"/>
+      <where>SystemId=10 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=10 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=10 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=10 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=10 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=10 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="1"/>
+      <where>SystemId=10 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="2"/>
+      <where>SystemId=10 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="ProductionFactor" value="0.0"/>
+      <column name="ConsumptionFactor" value="0.0"/>
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="Demand" value="0"/>
+      <where>SystemId=10 AND GoodId=10</where>
+    </update>
+  </changeSet>
+  <changeSet author="Roger Boykin" id="61">
+    <comment>Setting the good quantities</comment>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=1 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=1 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=1 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="13"/>
+      <where>SystemId=1 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=1 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=1 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=1 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=1 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="0"/>
+      <where>SystemId=1 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=1 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=2 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=2 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=2 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="0"/>
+      <where>SystemId=2 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=2 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="8"/>
+      <where>SystemId=2 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=2 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=2 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="13"/>
+      <where>SystemId=2 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=2 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="8"/>
+      <where>SystemId=3 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=3 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=3 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=3 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="13"/>
+      <where>SystemId=3 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=3 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="0"/>
+      <where>SystemId=3 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="8"/>
+      <where>SystemId=3 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=3 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=3 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=4 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=4 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=4 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="13"/>
+      <where>SystemId=4 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=4 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=4 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=4 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=4 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="0"/>
+      <where>SystemId=4 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=4 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=5 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=5 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=5 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="0"/>
+      <where>SystemId=5 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=5 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="8"/>
+      <where>SystemId=5 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=5 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=5 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="13"/>
+      <where>SystemId=5 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=5 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=6 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=6 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="8"/>
+      <where>SystemId=6 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=6 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=6 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=6 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=6 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=6 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=6 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="0"/>
+      <where>SystemId=6 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=7 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="8"/>
+      <where>SystemId=7 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=7 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=7 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="0"/>
+      <where>SystemId=7 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=7 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="13"/>
+      <where>SystemId=7 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=7 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=7 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="13"/>
+      <where>SystemId=7 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=8 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="8"/>
+      <where>SystemId=8 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=8 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=8 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="0"/>
+      <where>SystemId=8 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=8 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="13"/>
+      <where>SystemId=8 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=8 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=8 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="13"/>
+      <where>SystemId=8 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="8"/>
+      <where>SystemId=9 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=9 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=9 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=9 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="13"/>
+      <where>SystemId=9 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=9 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="0"/>
+      <where>SystemId=9 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="8"/>
+      <where>SystemId=9 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=9 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=9 AND GoodId=10</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=10 AND GoodId=1</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=10 AND GoodId=2</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="8"/>
+      <where>SystemId=10 AND GoodId=3</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=10 AND GoodId=4</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=10 AND GoodId=5</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=10 AND GoodId=6</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="12"/>
+      <where>SystemId=10 AND GoodId=7</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="10"/>
+      <where>SystemId=10 AND GoodId=8</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="11"/>
+      <where>SystemId=10 AND GoodId=9</where>
+    </update>
+    <update tableName="SystemGood">
+      <column name="Quantity" value="0"/>
+      <where>SystemId=10 AND GoodId=10</where>
+    </update>
+  </changeSet>
+  <changeSet author="Roger Boykin" id="62">
+    <comment>Inserting missing SystemGood rows. Deleting rows where demand = prohibited except 4-9.</comment>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="1" />
+      <column name="GoodId" value="7" />
+      <column name="Quantity" value="11" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.4"/>
+      <column name="ConsumptionFactor" value="0.6"/>
+      <column name="Demand" value="2"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="2" />
+      <column name="GoodId" value="8" />
+      <column name="Quantity" value="11" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="Demand" value="3"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="3" />
+      <column name="GoodId" value="4" />
+      <column name="Quantity" value="12" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="Demand" value="1"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="3" />
+      <column name="GoodId" value="10" />
+      <column name="Quantity" value="12" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="Demand" value="1"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="4" />
+      <column name="GoodId" value="8" />
+      <column name="Quantity" value="10" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="Demand" value="1"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="5" />
+      <column name="GoodId" value="9" />
+      <column name="Quantity" value="13" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="Demand" value="3"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="5" />
+      <column name="GoodId" value="10" />
+      <column name="Quantity" value="12" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="Demand" value="1"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="6" />
+      <column name="GoodId" value="1" />
+      <column name="Quantity" value="11" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="Demand" value="3"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="6" />
+      <column name="GoodId" value="2" />
+      <column name="Quantity" value="11" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="Demand" value="3"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="6" />
+      <column name="GoodId" value="5" />
+      <column name="Quantity" value="12" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="Demand" value="1"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="10" />
+      <column name="GoodId" value="1" />
+      <column name="Quantity" value="11" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="Demand" value="3"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="10" />
+      <column name="GoodId" value="2" />
+      <column name="Quantity" value="11" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.6"/>
+      <column name="ConsumptionFactor" value="0.4"/>
+      <column name="Demand" value="3"/>
+    </insert>
+    <insert tableName="SystemGood">
+      <column name="SystemId" value="10" />
+      <column name="GoodId" value="7" />
+      <column name="Quantity" value="12" />
+      <column name="PriceMultiplier" value="1.0" />
+      <column name="ProductionFactor" value="0.5"/>
+      <column name="ConsumptionFactor" value="0.5"/>
+      <column name="Demand" value="1"/>
+    </insert>
+    <delete tableName="SystemGood">
+      <where>SystemId=1 AND GoodId=9</where>
+    </delete>
+    <delete tableName="SystemGood">
+      <where>SystemId=2 AND GoodId=4</where>
+    </delete>
+    <delete tableName="SystemGood">
+      <where>SystemId=3 AND GoodId=7</where>
+    </delete>
+    <delete tableName="SystemGood">
+      <where>SystemId=5 AND GoodId=4</where>
+    </delete>
+    <delete tableName="SystemGood">
+      <where>SystemId=6 AND GoodId=10</where>
+    </delete>
+    <delete tableName="SystemGood">
+      <where>SystemId=7 AND GoodId=5</where>
+    </delete>
+    <delete tableName="SystemGood">
+      <where>SystemId=8 AND GoodId=5</where>
+    </delete>
+    <delete tableName="SystemGood">
+      <where>SystemId=9 AND GoodId=7</where>
+    </delete>
+    <delete tableName="SystemGood">
+      <where>SystemId=10 AND GoodId=10</where>
+    </delete>
+  </changeSet>  
  </databaseChangeLog>

@@ -200,7 +200,8 @@ namespace CosmoMonger.Models
         {
             Logger.Write("Enter Npc.UpdateSystemGoodPrice", "NPC", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-
+            //begin commenting out if I don't want to wait
+            
             // Mark the next time the system good prices will need to be updated
             this.NextActionTime = DateTime.Now.AddMinutes(Npc.MinutesBetweenSystemGoodUpdates);
             try
@@ -222,7 +223,8 @@ namespace CosmoMonger.Models
                 }
                 return;
             }
-
+           
+            //end commenting out 
             foreach (SystemGood good in db.SystemGoods)
             {
                 // Get the total number of this good type avaiable in all systems
@@ -232,6 +234,10 @@ namespace CosmoMonger.Models
                                        select s).Count();
                 int currentSystemGoodCount = Math.Max(good.Quantity, 1);
                 double newPriceMultipler = (1.0 * targetTotal / systemsWithGood) / currentSystemGoodCount;
+
+                // Limit the price multipler to between 0.33 and 3.0
+                newPriceMultipler = Math.Max(0.33, newPriceMultipler);
+                newPriceMultipler = Math.Min(3.0, newPriceMultipler);
 
                 // Give a little bit of randomization to the price multipler
                 // By doing a slight random adjustment of the new price multipler by -/+ 0.10
