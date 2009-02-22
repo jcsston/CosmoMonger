@@ -769,6 +769,118 @@
             <param name="routeName">The name of the route</param>
             <param name="routes">The route collection to add the route to</param>
         </member>
+        <member name="T:MvcContrib.Routing.RegexRoute">
+            <summary>
+            This class can be used to create routes from a regular expression. 
+            It is also bidirectional and can be used to generate urls from a given route.
+            </summary>
+        </member>
+        <member name="M:MvcContrib.Routing.RegexRoute.#ctor(System.String,System.Web.Routing.IRouteHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MvcContrib.Routing.RegexRoute"/> class given a regular expression and a route handler.
+            </summary>
+            <param name="regex">The regular expression that this route handler is supposed to handle.</param>
+            <param name="routeHandler">The route handler to handle this route.</param>
+        </member>
+        <member name="M:MvcContrib.Routing.RegexRoute.#ctor(System.String,System.String,System.Web.Routing.IRouteHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MvcContrib.Routing.RegexRoute"/> class given a regular expression and a route 
+            handler and a url generator to use to generate urls that would be handled by this route.
+            </summary>
+            <param name="regex">The regular expression that this route handler is supposed to handle.</param>
+            <param name="urlGenerator">The URL generator; used to generate urls for this route.</param>
+            <param name="routeHandler">The route handler to handle this route.</param>
+        </member>
+        <member name="M:MvcContrib.Routing.RegexRoute.#ctor(System.String,System.Web.Routing.RouteValueDictionary,System.Web.Routing.IRouteHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MvcContrib.Routing.RegexRoute"/> class.
+            </summary>
+            <param name="regex">The regular expression that this route handler is supposed to handle.</param>
+            <param name="defaults">Default route values for this route.</param>
+            <param name="routeHandler">The route handler to handle this route.</param>
+        </member>
+        <member name="M:MvcContrib.Routing.RegexRoute.#ctor(System.String,System.String,System.Web.Routing.RouteValueDictionary,System.Web.Routing.IRouteHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MvcContrib.Routing.RegexRoute"/> class.
+            </summary>
+            <param name="regex">The regular expression that this route handler is supposed to handle.</param>
+            <param name="urlGenerator">The URL generator; used to generate urls for this route.</param>
+            <param name="defaults">Default route values for this route.</param>
+            <param name="routeHandler">The route handler to handle this route.</param>
+        </member>
+        <member name="M:MvcContrib.Routing.RegexRoute.#ctor(System.String,System.Func{System.Web.Routing.RequestContext,System.Web.Routing.RouteValueDictionary,MvcContrib.Routing.RegexRoute,System.Web.Routing.VirtualPathData},System.Web.Routing.IRouteHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MvcContrib.Routing.RegexRoute"/> class.
+            </summary>
+            <param name="regex">The regular expression that this route handler is supposed to handle.</param>
+            <param name="getVirtualPath">A function to use to generate a virtual path given the request context, incoming route value dictionary and this <see cref="T:MvcContrib.Routing.RegexRoute"/> instance.</param>
+            <param name="routeHandler">The route handler to handle this route.</param>
+        </member>
+        <member name="M:MvcContrib.Routing.RegexRoute.#ctor(System.String,System.Func{System.Web.Routing.RequestContext,System.Web.Routing.RouteValueDictionary,MvcContrib.Routing.RegexRoute,System.Web.Routing.VirtualPathData},System.Web.Routing.RouteValueDictionary,System.Web.Routing.IRouteHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MvcContrib.Routing.RegexRoute"/> class.
+            </summary>
+            <param name="regex">The regular expression that this route handler is supposed to handle.</param>
+            <param name="getVirtualPath">A function to use to generate a virtual path given the request context, incoming route value dictionary and this <see cref="T:MvcContrib.Routing.RegexRoute"/> instance.</param>
+            <param name="defaults">Default route values for this route.</param>
+            <param name="routeHandler">The route handler to handle this route.</param>
+        </member>
+        <member name="M:MvcContrib.Routing.RegexRoute.#ctor(System.String,System.String,System.Func{System.Web.Routing.RequestContext,System.Web.Routing.RouteValueDictionary,MvcContrib.Routing.RegexRoute,System.Web.Routing.VirtualPathData},System.Web.Routing.RouteValueDictionary,System.Web.Routing.IRouteHandler)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MvcContrib.Routing.RegexRoute"/> class.
+            </summary>
+            <param name="regex">The regular expression that this route handler is supposed to handle.</param>
+            <param name="urlGenerator">The URL generator; used to generate urls for this route.</param>
+            <param name="getVirtualPath">A function to use to generate a virtual path given the request context, incoming route value dictionary and this <see cref="T:MvcContrib.Routing.RegexRoute"/> instance.</param>
+            <param name="defaults">Default route values for this route.</param>
+            <param name="routeHandler">The route handler to handle this route.</param>
+        </member>
+        <member name="M:MvcContrib.Routing.RegexRoute.GetVirtualPath(System.Web.Routing.RequestContext,System.Web.Routing.RouteValueDictionary)">
+            <summary>
+            Used to get a virtual path for a given set of route settings.
+            If the combination of defaults/values doesn't satisfy the url generator tokens: null is returned, 
+            signaling that this route isn't correct for the given values.
+            </summary>
+            <remarks>
+            This function is not used for figuring out the routes. It is only used for generating links for new routes.
+            </remarks>
+            <param name="requestContext">The request context.</param>
+            <param name="values">The settings to use to generate this virtual path.</param>
+            <returns>A virtual path that represents the given settings.</returns>
+        </member>
+        <member name="M:MvcContrib.Routing.RegexRoute.GetRouteData(System.Web.HttpContextBase)">
+            <summary>
+            Gets the route data from an incoming request; parses the incoming virtual 
+            path and returns the route data that was inside the url.
+            </summary>
+            <param name="httpContext">The HTTP context containing the url data.</param>
+            <returns>Route data gleaned from the context.</returns>
+        </member>
+        <member name="M:MvcContrib.Routing.RegexRoute.GetRouteData(System.String)">
+            <summary>
+            Gets the route data from the request portion of the url.
+            </summary>
+            <param name="request">The request string (the part after the virtual directory but before the query string).</param>
+            <returns>Route data gleaned from the context.</returns>
+        </member>
+        <member name="P:MvcContrib.Routing.RegexRoute.Defaults">
+            <summary>
+            Gets the default route value dictionary containing the default route settings.
+            </summary>
+            <value>The default settings for this route.</value>
+        </member>
+        <member name="P:MvcContrib.Routing.RegexRoute.RouteHandler">
+            <summary>
+            Gets the route handler handling this route.
+            </summary>
+            <value>The route handler that handles this route.</value>
+        </member>
+        <member name="P:MvcContrib.Routing.RegexRoute.UrlGenerator">
+            <summary>
+            Gets the string used to generate mvc urls for this route.
+            </summary>
+            <value>The string used to generate urls for this route.</value>
+        </member>
         <member name="T:MvcContrib.Routing.RouteDebugger">
             <summary>
             Helper class for switching the default route handler to the debug route handler.
@@ -1141,6 +1253,11 @@
             Whether to HTML-Encode the output (default is true).
             </summary>
         </member>
+        <member name="P:MvcContrib.UI.Html.Grid.GridColumn`1.HeaderAttributes">
+            <summary>
+            The attributs to apply to the header of the column.
+            </summary>
+        </member>
         <member name="T:MvcContrib.UI.Html.Grid.GridColumnBuilder`1">
             <summary>
             Constructs GridColumn objects representing the columns to be rendered in a grid.
@@ -1191,6 +1308,13 @@
             Can be used to perform custom rendering for a column's heading.
             </summary>
             <param name="block">Delegate to invoke to perform the rendering.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MvcContrib.UI.Html.Grid.INestedGridColumnBuilder`1.HeaderAttributes(System.Collections.IDictionary)">
+            <summary>
+            Applies the specified attributes to the header.
+            </summary>
+            <param name="attributes">A dictionary containing HTML attributes</param>
             <returns></returns>
         </member>
         <member name="M:MvcContrib.UI.Html.Grid.IExpressionColumnBuilder`1.DoNotSplit">
@@ -1264,6 +1388,13 @@
             Executes a delegate that can be used to specify custom HTML to replace the built in rendering of the end of the row.
             </summary>
             <param name="block">Action that renders the HTML.</param>
+        </member>
+        <member name="M:MvcContrib.UI.Html.Grid.GridColumnBuilder`1.HeaderAttributes(System.Collections.IDictionary)">
+            <summary>
+            Applies the specified attributes to the header of the current column.
+            </summary>
+            <param name="attributes"></param>
+            <returns></returns>
         </member>
         <member name="M:MvcContrib.UI.Html.Grid.GridColumnBuilder`1.ExpressionToName(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
             <summary>
@@ -1380,9 +1511,9 @@
             <param name="text"></param>
             <returns></returns>
         </member>
-        <member name="M:MvcContrib.UI.Html.Grid.Grid`1.BuildHtmlAttributes">
+        <member name="M:MvcContrib.UI.Html.Grid.Grid`1.BuildHtmlAttributes(System.Collections.IDictionary)">
             <summary>
-            Converts the HtmlAttributes dictionary of key-value pairs into a string of HTML attributes. 
+            Converts the specified attributes dictionary of key-value pairs into a string of HTML attributes. 
             </summary>
             <returns></returns>
         </member>

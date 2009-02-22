@@ -107,6 +107,13 @@
                             </ul>
 	                    </li>
                     </ul>
+                    <ul>	
+	                    <li><%= Html.ActionLink("Combat", "Index", "Combat")%>
+	                        <ul>
+	                            <li><%= Html.ActionLink("Attack", "Attack", "Combat")%></li>
+                            </ul>
+	                    </li>
+                    </ul>
                     <ul>
                         <li><%= Html.ActionLink("Logout", "Logout", "Account")%></li>
                     </ul>
