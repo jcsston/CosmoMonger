@@ -158,6 +158,7 @@ namespace CosmoMonger.Models
                 systemGood.CosmoSystem = this;
                 systemGood.GoodId = goodId;
                 systemGood.PriceMultiplier = 1.0;
+                systemGood.Demand = SystemGood.DemandTypes.Average;
                 this.SystemGoods.Add(systemGood);
             }
 

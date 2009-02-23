@@ -22,7 +22,7 @@ namespace CosmoMonger.Models
     /// </summary>
     public partial class SystemGood
     {
-        public enum Demand
+        public enum DemandTypes
         {
             /// <summary>
             /// This good is not bought or sold at this system
