@@ -2506,6 +2506,7 @@
   <changeSet author="Roger Boykin" id="60">
     <comment>
       Adding Demand column to SystemGood Table. Making changes to SystemGood Table to stabilize the
+
       economy.
     </comment>
     <addColumn tableName="SystemGood">
@@ -2513,6 +2514,16 @@
       </column>
     </addColumn>
     <addNotNullConstraint tableName="SystemGood" columnName="Demand" defaultNullValue="1" columnDataType="int" />
+    <sql>
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo',
+
+      N'TABLE',N'SystemGood', N'COLUMN',N'Demand'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'0=prohibited, 1=average, 2=increased,
+
+      3=decreased' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemGood',
+
+      @level2type=N'COLUMN',@level2name=N'Demand'
+    </sql>
     <update tableName="SystemGood">
       <column name="ProductionFactor" value="0.5"/>
       <column name="ConsumptionFactor" value="0.5"/>
