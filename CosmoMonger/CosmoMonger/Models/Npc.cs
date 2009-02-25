@@ -193,6 +193,105 @@ namespace CosmoMonger.Models
             }
         }
 
+        public double CalculatePriceMultipler(int targetTotal, int systemsWithGood, int currentSystemGoodCount)
+        {
+            double newPriceMultipler;
+            int min;
+            int max;
+
+            //the following if else statements make the priceMultipler inversely related to the quantity.
+            //the higher the quantity in a system, the lower the price (and vice versa)
+            if (currentSystemGoodCount == 0 || currentSystemGoodCount == 1)
+            {
+                min = 276;
+                max = 300;
+                newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
+            }
+            else if ((currentSystemGoodCount == 2) || (currentSystemGoodCount == 3))
+            {
+                min = 251;
+                max = 275;
+                newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
+            }
+            else if ((currentSystemGoodCount == 4) || (currentSystemGoodCount == 5))
+            {
+                min = 226;
+                max = 250;
+                newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
+            }
+            else if ((currentSystemGoodCount == 6) || (currentSystemGoodCount == 7))
+            {
+                min = 201;
+                max = 225;
+                newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
+            }
+            else if ((currentSystemGoodCount == 8) || (currentSystemGoodCount == 9))
+            {
+                min = 176;
+                max = 200;
+                newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
+            }
+            else if ((currentSystemGoodCount == 12) || (currentSystemGoodCount == 13))
+            {
+                min = 101;
+                max = 125;
+                newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
+            }
+            else if ((currentSystemGoodCount == 14) || (currentSystemGoodCount == 15))
+            {
+                min = 76;
+                max = 100;
+                newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
+            }
+            else if ((currentSystemGoodCount == 16) || (currentSystemGoodCount == 17))
+            {
+                min = 61;
+                max = 75;
+                newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
+            }
+            else if ((currentSystemGoodCount == 18) || (currentSystemGoodCount == 19))
+            {
+                min = 46;
+                max = 60;
+                newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
+            }
+            else if (currentSystemGoodCount >= 20)
+            {
+                min = 33;
+                max = 45;
+                newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
+            }
+            else //either currentSystemGoodCount is 10 or 11 or there is a problem
+            {
+                min = 126;
+                max = 175;
+                newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
+            }
+
+            return newPriceMultipler;
+        }
+
+        public double CalculatePriceMultiplerOld(int targetTotal, int systemsWithGood, int currentSystemGoodCount)
+        {
+            currentSystemGoodCount = Math.Max(currentSystemGoodCount, 1);
+            double newPriceMultipler = (1.0 * targetTotal / systemsWithGood) / currentSystemGoodCount;
+
+            // Limit the price multipler to between 0.33 and 3.0
+            newPriceMultipler = Math.Max(0.33, newPriceMultipler);
+            newPriceMultipler = Math.Min(3.0, newPriceMultipler);
+
+            // Give a little bit of randomization to the price multipler
+            // By doing a slight random adjustment of the new price multipler by -/+ 0.10
+            double rndPriceMultiplerAdjust = 0.10 - (rnd.NextDouble() / 5);
+            newPriceMultipler += rndPriceMultiplerAdjust;
+
+            // Limit the price multipler to between 0.33 and 3.0
+            newPriceMultipler = Math.Max(0.33, newPriceMultipler);
+            newPriceMultipler = Math.Min(3.0, newPriceMultipler);
+
+            return newPriceMultipler;
+        }
+
         /// <summary>
         /// Updates the system good price.
         /// </summary>
@@ -232,100 +331,17 @@ namespace CosmoMonger.Models
                 int systemsWithGood = (from s in good.Good.SystemGoods
                                        where s.Quantity > 0
                                        select s).Count();
-                int currentSystemGoodCount = Math.Max(good.Quantity, 1);
-                /* pre 2-21-09 way
-                double newPriceMultipler = (1.0 * targetTotal / systemsWithGood) / currentSystemGoodCount;
-
-                // Limit the price multipler to between 0.33 and 3.0
-                newPriceMultipler = Math.Max(0.33, newPriceMultipler);
-                newPriceMultipler = Math.Min(3.0, newPriceMultipler);
-
-                // Give a little bit of randomization to the price multipler
-                // By doing a slight random adjustment of the new price multipler by -/+ 0.10
-                double rndPriceMultiplerAdjust = 0.10 - (rnd.NextDouble() / 5);
-                newPriceMultipler += rndPriceMultiplerAdjust;
-
-                // Limit the price multipler to between 0.33 and 3.0
-                newPriceMultipler = Math.Max(0.33, newPriceMultipler);
-                newPriceMultipler = Math.Min(3.0, newPriceMultipler);
-                */
-                //new way post 2-21-09
                 double newPriceMultipler;
-                int min;
-                int max;
+
+                // pre 2-21-09 way
+                //newPriceMultipler = this.CalculatePriceMultipler(targetTotal, systemsWithGood, good.Quantity);
+
+                //new way post 2-21-09
+                newPriceMultipler = this.CalculatePriceMultipler(targetTotal, systemsWithGood, good.Quantity);
+
                 double oldPriceMultipler = good.PriceMultiplier;
-
-                //the following if else statements make the priceMultipler inversely related to the quantity.
-                //the higher the quantity in a system, the lower the price (and vice versa)
-                if (currentSystemGoodCount == 1)//really 0 or 1
-                {
-                    min = 276;
-                    max = 300;
-                    newPriceMultipler = (double)(rnd.Next(min, max) / 100);
-                }
-                else if ((currentSystemGoodCount == 2) || (currentSystemGoodCount == 3))
-                {
-                    min = 251;
-                    max = 275;
-                    newPriceMultipler = (double)(rnd.Next(min, max) / 100);
-                }
-                else if ((currentSystemGoodCount == 4) || (currentSystemGoodCount == 5))
-                {
-                    min = 226;
-                    max = 250;
-                    newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
-                }
-                else if ((currentSystemGoodCount == 6) || (currentSystemGoodCount == 7))
-                {
-                    min = 201;
-                    max = 225;
-                    newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
-                }
-                else if ((currentSystemGoodCount == 8) || (currentSystemGoodCount == 9))
-                {
-                    min = 176;
-                    max = 200;
-                    newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
-                }
-                else if ((currentSystemGoodCount == 12) || (currentSystemGoodCount == 13))
-                {
-                    min = 101;
-                    max = 125;
-                    newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
-                }
-                else if ((currentSystemGoodCount == 14) || (currentSystemGoodCount == 15))
-                {
-                    min = 76;
-                    max = 100;
-                    newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
-                }
-                else if ((currentSystemGoodCount == 16) || (currentSystemGoodCount == 17))
-                {
-                    min = 61;
-                    max = 75;
-                    newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
-                }
-                else if ((currentSystemGoodCount == 18) || (currentSystemGoodCount == 19))
-                {
-                    min = 46;
-                    max = 60;
-                    newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
-                }
-                else if (currentSystemGoodCount >= 20)
-                {
-                    min = 33;
-                    max = 45;
-                    newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
-                }
-                else //either currentSystemGoodCount is 10 or 11 or there is a problem
-                {
-                    min = 126;
-                    max = 175;
-                    newPriceMultipler = (double)(rnd.Next(min, max)/100.0);
-                }
-
                 // Take average of previous and current price multipler
-                good.PriceMultiplier = (good.PriceMultiplier + newPriceMultipler) / 2.0;
+                good.PriceMultiplier = (oldPriceMultipler + newPriceMultipler) / 2.0;
 
                 Logger.Write("Adjusting Good Price", "NPC", 500, 0, TraceEventType.Verbose, "Adjusting Good Price",
                     new Dictionary<string, object>
