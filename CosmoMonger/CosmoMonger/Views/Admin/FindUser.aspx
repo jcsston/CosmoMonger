@@ -14,10 +14,30 @@ Html.Grid<User>(
         column.For(u => u.Email);
         column.For(u => u.Joined);
         column.For(u => u.LastActivity);
-        column.For(u => u.Active
-            ? Html.ActionLink("Ban", "BanUser", new { userId = u.UserId }, new { onclick = "return confirm('Are you sure you want to ban user " + u.UserId + "?'));" })
-            : Html.ActionLink("Unban", "UnbanUser", new { userId = u.UserId }, new { onclick = "return confirm('Are you sure you want to unban user " + u.UserId + "?'));" })
-            , "Active").DoNotEncode();
+        column.For("Active").Do(u =>
+        {%><td><%
+        if (u.Active)
+        {
+            using (Html.BeginForm("BanUser", "Admin"))
+            { 
+                    %><div>
+                        <input type="hidden" name="userId" value="<%=u.UserId %>" /> 
+                        <input type="submit" value="Ban" onclick="return confirm('Are you sure you want to ban user <%= u.UserId %>?'));" />
+                    </div><% 
+            }
+        }
+        else
+        {
+            using (Html.BeginForm("UnbanUser", "Admin"))
+            { 
+                    %><div>
+                        <input type="hidden" name="userId" value="<%=u.UserId %>" /> 
+                        <input type="submit" value="Unban" onclick="return confirm('Are you sure you want to unban user <%= u.UserId %>?'));" />
+                    </div><% 
+            }
+        }
+            %></td><%
+    });
         column.For(u => u.Validated
             ? "True"
             : Html.ActionLink("Validate", "VerifyEmail", "Account", new { username = u.UserName, verificationCode = u.VerificationCode }, null)

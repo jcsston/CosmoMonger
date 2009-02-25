@@ -62,7 +62,17 @@
     <td class="vp-columnData"><%=fHours%></td>
     <td class="vp-columnData">hours</td>
     <td align="center" colspan="2">
-    <%=Html.ActionLink("Kill Current Player", "KillPlayer", new { playerId = player.PlayerId }, new { onclick = "return confirm('Are you sure you want to kill your player?');" })%>
+<%
+    using (Html.BeginForm("KillPlayer", "Player", FormMethod.Post, new { name = "killForm" }))
+    { 
+%>
+    <div>
+        <input type="hidden" name="playerId" value="<%=player.PlayerId %>" /> 
+        <input type="submit" value="Kill Current Player" onclick="return confirm('Are you sure you want to kill your player?');" />
+    </div>
+<% 
+    }
+%>
     </td>
 </tr>
 <tr>

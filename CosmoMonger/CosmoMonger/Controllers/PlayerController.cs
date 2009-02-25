@@ -127,6 +127,7 @@ namespace CosmoMonger.Controllers
         /// </summary>
         /// <param name="playerId">The player id.</param>
         /// <returns>A redirect to the CreatePlayer action</returns>
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult KillPlayer(int playerId)
         {
             if (this.ControllerGame.CurrentPlayer != null)

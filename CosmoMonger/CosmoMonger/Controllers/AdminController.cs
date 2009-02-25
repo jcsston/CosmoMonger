@@ -56,6 +56,7 @@
             return View();
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult BanUser(int userId)
         {
             // Check for non-admin users
@@ -78,6 +79,7 @@
             return View();
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult UnbanUser(int userId)
         {
             // Check for non-admin users
