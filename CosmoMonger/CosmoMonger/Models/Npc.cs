@@ -198,10 +198,12 @@ namespace CosmoMonger.Models
             double newPriceMultipler;
             int min;
             int max;
+            //int targetTotalLocal = targetTotal;
+
 
             //the following if else statements make the priceMultipler inversely related to the quantity.
             //the higher the quantity in a system, the lower the price (and vice versa)
-            if (currentSystemGoodCount == 0 || currentSystemGoodCount == 1)
+            if (currentSystemGoodCount <= 1)
             {
                 min = 276;
                 max = 300;

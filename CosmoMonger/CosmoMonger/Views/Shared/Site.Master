@@ -77,16 +77,19 @@
                                 <li><%= Html.ActionLink("Current Ship", "ViewShip", "Ship")%></li>
 	                            <li><%= Html.ActionLink("View Record", "ViewRecord", "PlayerRecord")%></li>
 	                            <li><%= Html.ActionLink("Top Records", "ListRecords", "PlayerRecord")%></li>
-	                            <li><%= Html.ActionLink("Communication", "Index", "Communication")%>
-	                                <ul>
-	                                    <li><%= Html.ActionLink("Inbox", "Inbox", "Communication")%></li>
-	                                    <li><%= Html.ActionLink("Sent", "Sent", "Communication")%></li>
-	                                    <li><%= Html.ActionLink("Compose", "Compose", "Communication")%></li>
-	                                    <li><%= Html.ActionLink("Buddy List", "BuddyList", "BuddyList")%></li>
-                                        <li><%= Html.ActionLink("Ignore List", "IgnoreList", "BuddyList")%></li>                             
-                                    </ul>
-	                            </li>
 
+
+                            </ul>
+	                    </li>
+                    </ul>
+                    <ul>                    	                            
+                    	<li><%= Html.ActionLink("Communication", "Index", "Communication")%>
+	                        <ul>
+	                            <li><%= Html.ActionLink("Inbox", "Inbox", "Communication")%></li>
+	                            <li><%= Html.ActionLink("Sent", "Sent", "Communication")%></li>
+	                            <li><%= Html.ActionLink("Compose", "Compose", "Communication")%></li>
+	                            <li><%= Html.ActionLink("Buddy List", "BuddyList", "BuddyList")%></li>
+                                <li><%= Html.ActionLink("Ignore List", "IgnoreList", "BuddyList")%></li>                             
                             </ul>
 	                    </li>
                     </ul>
