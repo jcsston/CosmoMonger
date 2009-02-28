@@ -5,7 +5,6 @@
     <!--
         function checkIfTraveling() {
             $.getJSON('/Travel/TravelProgress', function(data) {
-                $('#TimeLeft').text(parseInt(data.travelTime));
                 if (data.combat) {
                     document.location = '/Combat/CombatStart';
                 } else if (!data.travel) {
@@ -16,10 +15,16 @@
             });
         }
 
+        function updateTravelTime() {
+            $('#TimeLeft').text(parseInt($('#TimeLeft').text()) - 1);
+            setTimeout(updateTravelTime, 1000);
+        }
+
         $(document).ready(function() {
             var totalTime = parseFloat($('#TimeLeft').text());
             $('#ShipBlock').animate({ width: '350px' }, totalTime * 1000);
             checkIfTraveling();
+            setTimeout(updateTravelTime, 1000);
         });
     -->
     </script>

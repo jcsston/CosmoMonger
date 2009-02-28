@@ -150,7 +150,8 @@
     <Content Include="Scripts\jquery-1.2.6.min-vsdoc.js" />
     <Content Include="Scripts\jquery.flot.js" />
     <Content Include="Scripts\jquery.flot.pack.js" />
-    <Content Include="Scripts\jquery.purr.js" />
+    <Content Include="Scripts\jquery.jgrowl.js" />
+    <Content Include="Scripts\jquery.jgrowl.min.js" />
     <Content Include="Scripts\jquery.spin-1.0.2.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -214,7 +215,6 @@
     <Content Include="Views\Home\About.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Shared\Error.aspx" />
-    <Content Include="Views\Shared\LoginUserControl.ascx" />
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Web.config" />
   </ItemGroup>

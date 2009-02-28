@@ -8,7 +8,7 @@
     if (Request.IsAuthenticated)
     {
 %>
-    <script type="text/javascript" src="/Scripts/jquery.purr.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.jgrowl.min.js"></script>
     <script type="text/javascript">
     <!--
         lastMessageCount = 0;
@@ -20,21 +20,10 @@
             var messageCount = data;
             if (messageCount != lastMessageCount) {
                 lastMessageCount = messageCount;
-                var notice = 
-                    '<div class="notice">'
-                  + '<p>You have ' + messageCount + ' unread messages.</p>'
-                  + '<p><a href="/Communication/Inbox">Inbox</a></p>'
-                  + '<div class="notice-bottom">'
-                  + '</div>'
-                  + '</div>';
+                var notice = 'You have ' + messageCount + ' unread messages.<br />'
+                  + 'View <a href="/Communication/Inbox">Inbox</a>';
 
-                $(notice).purr(
-                    {
-                        fadeInSpeed: 200,
-                        fadeOutSpeed: 2000,
-                        removeTimer: 5000
-                    }
-                );
+                $.jGrowl(notice, { header: 'Unread Messages' });
             }
             setTimeout(updateUnreadMessageCount, 60 * 1000);
         }
@@ -56,123 +45,123 @@
 <body>
     <div class="page">
         <div id="header">
-            <!-- The following CSS menu is from http://sperling.com/examples/menuh/ -->
-            <div id="menuh-container">
-                <div id="menuh">
-                    <%
-                        if (Request.IsAuthenticated) {
-                    %>
-                    <ul style="width: auto">
-                        <li style="cursor: default">
-                                <div id="menuha">
-                                    Welcome aboard: <b><%= Html.Encode(Page.User.Identity.Name) %></b>&nbsp;
-                                </div>
-                        </li>
-                    </ul>
-                    <ul>	
-	                    <li><%= Html.ActionLink("Player", "Index", "Player")%>
-	                        <ul>
-	                            <li><%= Html.ActionLink("User Profile", "UserProfile", "Account")%></li>
-                                <li><%= Html.ActionLink("Player Profile", "PlayerProfile", "Player")%></li>
-                                <li><%= Html.ActionLink("Current Ship", "ViewShip", "Ship")%></li>
-	                            <li><%= Html.ActionLink("View Record", "ViewRecord", "PlayerRecord")%></li>
-	                            <li><%= Html.ActionLink("Top Records", "ListRecords", "PlayerRecord")%></li>
+    <!-- The following CSS menu is from http://sperling.com/examples/menuh/ -->
+    <div id="menuh-container">
+        <div id="menuh">
+            <%
+                if (Request.IsAuthenticated) {
+            %>
+            <ul style="width: auto">
+                <li style="cursor: default">
+                        <div id="menuha">
+                            Welcome aboard: <b><%= Html.Encode(Page.User.Identity.Name) %></b>&nbsp;
+                        </div>
+                </li>
+            </ul>
+            <ul>	
+                <li><%= Html.ActionLink("Player", "Index", "Player")%>
+                    <ul>
+                        <li><%= Html.ActionLink("User Profile", "UserProfile", "Account")%></li>
+                        <li><%= Html.ActionLink("Player Profile", "PlayerProfile", "Player")%></li>
+                        <li><%= Html.ActionLink("Current Ship", "ViewShip", "Ship")%></li>
+                        <li><%= Html.ActionLink("View Record", "ViewRecord", "PlayerRecord")%></li>
+                        <li><%= Html.ActionLink("Top Records", "ListRecords", "PlayerRecord")%></li>
 
 
-                            </ul>
-	                    </li>
                     </ul>
-                    <ul>                    	                            
-                    	<li><%= Html.ActionLink("Communication", "Index", "Communication")%>
-	                        <ul>
-	                            <li><%= Html.ActionLink("Inbox", "Inbox", "Communication")%></li>
-	                            <li><%= Html.ActionLink("Sent", "Sent", "Communication")%></li>
-	                            <li><%= Html.ActionLink("Compose", "Compose", "Communication")%></li>
-	                            <li><%= Html.ActionLink("Buddy List", "BuddyList", "BuddyList")%></li>
-                                <li><%= Html.ActionLink("Ignore List", "IgnoreList", "BuddyList")%></li>                             
-                            </ul>
-	                    </li>
-                    </ul>
-                    <ul>	
-	                    <li><%= Html.ActionLink("System", "Index", "Trade")%>
-	                        <ul>
-	                            <li><%= Html.ActionLink("List Goods", "ListGoods", "Trade")%></li>
-	                            <li><%= Html.ActionLink("Good Price Table", "PriceTable", "Trade")%></li>
-	                            <li><%= Html.ActionLink("Visit Bank", "Bank", "Bank")%></li>
-	                            <li><%= Html.ActionLink("List Ships", "ListShips", "Ship")%></li>
-                            </ul>
-	                    </li>
-                    </ul>
-                    <ul>	
-	                    <li><%= Html.ActionLink("Travel", "Index", "Travel")%>
-	                        <ul>
-	                            <li><%= Html.ActionLink("Travel", "Travel", "Travel")%></li>
-                            </ul>
-	                    </li>
-                    </ul>
-                    <% if (Request.IsLocal) { %>
-                    <ul>	
-	                    <li><%= Html.ActionLink("Combat", "Index", "Combat")%>
-	                        <ul>
-	                            <li><%= Html.ActionLink("Attack", "Attack", "Combat")%></li>
-                            </ul>
-	                    </li>
-                    </ul>
-                    <% } %>
+                </li>
+            </ul>
+            <ul>                    	                            
+        	    <li><%= Html.ActionLink("Communication", "Index", "Communication")%>
                     <ul>
-                        <li><%= Html.ActionLink("Logout", "Logout", "Account")%></li>
+                        <li><%= Html.ActionLink("Inbox", "Inbox", "Communication")%></li>
+                        <li><%= Html.ActionLink("Sent", "Sent", "Communication")%></li>
+                        <li><%= Html.ActionLink("Compose", "Compose", "Communication")%></li>
+                        <li><%= Html.ActionLink("Buddy List", "BuddyList", "BuddyList")%></li>
+                        <li><%= Html.ActionLink("Ignore List", "IgnoreList", "BuddyList")%></li>                             
                     </ul>
-                    <%
-                        }
-                        else 
-                        {
-                    %> 
+                </li>
+            </ul>
+            <ul>	
+                <li><%= Html.ActionLink("System", "Index", "Trade")%>
                     <ul>
-                        <li>
-                            <%= Html.ActionLink("Login", "Login", "Account") %>
-                        </li>
+                        <li><%= Html.ActionLink("List Goods", "ListGoods", "Trade")%></li>
+                        <li><%= Html.ActionLink("Good Price Table", "PriceTable", "Trade")%></li>
+                        <li><%= Html.ActionLink("Visit Bank", "Bank", "Bank")%></li>
+                        <li><%= Html.ActionLink("List Ships", "ListShips", "Ship")%></li>
                     </ul>
-                    <%
-                        }
-                    %>
-                </div>
-            </div>  
+                </li>
+            </ul>
+            <ul>	
+                <li><%= Html.ActionLink("Travel", "Index", "Travel")%>
+                    <ul>
+                        <li><%= Html.ActionLink("Travel", "Travel", "Travel")%></li>
+                    </ul>
+                </li>
+            </ul>
+            <% if (Request.IsLocal) { %>
+            <ul>	
+                <li><%= Html.ActionLink("Combat", "Index", "Combat")%>
+                    <ul>
+                        <li><%= Html.ActionLink("Attack", "Attack", "Combat")%></li>
+                    </ul>
+                </li>
+            </ul>
+            <% } %>
+            <ul>
+                <li><%= Html.ActionLink("Logout", "Logout", "Account")%></li>
+            </ul>
+            <%
+                }
+                else 
+                {
+            %> 
+            <ul>
+                <li>
+                    <%= Html.ActionLink("Login", "Login", "Account") %>
+                </li>
+            </ul>
+            <%
+                }
+            %>
+        </div>
+    </div>  
         </div>
         <div id="main" class="main">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
         </div>
         <asp:ContentPlaceHolder ID="FooterContent" runat="server" />
         <div id="footer">
         <% if (!this.Request.IsLocal) { %>
-            <script type="text/javascript"><!--
-                google_ad_client = "pub-7722569317874144";
-                /* 728x90, created 1/15/09 */
-                google_ad_slot = "0383659721";
-                google_ad_width = 728;
-                google_ad_height = 90;
-            //-->
-            </script>
-            <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-            </script>
-            <script src="http://cosmomonger.uservoice.com/pages/general/widgets/tab.js?alignment=right&amp;color=000000" type="text/javascript"></script>
+    <script type="text/javascript"><!--
+        google_ad_client = "pub-7722569317874144";
+        /* 728x90, created 1/15/09 */
+        google_ad_slot = "0383659721";
+        google_ad_width = 728;
+        google_ad_height = 90;
+    //-->
+    </script>
+    <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+    </script>
+    <script src="http://cosmomonger.uservoice.com/pages/general/widgets/tab.js?alignment=right&amp;color=000000" type="text/javascript"></script>
         <% } %>
-            <p>
-                <%= Html.ActionLink("CosmoMonger", "About", "Home") %> &copy; Copyright 2008-2009<br />
-                rev <%= CosmoMonger.Models.CosmoManager.GetCodeVersion() %> (db <%= CosmoMonger.Models.CosmoManager.GetDatabaseVersion()%>) <br />
-                <% 
-                    double processingTime = (DateTime.Now - this.ViewContext.HttpContext.Timestamp).TotalSeconds;
-                    Dictionary<string, object> props = new Dictionary<string, object>
-                    { 
-                        { "ViewPath", ((WebFormView)this.ViewContext.View).ViewPath },
-                        { "IPAddress", this.ViewContext.HttpContext.Request.UserHostAddress },
-                        { "SessionID", this.ViewContext.HttpContext.Session.SessionID },
-                        { "ProcessingTime", processingTime }
-                    };
-                    string message = this.ViewContext.RouteData.Values["controller"] + "." + this.ViewContext.RouteData.Values["action"];
-                    Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(message, "Page Log", 800, props);
-                %>
-                Processing Time: <%=processingTime%> seconds
-             </p>
+    <p>
+        <%= Html.ActionLink("CosmoMonger", "About", "Home") %> &copy; Copyright 2008-2009<br />
+        rev <%= CosmoMonger.Models.CosmoManager.GetCodeVersion() %> (db <%= CosmoMonger.Models.CosmoManager.GetDatabaseVersion()%>) <br />
+        <% 
+            double processingTime = (DateTime.Now - this.ViewContext.HttpContext.Timestamp).TotalSeconds;
+            Dictionary<string, object> props = new Dictionary<string, object>
+            { 
+                { "ViewPath", ((WebFormView)this.ViewContext.View).ViewPath },
+                { "IPAddress", this.ViewContext.HttpContext.Request.UserHostAddress },
+                { "SessionID", this.ViewContext.HttpContext.Session.SessionID },
+                { "ProcessingTime", processingTime }
+            };
+            string message = this.ViewContext.RouteData.Values["controller"] + "." + this.ViewContext.RouteData.Values["action"];
+            Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(message, "Page Log", 800, props);
+        %>
+        Processing Time: <%=processingTime%> seconds
+     </p>
         </div>
     </div>
 </body>

@@ -61,7 +61,7 @@
                         }
                 %>
                     <a href="javascript:selectSystem(<%=system.SystemId %>)">
-                    <img style="position: absolute; left: <%= x %>px; top: <%= y %>px; " class="<%=systemClass %>"
+                    <img style="position: absolute; left: <%= x %>px; top: <%= y %>px; " class="system-border <%=systemClass %>"
                             alt="<%=Html.AttributeEncode(system.Name)%>"
                             title="<%=Html.AttributeEncode(system.Name)%>"
                             src="/Content/System.png"
