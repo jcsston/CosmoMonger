@@ -54,6 +54,7 @@
         }
 
         [Test]
+        [Explicit("Deletes Water good from Sol system")]
         public void SellNotSold()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
