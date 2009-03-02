@@ -23,7 +23,8 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Constant for the number of minutes to schedule between system good price and quanitity updates.
         /// </summary>
-        public const int MinutesBetweenSystemGoodUpdates = 5;
+        /// 3-01 changing 5 to 2 RB
+        public const int MinutesBetweenSystemGoodUpdates = 2;
 
         /// <summary>
         /// A persitant random number generator for Npc code.
@@ -82,13 +83,14 @@ namespace CosmoMonger.Models
             {
                 // Get the total number of this good type available in all systems
                 int totalSystemGoodCount = good.SystemGoods.Sum(x => x.Quantity);
-
+                double targetBreak = (((double)good.TargetCount) / 10.0);
                 // Check if we need to add some of this good to the galaxy
                 while (totalSystemGoodCount < good.TargetCount)
                 {
-                    // Randomly select a good at a system to produce
+                    //Randomly select a system with  equal to or fewer than targetBreak number of goods to produce.
+                    
                     var goodProducingSystems = (from g in good.SystemGoods
-                                                where g.ProductionFactor > 0
+                                                where g.ProductionFactor > 0 && g.Quantity <= targetBreak
                                                 select g);
                     if (goodProducingSystems.Count() == 0)
                     {
@@ -141,9 +143,10 @@ namespace CosmoMonger.Models
                 }
 
                 // Now consume some of this good in the galaxy
-                // Randomly select a good at a system to consume
+                // Randomly select a good at a system to consume where the quantity is equal to or higher
+                // than targetBreak number of goods
                 var goodConsumingSystems = (from g in good.SystemGoods
-                                            where g.ConsumptionFactor > 0
+                                            where g.ConsumptionFactor > 0 && g.Quantity >= targetBreak
                                             && g.Quantity > 0
                                             select g);
                 if (goodConsumingSystems.Count() == 0)
@@ -198,73 +201,84 @@ namespace CosmoMonger.Models
             double newPriceMultipler;
             int min;
             int max;
-            //int targetTotalLocal = targetTotal;
-
+            double targetDouble = (double)targetTotal;
+            
 
             //the following if else statements make the priceMultipler inversely related to the quantity.
             //the higher the quantity in a system, the lower the price (and vice versa)
-            if (currentSystemGoodCount <= 1)
+            if ((currentSystemGoodCount >= 0) && (currentSystemGoodCount < (targetDouble / 50.0)))
             {
+                //between 0 and 1.999 per 100
                 min = 276;
                 max = 300;
                 newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
             }
-            else if ((currentSystemGoodCount == 2) || (currentSystemGoodCount == 3))
+            else if ((currentSystemGoodCount >= (targetDouble / 50.0)) && (currentSystemGoodCount < (targetDouble / 25.0)))
             {
+                //between 2 and 3.999 per 100
                 min = 251;
                 max = 275;
                 newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
             }
-            else if ((currentSystemGoodCount == 4) || (currentSystemGoodCount == 5))
+            else if ((currentSystemGoodCount >= (targetDouble / 25.0)) && (currentSystemGoodCount < (targetDouble / 16.667)))
             {
+                //between 4 and 5.999 per 100
                 min = 226;
                 max = 250;
                 newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
             }
-            else if ((currentSystemGoodCount == 6) || (currentSystemGoodCount == 7))
+            else if ((currentSystemGoodCount >= (targetDouble / 16.667)) && (currentSystemGoodCount < (targetDouble / 12.5)))
             {
+                //between 6 and 7.999 per 100
                 min = 201;
                 max = 225;
                 newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
             }
-            else if ((currentSystemGoodCount == 8) || (currentSystemGoodCount == 9))
+            else if ((currentSystemGoodCount >= (targetDouble / 12.5)) && (currentSystemGoodCount < (targetDouble / 10.0)))
             {
+                //between 8 and 9.999 per 100
                 min = 176;
                 max = 200;
                 newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
             }
-            else if ((currentSystemGoodCount == 12) || (currentSystemGoodCount == 13))
+            else if ((currentSystemGoodCount >= (targetDouble / 8.333)) && (currentSystemGoodCount < (targetDouble / 7.143)))
             {
+                //between 12 and 13.999 per 100
                 min = 101;
                 max = 125;
                 newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
             }
-            else if ((currentSystemGoodCount == 14) || (currentSystemGoodCount == 15))
+            else if ((currentSystemGoodCount >= (targetDouble / 7.143)) && (currentSystemGoodCount < (targetDouble / 6.25)))
             {
+                //between 14 and 15.999 per 100
                 min = 76;
                 max = 100;
                 newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
             }
-            else if ((currentSystemGoodCount == 16) || (currentSystemGoodCount == 17))
+            else if ((currentSystemGoodCount >= (targetDouble / 6.25)) && (currentSystemGoodCount < (targetDouble / 5.556)))
             {
+                //between 16 and 17.999 per 100
                 min = 61;
                 max = 75;
                 newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
             }
-            else if ((currentSystemGoodCount == 18) || (currentSystemGoodCount == 19))
+            else if ((currentSystemGoodCount >= (targetDouble / 5.556)) && (currentSystemGoodCount < (targetDouble / 5.0)))
             {
+                //between 18 and 19.999 per 100
                 min = 46;
                 max = 60;
                 newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
             }
-            else if (currentSystemGoodCount >= 20)
+            else if (currentSystemGoodCount >= (targetDouble / 5.0))
             {
+                // greater than or equal to 20 per 100
                 min = 33;
                 max = 45;
                 newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
             }
-            else //either currentSystemGoodCount is 10 or 11 or there is a problem
+            else
             {
+                //between 10 and 11.999 per 100 or a negative number(error)
                 min = 126;
                 max = 175;
                 newPriceMultipler = (double)(rnd.Next(min, max) / 100.0);
