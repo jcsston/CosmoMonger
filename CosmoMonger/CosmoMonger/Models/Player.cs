@@ -205,7 +205,7 @@ namespace CosmoMonger.Models
                 try
                 {
                     // Send changes to database
-                    db.SubmitChanges();
+                    db.SubmitChanges(ConflictMode.ContinueOnConflict);
                 }
                 catch (ChangeConflictException ex)
                 {
@@ -213,11 +213,16 @@ namespace CosmoMonger.Models
 
                     // Another thread has made changes to this Player row, 
                     // Most likely from browsing multiple pages at once.
-                    // We will toss this update of playtime since the previous one was
-                    // very recent
+                    // We will force this update of playtime as this one should be more recent
                     foreach (ObjectChangeConflict occ in db.ChangeConflicts)
                     {
-                        occ.Resolve(RefreshMode.OverwriteCurrentValues);
+                        // Log each conflict
+                        foreach (MemberChangeConflict mcc in occ.MemberConflicts)
+                        {
+                            string memberDetails = string.Format("{0}.{1} O: {2} D: {3} C: {4}", mcc.Member.DeclaringType.Name, mcc.Member.Name, mcc.OriginalValue, mcc.DatabaseValue, mcc.CurrentValue);
+                            Logger.Write(memberDetails, "Model", 10, 0, TraceEventType.Verbose, "SQL Change Conflict Details");
+                        }
+                        occ.Resolve(RefreshMode.KeepChanges);
                     }
                 }
             }

@@ -10,7 +10,7 @@ Html.Grid<Ship>(
 	"Ships",
     new Hash(empty => "No ships are currently leaving the system", @class => "grid"),
 	column => {
-        column.For(s => s.Players.Single().Name);
+        column.For(s => s.Players.Select(p => p.Name).SingleOrDefault(), "Player Name");
         column.For(s => s.BaseShip.Name, "Ship Type");
         column.For("Attack").Do(s =>
         {%><td><%

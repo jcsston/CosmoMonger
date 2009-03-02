@@ -4,7 +4,7 @@
     <script type="text/javascript">
     <!--
         combatId = null;
-        function updateCombatStatus(data) {
+        function updateCombatStatus(data, noTimeout) {
             // Update data format is defined in CombatController.BuildCombatStatus
             
             // Update player/enemy hull/shield damage
@@ -36,7 +36,7 @@
 
             if (data.complete) {
                 document.location = '/Combat/CombatComplete?combatId=' + combatId;
-            } else {
+            } else if (noTimeout != true) {
                 // Queue combat status check
                 setTimeout(queueCombatStatus, 1000);
             }
@@ -50,7 +50,7 @@
             $('#fireWeapon').click(function(eventObject) {
                 $(".turnAction").attr("disabled", "disabled");
                 $.getJSON('/Combat/FireWeapon', { combatId: combatId }, function(data) {
-                    updateCombatStatus(data.status);
+                    updateCombatStatus(data.status, true);
                     if (data.message) {
                         alert(data.message);
                     }
@@ -149,11 +149,11 @@
         </td>
         <td colspan="2">
             <p>Flee</p>
-            </td>
+        </td>
     </tr>
     <tr>
         <td>
-            Cost: <%=playerShip.Weapon.CargoCost %>
+            Cost: <%=playerShip.Weapon.TurnCost %>
             <br />
             Power: <%=playerShip.Weapon.Power %>
         </td>

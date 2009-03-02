@@ -193,7 +193,6 @@
         }
 
         [Test]
-        //[Ignore("Code still in development")]
         public void Attack()
         {
             Player player1 = this.CreateTestPlayer();
@@ -209,6 +208,54 @@
                 player1.Ship.InProgressCombat.TurnPointsLeft = 999;
                 player1.Ship.InProgressCombat.FireWeapon();
             }
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), MatchType = MessageMatch.Contains, ExpectedMessage = "Target ship")]
+        public void AttackTargetBusy()
+        {
+            Player player1 = this.CreateTestPlayer();
+            Player player2 = this.CreateTestPlayer();
+            Player player3 = this.CreateTestPlayer();
+
+            player3.Ship.Attack(player2.Ship);
+            player1.Ship.Attack(player2.Ship);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), MatchType = MessageMatch.Contains, ExpectedMessage = "Current ship")]
+        public void AttackSelfBusy()
+        {
+            Player player1 = this.CreateTestPlayer();
+            Player player2 = this.CreateTestPlayer();
+            Player player3 = this.CreateTestPlayer();
+
+            player1.Ship.Attack(player2.Ship);
+            player1.Ship.Attack(player3.Ship);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), MatchType = MessageMatch.Contains, ExpectedMessage = "Current ship")]
+        public void AttackBothBusy()
+        {
+            Player player1 = this.CreateTestPlayer();
+            Player player2 = this.CreateTestPlayer();
+            Player player3 = this.CreateTestPlayer();
+            Player player4 = this.CreateTestPlayer();
+
+            player1.Ship.Attack(player3.Ship);
+            player2.Ship.Attack(player4.Ship);
+
+            player1.Ship.Attack(player2.Ship);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), MatchType = MessageMatch.Contains, ExpectedMessage = "Cannot attack self")]
+        public void AttackSelf()
+        {
+            Player player1 = this.CreateTestPlayer();
+
+            player1.Ship.Attack(player1.Ship);
         }
 
         [Test]

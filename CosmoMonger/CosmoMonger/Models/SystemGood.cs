@@ -107,7 +107,7 @@ namespace CosmoMonger.Models
             try
             {
                 // Commit changes to the database
-                db.SubmitChanges();
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
             }
             catch (ChangeConflictException ex)
             {
@@ -137,7 +137,7 @@ namespace CosmoMonger.Models
             try
             {
                 // Commit changes to the database
-                db.SubmitChanges();
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
             }
             catch (ChangeConflictException ex)
             {

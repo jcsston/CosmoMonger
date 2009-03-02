@@ -62,7 +62,7 @@ namespace CosmoMonger.Models
             try
             {
                 // Send changes to database
-                db.SubmitChanges();
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
             }
             catch (ChangeConflictException ex)
             {
@@ -123,7 +123,7 @@ namespace CosmoMonger.Models
                     try
                     {
                         // Send changes to database
-                        db.SubmitChanges();
+                        db.SubmitChanges(ConflictMode.ContinueOnConflict);
                     }
                     catch (ChangeConflictException ex)
                     {
@@ -177,7 +177,7 @@ namespace CosmoMonger.Models
                 try
                 {
                     // Send changes to database
-                    db.SubmitChanges();
+                    db.SubmitChanges(ConflictMode.ContinueOnConflict);
                 }
                 catch (ChangeConflictException ex)
                 {
@@ -322,7 +322,7 @@ namespace CosmoMonger.Models
             try
             {
                 // Send changes to database
-                db.SubmitChanges();
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
             }
             catch (ChangeConflictException ex)
             {
@@ -373,7 +373,7 @@ namespace CosmoMonger.Models
                 try
                 {
                     // Send changes to database
-                    db.SubmitChanges();
+                    db.SubmitChanges(ConflictMode.ContinueOnConflict);
                 }
                 catch (ChangeConflictException ex)
                 {

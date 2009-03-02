@@ -178,7 +178,8 @@ namespace CosmoMonger.Models
             Logger.Write("Attacking ship fired weapon", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.FireWeapon",
                 new Dictionary<string, object>
                 {
-                    { "TurnShipId", this.ShipTurn.ShipId},
+                    { "CombatId", this.CombatId },
+                    { "TurnShipId", this.ShipTurn.ShipId },
                     { "OtherShipId", this.ShipOther.ShipId },
                     { "ShieldStrength", shieldStrength },
                     { "WeaponDamage", weaponDamage },
@@ -191,7 +192,7 @@ namespace CosmoMonger.Models
             try
             {
                 // Save database changes
-                db.SubmitChanges();
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
             }
             catch (ChangeConflictException ex)
             {
@@ -243,6 +244,7 @@ namespace CosmoMonger.Models
             Logger.Write("Offered surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OfferSurrender",
                 new Dictionary<string, object>
                 {
+                    { "CombatId", this.CombatId },
                     { "TurnShipId", this.ShipTurn.ShipId},
                     { "OtherShipId", this.ShipOther.ShipId }
                 }
@@ -277,6 +279,7 @@ namespace CosmoMonger.Models
             Logger.Write("Accepted surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.AcceptSurrender",
                 new Dictionary<string, object>
                 {
+                    { "CombatId", this.CombatId },
                     { "TurnShipId", this.ShipTurn.ShipId},
                     { "OtherShipId", this.ShipOther.ShipId }
                 }
@@ -328,6 +331,7 @@ namespace CosmoMonger.Models
             Logger.Write("Jettisoned cargo", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.JettisonShipCargo",
                 new Dictionary<string, object>
                 {
+                    { "CombatId", this.CombatId },
                     { "TurnShipId", this.ShipTurn.ShipId},
                     { "OtherShipId", this.ShipOther.ShipId }
                 }
@@ -378,6 +382,7 @@ namespace CosmoMonger.Models
             Logger.Write("Picked up cargo", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.PickupCargo",
                 new Dictionary<string, object>
                 {
+                    { "CombatId", this.CombatId },
                     { "TurnShipId", this.ShipTurn.ShipId },
                     { "OtherShipId", this.ShipOther.ShipId },
                     { "TotalCargoCount", pickCargo.Sum(g => g.Quantity) }
@@ -501,6 +506,12 @@ namespace CosmoMonger.Models
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
+            // No longer traveling, combat has ended
+            this.ShipOther.TargetSystemId = null;
+            this.ShipOther.TargetSystemArrivalTime = null;
+            this.ShipTurn.TargetSystemId = null;
+            this.ShipTurn.TargetSystemArrivalTime = null;
+
             // Move cargo into our cargo bays
             int cargoWorth = this.ShipOther.ShipGoods.Sum(g => (g.Quantity * g.Good.BasePrice));
             foreach (ShipGood cargo in this.ShipOther.ShipGoods)
@@ -518,6 +529,7 @@ namespace CosmoMonger.Models
                 Logger.Write("Transfering losing player credits to winner", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed",
                     new Dictionary<string, object>
                     {
+                        { "CombatId", this.CombatId },
                         { "TurnPlayerId", turnPlayer.PlayerId },
                         { "OtherPlayerId", otherPlayer.PlayerId },
                         { "OtherPlayerCashCredits", otherPlayer.CashCredits },
@@ -531,7 +543,7 @@ namespace CosmoMonger.Models
 
                 try
                 {
-                    db.SubmitChanges();
+                    db.SubmitChanges(ConflictMode.ContinueOnConflict);
                 }
                 catch (ChangeConflictException ex)
                 {
@@ -541,19 +553,7 @@ namespace CosmoMonger.Models
                     // Overwrite those changes
                     foreach (ObjectChangeConflict occ in db.ChangeConflicts)
                     {
-                        foreach (MemberChangeConflict mcc in occ.MemberConflicts)
-                        {
-                            // For Cash credits updates, use our update
-                            if (mcc.Member.Name == "CashCredits")
-                            {
-                                mcc.Resolve(RefreshMode.KeepChanges);
-                            }
-                            else
-                            {
-                                // For others, use the database value
-                                mcc.Resolve(RefreshMode.OverwriteCurrentValues);
-                            }
-                        }
+                        occ.Resolve(RefreshMode.KeepChanges);
                     }
                 }
 
@@ -561,11 +561,14 @@ namespace CosmoMonger.Models
                 CosmoSystem bankSystem = this.ShipOther.GetNearestBankSystem();
 
                 // Save a reference to the players old ship
+                Ship otherPlayerOldShip = otherPlayer.Ship;
+
                 otherPlayer.Ship = null;
 
                 Logger.Write("Relocating losing player to nearest system with bank", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed",
                     new Dictionary<string, object>
                     {
+                        { "CombatId", this.CombatId },
                         { "TurnPlayerId", turnPlayer.PlayerId },
                         { "OtherPlayerId", otherPlayer.PlayerId },
                         { "BankSystemId", bankSystem.SystemId }
@@ -576,17 +579,18 @@ namespace CosmoMonger.Models
                 otherPlayer.CreateStartingShip(bankSystem);
 
                 // Give the player some starting credits
-                int cloneCredits = (2000 - ((otherPlayer.BankCredits + 1) / 5000)) * 2000;
+                double cloneCredits = 2000 - ((otherPlayer.BankCredits + 1) / 5000.0 * 2000);
 
                 // Ignore negative values
-                otherPlayer.CashCredits = Math.Max(cloneCredits, 0);
+                cloneCredits = Math.Max(cloneCredits, 0);
+                otherPlayer.CashCredits = (int)cloneCredits;
 
                 Logger.Write("Giving losing player starting cash credits", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed",
                     new Dictionary<string, object>
                     {
+                        { "CombatId", this.CombatId },
                         { "TurnPlayerId", turnPlayer.PlayerId },
                         { "OtherPlayerId", otherPlayer.PlayerId },
-                        { "CalculatedCloneCredits", cloneCredits },
                         { "CashCredits", otherPlayer.CashCredits }
                     }
                 );
@@ -603,7 +607,7 @@ namespace CosmoMonger.Models
 
                 try
                 {
-                    db.SubmitChanges();
+                    db.SubmitChanges(ConflictMode.ContinueOnConflict);
                 }
                 catch (ChangeConflictException ex)
                 {

@@ -22,7 +22,7 @@
 
         public ActionResult Attack()
         {
-            ViewData["Ships"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetLeavingShips();
+            ViewData["Ships"] = this.ControllerGame.CurrentPlayer.Ship.GetShipsToAttack();
 
             return View();
         }
@@ -144,30 +144,39 @@
         public JsonResult CombatStatus(int combatId)
         {
             Combat selectedCombat = this.ControllerGame.GetCombat(combatId);
+            if (selectedCombat != null)
+            {
+                return Json(BuildCombatStatus(selectedCombat));
+            }
 
-            return Json(BuildCombatStatus(selectedCombat));
+            return Json(false);
         }
 
         public JsonResult FireWeapon(int combatId)
         {
             Combat selectedCombat = this.ControllerGame.GetCombat(combatId);
-            string message = null;
-            try
+            if (selectedCombat != null)
             {
-                selectedCombat.FireWeapon();
-            }
-            catch (InvalidOperationException ex)
-            {
-                // Combat is over
-                message = ex.Message;
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                // Not enough turn points
-                message = ex.Message;
+                string message = null;
+                try
+                {
+                    selectedCombat.FireWeapon();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Combat is over
+                    message = ex.Message;
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    // Not enough turn points
+                    message = ex.Message;
+                }
+
+                return Json(new { message = message, status = BuildCombatStatus(selectedCombat) });
             }
 
-            return Json(new { message = message, status = BuildCombatStatus(selectedCombat) });
+            return Json(false);
         }
 
         /// <summary>

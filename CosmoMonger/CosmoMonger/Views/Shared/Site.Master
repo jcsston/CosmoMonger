@@ -99,7 +99,6 @@
                     </ul>
                 </li>
             </ul>
-            <% if (Request.IsLocal) { %>
             <ul>	
                 <li><%= Html.ActionLink("Combat", "Index", "Combat")%>
                     <ul>
@@ -107,7 +106,6 @@
                     </ul>
                 </li>
             </ul>
-            <% } %>
             <ul>
                 <li><%= Html.ActionLink("Logout", "Logout", "Account")%></li>
             </ul>

@@ -20,6 +20,7 @@
         [SetUp]
         public void StartCombat()
         {
+            this.Cleanup();
             player1 = this.CreateTestPlayer();
             player2 = this.CreateTestPlayer();
             player1.Ship.Attack(player2.Ship);

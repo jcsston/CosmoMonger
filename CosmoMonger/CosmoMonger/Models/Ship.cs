@@ -241,6 +241,7 @@ namespace CosmoMonger.Models
         /// <param name="target">The target ship to attack.</param>
         /// <exception cref="InvalidOperationException">Thrown when this ship is already in combat</exception>
         /// <exception cref="ArgumentException">Thrown when target ship is already in combat</exception>
+        /// <exception cref="ArgumentException">Thrown when trying to attack self</exception>
         public virtual void Attack(Ship target)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
@@ -255,6 +256,12 @@ namespace CosmoMonger.Models
             if (target.InProgressCombat != null)
             {
                 throw new ArgumentException("Target ship is already in combat", "target");
+            }
+
+            // Check that we are not trying to attack ourself...
+            if (target == this)
+            {
+                throw new ArgumentException("Cannot attack self", "traget");
             }
 
             Combat combat = new Combat();
@@ -287,6 +294,17 @@ namespace CosmoMonger.Models
                 // A combat must already be in-progress
                 throw new InvalidOperationException("Ship is already in combat");
             }
+        }
+
+        /// <summary>
+        /// Gets ships that are leaving the system and we can attack
+        /// </summary>
+        /// <returns>An array of Ship objects that are leaving the system and open to attack</returns>
+        public virtual IEnumerable<Ship> GetShipsToAttack()
+        {
+            return (from s in this.CosmoSystem.GetLeavingShips()
+                    where s != this
+                    select s);
         }
 
         /// <summary>
@@ -380,7 +398,7 @@ namespace CosmoMonger.Models
             try
             {
                 // Save changes to the database
-                db.SubmitChanges();
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
             }
             catch (ChangeConflictException ex)
             {
