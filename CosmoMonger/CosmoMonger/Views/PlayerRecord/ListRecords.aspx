@@ -18,7 +18,7 @@
 <table class="bigTable">
  <tr>
     <td class="lr-columnEmpty">&nbsp;</td>
-    <td class="lr-columnHeaders">Player Name</td>
+    <td class="lr-columnHeaders">(User Name) - Player Name</td>
     <td class="lr-columnHeaders"><% 
             switch ((string)ViewData["SelectedRecordType"])
             {
@@ -64,7 +64,7 @@
 {  %>
  <tr>
     <td class="lr-columnEmpty">&nbsp;</td>
-    <td class="lr-columnLeft"><%= player.Name %></td>
+    <td class="lr-columnLeft">(<%=player.User.UserName %>) - <%= player.Name %></td>
     <td class="lr-columnRight"><% 
             switch ((string)ViewData["SelectedRecordType"])
             {
