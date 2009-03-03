@@ -142,10 +142,8 @@ namespace CosmoMonger.Models
                 throw new InvalidOperationException("Ship is already traveling");
             }
 
-
-            // This formula is use to determine the time to travel
-            // 5 / ln(engine power + 0.5) = number of seconds to charge
-            int travelTime = (int)(5 / Math.Log(this.JumpDrive.Speed + 0.5));
+            // Get the travel time
+            int travelTime = this.JumpDrive.ChargeTime;
 
             // Update the database
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();

@@ -1850,8 +1850,8 @@ namespace CosmoMonger.Models
     partial void OnJumpDriveIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnSpeedChanging(int value);
-    partial void OnSpeedChanged();
+    partial void OnChargeTimeChanging(int value);
+    partial void OnChargeTimeChanged();
     partial void OnRangeChanging(int value);
     partial void OnRangeChanged();
     partial void OnCargoCostChanging(int value);
@@ -1909,7 +1909,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Speed", DbType="Int NOT NULL")]
-		public int Speed
+		public int ChargeTime
 		{
 			get
 			{
@@ -1919,11 +1919,11 @@ namespace CosmoMonger.Models
 			{
 				if ((this._Speed != value))
 				{
-					this.OnSpeedChanging(value);
+					this.OnChargeTimeChanging(value);
 					this.SendPropertyChanging();
 					this._Speed = value;
-					this.SendPropertyChanged("Speed");
-					this.OnSpeedChanged();
+					this.SendPropertyChanged("ChargeTime");
+					this.OnChargeTimeChanged();
 				}
 			}
 		}

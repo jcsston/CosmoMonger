@@ -3774,5 +3774,29 @@
     <delete tableName="SystemGood">
       <where>SystemId=10 AND GoodId=10</where>
     </delete>
-  </changeSet>  
+  </changeSet>
+  <changeSet author="Jory Stone" id="63">
+    <comment>Renamed Speed column to ChargeTime on the JumpDrive table. This changes the meaning from a power factor to the number of seconds it takes to jump.</comment>
+    <renameColumn tableName="JumpDrive" oldColumnName="Speed" newColumnName="ChargeTime" />
+    <update tableName="JumpDrive">
+      <column name="ChargeTime" value="12"/>
+      <where>JumpDriveId=1</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="ChargeTime" value="10"/>
+      <where>JumpDriveId=2</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="ChargeTime" value="8"/>
+      <where>JumpDriveId=3</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="ChargeTime" value="6"/>
+      <where>JumpDriveId=4</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="ChargeTime" value="4"/>
+      <where>JumpDriveId=5</where>
+    </update>
+  </changeSet>
  </databaseChangeLog>

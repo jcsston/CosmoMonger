@@ -22,7 +22,7 @@
     <caption>Jump Drive Specs</caption>
     <tr><th>Name</th><td><%=Html.Encode(currentShip.JumpDrive.Name) %></td></tr>
     <tr><th>Range</th><td><%=currentShip.JumpDrive.Range %></td></tr>
-    <tr><th>Speed</th><td><%=currentShip.JumpDrive.Speed %></td></tr>
+    <tr><th>Speed</th><td><%=currentShip.JumpDrive.ChargeTime%></td></tr>
     <tr><th>Cargo Cost</th><td><%=currentShip.JumpDrive.CargoCost %></td></tr>
 </table>
 <table>
