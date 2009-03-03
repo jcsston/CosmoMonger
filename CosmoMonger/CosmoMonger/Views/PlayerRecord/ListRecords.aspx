@@ -64,7 +64,7 @@
 {  %>
  <tr>
     <td class="lr-columnEmpty">&nbsp;</td>
-    <td class="lr-columnLeft">(<%=player.User.UserName %>) - <%= player.Name %></td>
+    <td class="lr-columnLeft">(<%=Html.Encode(player.User.UserName) %>) - <%= Html.Encode(player.Name) %></td>
     <td class="lr-columnRight"><% 
             switch ((string)ViewData["SelectedRecordType"])
             {
