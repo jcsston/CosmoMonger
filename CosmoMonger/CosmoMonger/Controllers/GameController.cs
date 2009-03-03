@@ -92,34 +92,46 @@ namespace CosmoMonger.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             // Check if the user has a current player and is not trying to create a player
-            if (this.ControllerGame.CurrentPlayer == null && filterContext.Controller.GetType() != typeof(PlayerController))
+            Type controllerType = filterContext.Controller.GetType();
+            if (this.ControllerGame.CurrentPlayer == null)
             {
-                // Redirect to the CreatePlayer action
-                filterContext.HttpContext.Response.Redirect(this.Url.Action("CreatePlayer", "Player"));
+                if (controllerType != typeof(PlayerController))
+                {
+                    // Redirect to the CreatePlayer action
+                    filterContext.HttpContext.Response.Redirect(this.Url.Action("CreatePlayer", "Player"));
+                }
             }
             else
             {
-                // Check that the session for the user matches
-                if (this.Session.SessionID != this.ControllerGame.CurrentUser.SessionID)
+                if (this.ControllerGame.CurrentPlayer.Ship.InProgressCombat != null && controllerType != typeof(CommunicationController) && controllerType != typeof(CombatController) && controllerType != typeof(AdminController))
                 {
-                    // Redirect to the Logout page
-                    filterContext.HttpContext.Response.Redirect(this.Url.Action("Logout", "Account"));
+                    // The player is currently in combat, redirect to combat start page
+                    filterContext.HttpContext.Response.Redirect(this.Url.Action("CombatStart", "Combat"));
                 }
-
-                // Update the player playtime
-                Player currentPlayer = this.ControllerGame.CurrentPlayer;
-                if (currentPlayer != null)
+                else
                 {
-                    currentPlayer.UpdatePlayTime();
-
-                    // Redirect to the dead screen if the player has died
-                    if (!currentPlayer.Alive)
+                    // Check that the session for the user matches
+                    if (this.Session.SessionID != this.ControllerGame.CurrentUser.SessionID)
                     {
-                        filterContext.HttpContext.Response.Redirect(this.Url.Action("Dead", "Player"));
+                        // Redirect to the Logout page
+                        filterContext.HttpContext.Response.Redirect(this.Url.Action("Logout", "Account"));
                     }
-                }
 
-                base.OnActionExecuting(filterContext);
+                    // Update the player playtime
+                    Player currentPlayer = this.ControllerGame.CurrentPlayer;
+                    if (currentPlayer != null)
+                    {
+                        currentPlayer.UpdatePlayTime();
+
+                        // Redirect to the dead screen if the player has died
+                        if (!currentPlayer.Alive)
+                        {
+                            filterContext.HttpContext.Response.Redirect(this.Url.Action("Dead", "Player"));
+                        }
+                    }
+
+                    base.OnActionExecuting(filterContext);
+                }
             }
         }
     }

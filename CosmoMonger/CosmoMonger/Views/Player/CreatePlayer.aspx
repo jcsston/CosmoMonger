@@ -135,7 +135,7 @@
                 <tr>
                     <td class="cp-leftHeaders">Name:</td>
                     <td class="cp-leftData">
-                        <%= Html.TextBox("name")%>
+                        <%= Html.TextBox("name", ViewData["name"], new { maxlength = 255})%>
                         <%= Html.ValidationMessage("name")%>
                     </td>
                     <td rowspan="3" style="width: 40%" align="center">

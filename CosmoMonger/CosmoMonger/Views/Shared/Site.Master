@@ -12,26 +12,36 @@
     <script type="text/javascript">
     <!--
         lastMessageCount = 0;
-        function updateUnreadMessageCount() {
-            $.getJSON('/Communication/UnreadMessages', displayUnreadMessageCount);
+        function updateUnreadMessages() {
+            $.getJSON('/Communication/UnreadMessages', displayUnreadMessages);
         }
         
-        function displayUnreadMessageCount(data) {
-            var messageCount = data;
+        function displayUnreadMessages(data) {
+            var messageCount = data.length;
+            var messageDelay = 0;
             if (messageCount != lastMessageCount) {
                 lastMessageCount = messageCount;
-                var notice = 'You have ' + messageCount + ' unread messages.<br />'
-                  + 'View <a href="/Communication/Inbox">Inbox</a>';
-
-                $.jGrowl(notice, { header: 'Unread Messages' });
+                for (var i = 0; i < data.length; i++) {
+                    var msg = data[i];
+                    var msgDate = new Date(msg.time);
+                    var notice = 'Subject: ' + msg.subject
+                        + '<br />Date: ' + msgDate.toLocaleDateString()
+                        + '<br />Time: ' + msgDate.toLocaleTimeString()
+                        + '<br />'
+                        + ('Read Message'.link('/Communication/ViewMessage?messageId=' + msg.id));
+                        
+                    // Give 6 seconds per message to read
+                    messageDelay += 6000;
+                    $.jGrowl(notice, { header: 'Unread message from ' + msg.from, life: messageDelay });
+                }
             }
-            setTimeout(updateUnreadMessageCount, 60 * 1000);
+            setTimeout(updateUnreadMessages, 60 * 1000);
         }
 
         $(document).ready(function() {
             // Only nag the user if they are not in the Communication area
             if (location.pathname.indexOf("Communication") == -1) {
-                updateUnreadMessageCount();
+                updateUnreadMessages();
             }
         });
     //-->

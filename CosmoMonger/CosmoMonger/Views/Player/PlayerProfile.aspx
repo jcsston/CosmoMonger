@@ -63,7 +63,7 @@
     <td class="vp-columnData">hours</td>
     <td align="center" colspan="2">
 <%
-    using (Html.BeginForm("KillPlayer", "Player", FormMethod.Post, new { name = "killForm" }))
+    using (Html.BeginForm("KillPlayer", "Player", FormMethod.Post))
     { 
 %>
     <div>

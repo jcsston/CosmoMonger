@@ -141,6 +141,18 @@
             }
         }
 
+        /// <summary>
+        /// Check if the ship has entered combat
+        /// </summary>
+        /// <returns>A JSON data object with combat fields.</returns>
+        public JsonResult CombatPending()
+        {
+            Ship currentShip = this.ControllerGame.CurrentPlayer.Ship;
+            bool inCombat = (currentShip.InProgressCombat != null);
+
+            return Json(new { combat = inCombat });
+        }
+
         public JsonResult CombatStatus(int combatId)
         {
             Combat selectedCombat = this.ControllerGame.GetCombat(combatId);

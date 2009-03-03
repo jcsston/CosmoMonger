@@ -9,6 +9,7 @@
     using CosmoMonger.Models;
     using MvcContrib.Pagination;
     using MvcContrib.EnumerableExtensions;
+    using System.Collections;
 
     /// <summary>
     /// This controller handles communication between players
@@ -165,8 +166,18 @@
         public JsonResult UnreadMessages()
         {
             IEnumerable<Message> messages = this.ControllerGame.CurrentUser.GetUnreadMessages();
-            
-            return Json(messages.Count());
+            ArrayList messageData = new ArrayList();
+            foreach (Message msg in messages)
+            {
+                messageData.Add(new {
+                    from = HttpUtility.HtmlEncode(msg.SenderUser.UserName),
+                    time = msg.Time.ToString("R"),
+                    subject = HttpUtility.HtmlEncode(msg.Subject),
+                    id = msg.MessageId
+                });
+            }
+
+            return Json(messageData);
         }
     }
 }

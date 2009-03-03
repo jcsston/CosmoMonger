@@ -202,11 +202,11 @@ first child of the left and right table columns */
 
 #menuh-container
 {
-	margin: 0px;
-	padding: 0px;
-	position: relative;
-	text-align: center;
-	clear: both;
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+    text-align: center;
+    clear: both;
 }
 
 #menuh

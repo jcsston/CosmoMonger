@@ -2144,7 +2144,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_MessageId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int MessageId
+		public virtual int MessageId
 		{
 			get
 			{

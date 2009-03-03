@@ -193,8 +193,17 @@
         {
             // Arrange
             Mock<User> userMock = new Mock<User>();
+            Mock<Message> msgMock = new Mock<Message>();
+            msgMock.Expect(m => m.Time)
+                .Returns(DateTime.Now).AtMostOnce().Verifiable();
+            msgMock.Expect(m => m.Subject)
+                .Returns("Test Subject").AtMostOnce().Verifiable();
+            msgMock.Expect(m => m.SenderUser.UserName)
+                .Returns("From Username").AtMostOnce().Verifiable();
+            msgMock.Expect(m => m.MessageId)
+                .Returns(1).AtMostOnce().Verifiable();
             userMock.Expect(u => u.GetUnreadMessages())
-                .Returns(new Message[3]).AtMostOnce().Verifiable();
+                .Returns(new Message[]{msgMock.Object}).AtMostOnce().Verifiable();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
             CommunicationController controller = new CommunicationController(managerMock.Object);
 
@@ -202,9 +211,7 @@
             ActionResult result = controller.UnreadMessages();
 
             // Assert
-            Assert.That(result, Is.TypeOf(typeof(JsonResult)), "Should return a JSON");
-            JsonResult jsonResult = (JsonResult)result;
-            Assert.That(jsonResult.Data, Is.EqualTo(3), "Should be the number of items in the Message array");
+            Assert.That(result, Is.TypeOf(typeof(JsonResult)), "Should return a JSON result");
 
             managerMock.Verify();
         }

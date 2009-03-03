@@ -4,11 +4,9 @@
     <script type="text/javascript">
     <!--
         function checkIfTraveling() {
-            $.getJSON('/Travel/TravelProgress', function(data) {
+            $.getJSON('/Combat/CombatPending', function(data) {
                 if (data.combat) {
                     document.location = '/Combat/CombatStart';
-                } else if (!data.travel) {
-                    document.location = '/Travel';
                 } else {
                     setTimeout(checkIfTraveling, 1000);
                 }
@@ -16,8 +14,13 @@
         }
 
         function updateTravelTime() {
-            $('#TimeLeft').text(parseInt($('#TimeLeft').text()) - 1);
-            setTimeout(updateTravelTime, 1000);
+            var travelTime = parseInt($('#TimeLeft').text());
+            if (travelTime > 0) {
+                $('#TimeLeft').text(travelTime - 1);
+                setTimeout(updateTravelTime, 1000);
+            } else {
+                document.location = '/Travel/Travel';
+            }
         }
 
         $(document).ready(function() {
