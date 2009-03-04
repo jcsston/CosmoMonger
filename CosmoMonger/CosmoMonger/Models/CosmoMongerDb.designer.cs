@@ -1567,6 +1567,10 @@ namespace CosmoMonger.Models
 		
 		private Combat.CombatStatus _Complete;
 		
+		private System.DateTime _LastActionTime;
+		
+		private int _CreditsLooted;
+		
 		private EntitySet<CombatGood> _CombatGoods;
 		
 		private EntityRef<Ship> _Ship;
@@ -1593,6 +1597,10 @@ namespace CosmoMonger.Models
     partial void OnCombatIdChanged();
     partial void OnStatusChanging(Combat.CombatStatus value);
     partial void OnStatusChanged();
+    partial void OnLastActionTimeChanging(System.DateTime value);
+    partial void OnLastActionTimeChanged();
+    partial void OnCreditsLootedChanging(int value);
+    partial void OnCreditsLootedChanged();
     #endregion
 		
 		public Combat()
@@ -1767,6 +1775,46 @@ namespace CosmoMonger.Models
 					this._Complete = value;
 					this.SendPropertyChanged("Status");
 					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_LastActionTime", DbType="datetime NOT NULL")]
+		public System.DateTime LastActionTime
+		{
+			get
+			{
+				return this._LastActionTime;
+			}
+			set
+			{
+				if ((this._LastActionTime != value))
+				{
+					this.OnLastActionTimeChanging(value);
+					this.SendPropertyChanging();
+					this._LastActionTime = value;
+					this.SendPropertyChanged("LastActionTime");
+					this.OnLastActionTimeChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_CreditsLooted", DbType="int NOT NULL")]
+		public int CreditsLooted
+		{
+			get
+			{
+				return this._CreditsLooted;
+			}
+			set
+			{
+				if ((this._CreditsLooted != value))
+				{
+					this.OnCreditsLootedChanging(value);
+					this.SendPropertyChanging();
+					this._CreditsLooted = value;
+					this.SendPropertyChanged("CreditsLooted");
+					this.OnCreditsLootedChanged();
 				}
 			}
 		}

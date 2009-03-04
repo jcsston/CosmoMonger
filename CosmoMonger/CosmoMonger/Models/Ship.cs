@@ -270,6 +270,7 @@ namespace CosmoMonger.Models
             combat.Surrender = false;
             combat.Turn = 0;
             combat.JettisonCargo = false;
+            combat.LastActionTime = DateTime.Now;
 
             // Save changes to the database
             db.Combats.InsertOnSubmit(combat);

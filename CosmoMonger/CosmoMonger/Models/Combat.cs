@@ -58,24 +58,6 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Gets a list of Goods that can be picked up by the opposing player.
-        /// If the goods are not picked up, the goods are deleted from the system.
-        /// </summary>
-        /// <value>The cargo to pickup. Null if there is no cargo jettisoned</value>
-        public ShipGood[] CargoToPickup
-        {
-            get
-            {
-                if (this.JettisonCargo)
-                {
-                    return this.ShipOther.GetGoods();
-                }
-
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Gets a reference to the current Ship ('Player') turn.
         /// We reference Ships rather than Players because NPCs are not considered Players,
         /// but do own Ships and can fight.
@@ -189,6 +171,9 @@ namespace CosmoMonger.Models
                 }
             );
 
+            // Update turn action time
+            this.LastActionTime = DateTime.Now;
+
             try
             {
                 // Save database changes
@@ -250,6 +235,9 @@ namespace CosmoMonger.Models
                 }
             );
 
+            // Update turn action time
+            this.LastActionTime = DateTime.Now;
+
             db.SubmitChanges();
 
             // Turn is ended
@@ -285,17 +273,17 @@ namespace CosmoMonger.Models
                 }
             );
 
-            // Move enemy cargo into our cargo bays
-            foreach (ShipGood cargo in this.ShipOther.ShipGoods)
-            {
-                this.ShipTurn.AddGood(cargo.GoodId, cargo.Quantity);
-            }
+            // In space the cargo will go
+            this.SendCargoIntoSpace(this.ShipOther);
 
-            // Delete the cargo from the other ship
-            db.ShipGoods.DeleteAllOnSubmit(this.ShipOther.ShipGoods);
+            // Move enemy cargo from space into our cargo bays
+            this.LoadCargo();
 
             // Combat has ended
             this.Status = CombatStatus.ShipSurrendered;
+
+            // Update turn action time
+            this.LastActionTime = DateTime.Now;
 
             db.SubmitChanges();
         }
@@ -326,6 +314,9 @@ namespace CosmoMonger.Models
                 throw new InvalidOperationException("No ship cargo to jettison");
             }
 
+            // Sending cargo into space
+            this.SendCargoIntoSpace(this.ShipTurn);
+
             this.JettisonCargo = true;
 
             Logger.Write("Jettisoned cargo", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.JettisonShipCargo",
@@ -336,6 +327,9 @@ namespace CosmoMonger.Models
                     { "OtherShipId", this.ShipOther.ShipId }
                 }
             );
+
+            // Update turn action time
+            this.LastActionTime = DateTime.Now;
 
             db.SubmitChanges();
 
@@ -364,33 +358,13 @@ namespace CosmoMonger.Models
             }
 
             // Find cargo to pickup
-            ShipGood[] pickCargo = this.CargoToPickup;
-            if (pickCargo == null)
-            {
-                throw new InvalidOperationException("No cargo jettisoned");
-            }
-
-            // Move cargo into our cargo bays
-            foreach (ShipGood cargo in pickCargo) 
-            {
-                this.ShipTurn.AddGood(cargo.GoodId, cargo.Quantity);
-            }
-
-            // Delete the space cargo from the database
-            db.ShipGoods.DeleteAllOnSubmit(pickCargo);
-
-            Logger.Write("Picked up cargo", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.PickupCargo",
-                new Dictionary<string, object>
-                {
-                    { "CombatId", this.CombatId },
-                    { "TurnShipId", this.ShipTurn.ShipId },
-                    { "OtherShipId", this.ShipOther.ShipId },
-                    { "TotalCargoCount", pickCargo.Sum(g => g.Quantity) }
-                }
-            );
+            this.LoadCargo();
 
             // Combat has ended
             this.Status = CombatStatus.CargoPickup;
+
+            // Update turn action time
+            this.LastActionTime = DateTime.Now;
 
             db.SubmitChanges();
         }
@@ -441,6 +415,10 @@ namespace CosmoMonger.Models
                 this.ShipTurn.Repair();
                 this.ShipOther.Repair();
 
+                // Reset jump drive charges
+                this.ShipOther.CurrentJumpDriveCharge = 0;
+                this.ShipTurn.CurrentJumpDriveCharge = 0;
+
                 // Check how much the longer the ship needed prep for jumping
                 if (this.ShipTurn.TargetSystemArrivalTime.HasValue && this.ShipTurn.TargetSystemArrivalTime > DateTime.Now)
                 {
@@ -457,6 +435,9 @@ namespace CosmoMonger.Models
                 // Ship did not escape yet, so it's the other ships turn
                 this.SwapTurn();
             }
+
+            // Update turn action time
+            this.LastActionTime = DateTime.Now;
 
             db.SubmitChanges();
         }
@@ -488,7 +469,7 @@ namespace CosmoMonger.Models
             if (this.JettisonCargo)
             {
                 // Delete ignored space goods
-                db.ShipGoods.DeleteAllOnSubmit(this.CargoToPickup);
+                db.CombatGoods.DeleteAllOnSubmit(this.CombatGoods);
 
                 // Reset flag
                 this.JettisonCargo = false;
@@ -548,15 +529,11 @@ namespace CosmoMonger.Models
             this.ShipOther.CurrentJumpDriveCharge = 0;
             this.ShipTurn.CurrentJumpDriveCharge = 0;
 
-            // Move cargo into our cargo bays
-            int cargoWorth = this.ShipOther.ShipGoods.Sum(g => (g.Quantity * g.Good.BasePrice));
-            foreach (ShipGood cargo in this.ShipOther.ShipGoods)
-            {
-                this.ShipTurn.AddGood(cargo.GoodId, cargo.Quantity);
-            }
+            // Sending cargo into space
+            this.SendCargoIntoSpace(this.ShipOther);
 
-            // Delete the extra cargo from the database
-            db.ShipGoods.DeleteAllOnSubmit(this.ShipOther.ShipGoods);
+            // Move cargo into our cargo bays
+            this.LoadCargo();
 
             Player turnPlayer = this.ShipTurn.Players.SingleOrDefault();
             Player otherPlayer = this.ShipOther.Players.SingleOrDefault();
@@ -574,6 +551,7 @@ namespace CosmoMonger.Models
                 );
 
                 // Take the other players credits
+                this.CreditsLooted = otherPlayer.CashCredits;
                 turnPlayer.CashCredits += otherPlayer.CashCredits;
                 otherPlayer.CashCredits = 0;
 
@@ -633,10 +611,8 @@ namespace CosmoMonger.Models
 
                 // Update player stats
                 otherPlayer.ShipsLost++;
-                otherPlayer.CargoLostWorth += cargoWorth;
-
+                
                 turnPlayer.ShipsDestroyed++;
-                turnPlayer.CargoLootedWorth += cargoWorth;
 
                 // Combat has ended
                 this.Status = CombatStatus.ShipDestroyed;
@@ -663,6 +639,111 @@ namespace CosmoMonger.Models
             else
             {
                 throw new NotImplementedException("Non-player ship or NPC combat not supported");
+            }
+        }
+
+        /// <summary>
+        /// Sends all the cargo on the ship into space.
+        /// </summary>
+        /// <param name="sourceShip">The source ship to throw the cargo out of.</param>
+        private void SendCargoIntoSpace(Ship sourceShip)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // We will unload all the cargo off of the source ship and move it into the combat 'space'
+            foreach (ShipGood shipGood in sourceShip.ShipGoods) 
+            {
+                CombatGood good = (from g in this.CombatGoods
+                                   where g.Good == shipGood.Good
+                                   select g).SingleOrDefault();
+                if (good == null)
+                {
+                    good = new CombatGood();
+                    good.Combat = this;
+                    good.Good = shipGood.Good;
+                    db.CombatGoods.InsertOnSubmit(good);
+                }
+
+                // Into space the good goes...
+                good.Quantity += shipGood.Quantity;
+                // The good is no longer on the ship
+                shipGood.Quantity = 0;
+            }
+
+            // Update the player stats on lost cargo
+            Player shipPlayer = sourceShip.Players.SingleOrDefault();
+            if (shipPlayer != null)
+            {
+                int cargoWorth = this.CombatGoods.Sum(g => (g.Quantity * g.Good.BasePrice));
+                shipPlayer.CargoLostWorth += cargoWorth;
+            }
+
+            try
+            {
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to the ship or combat goods
+                // Keep our changes
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    occ.Resolve(RefreshMode.KeepChanges);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Loads as much of the cargo in space as possible into the current turn ship.
+        /// </summary>
+        private void LoadCargo()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // We will unload all the cargo off of the source ship and move it into the combat 'space'
+            // Load the higher priced goods first
+            foreach (CombatGood good in this.CombatGoods.OrderByDescending(g => g.Good.BasePrice))
+            {
+                // Load up the cargo
+                int quantityLoaded = this.ShipTurn.AddGood(good.GoodId, good.Quantity);
+                good.QuantityPickedUp = quantityLoaded;
+            }
+
+            Logger.Write("Picked up cargo", "Model", 150, 0, TraceEventType.Verbose, "Combat.LoadCargo",
+                new Dictionary<string, object>
+                {
+                    { "CombatId", this.CombatId },
+                    { "TurnShipId", this.ShipTurn.ShipId },
+                    { "OtherShipId", this.ShipOther.ShipId },
+                    { "TotalCargoCount", this.CombatGoods.Sum(g => g.Quantity) },
+                    { "TotalPickupCount", this.CombatGoods.Sum(g => g.QuantityPickedUp) }
+                }
+            );
+
+            // Update the player stats on looted cargo
+            Player shipPlayer = this.ShipTurn.Players.SingleOrDefault();
+            if (shipPlayer != null)
+            {
+                int cargoWorth = this.CombatGoods.Sum(g => (g.Quantity * g.Good.BasePrice));
+                shipPlayer.CargoLootedWorth += cargoWorth;
+            }
+
+            try
+            {
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to the ship or combat goods
+                // Keep our changes
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    occ.Resolve(RefreshMode.KeepChanges);
+                }
             }
         }
     }

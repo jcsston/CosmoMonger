@@ -92,6 +92,8 @@
             Combat combat = this.ControllerGame.GetCombat(combatId);
             if (combat != null)
             {
+                ViewData["CreditsLooted"] = combat.CreditsLooted;
+
                 Ship playerShip = this.ControllerGame.CurrentPlayer.Ship;
                 switch (combat.Status)
                 {
@@ -99,10 +101,12 @@
                         if (combat.ShipTurn == playerShip)
                         {
                             ViewData["Message"] = "Player has won";
+                            ViewData["CargoLooted"] = combat.CombatGoods;
                         }
                         else
                         {
                             ViewData["Message"] = "Player has lost";
+                            ViewData["CargoLost"] = combat.CombatGoods;
                         }
                         break;
 
@@ -110,10 +114,12 @@
                         if (combat.ShipTurn == playerShip)
                         {
                             ViewData["Message"] = "Player picked up cargo";
+                            ViewData["CargoLooted"] = combat.CombatGoods;
                         }
                         else
                         {
                             ViewData["Message"] = "Player escaped";
+                            ViewData["CargoLost"] = combat.CombatGoods;
                         }
                         break;
 
@@ -132,15 +138,15 @@
                         if (combat.ShipTurn == playerShip)
                         {
                             ViewData["Message"] = "Player has captured opposing player";
+                            ViewData["CargoLooted"] = combat.CombatGoods;
                         }
                         else
                         {
                             ViewData["Message"] = "Player surrendered";
+                            ViewData["CargoLost"] = combat.CombatGoods;
                         }
                         break;
                 }
-
-                ViewData["Combat"] = combat;
 
                 return View();
             }

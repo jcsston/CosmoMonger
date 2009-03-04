@@ -505,7 +505,7 @@ div.race
 }
 
 /* ListGoods View CSS */
-h1.goods
+h1.goods, h2.goods
 {
     text-align: center;
 }

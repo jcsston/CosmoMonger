@@ -3823,4 +3823,31 @@
     <comment>Changed the CurrentJumpDriveCharge column on the Ship table to NOT NULL. Unsure why it was marked as nullable.</comment>
     <addNotNullConstraint tableName="Ship" columnName="CurrentJumpDriveCharge" defaultNullValue="0" columnDataType="int" />
   </changeSet>
- </databaseChangeLog>
+  <changeSet author="Jory Stone" id="66">
+    <comment>Created indexes on Player and ShipGood table to help query speed.</comment>
+    <createIndex tableName="Player" indexName="IDX_Player_UserId">
+      <column name="UserId" />
+    </createIndex>
+    <createIndex tableName="ShipGood" indexName="IDX_ShipGood_ShipId">
+      <column name="ShipId" />
+    </createIndex>
+  </changeSet>
+  <changeSet author="Jory Stone" id="67">
+    <comment>Adding LastActionTime column on the Combat table to track the time since the last action taken during a turn. This will be used to enforce a time limit on turn actions.</comment>
+    <addColumn tableName="Combat">
+      <column name="LastActionTime" type="datetime" />
+    </addColumn>
+    <addNotNullConstraint tableName="Combat" columnName="LastActionTime" columnDataType="datetime" defaultNullValue="" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="68">
+    <comment>Adding LootedCredits column on the Combat table to track the amount of credits looted.</comment>
+    <addColumn tableName="Combat">
+      <column name="LootedCredits" type="int" />
+    </addColumn>
+    <addNotNullConstraint tableName="Combat" columnName="LootedCredits" columnDataType="int" defaultNullValue="0" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="69">
+    <comment>Renamed LootedCredits column on the Combat table to CreditsLooted.</comment>
+    <renameColumn tableName="Combat" oldColumnName="LootedCredits" newColumnName="CreditsLooted" />
+  </changeSet>
+</databaseChangeLog>

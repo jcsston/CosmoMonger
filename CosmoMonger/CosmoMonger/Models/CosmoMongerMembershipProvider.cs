@@ -233,14 +233,17 @@ namespace CosmoMonger.Models
                                  select u).SingleOrDefault();
             if (matchingUser != null)
             {
+                db.Log = Console.Error;
                 // We have to delete all objects in the database related to this user
                 var playerShips = (from p in db.Players where p.User == matchingUser select p.Ship);
                 var playerShipIds = (from p in db.Players where p.User == matchingUser select p.Ship.ShipId);
                 db.Players.DeleteAllOnSubmit(from p in db.Players where p.User == matchingUser select p);
-                db.Combats.DeleteAllOnSubmit(from c in db.Combats
-                                                       where playerShipIds.Contains(c.AttackerShipId)
-                                                       || playerShipIds.Contains(c.DefenderShipId)
-                                                       select c);
+                List<int> playerCombatIds = (from c in db.Combats
+                                             where playerShipIds.Contains(c.AttackerShipId)
+                                             || playerShipIds.Contains(c.DefenderShipId)
+                                             select c.CombatId).ToList();
+                db.CombatGoods.DeleteAllOnSubmit(from g in db.CombatGoods where playerCombatIds.Contains(g.CombatId) select g);
+                db.Combats.DeleteAllOnSubmit(from c in db.Combats where playerCombatIds.Contains(c.CombatId) select c);
                 db.ShipGoods.DeleteAllOnSubmit(from g in db.ShipGoods where playerShips.Contains(g.Ship) select g);
                 db.Ships.DeleteAllOnSubmit(playerShips);
                 db.BuddyLists.DeleteAllOnSubmit(from b in db.BuddyLists
@@ -257,6 +260,7 @@ namespace CosmoMonger.Models
                                               select m);
                 db.Users.DeleteOnSubmit(matchingUser);
                 db.SubmitChanges();
+                db.Log = null;
                 return true;
             }
 
