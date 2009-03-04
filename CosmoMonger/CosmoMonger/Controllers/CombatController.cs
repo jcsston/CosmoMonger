@@ -22,7 +22,16 @@
 
         public ActionResult Attack()
         {
-            ViewData["Ships"] = this.ControllerGame.CurrentPlayer.Ship.GetShipsToAttack();
+            Ship playerShip = this.ControllerGame.CurrentPlayer.Ship;
+            // Check if there is a combat in progress
+            if (playerShip.InProgressCombat != null)
+            {
+                // Redirect to combat start
+                return RedirectToAction("CombatStart");
+            }
+
+            ViewData["Ships"] = playerShip.CosmoSystem.GetShipsInSystem().Where(s => s != playerShip);
+            ViewData["ShipsToAttack"] = playerShip.GetShipsToAttack();
 
             return View();
         }
@@ -173,6 +182,33 @@
                 try
                 {
                     selectedCombat.FireWeapon();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Combat is over
+                    message = ex.Message;
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    // Not enough turn points
+                    message = ex.Message;
+                }
+
+                return Json(new { message = message, status = BuildCombatStatus(selectedCombat) });
+            }
+
+            return Json(false);
+        }
+
+        public JsonResult ChargeJumpdrive(int combatId)
+        {
+            Combat selectedCombat = this.ControllerGame.GetCombat(combatId);
+            if (selectedCombat != null)
+            {
+                string message = null;
+                try
+                {
+                    selectedCombat.ChargeJumpdrive();
                 }
                 catch (InvalidOperationException ex)
                 {

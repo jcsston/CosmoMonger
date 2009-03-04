@@ -5,21 +5,26 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <h1>Attack Ship</h1>
 <%
+IEnumerable<Ship> shipsToAttack = (IEnumerable<Ship>)ViewData["ShipsToAttack"];
 // Note: if your tag is a reserved work, like "class", use the standard @ reserved word prefix: "@class"
 Html.Grid<Ship>(
 	"Ships",
-    new Hash(empty => "No ships are currently leaving the system", @class => "grid"),
+    new Hash(empty => "No ships are currently in the system", @class => "grid"),
 	column => {
         column.For(s => s.Players.Select(p => p.Name).SingleOrDefault(), "Player Name");
         column.For(s => s.BaseShip.Name, "Ship Type");
         column.For("Attack").Do(s =>
         {%><td><%
-            using (Html.BeginForm())
-            { 
-            %><div>
-                <input type="hidden" name="shipId" value="<%=s.ShipId %>" /> 
-                <input type="submit" value="Attack" />
-            </div><% 
+            if (shipsToAttack.Contains(s)) {
+                using (Html.BeginForm())
+                { 
+                %><div>
+                    <input type="hidden" name="shipId" value="<%=s.ShipId %>" /> 
+                    <input type="submit" value="Attack" />
+                </div><% 
+                }
+            } else {
+                %>Docked<%
             }
             %></td><%
         });

@@ -96,6 +96,9 @@ namespace CosmoMonger.Models
     partial void InsertUser(User instance);
     partial void UpdateUser(User instance);
     partial void DeleteUser(User instance);
+    partial void InsertCombatGood(CombatGood instance);
+    partial void UpdateCombatGood(CombatGood instance);
+    partial void DeleteCombatGood(CombatGood instance);
     #endregion
 		
 		public CosmoMongerDbDataContext() : 
@@ -301,6 +304,14 @@ namespace CosmoMonger.Models
 			get
 			{
 				return this.GetTable<User>();
+			}
+		}
+		
+		public System.Data.Linq.Table<CombatGood> CombatGoods
+		{
+			get
+			{
+				return this.GetTable<CombatGood>();
 			}
 		}
 	}
@@ -1144,6 +1155,8 @@ namespace CosmoMonger.Models
 		
 		private EntitySet<SystemGood> _SystemGoods;
 		
+		private EntitySet<CombatGood> _CombatGoods;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1164,6 +1177,7 @@ namespace CosmoMonger.Models
 		{
 			this._ShipGoods = new EntitySet<ShipGood>(new Action<ShipGood>(this.attach_ShipGoods), new Action<ShipGood>(this.detach_ShipGoods));
 			this._SystemGoods = new EntitySet<SystemGood>(new Action<SystemGood>(this.attach_SystemGoods), new Action<SystemGood>(this.detach_SystemGoods));
+			this._CombatGoods = new EntitySet<CombatGood>(new Action<CombatGood>(this.attach_CombatGoods), new Action<CombatGood>(this.detach_CombatGoods));
 			OnCreated();
 		}
 		
@@ -1293,6 +1307,19 @@ namespace CosmoMonger.Models
 			}
 		}
 		
+		[Association(Name="Good_CombatGood", Storage="_CombatGoods", ThisKey="GoodId", OtherKey="GoodId")]
+		public EntitySet<CombatGood> CombatGoods
+		{
+			get
+			{
+				return this._CombatGoods;
+			}
+			set
+			{
+				this._CombatGoods.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -1332,6 +1359,18 @@ namespace CosmoMonger.Models
 		}
 		
 		private void detach_SystemGoods(SystemGood entity)
+		{
+			this.SendPropertyChanging();
+			entity.Good = null;
+		}
+		
+		private void attach_CombatGoods(CombatGood entity)
+		{
+			this.SendPropertyChanging();
+			entity.Good = this;
+		}
+		
+		private void detach_CombatGoods(CombatGood entity)
 		{
 			this.SendPropertyChanging();
 			entity.Good = null;
@@ -1528,6 +1567,8 @@ namespace CosmoMonger.Models
 		
 		private Combat.CombatStatus _Complete;
 		
+		private EntitySet<CombatGood> _CombatGoods;
+		
 		private EntityRef<Ship> _Ship;
 		
 		private EntityRef<Ship> _Ship1;
@@ -1556,6 +1597,7 @@ namespace CosmoMonger.Models
 		
 		public Combat()
 		{
+			this._CombatGoods = new EntitySet<CombatGood>(new Action<CombatGood>(this.attach_CombatGoods), new Action<CombatGood>(this.detach_CombatGoods));
 			this._Ship = default(EntityRef<Ship>);
 			this._Ship1 = default(EntityRef<Ship>);
 			OnCreated();
@@ -1729,6 +1771,19 @@ namespace CosmoMonger.Models
 			}
 		}
 		
+		[Association(Name="Combat_CombatGood", Storage="_CombatGoods", ThisKey="CombatId", OtherKey="CombatId")]
+		public EntitySet<CombatGood> CombatGoods
+		{
+			get
+			{
+				return this._CombatGoods;
+			}
+			set
+			{
+				this._CombatGoods.Assign(value);
+			}
+		}
+		
 		[Association(Name="Ship_Combat", Storage="_Ship", ThisKey="AttackerShipId", OtherKey="ShipId", IsForeignKey=true)]
 		public Ship AttackerShip
 		{
@@ -1815,6 +1870,18 @@ namespace CosmoMonger.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_CombatGoods(CombatGood entity)
+		{
+			this.SendPropertyChanging();
+			entity.Combat = this;
+		}
+		
+		private void detach_CombatGoods(CombatGood entity)
+		{
+			this.SendPropertyChanging();
+			entity.Combat = null;
 		}
 	}
 	
@@ -7384,6 +7451,222 @@ namespace CosmoMonger.Models
 		{
 			this.SendPropertyChanging();
 			entity.User = null;
+		}
+	}
+	
+	[Table(Name="dbo.CombatGood")]
+	public partial class CombatGood : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _CombatId;
+		
+		private int _GoodId;
+		
+		private int _Quantity;
+		
+		private int _QuantityPickedUp;
+		
+		private EntityRef<Combat> _Combat;
+		
+		private EntityRef<Good> _Good;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCombatIdChanging(int value);
+    partial void OnCombatIdChanged();
+    partial void OnGoodIdChanging(int value);
+    partial void OnGoodIdChanged();
+    partial void OnQuantityChanging(int value);
+    partial void OnQuantityChanged();
+    partial void OnQuantityPickedUpChanging(int value);
+    partial void OnQuantityPickedUpChanged();
+    #endregion
+		
+		public CombatGood()
+		{
+			this._Combat = default(EntityRef<Combat>);
+			this._Good = default(EntityRef<Good>);
+			OnCreated();
+		}
+		
+		[Column(Storage="_CombatId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int CombatId
+		{
+			get
+			{
+				return this._CombatId;
+			}
+			set
+			{
+				if ((this._CombatId != value))
+				{
+					if (this._Combat.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCombatIdChanging(value);
+					this.SendPropertyChanging();
+					this._CombatId = value;
+					this.SendPropertyChanged("CombatId");
+					this.OnCombatIdChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_GoodId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int GoodId
+		{
+			get
+			{
+				return this._GoodId;
+			}
+			set
+			{
+				if ((this._GoodId != value))
+				{
+					if (this._Good.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnGoodIdChanging(value);
+					this.SendPropertyChanging();
+					this._GoodId = value;
+					this.SendPropertyChanged("GoodId");
+					this.OnGoodIdChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Quantity", DbType="Int NOT NULL")]
+		public int Quantity
+		{
+			get
+			{
+				return this._Quantity;
+			}
+			set
+			{
+				if ((this._Quantity != value))
+				{
+					this.OnQuantityChanging(value);
+					this.SendPropertyChanging();
+					this._Quantity = value;
+					this.SendPropertyChanged("Quantity");
+					this.OnQuantityChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_QuantityPickedUp", DbType="Int NOT NULL")]
+		public int QuantityPickedUp
+		{
+			get
+			{
+				return this._QuantityPickedUp;
+			}
+			set
+			{
+				if ((this._QuantityPickedUp != value))
+				{
+					this.OnQuantityPickedUpChanging(value);
+					this.SendPropertyChanging();
+					this._QuantityPickedUp = value;
+					this.SendPropertyChanged("QuantityPickedUp");
+					this.OnQuantityPickedUpChanged();
+				}
+			}
+		}
+		
+		[Association(Name="Combat_CombatGood", Storage="_Combat", ThisKey="CombatId", OtherKey="CombatId", IsForeignKey=true)]
+		public Combat Combat
+		{
+			get
+			{
+				return this._Combat.Entity;
+			}
+			set
+			{
+				Combat previousValue = this._Combat.Entity;
+				if (((previousValue != value) 
+							|| (this._Combat.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Combat.Entity = null;
+						previousValue.CombatGoods.Remove(this);
+					}
+					this._Combat.Entity = value;
+					if ((value != null))
+					{
+						value.CombatGoods.Add(this);
+						this._CombatId = value.CombatId;
+					}
+					else
+					{
+						this._CombatId = default(int);
+					}
+					this.SendPropertyChanged("Combat");
+				}
+			}
+		}
+		
+		[Association(Name="Good_CombatGood", Storage="_Good", ThisKey="GoodId", OtherKey="GoodId", IsForeignKey=true)]
+		public Good Good
+		{
+			get
+			{
+				return this._Good.Entity;
+			}
+			set
+			{
+				Good previousValue = this._Good.Entity;
+				if (((previousValue != value) 
+							|| (this._Good.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Good.Entity = null;
+						previousValue.CombatGoods.Remove(this);
+					}
+					this._Good.Entity = value;
+					if ((value != null))
+					{
+						value.CombatGoods.Add(this);
+						this._GoodId = value.GoodId;
+					}
+					else
+					{
+						this._GoodId = default(int);
+					}
+					this.SendPropertyChanged("Good");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }
