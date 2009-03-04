@@ -119,7 +119,7 @@
         [Test]
         public void ChargeJumpdrive()
         {
-            combat.ChargeJumpdrive();
+            combat.ChargeJumpDrive();
 
             Assert.That(combat.ShipTurn, Is.EqualTo(player2.Ship), "Should now be Player 2's turn");
             Assert.That(combat.TurnPointsLeft, Is.EqualTo(Combat.PointsPerTurn), "Player 2's turn points left should match points per turn");

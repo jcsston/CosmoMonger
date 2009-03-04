@@ -179,19 +179,24 @@
             if (selectedCombat != null)
             {
                 string message = null;
-                try
+
+                // Check that it is the current players turn
+                if (selectedCombat.ShipTurn == this.ControllerGame.CurrentPlayer.Ship)
                 {
-                    selectedCombat.FireWeapon();
-                }
-                catch (InvalidOperationException ex)
-                {
-                    // Combat is over
-                    message = ex.Message;
-                }
-                catch (ArgumentOutOfRangeException ex)
-                {
-                    // Not enough turn points
-                    message = ex.Message;
+                    try
+                    {
+                        selectedCombat.FireWeapon();
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // Combat is over
+                        message = ex.Message;
+                    }
+                    catch (ArgumentOutOfRangeException ex)
+                    {
+                        // Not enough turn points
+                        message = ex.Message;
+                    }
                 }
 
                 return Json(new { message = message, status = BuildCombatStatus(selectedCombat) });
@@ -200,25 +205,30 @@
             return Json(false);
         }
 
-        public JsonResult ChargeJumpdrive(int combatId)
+        public JsonResult ChargeJumpDrive(int combatId)
         {
             Combat selectedCombat = this.ControllerGame.GetCombat(combatId);
             if (selectedCombat != null)
             {
                 string message = null;
-                try
+
+                // Check that it is the current players turn
+                if (selectedCombat.ShipTurn == this.ControllerGame.CurrentPlayer.Ship)
                 {
-                    selectedCombat.ChargeJumpdrive();
-                }
-                catch (InvalidOperationException ex)
-                {
-                    // Combat is over
-                    message = ex.Message;
-                }
-                catch (ArgumentOutOfRangeException ex)
-                {
-                    // Not enough turn points
-                    message = ex.Message;
+                    try
+                    {
+                        selectedCombat.ChargeJumpDrive();
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // Combat is over
+                        message = ex.Message;
+                    }
+                    catch (ArgumentOutOfRangeException ex)
+                    {
+                        // Not enough turn points
+                        message = ex.Message;
+                    }
                 }
 
                 return Json(new { message = message, status = BuildCombatStatus(selectedCombat) });

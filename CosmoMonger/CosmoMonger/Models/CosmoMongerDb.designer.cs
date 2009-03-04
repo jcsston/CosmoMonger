@@ -4478,7 +4478,7 @@ namespace CosmoMonger.Models
 		
 		private System.Nullable<int> _TargetSystemId;
 		
-		private System.Nullable<int> _CurrentJumpDriveCharge;
+		private int _CurrentJumpDriveCharge;
 		
 		private System.Nullable<System.DateTime> _TargetSystemArrivalTime;
 		
@@ -4528,7 +4528,7 @@ namespace CosmoMonger.Models
     partial void OnDamageHullChanged();
     partial void OnTargetSystemIdChanging(System.Nullable<int> value);
     partial void OnTargetSystemIdChanged();
-    partial void OnCurrentJumpDriveChargeChanging(System.Nullable<int> value);
+    partial void OnCurrentJumpDriveChargeChanging(int value);
     partial void OnCurrentJumpDriveChargeChanged();
     partial void OnTargetSystemArrivalTimeChanging(System.Nullable<System.DateTime> value);
     partial void OnTargetSystemArrivalTimeChanged();
@@ -4789,8 +4789,8 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_CurrentJumpDriveCharge", DbType="Int")]
-		public System.Nullable<int> CurrentJumpDriveCharge
+		[Column(Storage="_CurrentJumpDriveCharge", DbType="Int NOT NULL")]
+		public int CurrentJumpDriveCharge
 		{
 			get
 			{

@@ -3819,4 +3819,8 @@
     <addForeignKeyConstraint baseColumnNames="CombatId" baseTableName="CombatGood" constraintName="FK_Combat_CombatGood_CombatId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="CombatId" referencedTableName="Combat"/>
     <addForeignKeyConstraint baseColumnNames="GoodId" baseTableName="CombatGood" constraintName="FK_Good_CombatGood_GoodId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="GoodId" referencedTableName="Good"/>
   </changeSet>
+  <changeSet author="Jory Stone" id="65">
+    <comment>Changed the CurrentJumpDriveCharge column on the Ship table to NOT NULL. Unsure why it was marked as nullable.</comment>
+    <addNotNullConstraint tableName="Ship" columnName="CurrentJumpDriveCharge" defaultNullValue="0" columnDataType="int" />
+  </changeSet>
  </databaseChangeLog>

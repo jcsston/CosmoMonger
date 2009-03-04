@@ -200,7 +200,7 @@
       <Column Name="DamageShield" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="DamageHull" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TargetSystemId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CurrentJumpDriveCharge" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CurrentJumpDriveCharge" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TargetSystemArrivalTime" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
       <Association Name="Ship_Combat" Member="CombatsAttacker" Storage="_InProgressCombats" ThisKey="ShipId" OtherKey="AttackerShipId" Type="Combat" />
       <Association Name="Ship_Combat1" Member="CombatsDefender" Storage="_InProgressCombats1" ThisKey="ShipId" OtherKey="DefenderShipId" Type="Combat" />

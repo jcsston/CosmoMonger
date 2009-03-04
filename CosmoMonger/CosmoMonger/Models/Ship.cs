@@ -440,5 +440,34 @@ namespace CosmoMonger.Models
                                    select s);
             return systemsWithBank.First();
         }
+
+        /// <summary>
+        /// Completely repairs this ship.
+        /// </summary>
+        public void Repair()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            this.DamageEngine = 0;
+            this.DamageHull = 0;
+            this.DamageShield = 0;
+            this.DamageWeapon = 0;
+
+            try
+            {
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to this ship record
+                // Keep our changes, but update the other values
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    occ.Resolve(RefreshMode.KeepChanges);
+                }
+            }
+        }
     }
 }

@@ -60,8 +60,13 @@
 
             $('#chargeJumpDrive').click(function(eventObject) {
                 $(".turnAction").attr("disabled", "disabled");
-
-                $(".turnAction").attr("disabled", "");
+                $.getJSON('/Combat/ChargeJumpDrive', { combatId: combatId }, function(data) {
+                    updateCombatStatus(data.status, true);
+                    if (data.message) {
+                        alert(data.message);
+                    }
+                    $(".turnAction").attr("disabled", "");
+                });
             });
 
             $('#jettisonCargo').click(function(eventObject) {

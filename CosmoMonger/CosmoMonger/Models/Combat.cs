@@ -399,7 +399,7 @@ namespace CosmoMonger.Models
         /// Uses the rest of the current turn points to charge the jump drive. 
         /// If the jump drive becomes completely charged, the ship escapes and combat is ended.
         /// </summary>
-        public void ChargeJumpdrive()
+        public void ChargeJumpDrive()
         {
             // Check that the combat is still in-progress
             if (this.Status != CombatStatus.Incomplete)
@@ -409,24 +409,56 @@ namespace CosmoMonger.Models
 
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
-            // Get the current jumpdrive charge if any
-            int currentCharge = this.ShipTurn.CurrentJumpDriveCharge ?? 0;
-
             // Alloc turn points to the charge of the JumpDrive
-            this.ShipTurn.CurrentJumpDriveCharge = currentCharge + this.TurnPointsLeft;
+            this.ShipTurn.CurrentJumpDriveCharge += this.TurnPointsLeft;
             this.TurnPointsLeft = 0;
 
             // Did the jumpdrive fully charge?
             if (this.ShipTurn.CurrentJumpDriveCharge >= 100)
             {
-                // TODO: This ship escapes combat
+                // This ship escapes combat
                 this.Status = CombatStatus.ShipFled;
-                throw new NotImplementedException();
+
+                try
+                {
+                    // Save database changes
+                    db.SubmitChanges(ConflictMode.ContinueOnConflict);
+                }
+                catch (ChangeConflictException ex)
+                {
+                    ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                    // Another thread has made changes to the combat record, this is invalid
+                    // and so we use our values and ignore the new data
+                    foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                    {
+                        // Refresh current values from database
+                        occ.Resolve(RefreshMode.KeepCurrentValues);
+                    }
+                }
+
+                // Repair both ships
+                this.ShipTurn.Repair();
+                this.ShipOther.Repair();
+
+                // Check how much the longer the ship needed prep for jumping
+                if (this.ShipTurn.TargetSystemArrivalTime.HasValue && this.ShipTurn.TargetSystemArrivalTime > DateTime.Now)
+                {
+                    // The ship still needs time to prep,
+                    // Combat is non real-time so we will cheat here and make the ship instantly jump
+                    this.ShipTurn.TargetSystemArrivalTime = DateTime.Now.AddSeconds(-1);
+                }
+
+                // Ensure that the ship traveling is in valid state
+                this.ShipTurn.CheckIfTraveling();
+            }
+            else
+            {
+                // Ship did not escape yet, so it's the other ships turn
+                this.SwapTurn();
             }
 
             db.SubmitChanges();
-
-            this.SwapTurn();
         }
 
         /// <summary>
@@ -511,6 +543,10 @@ namespace CosmoMonger.Models
             this.ShipOther.TargetSystemArrivalTime = null;
             this.ShipTurn.TargetSystemId = null;
             this.ShipTurn.TargetSystemArrivalTime = null;
+            
+            // Reset jump drive charges
+            this.ShipOther.CurrentJumpDriveCharge = 0;
+            this.ShipTurn.CurrentJumpDriveCharge = 0;
 
             // Move cargo into our cargo bays
             int cargoWorth = this.ShipOther.ShipGoods.Sum(g => (g.Quantity * g.Good.BasePrice));
@@ -620,6 +656,9 @@ namespace CosmoMonger.Models
                         occ.Resolve(RefreshMode.KeepChanges);
                     }
                 }
+
+                // Repair winners ship
+                this.ShipTurn.Repair();
             }
             else
             {
