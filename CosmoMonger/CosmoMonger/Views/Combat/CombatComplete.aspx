@@ -4,7 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <h1><%=Html.Encode(ViewData["Message"]) %></h1>
-<h2 class="goods">Results of Combat</h2>
+<h2 class="center">Results of Combat</h2>
 <%
 if (ViewData["CargoLooted"] != null)
 {
@@ -19,7 +19,7 @@ if (ViewData["CargoLooted"] != null)
             column.For(g => "$" + (g.QuantityPickedUp * g.Good.BasePrice), "Picked Up Cargo Worth");
         }
     );
-    %><p>Credits Looted: $<%=Html.Encode(ViewData["CreditsLooted"])%></p><%
+    %><p class="center">Credits Looted: $<%=Html.Encode(ViewData["CreditsLooted"])%></p><%
 }
 else if (ViewData["CargoLost"] != null)
 {
@@ -33,7 +33,12 @@ else if (ViewData["CargoLost"] != null)
             column.For(g => "$" + (g.Quantity * g.Good.BasePrice), "Lost Cargo Worth");
         }
     );
-    %><p>Credits Lost: $<%=Html.Encode(ViewData["CreditsLooted"])%></p><%
+    %><p class="center">Credits Lost: $<%=Html.Encode(ViewData["CreditsLooted"])%></p><%
+}
+
+if (ViewData["FinalImage"] != null)
+{
+    %><div class="center"><img src="/Content/<%=Url.Encode((string)ViewData["FinalImage"])%>" alt="Combat End" /></div><%
 }
 %>
 </asp:Content>

@@ -127,6 +127,7 @@
                         if (combat.ShipTurn == playerShip)
                         {
                             ViewData["Message"] = "Player escaped";
+                            ViewData["FinalImage"] = "RunningChicken.png";
                         }
                         else
                         {
