@@ -45,7 +45,7 @@
                                 digits: true,
                                 min: goodQuantityMin,
                                 max: goodQuantityMax
-                            },
+                            }
                         },
                         // Error placement option, we want to show the error message to the user on a new line after the problem form element
                         errorPlacement: function (label, element) {

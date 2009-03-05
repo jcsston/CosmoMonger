@@ -43,11 +43,13 @@ a:active
     color: #12eb87;
 }
 
+/*
 p, ul
 {
     margin-bottom: 20px;
     line-height: 1.6em;
 }
+*/
 
 /* HEADINGS   
 ----------------------------------------------------------*/
@@ -545,6 +547,30 @@ table.goods td + td
 table.goodsCenter td
 {
     text-align: center;
+}
+
+.priceTableCurrentSystem
+{
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: larger;
+}
+
+.priceTableCurrentSystem td
+{
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: larger;
+}
+
+.priceTableLow
+{
+    color: red;
+}
+
+.priceTableHigh
+{
+    color: blue;
 }
 
 /* ListRecords View */

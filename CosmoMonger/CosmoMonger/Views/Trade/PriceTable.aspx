@@ -24,13 +24,15 @@
     foreach (PriceTableEntry entry in priceTable)
     {
 %>
-    <tr>
+    <tr class="<%=(currentSystem.Name == entry.SystemName) ? "priceTableCurrentSystem" : "" %>">
         <td><b><%=Html.Encode(entry.SystemName)%></b></td>
 <%
         foreach (KeyValuePair<string, int> goodPrice in entry.GoodPrices)
         {
+            int maxPrice = priceTable.Max(g => g.GoodPrices[goodPrice.Key]);
+            int minPrice = priceTable.Where(g => g.GoodPrices[goodPrice.Key] > 0).Min(g => g.GoodPrices[goodPrice.Key]);
 %>       
-            <td><%=goodPrice.Value != 0 ? goodPrice.Value.ToString() : "N/A"%></td>
+            <td class="<%=(goodPrice.Value == maxPrice) ? "priceTableHigh" : (goodPrice.Value == minPrice) ? "priceTableLow" : "" %>"><%=goodPrice.Value != 0 ? goodPrice.Value.ToString() : "N/A"%></td>
 <%
         }
 %> 
@@ -39,6 +41,15 @@
     }
 %>
 </table>
+<p class="center">
+Legend:
+<br />
+<span class="priceTableLow">The Lowest Prices for a good are marked like this. </span>
+<br />
+<span class="priceTableHigh">The Highest Prices for a good are marked like this.</span>
+<br />
+<span class="priceTableCurrentSystem">The System you are located in is marked like this.</span>
+</p>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>

@@ -24,8 +24,8 @@
             {
                 using (Html.BeginForm("BuyShip", "Ship"))
                 {
-                    %><p><%=Html.Hidden("shipId", ship.BaseShipId, new { id = "shipId" + ship.BaseShipId })
-                    %><input type="submit" value="Buy" /></p><%
+                    %><div><%=Html.Hidden("shipId", ship.BaseShipId, new { id = "shipId" + ship.BaseShipId })
+                    %><input type="submit" value="Buy" /></div><%
                 }
             }
             else
