@@ -76,7 +76,7 @@
 <h1 class="goods">Buy &amp; Sell in the <%=Html.Encode(currentSystem.Name) %> System</h1>
 <hr />
 <table class="goods">
-<tr><td rowspan="11" class="systemImg"><img alt="System Image" src="/Content/System/<%=Html.Encode(currentSystem.Name) %>.png" /></td><th>Name</th><th>Base Price</th><th>Price</th><th># in System</th><th>Buy</th><th># in Ship</th><th>Sell</th></tr>
+<tr><td rowspan="11"><img class="systemImg" alt="System Image" src="/Content/System/<%=Html.Encode(currentSystem.Name) %>.png" /></td><th>Name</th><th>Base Price</th><th>Price</th><th># in System</th><th>Buy</th><th># in Ship</th><th>Sell</th></tr>
 <%
     foreach (SystemGood good in systemGoods)
     {
