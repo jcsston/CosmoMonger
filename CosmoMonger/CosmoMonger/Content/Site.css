@@ -510,6 +510,13 @@ h1.goods, h2.goods
     text-align: center;
 }
 
+td.systemImg
+{
+	margin-right: 20px;
+
+}
+
+
 table.goods
 {
     border-spacing: 5px;
