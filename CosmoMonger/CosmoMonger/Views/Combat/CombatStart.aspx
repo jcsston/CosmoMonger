@@ -10,19 +10,48 @@
             // Update player/enemy hull/shield damage
             var playerHull = $('#playerHull');
             if (playerHull.css('height') != data.playerHull + '%') {
-                playerHull.animate({ height: data.playerHull + '%' }, "slow");
+                //$("#playerShip").effect("bounce", { direction: "right", distance: 30 }, 500);
+                if (data.playerHull > 8) {
+                    playerHull.text(data.playerHull + '%');
+                } else {
+                    playerHull.text('');
+                }
+                playerHull.animate({ height: data.playerHull + '%' }, "normal");
+                if (data.playerHull == 100) {
+                    // Ship explodes...
+                    $('#playerShip').hide("explode", { number: 9 }, 1000);
+                }
             }
             var playerShield = $('#playerShield');
             if (playerShield.css('height') != data.playerShield + '%') {
-                playerShield.animate({ height: data.playerShield + '%' }, "slow");
+                if (data.playerShield > 8) {
+                    playerShield.text(data.playerShield + '%');
+                } else {
+                    playerShield.text('');
+                }
+                playerShield.animate({ height: data.playerShield + '%' }, "normal");
             }
             var enemyHull = $('#enemyHull');
             if (enemyHull.css('height') != data.enemyHull + '%') {
-                enemyHull.animate({ height: data.enemyHull + '%' }, "slow");
+                if (data.enemyHull > 8) {
+                    enemyHull.text(data.enemyHull + '%');
+                } else {
+                    enemyHull.text('');
+                }
+                enemyHull.animate({ height: data.enemyHull + '%' }, "normal");
+                if (data.enemyHull == 100) {
+                    // Ship explodes...
+                    $('#enemyShip').hide("explode", { number: 9 }, 1000);
+                }
             }
             var enemyShield = $('#enemyShield');
             if (enemyShield.css('height') != data.enemyShield + '%') {
-                enemyShield.animate({ height: data.enemyShield + '%' }, "slow");
+                if (data.enemyShield > 8) {
+                    enemyShield.text(data.enemyShield + '%');
+                } else {
+                    enemyShield.text('');
+                }
+                enemyShield.animate({ height: data.enemyShield + '%' }, "normal");
             }
             
             if (data.turn) {
@@ -77,7 +106,7 @@
 
             $('#offerSurrender').click(function(eventObject) {
                 $(".turnAction").attr("disabled", "disabled");
-
+                
                 $(".turnAction").attr("disabled", "");
             });
 
@@ -115,7 +144,7 @@
             <td>
                 <%=Html.Encode(ViewData["PlayerName"]) %>
                 <br />
-                <img alt="Your Ship" src="/Content/BaseShip/<%=playerShip.BaseShipId %>.png" />
+                <img id="playerShip" alt="Your Ship" src="/Content/BaseShip/<%=playerShip.BaseShipId %>.png" />
                 <br />
                 Your Ship</td>
             <td>
@@ -123,7 +152,7 @@
             <td>
                 <%=Html.Encode(ViewData["EnemyName"]) %>
                 <br />
-                <img alt="Enemy Ship" src="/Content/BaseShip/<%=enemyShip.BaseShipId %>.png" />
+                <img id="enemyShip" alt="Enemy Ship" src="/Content/BaseShip/<%=enemyShip.BaseShipId %>.png" />
                 <br />
                 Enemy Ship</td>
             <td rowspan="2">

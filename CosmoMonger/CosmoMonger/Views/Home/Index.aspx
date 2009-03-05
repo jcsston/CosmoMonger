@@ -1,13 +1,11 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
-    <meta name="description" content="CosmoMonger is an on-line space-based trading game featuring real-time 
-        multi-player interaction." />
+    <meta name="description" content="CosmoMonger is an on-line space-based trading game featuring real-time multi-player interaction." />
     <meta name="keywords" content="CosmoMonger, space, trader, game, free, combat, police, pirates, traders, goods" />
-    
     <title>CosmoMonger</title>
 </asp:Content>
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2><img class="logo" alt="CosmoMonger Logo" src="/Content/Logo.png" />Welcome to CosmoMonger <i class="error">(Under Development)</i></h2>
+    <h2><img id="logo" class="logo" alt="CosmoMonger Logo" src="/Content/Logo.png" />Welcome to CosmoMonger <i class="error">(Under Development)</i></h2>
     <p>
         CosmoMonger is an on-line space-based trading game featuring real-time 
         multi-player interaction.&nbsp; Players own a starship which they use to visit 

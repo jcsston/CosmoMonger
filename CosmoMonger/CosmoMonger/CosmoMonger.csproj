@@ -144,6 +144,9 @@
     <Content Include="Content\tombstone1.png" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\effects.bounce.js" />
+    <Content Include="Scripts\effects.core.js" />
+    <Content Include="Scripts\effects.explode.js" />
     <Content Include="Scripts\excanvas.js" />
     <Content Include="Scripts\excanvas.pack.js" />
     <Content Include="Scripts\jquery-1.2.6-vsdoc.js" />
@@ -155,6 +158,7 @@
     <Content Include="Scripts\jquery.spin-1.0.2.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\ui.core.js" />
     <Content Include="Views\Account\ChangeEmail.aspx" />
     <Content Include="Views\Account\ChangeEmailSuccess.aspx" />
     <Content Include="Views\Account\SendVerificationCode.aspx" />
