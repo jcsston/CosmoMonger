@@ -139,6 +139,11 @@
                     <%= Html.ActionLink("Login", "Login", "Account") %>
                 </li>
             </ul>
+            <ul>
+                <li>
+					<a href="http://wiki.cosmomonger.com/<%= Url.Encode(Url.RequestContext.RouteData.Values["controller"] + "_" + this.Url.RequestContext.RouteData.Values["action"]) %>.ashx" target="_blank">Help</a>
+			    </li>
+			</ul>
             <%
                 } 
             %>
