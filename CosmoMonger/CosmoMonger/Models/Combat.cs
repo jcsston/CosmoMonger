@@ -208,6 +208,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Gives up the rest of the turn and signals that the current ship is surrendering to the opposing ship.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when combat is over or other ship has surrendered</exception>
         public void OfferSurrender()
         {
             // Check that the combat is still in-progress
@@ -219,12 +220,12 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Surrender flag must be not set
-            if (this.Surrender)
+            if (this.Surrendered)
             {
                 throw new InvalidOperationException("Other ship already offered surrender");
             }
 
-            this.Surrender = true;
+            this.Surrendered = true;
 
             Logger.Write("Offered surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OfferSurrender",
                 new Dictionary<string, object>
@@ -248,6 +249,7 @@ namespace CosmoMonger.Models
         /// Accept the surrender of the opposing ship. 
         /// This gives all the goods and credits aboard the opposing ship to the current ship and ends combat.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when combat is over or no surrender has been offered</exception>
         public void AcceptSurrender()
         {
             // Check that the combat is still in-progress
@@ -259,12 +261,12 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Surrender flag must be set
-            if (!this.Surrender)
+            if (!this.Surrendered)
             {
                 throw new InvalidOperationException("No surrender offered");
             }
 
-            Logger.Write("Accepted surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.AcceptSurrender",
+            Logger.Write("Accepted surrender", "Model", 150, 0, TraceEventType.Verbose, "Combat.AcceptSurrender",
                 new Dictionary<string, object>
                 {
                     { "CombatId", this.CombatId },
@@ -292,7 +294,8 @@ namespace CosmoMonger.Models
         /// Jettison all of the ships current cargo. 
         /// This will allow the ship to escape if the opposing ship picks up the cargo.
         /// </summary>
-        public void JettisonShipCargo()
+        /// <exception cref="InvalidOperationException">Thrown when combat is over or there is no cargo to jettison or cargo has already need jettisoned</exception>
+        public void JettisonCargo()
         {
             // Check that the combat is still in-progress
             if (this.Status != CombatStatus.Incomplete)
@@ -303,7 +306,7 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Jettison Cargo flag must be not set
-            if (this.JettisonCargo)
+            if (this.CargoJettisoned)
             {
                 throw new InvalidOperationException("There is already cargo jettisoned");
             }
@@ -317,9 +320,9 @@ namespace CosmoMonger.Models
             // Sending cargo into space
             this.SendCargoIntoSpace(this.ShipTurn);
 
-            this.JettisonCargo = true;
+            this.CargoJettisoned = true;
 
-            Logger.Write("Jettisoned cargo", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.JettisonShipCargo",
+            Logger.Write("Jettisoned cargo", "Model", 150, 0, TraceEventType.Verbose, "Combat.JettisonShipCargo",
                 new Dictionary<string, object>
                 {
                     { "CombatId", this.CombatId },
@@ -341,6 +344,7 @@ namespace CosmoMonger.Models
         /// Pickup cargo jettisoned by opposing ship, this will end combat as the other ship will escape. 
         /// If the cargo is not picked up, it is deleted on the next turn.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when combat is over or there is no cargo to jettison</exception>
         public void PickupCargo()
         {
             // Check that the combat is still in-progress
@@ -352,7 +356,7 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Jettison Cargo flag must be set
-            if (!this.JettisonCargo)
+            if (!this.CargoJettisoned)
             {
                 throw new InvalidOperationException("No cargo jettisoned");
             }
@@ -373,6 +377,7 @@ namespace CosmoMonger.Models
         /// Uses the rest of the current turn points to charge the jump drive. 
         /// If the jump drive becomes completely charged, the ship escapes and combat is ended.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when combat is over</exception>
         public void ChargeJumpDrive()
         {
             // Check that the combat is still in-progress
@@ -459,20 +464,20 @@ namespace CosmoMonger.Models
             this.SwapTurn();
 
             // Check if surrender was not accepted
-            if (this.Surrender)
+            if (this.Surrendered)
             {
                 // Reset flag
-                this.Surrender = false;
+                this.Surrendered = false;
             }
 
             // Check if cargo was not picked up
-            if (this.JettisonCargo)
+            if (this.CargoJettisoned)
             {
                 // Delete ignored space goods
                 db.CombatGoods.DeleteAllOnSubmit(this.CombatGoods);
 
                 // Reset flag
-                this.JettisonCargo = false;
+                this.CargoJettisoned = false;
             }
 
             db.SubmitChanges();

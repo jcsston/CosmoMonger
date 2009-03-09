@@ -30,7 +30,7 @@
         <%=Html.Hidden("targetSystem")%>
     </div>
     <%=Html.ValidationSummary() %>
-    <table>
+    <table class="travel">
         <tr>
             <td>
                 <%
@@ -64,7 +64,7 @@
                     <img style="position: absolute; left: <%= x %>px; top: <%= y %>px; " class="system-border <%=systemClass %>"
                             alt="<%=Html.AttributeEncode(system.Name)%>"
                             title="<%=Html.AttributeEncode(system.Name)%>"
-                            src="/Content/System.png"
+                            src="/Content/System/Small/<%=Html.AttributeEncode(system.Name)%>.png"
                             width="20" height="20" />
                      </a>
                 <% } %>
@@ -75,8 +75,8 @@
                     int shipRangeX = currentPositionX + 10 - (shipRangeSize / 2);
                     int shipRangeY = currentPositionY + 10 - (shipRangeSize / 2);
                 %>
-                <img id="shipRange" src="/Content/ShipRangeCircle.png" alt="Ship Range" 
-                    style="position: absolute; left: <%=shipRangeX %>px; top: <%=shipRangeY%>px; z-index: -1;" 
+                <img id="shipRange" class="shipRange" src="/Content/ShipRangeCircle.png" alt="Ship Range" 
+                    style="left: <%=shipRangeX %>px; top: <%=shipRangeY%>px;" 
                     width="<%=shipRangeSize %>" 
                     height="<%=shipRangeSize %>" />
                 </div>
@@ -90,19 +90,18 @@
                     <div id="system<%=system.SystemId %>" class="system-info">
                     <b><%=Html.Encode(system.Name) %></b>
                     <hr />
+                    <img alt="<%=Html.AttributeEncode(system.Name)%>" src="/Content/System/<%=Html.AttributeEncode(system.Name)%>.png" />
                     <% 
                         if (system.Races.Count > 0)
                         { 
                     %>
                     <p>Home System of the <%=Html.Encode(system.Races.First().Name)%> Race</p>
                     <% 
-                        }
-                    %>
-                    <%
-                        else { 
+                        } 
+                        else 
+                        { 
                     %>
                     <p>Dominant Race: <%=Html.Encode(system.Race.Name)%></p>
-                    
                     <% 
                         } 
                     %>

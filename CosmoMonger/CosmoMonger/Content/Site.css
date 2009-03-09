@@ -330,6 +330,19 @@ div#menuh li li li li:hover ul
     border: solid 2px blue; 
     overflow: hidden; 
     padding: 15px;
+    z-index: 0;
+    /*background-image: url('/Content/TravelBackground.jpg');*/
+}
+
+table.travel td
+{
+    vertical-align: top;
+}
+
+.shipRange
+{
+    position: absolute; 
+    z-index: -1;
 }
 
 .system-border

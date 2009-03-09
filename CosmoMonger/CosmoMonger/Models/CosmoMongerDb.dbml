@@ -64,8 +64,8 @@
       <Column Name="DefenderShipId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Turn" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TurnPointsLeft" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Surrender" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="JettisonCargo" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Surrendered" Storage="_Surrender" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CargoJettisoned" Storage="_JettisonCargo" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="CombatId" Type="System.Int32" DbType="int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Status" Storage="_Complete" Type="Combat.CombatStatus" DbType="int NOT NULL" CanBeNull="false" />
       <Column Name="LastActionTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" />

@@ -3,7 +3,7 @@
     <title>Combat</title>
     <script type="text/javascript">
     <!--
-        combatId = null;
+        var combatId = null;
         function updateCombatStatus(data, noTimeout) {
             // Update data format is defined in CombatController.BuildCombatStatus
             
@@ -22,6 +22,7 @@
                     $('#playerShip').hide("explode", { number: 9 }, 1000);
                 }
             }
+            
             var playerShield = $('#playerShield');
             if (playerShield.css('height') != data.playerShield + '%') {
                 if (data.playerShield > 8) {
@@ -31,6 +32,7 @@
                 }
                 playerShield.animate({ height: data.playerShield + '%' }, "normal");
             }
+            
             var enemyHull = $('#enemyHull');
             if (enemyHull.css('height') != data.enemyHull + '%') {
                 if (data.enemyHull > 8) {
@@ -44,6 +46,7 @@
                     $('#enemyShip').hide("explode", { number: 9 }, 1000);
                 }
             }
+            
             var enemyShield = $('#enemyShield');
             if (enemyShield.css('height') != data.enemyShield + '%') {
                 if (data.enemyShield > 8) {
@@ -62,11 +65,41 @@
                 // Hide turn actions
                 $("#turnActions").slideUp("slow");
             }
-
+            
+            // Done updating status, Has combat been completed?
             if (data.complete) {
                 document.location = '/Combat/CombatComplete?combatId=' + combatId;
-            } else if (noTimeout != true) {
-                // Queue combat status check
+                return;
+            }
+
+            // Check if we need to prompt the player
+            if (data.surrendered) {
+                // Other player has offered surrender
+                var acceptSurrender = prompt('Other player has offered surrender, accept?');
+                if (acceptSurrender) {
+                    $(".turnAction").attr("disabled", "disabled");
+                    $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {
+                        updateCombatStatus(data.status, true);
+                        if (data.message) {
+                            alert(data.message);
+                        }
+                    });
+                }
+            } else if (data.cargoJettisoned) {
+                // Other player has offered surrender
+                var acceptSurrender = prompt('Other player has offered surrender, accept?');
+                if (acceptSurrender) {
+                    $(".turnAction").attr("disabled", "disabled");
+                    $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {
+                        updateCombatStatus(data.status, true);
+                        if (data.message) {
+                            alert(data.message);
+                        }
+                    });
+                }
+            }
+            // Queue combat status check if needed
+            if (noTimeout != true) {    
                 setTimeout(queueCombatStatus, 1000);
             }
         }
@@ -100,8 +133,13 @@
 
             $('#jettisonCargo').click(function(eventObject) {
                 $(".turnAction").attr("disabled", "disabled");
-
-                $(".turnAction").attr("disabled", "");
+                $.getJSON('/Combat/JettisonCargo', { combatId: combatId }, function(data) {
+                    updateCombatStatus(data.status, true);
+                    if (data.message) {
+                        alert(data.message);
+                    }
+                    $(".turnAction").attr("disabled", "");
+                });
             });
 
             $('#offerSurrender').click(function(eventObject) {
@@ -132,41 +170,42 @@
             <td rowspan="2">
                 Hull
                 <div style="border: solid thin blue; background-color: blue; width: 75px; height: 175px;">
-                    <div id="playerHull" style="width: 100%; height: 0%; background-color: black" />
+                    <div id="playerHull" style="width: 100%; height: 0%; background-color: black"></div>
                 </div>
-                </td>
+            </td>
             <td rowspan="2">
                 Shield
                 <div style="border: solid thin blue; background-color: green; width: 75px; height: 175px;">
-                    <div id="playerShield" style="width: 100%; height: 0%; background-color: black" />
+                    <div id="playerShield" style="width: 100%; height: 0%; background-color: black"></div>
                 </div>
-                </td>
+            </td>
             <td>
                 <%=Html.Encode(ViewData["PlayerName"]) %>
                 <br />
-                <img id="playerShip" alt="Your Ship" src="/Content/BaseShip/<%=playerShip.BaseShipId %>.png" />
+                <img id="playerShip" alt="Your Ship" src="/Content/BaseShip/<%=Html.AttributeEncode(playerShip.BaseShip.Name) %>.png" />
                 <br />
-                Your Ship</td>
-            <td>
-                &nbsp;</td>
+                Your Ship
+            </td>
+            <td>&nbsp;</td>
             <td>
                 <%=Html.Encode(ViewData["EnemyName"]) %>
                 <br />
-                <img id="enemyShip" alt="Enemy Ship" src="/Content/BaseShip/<%=enemyShip.BaseShipId %>.png" />
+                <img id="enemyShip" alt="Enemy Ship" src="/Content/BaseShip/<%=Html.AttributeEncode(enemyShip.BaseShip.Name) %>.png" />
                 <br />
-                Enemy Ship</td>
+                Enemy Ship
+            </td>
             <td rowspan="2">
                 Shield
                 <div style="border: solid thin blue; background-color: green; width: 75px; height: 175px;">
-                    <div id="enemyShield" style="width: 100%; height: 0%; background-color: black" />
+                    <div id="enemyShield" style="width: 100%; height: 0%; background-color: black"></div>
                 </div>
-                </td>
+            </td>
             <td rowspan="2">
                 Hull
                 <div style="border: solid thin blue; background-color: blue; width: 75px; height: 175px;">
-                    <div id="enemyHull" style="width: 100%; height: 0%; background-color: black" />
+                    <div id="enemyHull" style="width: 100%; height: 0%; background-color: black"></div>
                 </div>
-                </td>
+            </td>
         </tr>
         <tr>
             <td>Primary Weapon: <%=Html.Encode(playerShip.Weapon.Name) %></td>

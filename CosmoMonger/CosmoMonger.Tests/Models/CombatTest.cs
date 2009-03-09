@@ -72,7 +72,7 @@
 
             Assert.That(combat.ShipTurn, Is.EqualTo(player2.Ship), "Should now be player 2's turn");
             Assert.That(combat.TurnPointsLeft, Is.EqualTo(Combat.PointsPerTurn), "Player 2's turn points left should match points per turn");
-            Assert.That(combat.Surrender, Is.True, "Player 1 should have surrendered");
+            Assert.That(combat.Surrendered, Is.True, "Player 1 should have surrendered");
         }
 
         [Test]

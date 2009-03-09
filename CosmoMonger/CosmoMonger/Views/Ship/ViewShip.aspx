@@ -8,7 +8,7 @@
 %>
 <h1>Current Ship</h1>
 <div style="float: right; text-align: center">
-    <img alt="Ship Image" src="/Content/BaseShip/<%=currentShip.BaseShipId %>.png" />
+    <img alt="Ship Image" src="/Content/BaseShip/<%=Html.AttributeEncode(currentShip.BaseShip.Name) %>.png" />
     <br />
     <%=Html.Encode(currentShip.BaseShip.Name) %>
 </div>

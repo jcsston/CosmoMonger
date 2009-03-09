@@ -1589,10 +1589,10 @@ namespace CosmoMonger.Models
     partial void OnTurnChanged();
     partial void OnTurnPointsLeftChanging(int value);
     partial void OnTurnPointsLeftChanged();
-    partial void OnSurrenderChanging(bool value);
-    partial void OnSurrenderChanged();
-    partial void OnJettisonCargoChanging(bool value);
-    partial void OnJettisonCargoChanged();
+    partial void OnSurrenderedChanging(bool value);
+    partial void OnSurrenderedChanged();
+    partial void OnCargoJettisonedChanging(bool value);
+    partial void OnCargoJettisonedChanged();
     partial void OnCombatIdChanging(int value);
     partial void OnCombatIdChanged();
     partial void OnStatusChanging(Combat.CombatStatus value);
@@ -1700,7 +1700,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Surrender", DbType="Bit NOT NULL")]
-		public bool Surrender
+		public bool Surrendered
 		{
 			get
 			{
@@ -1710,17 +1710,17 @@ namespace CosmoMonger.Models
 			{
 				if ((this._Surrender != value))
 				{
-					this.OnSurrenderChanging(value);
+					this.OnSurrenderedChanging(value);
 					this.SendPropertyChanging();
 					this._Surrender = value;
-					this.SendPropertyChanged("Surrender");
-					this.OnSurrenderChanged();
+					this.SendPropertyChanged("Surrendered");
+					this.OnSurrenderedChanged();
 				}
 			}
 		}
 		
 		[Column(Storage="_JettisonCargo", DbType="Bit NOT NULL")]
-		public bool JettisonCargo
+		public bool CargoJettisoned
 		{
 			get
 			{
@@ -1730,11 +1730,11 @@ namespace CosmoMonger.Models
 			{
 				if ((this._JettisonCargo != value))
 				{
-					this.OnJettisonCargoChanging(value);
+					this.OnCargoJettisonedChanging(value);
 					this.SendPropertyChanging();
 					this._JettisonCargo = value;
-					this.SendPropertyChanged("JettisonCargo");
-					this.OnJettisonCargoChanged();
+					this.SendPropertyChanged("CargoJettisoned");
+					this.OnCargoJettisonedChanged();
 				}
 			}
 		}

@@ -267,9 +267,9 @@ namespace CosmoMonger.Models
             combat.DefenderShip = target;
             combat.TurnPointsLeft = Combat.PointsPerTurn;
             combat.Status = Combat.CombatStatus.Incomplete;
-            combat.Surrender = false;
+            combat.Surrendered = false;
             combat.Turn = 0;
-            combat.JettisonCargo = false;
+            combat.CargoJettisoned = false;
             combat.LastActionTime = DateTime.Now;
 
             // Save changes to the database

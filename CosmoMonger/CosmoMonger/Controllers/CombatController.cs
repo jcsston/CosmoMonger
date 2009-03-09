@@ -100,12 +100,12 @@
                     case Combat.CombatStatus.ShipDestroyed:
                         if (combat.ShipTurn == playerShip)
                         {
-                            ViewData["Message"] = "Player has won";
+                            ViewData["Message"] = "You have won";
                             ViewData["CargoLooted"] = combat.CombatGoods;
                         }
                         else
                         {
-                            ViewData["Message"] = "Player has lost";
+                            ViewData["Message"] = "You have lost";
                             ViewData["CargoLost"] = combat.CombatGoods;
                         }
                         break;
@@ -113,12 +113,12 @@
                     case Combat.CombatStatus.CargoPickup:
                         if (combat.ShipTurn == playerShip)
                         {
-                            ViewData["Message"] = "Player picked up cargo";
+                            ViewData["Message"] = "Picked up jettisioned cargo";
                             ViewData["CargoLooted"] = combat.CombatGoods;
                         }
                         else
                         {
-                            ViewData["Message"] = "Player escaped";
+                            ViewData["Message"] = "You escaped by jettisoning cargo";
                             ViewData["CargoLost"] = combat.CombatGoods;
                         }
                         break;
@@ -126,24 +126,24 @@
                     case Combat.CombatStatus.ShipFled:
                         if (combat.ShipTurn == playerShip)
                         {
-                            ViewData["Message"] = "Player escaped";
+                            ViewData["Message"] = "You have escaped";
                             ViewData["FinalImage"] = "RunningChicken.png";
                         }
                         else
                         {
-                            ViewData["Message"] = "Enemy escaped";
+                            ViewData["Message"] = "Enemy has escaped";
                         }
                         break;
 
                     case Combat.CombatStatus.ShipSurrendered:
                         if (combat.ShipTurn == playerShip)
                         {
-                            ViewData["Message"] = "Player has captured opposing player";
+                            ViewData["Message"] = "You have captured the opposing player";
                             ViewData["CargoLooted"] = combat.CombatGoods;
                         }
                         else
                         {
-                            ViewData["Message"] = "Player surrendered";
+                            ViewData["Message"] = "You have surrendered";
                             ViewData["CargoLost"] = combat.CombatGoods;
                         }
                         break;
@@ -244,6 +244,70 @@
             return Json(false);
         }
 
+        public JsonResult JettisonCargo(int combatId)
+        {
+            Combat selectedCombat = this.ControllerGame.GetCombat(combatId);
+            if (selectedCombat != null)
+            {
+                string message = null;
+
+                // Check that it is the current players turn
+                if (selectedCombat.ShipTurn == this.ControllerGame.CurrentPlayer.Ship)
+                {
+                    try
+                    {
+                        selectedCombat.JettisonCargo();
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // Combat is over
+                        message = ex.Message;
+                    }
+                    catch (ArgumentOutOfRangeException ex)
+                    {
+                        // Not enough turn points
+                        message = ex.Message;
+                    }
+                }
+
+                return Json(new { message = message, status = BuildCombatStatus(selectedCombat) });
+            }
+
+            return Json(false);
+        }
+
+        public JsonResult PickupCargo(int combatId)
+        {
+            Combat selectedCombat = this.ControllerGame.GetCombat(combatId);
+            if (selectedCombat != null)
+            {
+                string message = null;
+
+                // Check that it is the current players turn
+                if (selectedCombat.ShipTurn == this.ControllerGame.CurrentPlayer.Ship)
+                {
+                    try
+                    {
+                        selectedCombat.PickupCargo();
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // Combat is over
+                        message = ex.Message;
+                    }
+                    catch (ArgumentOutOfRangeException ex)
+                    {
+                        // Not enough turn points
+                        message = ex.Message;
+                    }
+                }
+
+                return Json(new { message = message, status = BuildCombatStatus(selectedCombat) });
+            }
+
+            return Json(false);
+        }
+
         /// <summary>
         /// Builds a combat status object for JSON
         /// </summary>
@@ -256,6 +320,8 @@
         /// int enemyHull - amount of damage to hull
         /// int enemyShield
         /// bool turn - True is player's turn, false is other players turn
+        /// bool surrendered - When True the other player has offered a surrender
+        /// bool cargoJettisoned - When True the other player has jettisoned their cargo
         /// int jumpDriveCharge - charge of JumpDrive
         /// int turnPoints - Number of turn points left
         /// bool complete - true when combat is complete
@@ -280,6 +346,8 @@
                 enemyHull = enemyShip.DamageHull,
                 enemyShield = enemyShip.DamageShield,
                 turn = (playerShip == combat.ShipTurn),
+                surrendered = combat.Surrendered,
+                cargoJettisoned = combat.CargoJettisoned,
                 jumpDriveCharge = playerShip.CurrentJumpDriveCharge,
                 turnPoints = combat.TurnPointsLeft,
                 complete = (combat.Status != Combat.CombatStatus.Incomplete)

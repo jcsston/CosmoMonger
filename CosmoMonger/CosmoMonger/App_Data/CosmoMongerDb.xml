@@ -3850,4 +3850,12 @@
     <comment>Renamed LootedCredits column on the Combat table to CreditsLooted.</comment>
     <renameColumn tableName="Combat" oldColumnName="LootedCredits" newColumnName="CreditsLooted" />
   </changeSet>
+  <changeSet author="Jory Stone" id="70">
+    <comment>Renamed JettisonCargo column on the Combat table to CargoJettisoned.</comment>
+    <renameColumn tableName="Combat" oldColumnName="JettisonCargo" newColumnName="CargoJettisoned" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="71">
+    <comment>Renamed Surrender column on the Combat table to Surrendered.</comment>
+    <renameColumn tableName="Combat" oldColumnName="Surrender" newColumnName="Surrendered" />
+  </changeSet>
 </databaseChangeLog>
