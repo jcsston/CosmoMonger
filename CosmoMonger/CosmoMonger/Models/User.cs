@@ -126,7 +126,9 @@ namespace CosmoMonger.Models
         /// <returns>Array of BuddyList objects</returns>
         public virtual BuddyList[] GetBuddyList()
         {
-            return this.BuddyLists.ToArray();
+            return (from b in BuddyLists
+                    orderby b.Friend.UserName
+                    select b).ToArray();
         }
 
         /// <summary>

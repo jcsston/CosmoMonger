@@ -72,7 +72,7 @@
         /// <returns>The Compose view filled in with the target user id, if any.</returns>
         public ActionResult Compose(int? toUserId)
         {
-            ViewData["toUserId"] = new SelectList(this.ControllerGame.CurrentUser.BuddyLists, "FriendId", "Friend.UserName", toUserId); 
+            ViewData["toUserId"] = new SelectList(this.ControllerGame.CurrentUser.GetBuddyList(), "FriendId", "Friend.UserName", toUserId); 
 
             return View();
         }
