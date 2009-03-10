@@ -33,10 +33,16 @@ Back to <%
     }
 %> messages.
 </p>
-<p><% 
-%><%=Html.ActionLink("Reply", "Compose", new { toUserId = ViewData["SenderId"] })%><%
+
+<% 
+if (!(bool)ViewData["Sent"])
+{
+    
+%><p> <%=Html.ActionLink("Reply", "Compose", new { toUserId = ViewData["SenderId"] })%></p><%
+
+
+}
 %>
-</p>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>
