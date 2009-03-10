@@ -112,7 +112,7 @@
                 {
                     message.MarkAsReceived();
                 }
-
+                ViewData["SenderId"] = message.SenderUserId;//new 3-9-09
                 ViewData["From"] = message.SenderUser.UserName;
                 ViewData["To"] = message.RecipientUser.UserName;
                 ViewData["Subject"] = message.Subject;
