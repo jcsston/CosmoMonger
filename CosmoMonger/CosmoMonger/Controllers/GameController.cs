@@ -7,8 +7,10 @@
 namespace CosmoMonger.Controllers
 {
     using System;
+    using System.Diagnostics;
     using System.Threading;
     using System.Web.Mvc;
+    using System.Web.UI;
     using CosmoMonger.Controllers.Attributes;
     using CosmoMonger.Models;
 
@@ -18,6 +20,8 @@ namespace CosmoMonger.Controllers
     /// </summary>
     [Authorize]
     [ExceptionPolicy]
+    [LogRequest]
+    [OutputCache(Location = OutputCacheLocation.None)]
     public class GameController : Controller
     {
         /// <summary>

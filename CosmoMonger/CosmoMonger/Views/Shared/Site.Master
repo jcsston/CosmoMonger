@@ -13,9 +13,10 @@
     <script type="text/javascript" src="/Scripts/jquery.jgrowl.min.js"></script>
     <script type="text/javascript">
     <!--
+        var ajaxRequest = null;
         lastMessageCount = 0;
         function updateUnreadMessages() {
-            $.getJSON('/Communication/UnreadMessages', { lastMessageCount: lastMessageCount }, displayUnreadMessages);
+            ajaxRequest = $.getJSON('/Communication/UnreadMessages', { lastMessageCount: lastMessageCount }, displayUnreadMessages);
         }
         
         function displayUnreadMessages(data) {
@@ -44,6 +45,13 @@
             // Only nag the user if they are not in the Communication area
             if (location.pathname.indexOf("Communication") == -1) {
                 updateUnreadMessages();
+            }
+        });
+
+        $(window).unload(function() {
+            // Abort any active Ajax request
+            if (ajaxRequest) {
+                ajaxRequest.abort();
             }
         });
     //-->
@@ -166,7 +174,14 @@
                 { "ProcessingTime", processingTime }
             };
             string message = this.ViewContext.RouteData.Values["controller"] + "." + this.ViewContext.RouteData.Values["action"];
-            Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(message, "Page Log", 800, props);
+            Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(message, "Page Log", 800, 0, System.Diagnostics.TraceEventType.Verbose, "Master Page Log", props);
+            
+            int workerAvailable = 0;
+            int completionPortAvailable = 0;
+            System.Threading.ThreadPool.GetAvailableThreads(out workerAvailable, out completionPortAvailable);
+
+            Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(string.Format("Worker Threads Available: {0} Completion Port Threads Available: {1}", workerAvailable, completionPortAvailable), "View", 300, 0, System.Diagnostics.TraceEventType.Verbose, "Thread Pool Status");
+
         %>
         Processing Time: <%=processingTime%> seconds
      </p>
