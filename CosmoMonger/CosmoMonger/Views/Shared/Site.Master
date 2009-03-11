@@ -15,7 +15,7 @@
     <!--
         lastMessageCount = 0;
         function updateUnreadMessages() {
-            $.getJSON('/Communication/UnreadMessages', displayUnreadMessages);
+            $.getJSON('/Communication/UnreadMessages', { lastMessageCount: lastMessageCount }, displayUnreadMessages);
         }
         
         function displayUnreadMessages(data) {
@@ -31,13 +31,13 @@
                         + '<br />Time: ' + msgDate.toLocaleTimeString()
                         + '<br />'
                         + ('Read Message'.link('/Communication/ViewMessage?messageId=' + msg.id));
-                        
+
                     // Give 6 seconds per message to read
                     messageDelay += 6000;
                     $.jGrowl(notice, { header: 'Unread message from ' + msg.from, life: messageDelay });
                 }
             }
-            setTimeout(updateUnreadMessages, 60 * 1000);
+            setTimeout(updateUnreadMessages, 1000);
         }
 
         $(document).ready(function() {

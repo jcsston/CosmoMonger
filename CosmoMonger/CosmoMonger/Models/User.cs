@@ -9,6 +9,7 @@ namespace CosmoMonger.Models
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Data.Linq;
     using System.Diagnostics;
     using System.Linq;
     using System.Web;
@@ -236,11 +237,15 @@ namespace CosmoMonger.Models
         /// This returns any unread messages for the User.
         /// If no unread messages exist an empty array is returned.
         /// </summary>
+        /// <remarks>This function always fetches fresh values from database and is not cached.</remarks>
         /// <returns>Array of Message objects</returns>
         public virtual IEnumerable<Message> GetUnreadMessages()
         {
-            return (from m in this.Messages 
-                    where !m.Received
+            // Ensure that the messages are freshly loaded from the database by querying database directly
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            return (from m in db.Messages
+                    where m.RecipientUserId == this.UserId
+                    && !m.Received
                     && m.VisibleToRecipient
                     select m);
         }

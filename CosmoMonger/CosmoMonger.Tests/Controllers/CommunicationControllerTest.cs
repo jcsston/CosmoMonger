@@ -208,7 +208,7 @@
             CommunicationController controller = new CommunicationController(managerMock.Object);
 
             // Act
-            ActionResult result = controller.UnreadMessages();
+            ActionResult result = controller.UnreadMessages(0);
 
             // Assert
             Assert.That(result, Is.TypeOf(typeof(JsonResult)), "Should return a JSON result");

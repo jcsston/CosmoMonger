@@ -163,13 +163,30 @@
         /// Checks if there are any unread messages.
         /// </summary>
         /// <returns>A JSON result containing the number of unread messages.</returns>
-        public JsonResult UnreadMessages()
+        public JsonResult UnreadMessages(int lastMessageCount)
         {
             IEnumerable<Message> messages = this.ControllerGame.CurrentUser.GetUnreadMessages();
+
+            int messageCheckCount = 0;
+
+            // Wait until we have new messages or we've been waiting 300 seconds
+            while (lastMessageCount == messages.Count() && messageCheckCount < 300)
+            {
+                // Wait half a second before checking again
+                System.Threading.Thread.Sleep(1000);
+
+                // Check for new messages
+                messages = this.ControllerGame.CurrentUser.GetUnreadMessages();
+
+                // Update the check count
+                messageCheckCount++;
+            }
+
             ArrayList messageData = new ArrayList();
             foreach (Message msg in messages)
             {
-                messageData.Add(new {
+                messageData.Add(new
+                {
                     from = HttpUtility.HtmlEncode(msg.SenderUser.UserName),
                     time = msg.Time.ToString("R"),
                     subject = HttpUtility.HtmlEncode(msg.Subject),

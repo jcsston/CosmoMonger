@@ -578,12 +578,12 @@ table.goodsCenter td
 
 .priceTableLow
 {
-    color: red;
+    color: blue;
 }
 
 .priceTableHigh
 {
-    color: blue;
+    color: red;
 }
 
 /* ListRecords View */
