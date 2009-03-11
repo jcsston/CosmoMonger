@@ -16,7 +16,7 @@
         var ajaxRequest = null;
         lastMessageCount = 0;
         function updateUnreadMessages() {
-            ajaxRequest = $.getJSON('/Communication/UnreadMessages', { lastMessageCount: lastMessageCount }, displayUnreadMessages);
+            ajaxRequest = $.getJSON('/Communication/UnreadMessages', { lastMessageCount: -1 }, displayUnreadMessages);
         }
         
         function displayUnreadMessages(data) {
@@ -38,7 +38,7 @@
                     $.jGrowl(notice, { header: 'Unread message from ' + msg.from, life: messageDelay });
                 }
             }
-            setTimeout(updateUnreadMessages, 1000);
+            setTimeout(updateUnreadMessages, 60 * 1000);
         }
 
         $(document).ready(function() {
