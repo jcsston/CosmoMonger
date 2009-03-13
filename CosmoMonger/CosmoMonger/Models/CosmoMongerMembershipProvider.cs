@@ -233,7 +233,7 @@ namespace CosmoMonger.Models
                                  select u).SingleOrDefault();
             if (matchingUser != null)
             {
-                db.Log = Console.Error;
+                //db.Log = Console.Out;
                 // We have to delete all objects in the database related to this user
                 var playerShips = (from p in db.Players where p.User == matchingUser select p.Ship);
                 var playerShipIds = (from p in db.Players where p.User == matchingUser select p.Ship.ShipId);
@@ -260,7 +260,7 @@ namespace CosmoMonger.Models
                                               select m);
                 db.Users.DeleteOnSubmit(matchingUser);
                 db.SubmitChanges();
-                db.Log = null;
+                //db.Log = null;
                 return true;
             }
 
