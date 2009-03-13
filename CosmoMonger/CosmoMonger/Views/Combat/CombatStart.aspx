@@ -4,13 +4,14 @@
     <script type="text/javascript">
     <!--
         var combatId = null;
+        var playerNotified = false;
+        
         function updateCombatStatus(data, noTimeout) {
             // Update data format is defined in CombatController.BuildCombatStatus
             
             // Update player/enemy hull/shield damage
             var playerHull = $('#playerHull');
             if (playerHull.css('height') != data.playerHull + '%') {
-                //$("#playerShip").effect("bounce", { direction: "right", distance: 30 }, 500);
                 if (data.playerHull > 8) {
                     playerHull.text(data.playerHull + '%');
                 } else {
@@ -56,14 +57,54 @@
                 }
                 enemyShield.animate({ height: data.enemyShield + '%' }, "normal");
             }
-            
+
+            $("#jumpDriveCharge").text(data.jumpDriveCharge);
             if (data.turn) {
-                $("#turnActions").show("slow");
-                $("#jumpDriveCharge").text(data.jumpDriveCharge);
+                // Enable turn buttons
+                $(".turnAction").attr("disabled", "");
+                $("#turnActions caption").html("Current Turn: <b>Yours</b>");
+                $("#timeLeft").text(parseInt(data.timeLeft));
+                //$("#turnActions").show("slow");
                 $("#turnPoints").text(data.turnPoints);
+
+                // Check if we need to prompt the player
+                if (data.surrendered && !playerNotified) {
+                    // Other player has offered surrender
+                    playerNotified = true;
+                    var acceptSurrender = prompt('Other player has offered surrender, accept?');
+                    if (acceptSurrender) {
+                        $(".turnAction").attr("disabled", "disabled");
+                        $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {
+                            updateCombatStatus(data.status, true);
+                            if (data.message) {
+                                alert(data.message);
+                            }
+                        });
+                    }
+                } else if (data.cargoJettisoned && !playerNotified) {
+                    // Other player has jettisoned cargo
+                    playerNotified = true;
+                    var pickupCargo = confirm('Other player has jettisoned cargo, pickup? If we pickup the cargo the other player will escape, if not the cargo will be lost.');
+                    if (pickupCargo) {
+                        $(".turnAction").attr("disabled", "disabled");
+                        $.getJSON('/Combat/PickupCargo', { combatId: combatId }, function(data) {
+                            updateCombatStatus(data.status, true);
+                            if (data.message) {
+                                alert(data.message);
+                            }
+                        });
+                    }
+                }
             } else {
                 // Hide turn actions
-                $("#turnActions").slideUp("slow");
+                //$("#turnActions").slideUp("slow");
+                $(".turnAction").attr("disabled", "disabled");
+                $("#turnPoints").text(0);
+                $("#timeLeft").text(0);
+                $("#turnActions caption").html("Current Turn: <b>Enemy</b>");
+
+                // Reset player notifications
+                playerNotified = false;
             }
             
             // Done updating status, Has combat been completed?
@@ -71,33 +112,7 @@
                 document.location = '/Combat/CombatComplete?combatId=' + combatId;
                 return;
             }
-
-            // Check if we need to prompt the player
-            if (data.surrendered) {
-                // Other player has offered surrender
-                var acceptSurrender = prompt('Other player has offered surrender, accept?');
-                if (acceptSurrender) {
-                    $(".turnAction").attr("disabled", "disabled");
-                    $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {
-                        updateCombatStatus(data.status, true);
-                        if (data.message) {
-                            alert(data.message);
-                        }
-                    });
-                }
-            } else if (data.cargoJettisoned) {
-                // Other player has offered surrender
-                var acceptSurrender = prompt('Other player has offered surrender, accept?');
-                if (acceptSurrender) {
-                    $(".turnAction").attr("disabled", "disabled");
-                    $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {
-                        updateCombatStatus(data.status, true);
-                        if (data.message) {
-                            alert(data.message);
-                        }
-                    });
-                }
-            }
+            
             // Queue combat status check if needed
             if (noTimeout != true) {    
                 setTimeout(queueCombatStatus, 1000);
@@ -116,7 +131,7 @@
                     if (data.message) {
                         alert(data.message);
                     }
-                    $(".turnAction").attr("disabled", "");
+                    //$(".turnAction").attr("disabled", "");
                 });
             });
 
@@ -127,7 +142,7 @@
                     if (data.message) {
                         alert(data.message);
                     }
-                    $(".turnAction").attr("disabled", "");
+                    //$(".turnAction").attr("disabled", "");
                 });
             });
 
@@ -138,14 +153,19 @@
                     if (data.message) {
                         alert(data.message);
                     }
-                    $(".turnAction").attr("disabled", "");
+                    //$(".turnAction").attr("disabled", "");
                 });
             });
 
             $('#offerSurrender').click(function(eventObject) {
                 $(".turnAction").attr("disabled", "disabled");
-                
-                $(".turnAction").attr("disabled", "");
+                $.getJSON('/Combat/OfferSurrender', { combatId: combatId }, function(data) {
+                    updateCombatStatus(data.status, true);
+                    if (data.message) {
+                        alert(data.message);
+                    }
+                    //$(".turnAction").attr("disabled", "");
+                });
             });
 
             queueCombatStatus();
@@ -215,7 +235,7 @@
     </table>
     <hr />
     <table id="turnActions" class="combat">
-    <caption>Turn Actions</caption>
+    <caption>Current turn: Yours</caption>
     <tr>
         <td colspan="2">
             <p>Attack</p>
@@ -268,15 +288,11 @@
         </td>
     </tr>
     <tr>
-    <td colspan="4">
-        Turn Points Left: <span id="turnPoints">20</span>
-        <!--
-        <br />
-        Turn Time Left:
-        <div style="width: 200px; height: 30px; border: solid thin blue">
-        <div id="timeLeft" style="background-color: red; width: 100px; height: 100%;" />
-        </div>
-        -->
+    <td colspan="2">
+        Turn Points Left: <span id="turnPoints">0</span>
+    </td>
+    <td colspan="2">
+        Turn Time Left: <span id="timeLeft">0</span> seconds
     </td>
     </tr>
     </table>

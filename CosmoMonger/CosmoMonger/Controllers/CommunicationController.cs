@@ -1,16 +1,17 @@
 ﻿namespace CosmoMonger.Controllers
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Mvc.Ajax;
     using CosmoMonger.Models;
-    using MvcContrib.Pagination;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using MvcContrib.EnumerableExtensions;
-    using System.Collections;
-    using System.Threading;
+    using MvcContrib.Pagination;
 
     /// <summary>
     /// This controller handles communication between players
@@ -124,6 +125,7 @@
             {
                 ModelState.AddModelError("messageId", "Invalid Message Id");
             }
+
             ViewData["Sent"] = sent ?? false;
 
             return View();
@@ -145,6 +147,9 @@
             }
             catch (ArgumentException ex)
             {
+                // Log this exception
+                ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                 ModelState.AddModelError("messageId", ex);
             }
 

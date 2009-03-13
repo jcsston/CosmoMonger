@@ -26,6 +26,11 @@ namespace CosmoMonger.Models
         public const int PointsPerTurn = 20;
 
         /// <summary>
+        /// The default amount of seconds given per turn
+        /// </summary>
+        public const int SecondsPerTurn = 30;
+
+        /// <summary>
         /// This enum describes the meaning of the Combat.Status field
         /// </summary>
         public enum CombatStatus
@@ -102,6 +107,32 @@ namespace CosmoMonger.Models
                 }
 
                 throw new ArgumentOutOfRangeException("Turn");
+            }
+        }
+
+        /// <summary>
+        /// Gets the turn time left.
+        /// </summary>
+        /// <value>The turn time left.</value>
+        public TimeSpan TurnTimeLeft
+        {
+            get
+            {
+                return this.LastActionTime.AddSeconds(Combat.SecondsPerTurn) - DateTime.Now;
+            }
+        }
+
+        /// <summary>
+        /// Checks the turn time left.
+        /// </summary>
+        /// <returns></returns>
+        public void CheckTurnTimeLeft()
+        {
+            // Check if any time is left
+            if (this.TurnTimeLeft.TotalSeconds < 0 && this.Status == CombatStatus.Incomplete)
+            {
+                // No time left in turn, auto-charge JumpDrive
+                this.ChargeJumpDrive();
             }
         }
 
@@ -371,6 +402,10 @@ namespace CosmoMonger.Models
             this.LastActionTime = DateTime.Now;
 
             db.SubmitChanges();
+
+            // Ensure both ships are no longer traveling
+            this.ShipTurn.CheckIfTraveling();
+            this.ShipOther.CheckIfTraveling();
         }
 
         /// <summary>
@@ -438,7 +473,7 @@ namespace CosmoMonger.Models
             else
             {
                 // Ship did not escape yet, so it's the other ships turn
-                this.SwapTurn();
+                this.EndTurn();
             }
 
             // Update turn action time
@@ -514,7 +549,21 @@ namespace CosmoMonger.Models
             // Rest the turn point counter
             this.TurnPointsLeft = Combat.PointsPerTurn;
 
-            db.SubmitChanges();
+            try
+            {
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to one of this combat record
+                // Overwrite those changes
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    occ.Resolve(RefreshMode.KeepChanges);
+                }
+            }
         }
 
         /// <summary>

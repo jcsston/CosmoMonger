@@ -65,6 +65,7 @@
                 }
                 catch (ArgumentException ex)
                 {
+                    // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
                     ModelState.AddModelError("userId", ex);
@@ -95,6 +96,7 @@
                 }
                 catch (ArgumentException ex)
                 {
+                    // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
                     ModelState.AddModelError("buddyId", ex);
@@ -131,6 +133,7 @@
                 }
                 catch (ArgumentException ex)
                 {
+                    // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
                     ModelState.AddModelError("userId", ex);
@@ -157,6 +160,7 @@
                 }
                 catch (ArgumentException ex)
                 {
+                    // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
                     ModelState.AddModelError("antiBuddyId", ex);

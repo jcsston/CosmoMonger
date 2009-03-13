@@ -50,6 +50,9 @@
                 }
                 catch (InvalidOperationException ex)
                 {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                     ModelState.AddModelError("shipId", ex);
                 }
             }
@@ -175,6 +178,9 @@
             Combat selectedCombat = this.ControllerGame.GetCombat(combatId);
             if (selectedCombat != null)
             {
+                // Check that the player turn is not over
+                selectedCombat.CheckTurnTimeLeft();
+
                 return Json(BuildCombatStatus(selectedCombat));
             }
 
@@ -197,11 +203,17 @@
                     }
                     catch (InvalidOperationException ex)
                     {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                         // Combat is over
                         message = ex.Message;
                     }
                     catch (ArgumentOutOfRangeException ex)
                     {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                         // Not enough turn points
                         message = ex.Message;
                     }
@@ -229,11 +241,17 @@
                     }
                     catch (InvalidOperationException ex)
                     {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                         // Combat is over
                         message = ex.Message;
                     }
                     catch (ArgumentOutOfRangeException ex)
                     {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                         // Not enough turn points
                         message = ex.Message;
                     }
@@ -261,11 +279,17 @@
                     }
                     catch (InvalidOperationException ex)
                     {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                         // Combat is over
                         message = ex.Message;
                     }
                     catch (ArgumentOutOfRangeException ex)
                     {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                         // Not enough turn points
                         message = ex.Message;
                     }
@@ -293,11 +317,17 @@
                     }
                     catch (InvalidOperationException ex)
                     {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                         // Combat is over
                         message = ex.Message;
                     }
                     catch (ArgumentOutOfRangeException ex)
                     {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
                         // Not enough turn points
                         message = ex.Message;
                     }
@@ -325,6 +355,7 @@
         /// bool cargoJettisoned - When True the other player has jettisoned their cargo
         /// int jumpDriveCharge - charge of JumpDrive
         /// int turnPoints - Number of turn points left
+        /// double timeLeft - Number of seconds left in current turn action
         /// bool complete - true when combat is complete
         /// </returns>
         private object BuildCombatStatus(Combat combat)
@@ -351,6 +382,7 @@
                 cargoJettisoned = combat.CargoJettisoned,
                 jumpDriveCharge = playerShip.CurrentJumpDriveCharge,
                 turnPoints = combat.TurnPointsLeft,
+                timeLeft = combat.TurnTimeLeft.TotalSeconds,
                 complete = (combat.Status != Combat.CombatStatus.Incomplete)
             };
         }
