@@ -71,7 +71,7 @@
                 if (data.surrendered && !playerNotified) {
                     // Other player has offered surrender
                     playerNotified = true;
-                    var acceptSurrender = prompt('Other player has offered surrender, accept?');
+                    var acceptSurrender = confirm('Other player has offered surrender, accept?');
                     if (acceptSurrender) {
                         $(".turnAction").attr("disabled", "disabled");
                         $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {

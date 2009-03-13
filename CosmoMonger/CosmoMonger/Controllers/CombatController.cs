@@ -339,6 +339,67 @@
             return Json(false);
         }
 
+
+        public JsonResult OfferSurrender(int combatId)
+        {
+            Combat selectedCombat = this.ControllerGame.GetCombat(combatId);
+            if (selectedCombat != null)
+            {
+                string message = null;
+
+                // Check that it is the current players turn
+                if (selectedCombat.ShipTurn == this.ControllerGame.CurrentPlayer.Ship)
+                {
+                    try
+                    {
+                        selectedCombat.OfferSurrender();
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
+                        // Surrender already offered
+                        message = ex.Message;
+                    }
+                }
+
+                return Json(new { message = message, status = BuildCombatStatus(selectedCombat) });
+            }
+
+            return Json(false);
+        }
+
+        public JsonResult AcceptSurrender(int combatId)
+        {
+            Combat selectedCombat = this.ControllerGame.GetCombat(combatId);
+            if (selectedCombat != null)
+            {
+                string message = null;
+
+                // Check that it is the current players turn
+                if (selectedCombat.ShipTurn == this.ControllerGame.CurrentPlayer.Ship)
+                {
+                    try
+                    {
+                        selectedCombat.AcceptSurrender();
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
+                        // No surrender offered?
+                        message = ex.Message;
+                    }
+                }
+
+                return Json(new { message = message, status = BuildCombatStatus(selectedCombat) });
+            }
+
+            return Json(false);
+        }
+
         /// <summary>
         /// Builds a combat status object for JSON
         /// </summary>

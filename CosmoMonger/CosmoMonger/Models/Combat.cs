@@ -318,6 +318,9 @@ namespace CosmoMonger.Models
             // Update turn action time
             this.LastActionTime = DateTime.Now;
 
+            // Cleanup combat
+            this.CleanupCombat();
+
             db.SubmitChanges();
         }
 
@@ -403,9 +406,39 @@ namespace CosmoMonger.Models
 
             db.SubmitChanges();
 
+            // Cleanup combat
+            this.CleanupCombat();
+        }
+
+        private void CleanupCombat()
+        {
+            // Check how much the longer the ship needed prep for jumping
+            if (this.ShipTurn.TargetSystemArrivalTime.HasValue && this.ShipTurn.TargetSystemArrivalTime > DateTime.Now)
+            {
+                // The ship still needs time to prep,
+                // Combat is non real-time so we will cheat here and make the ship instantly jump
+                this.ShipTurn.TargetSystemArrivalTime = DateTime.Now.AddSeconds(-1);
+            }
+
+            // Check how much the longer the other ship needed prep for jumping
+            if (this.ShipOther.TargetSystemArrivalTime.HasValue && this.ShipOther.TargetSystemArrivalTime > DateTime.Now)
+            {
+                // The other ship still needs time to prep,
+                // Combat is non real-time so we will cheat here and make the ship instantly jump
+                this.ShipOther.TargetSystemArrivalTime = DateTime.Now.AddSeconds(-1);
+            }
+
             // Ensure both ships are no longer traveling
             this.ShipTurn.CheckIfTraveling();
             this.ShipOther.CheckIfTraveling();
+
+            // Repair both ships
+            this.ShipTurn.Repair();
+            this.ShipOther.Repair();
+
+            // Reset jump drive charges
+            this.ShipOther.CurrentJumpDriveCharge = 0;
+            this.ShipTurn.CurrentJumpDriveCharge = 0;
         }
 
         /// <summary>
@@ -451,24 +484,8 @@ namespace CosmoMonger.Models
                     }
                 }
 
-                // Repair both ships
-                this.ShipTurn.Repair();
-                this.ShipOther.Repair();
-
-                // Reset jump drive charges
-                this.ShipOther.CurrentJumpDriveCharge = 0;
-                this.ShipTurn.CurrentJumpDriveCharge = 0;
-
-                // Check how much the longer the ship needed prep for jumping
-                if (this.ShipTurn.TargetSystemArrivalTime.HasValue && this.ShipTurn.TargetSystemArrivalTime > DateTime.Now)
-                {
-                    // The ship still needs time to prep,
-                    // Combat is non real-time so we will cheat here and make the ship instantly jump
-                    this.ShipTurn.TargetSystemArrivalTime = DateTime.Now.AddSeconds(-1);
-                }
-
-                // Ensure that the ship traveling is in valid state
-                this.ShipTurn.CheckIfTraveling();
+                // Cleanup combat
+                this.CleanupCombat();
             }
             else
             {
@@ -573,16 +590,12 @@ namespace CosmoMonger.Models
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
-            // No longer traveling, combat has ended
+            // No longer traveling, combat has ended with one ship being destroyed
             this.ShipOther.TargetSystemId = null;
             this.ShipOther.TargetSystemArrivalTime = null;
             this.ShipTurn.TargetSystemId = null;
             this.ShipTurn.TargetSystemArrivalTime = null;
-            
-            // Reset jump drive charges
-            this.ShipOther.CurrentJumpDriveCharge = 0;
-            this.ShipTurn.CurrentJumpDriveCharge = 0;
-
+        
             // Sending cargo into space
             this.SendCargoIntoSpace(this.ShipOther);
 
@@ -687,8 +700,8 @@ namespace CosmoMonger.Models
                     }
                 }
 
-                // Repair winners ship
-                this.ShipTurn.Repair();
+                // Cleanup combat
+                this.CleanupCombat();
             }
             else
             {
