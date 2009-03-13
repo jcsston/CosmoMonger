@@ -183,13 +183,13 @@
 
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
-            db.Log = Console.Error;
+            //db.Log = Console.Out;
 
             IEnumerable<User> users = manager.FindUser("jory");
             IPagination<User> usersPaged =  users.AsPagination(1);
             usersPaged.ToArray();
 
-            db.Log = null;
+            //db.Log = null;
 
             Assert.That(users, Is.Not.Empty, "Should find me");
         }
