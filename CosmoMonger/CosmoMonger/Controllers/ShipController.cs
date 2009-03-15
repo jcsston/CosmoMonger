@@ -66,6 +66,10 @@ namespace CosmoMonger.Controllers
         {
             ViewData["CurrentShip"] = this.ControllerGame.CurrentPlayer.Ship;
             ViewData["Ships"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetAvailableShips();
+            ViewData["CashCredits"] = this.ControllerGame.CurrentPlayer.CashCredits;
+            ViewData["BankCredits"] = this.ControllerGame.CurrentPlayer.BankCredits;
+            ViewData["FreeCargoSpace"] = this.ControllerGame.CurrentPlayer.Ship.CargoSpaceFree;
+
             return View();
         }
 

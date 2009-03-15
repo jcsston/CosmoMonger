@@ -2,7 +2,7 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>List Goods</title>
     <script type="text/javascript" src="/Scripts/jquery.spin-1.0.2.js"></script>
-    <script type="text/javascript" src="/Scripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.validate.min.js"></script>
     <script type="text/javascript">
     <!--
         $(document).ready(function() {

@@ -163,6 +163,7 @@ namespace CosmoMonger.Models
             {
                 SqlCommand priceHistoryCmd = logConnection.CreateCommand();
                 priceHistoryCmd.CommandText = "SELECT Timestamp, FormattedMessage FROM Log WHERE Title = 'Adjusting Good Price' AND FormattedMessage LIKE '%SystemId: " + this.SystemId + "\r%' AND FormattedMessage LIKE '%GoodId: " + this.GoodId + "\r%' ORDER BY Timestamp";
+                priceHistoryCmd.CommandTimeout = 600;
 
                 SqlDataReader reader = priceHistoryCmd.ExecuteReader();
                 while (reader.Read())
@@ -172,7 +173,7 @@ namespace CosmoMonger.Models
                     if (formattedMessage != null)
                     {
                         Match match = priceMultiplierRegex.Match(formattedMessage);
-                        if (match != null)
+                        if (match != null && match.Success)
                         {
                             double priceMultipler = double.Parse(match.Groups[1].Value);
                             int price = (int)(priceMultipler * this.Good.BasePrice);
