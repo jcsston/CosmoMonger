@@ -84,7 +84,7 @@
                 } else if (data.cargoJettisoned && !playerNotified) {
                     // Other player has jettisoned cargo
                     playerNotified = true;
-                    var pickupCargo = confirm('Other player has jettisoned cargo, pickup? If we pickup the cargo the other player will escape, if not the cargo will be lost.');
+                    var pickupCargo = confirm('Other player has jettisoned ' + data.cargoJettisoned + ' cargo items, pickup? If we pickup the cargo the other player will escape, if not the cargo will be lost.');
                     if (pickupCargo) {
                         $(".turnAction").attr("disabled", "disabled");
                         $.getJSON('/Combat/PickupCargo', { combatId: combatId }, function(data) {

@@ -413,7 +413,7 @@
         /// int enemyShield
         /// bool turn - True is player's turn, false is other players turn
         /// bool surrendered - When True the other player has offered a surrender
-        /// bool cargoJettisoned - When True the other player has jettisoned their cargo
+        /// int cargoJettisoned - When greater than 0 the other player has jettisoned their cargo, number is the number of cargo items jettisoned
         /// int jumpDriveCharge - charge of JumpDrive
         /// int turnPoints - Number of turn points left
         /// double timeLeft - Number of seconds left in current turn action
@@ -440,7 +440,7 @@
                 enemyShield = enemyShip.DamageShield,
                 turn = (playerShip == combat.ShipTurn),
                 surrendered = combat.Surrendered,
-                cargoJettisoned = combat.CargoJettisoned,
+                cargoJettisoned = combat.CargoJettisonedCount,
                 jumpDriveCharge = playerShip.CurrentJumpDriveCharge,
                 turnPoints = combat.TurnPointsLeft,
                 timeLeft = combat.TurnTimeLeft.TotalSeconds,

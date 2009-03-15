@@ -111,6 +111,25 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Gets the number of cargo items jettisoned and avaiable to be picked up.
+        /// </summary>
+        /// <value>The total quantity of cargo jettisoned.</value>
+        public int CargoJettisonedCount
+        {
+            get
+            {
+                if (this.CargoJettisoned)
+                {
+                    return this.CombatGoods.Sum(g => g.Quantity);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the turn time left.
         /// </summary>
         /// <value>The turn time left.</value>
@@ -457,7 +476,18 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Alloc turn points to the charge of the JumpDrive
-            this.ShipTurn.CurrentJumpDriveCharge += this.TurnPointsLeft;
+            
+            // Calculate how much the JumpDrive will charge
+            // Formula: x = 100 / (ChargeTime / 2)
+            // This means that if it takes 12 seconds to jump, it will take 6 turns to escape
+            // or if it takes 4 seconds to jump, it will take 2 turns to escape
+            int jumpDriveChargePerTurn = 100 / (this.ShipTurn.JumpDrive.ChargeTime / 2);
+            
+            // Based on many turn points left is how much the normal jumpdrive will charge
+            // if you only have half your turn points left, you will only get half the normal charge amount
+            int jumpDriveChargeCurrentTurn = (int)(jumpDriveChargePerTurn * (1.0 * this.TurnPointsLeft / Combat.PointsPerTurn));
+            
+            this.ShipTurn.CurrentJumpDriveCharge += jumpDriveChargeCurrentTurn;
             this.TurnPointsLeft = 0;
 
             // Did the jumpdrive fully charge?
@@ -718,7 +748,7 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // We will unload all the cargo off of the source ship and move it into the combat 'space'
-            foreach (ShipGood shipGood in sourceShip.ShipGoods) 
+            foreach (ShipGood shipGood in sourceShip.ShipGoods.Where(g => g.Quantity > 0)) 
             {
                 CombatGood good = (from g in this.CombatGoods
                                    where g.Good == shipGood.Good
