@@ -331,6 +331,18 @@ namespace CosmoMonger.Models
             // Move enemy cargo from space into our cargo bays
             this.LoadCargo();
 
+            // Update records
+            Player turnPlayer = this.ShipTurn.Players.SingleOrDefault();
+            if (turnPlayer != null)
+            {
+                turnPlayer.ForcedSurrenders++;
+            }
+            Player otherPlayer = this.ShipOther.Players.SingleOrDefault();
+            if (otherPlayer != null)
+            {
+                otherPlayer.SurrenderCount++;
+            }
+
             // Combat has ended
             this.Status = CombatStatus.ShipSurrendered;
 
@@ -495,6 +507,18 @@ namespace CosmoMonger.Models
             {
                 // This ship escapes combat
                 this.Status = CombatStatus.ShipFled;
+
+                // Update records
+                Player turnPlayer = this.ShipTurn.Players.SingleOrDefault();
+                if (turnPlayer != null)
+                {
+                    turnPlayer.FleeCount++;
+                }
+                Player otherPlayer = this.ShipOther.Players.SingleOrDefault();
+                if (otherPlayer != null)
+                {
+                    otherPlayer.ForcedFlees++;
+                }
 
                 try
                 {
