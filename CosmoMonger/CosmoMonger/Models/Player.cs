@@ -8,11 +8,11 @@ namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Linq;
     using System.Diagnostics;
     using System.Linq;
-    using Microsoft.Practices.EnterpriseLibrary.Logging;
-    using System.Data.Linq;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
     /// Extension of the partial LINQ class Player

@@ -6,16 +6,20 @@
 <h1>Player Profile</h1>
 <table style="width: 100%">
 <% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["Player"]; %>
-<tr><td class="vp-playerName" colspan="6"><%= Html.Encode(player.Name) %></td></tr>
-<tr><td>&nbsp;</td></tr>
+<tr>
+    <td class="vp-playerName" colspan="6"><%= Html.Encode(player.Name) %></td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+</tr>
 <tr>
     <td class="vp-headers" colspan="2">Financial Data</td>
     <td class="vp-headers" colspan="2">Reputation</td>
     <td class="vp-headers" colspan="2">Bounty</td>
 </tr>
 <tr>
-    <td class="vp-columnData">Net Worth:</td>
-    <td class="vp-columnData"><%= player.NetWorth%></td>
+    <td class="vp-columnData"><u>Net Worth:</u></td>
+    <td class="vp-columnData"><u><%= player.NetWorth%></u></td>
     <td class="vp-columnData"><%=player.Reputation%></td>
     <td class="vp-columnData"><%=player.ReputationLevel%></td>
     <td class="vp-columnData"><%=player.BountyTotal%></td>
@@ -29,7 +33,17 @@
     <td class="vp-columnData">Bank Credits:</td>
     <td class="vp-columnData"><%= player.BankCredits%></td>
 </tr>
-<tr><td>&nbsp;</td></tr>
+<tr>
+    <td class="vp-columnData">Ship Trade-In Value:</td>
+    <td class="vp-columnData"><%= player.Ship.TradeInValue%></td>
+</tr>
+<tr>
+    <td class="vp-columnData">Cargo Value:</td>
+    <td class="vp-columnData"><%= player.Ship.CargoWorth%></td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+</tr>
 <tr>
     <td class="vp-headers" colspan="2">Racial Data</td>
     <td class="vp-headers" colspan="2">Time Played</td>

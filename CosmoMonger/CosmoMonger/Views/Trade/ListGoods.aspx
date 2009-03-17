@@ -3,8 +3,13 @@
     <title>List Goods</title>
     <script type="text/javascript" src="/Scripts/jquery.spin-1.0.2.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.tooltip.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.bgiframe.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.dimensions.js"></script>
+    <link href="/Scripts/jquery.tooltip.css" rel="stylesheet" type="text/css" />     
     <script type="text/javascript">
-    <!--
+      <!--
+
         $(document).ready(function() {
             $('input[name=quantity]').map(function(index, domElement) {
                 var buyGood = false;
@@ -63,6 +68,15 @@
                     $(this).val(goodQuantityMin);
                 }
             });
+            
+    $('.goodImages').tooltip({ 
+    delay: 0, 
+    showURL: false, 
+    bodyHandler: function() { 
+        return $("<img/>").attr("src", this.src); 
+    } 
+    });
+
         });
     -->
     </script>
@@ -86,7 +100,8 @@
                                 select g.Quantity).SingleOrDefault();
 %>
         <tr>
-            <td><%=Html.Encode(good.Good.Name) + (good.Good.Contraband ? "*" : "") %></td>
+            <td><img class="goodImages" src="/Content/Goods/<%=Html.AttributeEncode(good.Good.Name)%>.png" alt="small good image" height="20px"/>
+            <%=Html.Encode(good.Good.Name) + (good.Good.Contraband ? "*" : "") %></td>
             <td>$<%=good.Good.BasePrice %></td>
             <td id="goodPrice<%=good.GoodId %>">$<%=good.Price %></td>
             <td id="goodQuantity<%=good.GoodId %>"><%=good.Quantity %></td>

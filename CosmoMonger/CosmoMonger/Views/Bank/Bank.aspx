@@ -16,6 +16,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 <% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["CurrentPlayer"]; %>
 <% CosmoMonger.Models.CosmoSystem cSystem = ViewData["CurrentSystem"] as CosmoMonger.Models.CosmoSystem; %>
+
 <% if (cSystem.HasBank == true)
    { %> 
 <h1>Welcome To The Intergalactic Bank of <%= Html.Encode(cSystem.Name)%></h1>
@@ -25,6 +26,9 @@
 <h1>Welcome To The Online Intergalactic Bank</h1>
 <% } %>
 <table style="width: 100%">
+<tr>
+    <td align="center"><img id="BankLogo" src="/Content/IGBank.png" alt="Bank Logo" /></td>
+</tr>
 <tr>
     <td class="bank-columnHeaders"><%= Html.Encode(player.Name) %>'s Bank Account</td>
 </tr>
