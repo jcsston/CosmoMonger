@@ -136,7 +136,7 @@ namespace CosmoMonger.Models
             int netWorth = this.BankCredits + this.CashCredits;
             if (this.Ship != null)
             {
-                netWorth += this.Ship.TradeInValue + this.Ship.ShipGoods.Sum(x => x.Quantity * x.Good.BasePrice);
+                netWorth += this.Ship.TradeInValue + this.Ship.CargoWorth;
             }
 
             Logger.Write("Updating player net worth in Player.UpdateNetWorth", "Model", 500, 0, TraceEventType.Verbose, "Update player networth",

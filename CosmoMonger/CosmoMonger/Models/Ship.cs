@@ -77,6 +77,17 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Gets the worth of the cargo aboard the ship.
+        /// </summary>
+        public virtual int CargoWorth
+        {
+            get
+            {
+                return this.ShipGoods.Sum(g => g.Quantity * g.Good.BasePrice);
+            }
+        }
+
+        /// <summary>
         /// Gets the current in progress combat if any
         /// </summary>
         /// <value>The in progress combat object, null if no combat is taking place.</value>
