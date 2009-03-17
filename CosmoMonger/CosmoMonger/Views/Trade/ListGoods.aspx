@@ -6,8 +6,7 @@
     <script type="text/javascript" src="/Scripts/jquery.tooltip.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.bgiframe.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.dimensions.js"></script>
-    <link href="/Scripts/jquery.tooltip.css" rel="stylesheet" type="text/css" />     
-    <script type="text/javascript">
+     <script type="text/javascript">
       <!--
 
         $(document).ready(function() {
@@ -71,7 +70,7 @@
             
     $('.goodImages').tooltip({ 
     delay: 0, 
-    showURL: false, 
+    showURL: false,
     bodyHandler: function() { 
         return $("<img/>").attr("src", this.src); 
     } 

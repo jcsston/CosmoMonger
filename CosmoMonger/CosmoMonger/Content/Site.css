@@ -795,3 +795,13 @@ div.jGrowl div.jGrowl-closer {
 	font-weight: 			bold;
 	text-align: 			center;
 }
+
+/* Tooltip CSS */
+#tooltip {
+	position: absolute;
+	z-index: 3000;
+	/*border: 1px solid #111;*/
+	background-color: transparent; /* #eee */
+	padding: 5px;
+}
+#tooltip h3, #tooltip div { margin: 0; }
