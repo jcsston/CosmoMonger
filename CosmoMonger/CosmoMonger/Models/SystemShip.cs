@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="SystemShip.cs" company="CosmoMonger">
-//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
 //-----------------------------------------------------------------------
@@ -8,8 +8,8 @@ namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Diagnostics;
+    using System.Linq;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
@@ -54,14 +54,13 @@ namespace CosmoMonger.Models
                 throw new InvalidOperationException("Not enough cargo space on new ship to transfer over cargo");
             }
 
-            Logger.Write("Buying new ship in SystemShip.Buy", "Model", 500, 0, TraceEventType.Information, "Buying Ship",
-                new Dictionary<string, object>
-                {
-                    { "PlayerId", manager.CurrentPlayer.PlayerId },
-                    { "OldShipBaseId", currentShip.BaseShipId },
-                    { "NewShipBaseId", this.BaseShipId }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "PlayerId", manager.CurrentPlayer.PlayerId },
+                { "OldShipBaseId", currentShip.BaseShipId },
+                { "NewShipBaseId", this.BaseShipId }
+            };
+            Logger.Write("Buying new ship in SystemShip.Buy", "Model", 500, 0, TraceEventType.Information, "Buying Ship", props);
 
             // 'Trade-in' the current ship
             SystemShip tradeInShip = (from ss in this.CosmoSystem.SystemShips

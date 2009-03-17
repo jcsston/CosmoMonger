@@ -94,6 +94,7 @@
     <Compile Include="Controllers\AdminControllerTest.cs" />
     <Compile Include="Controllers\BankControllerTest.cs" />
     <Compile Include="Controllers\CachingXmlResolver.cs" />
+    <Compile Include="Controllers\CombatControllerTest.cs" />
     <Compile Include="Controllers\CommunicationControllerTest.cs" />
     <Compile Include="Controllers\PlayerControllerTest.cs" />
     <Compile Include="Controllers\PlayerRecordControllerTest.cs" />

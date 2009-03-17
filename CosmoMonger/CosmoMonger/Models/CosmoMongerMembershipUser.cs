@@ -18,9 +18,9 @@ namespace CosmoMonger.Models
     using System.Threading;
     using System.Web;
     using System.Web.Security;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
     using Microsoft.Practices.EnterpriseLibrary.Security.Cryptography;
-    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     /// <summary>
     /// This class represents a user account in the system and manages checking the password,
@@ -300,6 +300,7 @@ namespace CosmoMonger.Models
 
                 db.SubmitChanges();
             }
+
             return false;
         }
 
@@ -419,6 +420,10 @@ namespace CosmoMonger.Models
             db.SubmitChanges();
         }
 
+        /// <summary>
+        /// Updates the logged-in session for this user.
+        /// </summary>
+        /// <param name="sessionId">The current session id.</param>
         public void UpdateSession(string sessionId)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();

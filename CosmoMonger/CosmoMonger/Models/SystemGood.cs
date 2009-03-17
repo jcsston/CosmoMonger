@@ -1,8 +1,9 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="SystemGood.cs" company="CosmoMonger">
-//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
+// <author>Roger Boykin</author>
 //-----------------------------------------------------------------------
 namespace CosmoMonger.Models
 {
@@ -22,7 +23,10 @@ namespace CosmoMonger.Models
     /// </summary>
     public partial class SystemGood
     {
-        public enum DemandTypes
+        /// <summary>
+        /// Enum for the different types of Demand goods can have
+        /// </summary>
+        public enum DemandType
         {
             /// <summary>
             /// This good is not bought or sold at this system
@@ -44,7 +48,6 @@ namespace CosmoMonger.Models
             /// </summary>
             Decreased = 3
         }
-        
         
         /// <summary>
         /// Gets the actual price of the good.
@@ -87,16 +90,15 @@ namespace CosmoMonger.Models
                 throw new ArgumentException("Not enough cargo space to carry requested number of goods", "quantity");
             }
 
-            Logger.Write("Buying goods in SystemGood.Buy", "Model", 500, 0, TraceEventType.Information, "Buying Goods",
-                new Dictionary<string, object>
-                {
-                    { "PlayerId", manager.CurrentPlayer.PlayerId },
-                    { "SystemId", this.SystemId },
-                    { "GoodId", this.GoodId },
-                    { "Quantity", quantity },
-                    { "TotalCost", totalCost }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "PlayerId", manager.CurrentPlayer.PlayerId },
+                { "SystemId", this.SystemId },
+                { "GoodId", this.GoodId },
+                { "Quantity", quantity },
+                { "TotalCost", totalCost }
+            };
+            Logger.Write("Buying goods in SystemGood.Buy", "Model", 500, 0, TraceEventType.Information, "Buying Goods", props);
 
             // Remove the goods from the system
             this.Quantity -= quantity;
@@ -120,6 +122,7 @@ namespace CosmoMonger.Models
                 {
                     occ.Resolve(RefreshMode.OverwriteCurrentValues);
                 }
+
                 // This does have the chance of a stack overflow, we should find out in testing
                 this.Buy(manager, quantity);
                 return;
@@ -129,7 +132,7 @@ namespace CosmoMonger.Models
             int addedQuantity = playerShip.AddGood(this.GoodId, quantity);
             
             // We should have checked that the ship had enough space to hold the good already
-            Debug.Assert(addedQuantity == quantity);
+            Debug.Assert(addedQuantity == quantity, "The ship should have enough space to hold all the goods");
 
             // Charge the player for the goods
             manager.CurrentPlayer.CashCredits -= totalCost;
@@ -153,6 +156,10 @@ namespace CosmoMonger.Models
             }
         }
 
+        /// <summary>
+        /// Gets the price history for this system good
+        /// </summary>
+        /// <returns>Dictionary of DateTimes and the price at that point in time.</returns>
         public virtual Dictionary<DateTime, int> GetPriceHistory()
         {
             Dictionary<DateTime, int> priceHistory = new Dictionary<DateTime, int>();
@@ -181,6 +188,7 @@ namespace CosmoMonger.Models
                         }
                     }
                 }
+
                 reader.Close();
             }
 

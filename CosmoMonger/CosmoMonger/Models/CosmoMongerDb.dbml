@@ -251,7 +251,7 @@
       <Column Name="PriceMultiplier" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="ProductionFactor" Type="System.Double" DbType="float NOT NULL" CanBeNull="false" />
       <Column Name="ConsumptionFactor" Type="System.Double" DbType="float NOT NULL" CanBeNull="false" />
-      <Column Name="Demand" Type="SystemGood.DemandTypes" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Demand" Type="SystemGood.DemandType" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="Good_SystemGood" Member="Good" ThisKey="GoodId" OtherKey="GoodId" Type="Good" IsForeignKey="true" />
       <Association Name="CosmoSystem_SystemGood" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>

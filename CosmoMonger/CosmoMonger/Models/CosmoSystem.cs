@@ -140,14 +140,13 @@ namespace CosmoMonger.Models
         /// <param name="quantity">The quantity of the good to add.</param>
         public virtual void AddGood(int goodId, int quantity)
         {
-            Logger.Write("Adding Good to System in CosmoSystem.AddGood", "Model", 150, 0, TraceEventType.Verbose, "Adding Good to System", 
-                new Dictionary<string, object>
-                {
-                    { "GoodId", goodId },
-                    { "Quantity", quantity },
-                    { "SystemId", this.SystemId }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "GoodId", goodId },
+                { "Quantity", quantity },
+                { "SystemId", this.SystemId }
+            };
+            Logger.Write("Adding Good to System in CosmoSystem.AddGood", "Model", 150, 0, TraceEventType.Verbose, "Adding Good to System", props);
 
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             SystemGood systemGood = this.GetGood(goodId);
@@ -158,7 +157,7 @@ namespace CosmoMonger.Models
                 systemGood.CosmoSystem = this;
                 systemGood.GoodId = goodId;
                 systemGood.PriceMultiplier = 1.0;
-                systemGood.Demand = SystemGood.DemandTypes.Average;
+                systemGood.Demand = SystemGood.DemandType.Average;
                 this.SystemGoods.Add(systemGood);
             }
 
@@ -179,7 +178,7 @@ namespace CosmoMonger.Models
                     where s.TargetSystemId.HasValue
                     && s.Players.Any(p => p.Alive)
                     && s.DamageHull < 100
-                    select s);
+                    select s).AsEnumerable();
         }
 
         /// <summary>
@@ -191,7 +190,7 @@ namespace CosmoMonger.Models
             return (from s in this.Ships
                     where s.Players.Any(p => p.Alive)
                     && s.DamageHull < 100
-                    select s);
+                    select s).AsEnumerable();
         }
     }
 }

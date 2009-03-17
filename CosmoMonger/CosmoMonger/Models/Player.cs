@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Player.cs" company="CosmoMonger">
-//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
 //-----------------------------------------------------------------------
@@ -68,15 +68,14 @@ namespace CosmoMonger.Models
                 throw new ArgumentOutOfRangeException("credits", "Cannot withdraw more credits than available in the bank");
             }
 
-            Logger.Write("Withdrawing credits from bank in Player.BankWithdraw", "Model", 500, 0, TraceEventType.Verbose, "Withdrawing credits",
-                new Dictionary<string, object>
-                {
-                    { "PlayerId", this.PlayerId },
-                    { "Credits", credits },
-                    { "BankCredits", this.BankCredits },
-                    { "CashCredits", this.CashCredits }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "PlayerId", this.PlayerId },
+                { "Credits", credits },
+                { "BankCredits", this.BankCredits },
+                { "CashCredits", this.CashCredits }
+            };
+            Logger.Write("Withdrawing credits from bank in Player.BankWithdraw", "Model", 500, 0, TraceEventType.Verbose, "Withdrawing credits", props);
 
             this.BankCredits -= credits;
             this.CashCredits += credits;
@@ -111,15 +110,14 @@ namespace CosmoMonger.Models
                 throw new ArgumentOutOfRangeException("credits", "Cannot deposit more credits than available in cash");
             }
 
-            Logger.Write("Depositing credits into bank in Player.BankDeposit", "Model", 500, 0, TraceEventType.Verbose, "Depositing credits",
-                new Dictionary<string, object>
-                {
-                    { "PlayerId", this.PlayerId },
-                    { "Credits", credits },
-                    { "BankCredits", this.BankCredits },
-                    { "CashCredits", this.CashCredits }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "PlayerId", this.PlayerId },
+                { "Credits", credits },
+                { "BankCredits", this.BankCredits },
+                { "CashCredits", this.CashCredits }
+            };
+            Logger.Write("Depositing credits into bank in Player.BankDeposit", "Model", 500, 0, TraceEventType.Verbose, "Depositing credits", props);
 
             this.CashCredits -= credits;
             this.BankCredits += credits;
@@ -139,14 +137,13 @@ namespace CosmoMonger.Models
                 netWorth += this.Ship.TradeInValue + this.Ship.CargoWorth;
             }
 
-            Logger.Write("Updating player net worth in Player.UpdateNetWorth", "Model", 500, 0, TraceEventType.Verbose, "Update player networth",
-                new Dictionary<string, object>
-                {
-                    { "PlayerId", this.PlayerId },
-                    { "NewNetWorth", netWorth },
-                    { "OldNetWorth", this.NetWorth }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "PlayerId", this.PlayerId },
+                { "NewNetWorth", netWorth },
+                { "OldNetWorth", this.NetWorth }
+            };
+            Logger.Write("Updating player net worth in Player.UpdateNetWorth", "Model", 500, 0, TraceEventType.Verbose, "Update player networth", props);
 
             this.NetWorth = netWorth;
 
@@ -222,6 +219,7 @@ namespace CosmoMonger.Models
                             string memberDetails = string.Format("{0}.{1} O: {2} D: {3} C: {4}", mcc.Member.DeclaringType.Name, mcc.Member.Name, mcc.OriginalValue, mcc.DatabaseValue, mcc.CurrentValue);
                             Logger.Write(memberDetails, "Model", 10, 0, TraceEventType.Verbose, "SQL Change Conflict Details");
                         }
+
                         occ.Resolve(RefreshMode.KeepChanges);
                     }
                 }
@@ -229,35 +227,16 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// A property changed event, called when CashCredits is changed.
-        /// </summary>
-        partial void OnCashCreditsChanged()
-        {
-            // Because CashCredits has changed we need to update NetWorth
-            this.UpdateNetWorth();
-        }
-
-        /// <summary>
-        /// A property changed event, called when BankCredits is changed.
-        /// </summary>
-        partial void OnBankCreditsChanged()
-        {
-            // Because BankCredits has changed we need to update NetWorth
-            this.UpdateNetWorth();
-        }
-
-        /// <summary>
         /// Kills this player.
         /// </summary>
         public virtual void Kill()
         {
-            Logger.Write("Killing player in Player.Kill", "Model", 600, 0, TraceEventType.Verbose, "Kill Player",
-                new Dictionary<string, object>
-                {
-                    { "PlayerId", this.PlayerId },
-                    { "Alive", this.Alive }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "PlayerId", this.PlayerId },
+                { "Alive", this.Alive }
+            };
+            Logger.Write("Killing player in Player.Kill", "Model", 600, 0, TraceEventType.Verbose, "Kill Player", props);
 
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
@@ -305,6 +284,24 @@ namespace CosmoMonger.Models
 
             db.Ships.InsertOnSubmit(playerShip);
             this.Ship = playerShip;
+        }
+
+        /// <summary>
+        /// A property changed event, called when CashCredits is changed.
+        /// </summary>
+        partial void OnCashCreditsChanged()
+        {
+            // Because CashCredits has changed we need to update NetWorth
+            this.UpdateNetWorth();
+        }
+
+        /// <summary>
+        /// A property changed event, called when BankCredits is changed.
+        /// </summary>
+        partial void OnBankCreditsChanged()
+        {
+            // Because BankCredits has changed we need to update NetWorth
+            this.UpdateNetWorth();
         }
     }
 }

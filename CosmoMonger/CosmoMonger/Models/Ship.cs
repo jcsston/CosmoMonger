@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Ship.cs" company="CosmoMonger">
-//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
 //-----------------------------------------------------------------------
@@ -95,13 +95,15 @@ namespace CosmoMonger.Models
         {
             get
             {
-                /* This is a more optimized query, results in a single query to the database with Complete in the where clause
+                /* 
+                // This is a more optimized query, results in a single query to the database with Complete in the where clause
                 CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
                 return (from c in db.Combats
                         where !c.Complete
                         && (c.AttackerShip == this || c.DefenderShip == this)
                         select c).SingleOrDefault();
                 */
+
                 // This query seems to pull in all combats the ship has ever been in, Complete is not part of the where clause
                 return (from c in this.CombatsAttacker
                         where c.Status == Combat.CombatStatus.Incomplete
@@ -314,55 +316,7 @@ namespace CosmoMonger.Models
         {
             return (from s in this.CosmoSystem.GetLeavingShips()
                     where s != this
-                    select s);
-        }
-
-        /// <summary>
-        /// Called when the BaseShip/BaseShipId is changed.
-        /// </summary>
-        partial void OnBaseShipIdChanged()
-        {
-            Player player = this.Players.SingleOrDefault();
-            if (player != null)
-            {
-                player.UpdateNetWorth();
-            }
-        }
-
-        /// <summary>
-        /// Called when the JumpDrive/JumpDriveId is changed.
-        /// </summary>
-        partial void OnJumpDriveIdChanged()
-        {
-            Player player = this.Players.SingleOrDefault();
-            if (player != null)
-            {
-                player.UpdateNetWorth();
-            }
-        }
-
-        /// <summary>
-        /// Called when the Shield/ShieldId is changed.
-        /// </summary>
-        partial void OnShieldIdChanged()
-        {
-            Player player = this.Players.SingleOrDefault();
-            if (player != null)
-            {
-                player.UpdateNetWorth();
-            }
-        }
-
-        /// <summary>
-        /// Called when the Weapon/WeaponId is changed.
-        /// </summary>
-        partial void OnWeaponIdChanged()
-        {
-            Player player = this.Players.SingleOrDefault();
-            if (player != null)
-            {
-                player.UpdateNetWorth();
-            }
+                    select s).AsEnumerable();
         }
 
         /// <summary>
@@ -378,15 +332,14 @@ namespace CosmoMonger.Models
             // Limit the quantity to the amount of free cargo space
             int actualQuantity = Math.Min(quantity, this.CargoSpaceFree);
 
-            Logger.Write("Adding Good to Ship in Ship.AddGood", "Model", 150, 0, TraceEventType.Verbose, "Adding Good to Ship",
-                new Dictionary<string, object>
-                {
-                    { "GoodId", goodId },
-                    { "Quantity", quantity },
-                    { "ActualQuantity", actualQuantity },
-                    { "ShipId", this.ShipId }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "GoodId", goodId },
+                { "Quantity", quantity },
+                { "ActualQuantity", actualQuantity },
+                { "ShipId", this.ShipId }
+            };
+            Logger.Write("Adding Good to Ship in Ship.AddGood", "Model", 150, 0, TraceEventType.Verbose, "Adding Good to Ship", props);
 
             ShipGood shipGood = this.GetGood(goodId);
             if (shipGood == null)
@@ -447,8 +400,8 @@ namespace CosmoMonger.Models
 
             var systemsWithBank = (from s in db.CosmoSystems
                                    where s.HasBank
-                                   orderby (Math.Sqrt(Math.Pow(this.CosmoSystem.PositionX - s.PositionX, 2) 
-                                            + Math.Pow(this.CosmoSystem.PositionY - s.PositionY, 2)))
+                                   orderby Math.Sqrt(Math.Pow(this.CosmoSystem.PositionX - s.PositionX, 2) 
+                                            + Math.Pow(this.CosmoSystem.PositionY - s.PositionY, 2))
                                    select s);
             return systemsWithBank.First();
         }
@@ -479,6 +432,54 @@ namespace CosmoMonger.Models
                 {
                     occ.Resolve(RefreshMode.KeepChanges);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Called when the BaseShip/BaseShipId is changed.
+        /// </summary>
+        partial void OnBaseShipIdChanged()
+        {
+            Player player = this.Players.SingleOrDefault();
+            if (player != null)
+            {
+                player.UpdateNetWorth();
+            }
+        }
+
+        /// <summary>
+        /// Called when the JumpDrive/JumpDriveId is changed.
+        /// </summary>
+        partial void OnJumpDriveIdChanged()
+        {
+            Player player = this.Players.SingleOrDefault();
+            if (player != null)
+            {
+                player.UpdateNetWorth();
+            }
+        }
+
+        /// <summary>
+        /// Called when the Shield/ShieldId is changed.
+        /// </summary>
+        partial void OnShieldIdChanged()
+        {
+            Player player = this.Players.SingleOrDefault();
+            if (player != null)
+            {
+                player.UpdateNetWorth();
+            }
+        }
+
+        /// <summary>
+        /// Called when the Weapon/WeaponId is changed.
+        /// </summary>
+        partial void OnWeaponIdChanged()
+        {
+            Player player = this.Players.SingleOrDefault();
+            if (player != null)
+            {
+                player.UpdateNetWorth();
             }
         }
     }

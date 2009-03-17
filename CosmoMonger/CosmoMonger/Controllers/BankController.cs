@@ -6,7 +6,7 @@
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     /// <summary>
-    /// 
+    /// Controller for bank actions such as viewing balance, deposit, and withdraw.
     /// </summary>
     public class BankController : GameController
     {

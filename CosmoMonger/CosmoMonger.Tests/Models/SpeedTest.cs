@@ -11,7 +11,7 @@
     [TestFixture]
     public class SpeedTest
     {
-        public const int LOOP_COUNT = 10;
+        public const int LOOP_COUNT = 100;
 
         [Test]
         public void LINQWhereObject()

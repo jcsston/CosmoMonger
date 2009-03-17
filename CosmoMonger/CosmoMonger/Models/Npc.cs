@@ -3,6 +3,7 @@
 //     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
+// <author>Roger Boykin</author>
 //-----------------------------------------------------------------------
 namespace CosmoMonger.Models
 {

@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------
 // <copyright file="User.cs" company="CosmoMonger">
-//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
 //-----------------------------------------------------------------------
@@ -53,13 +53,12 @@ namespace CosmoMonger.Models
                 throw new ArgumentException("Player by another user with the same name already exists", "name");
             }
 
-            Logger.Write("Creating player in User.CreatePlayer", "Model", 700, 0, TraceEventType.Information, "Creating Player",
-                new Dictionary<string, object>
-                {
-                    { "Name", name },
-                    { "Race", race.Name }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "Name", name },
+                { "Race", race.Name }
+            };
+            Logger.Write("Creating player in User.CreatePlayer", "Model", 700, 0, TraceEventType.Information, "Creating Player", props);
 
             Player player = new Player();
             player.User = this;
@@ -106,14 +105,13 @@ namespace CosmoMonger.Models
                 throw new ArgumentException("Another user has the same e-mail", "email");
             }
 
-            Logger.Write("Changing user email in User.UpdateEmail", "Model", 500, 0, TraceEventType.Information, "Changing User Email",
-                new Dictionary<string, object>
-                {
-                    { "UserId", this.UserId },
-                    { "OldEmail", this.Email },
-                    { "NewEmail", email }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "UserId", this.UserId },
+                { "OldEmail", this.Email },
+                { "NewEmail", email }
+            };
+            Logger.Write("Changing user email in User.UpdateEmail", "Model", 500, 0, TraceEventType.Information, "Changing User Email", props);
 
             this.Email = email;
 
@@ -247,7 +245,7 @@ namespace CosmoMonger.Models
                     where m.RecipientUserId == this.UserId
                     && !m.Received
                     && m.VisibleToRecipient
-                    select m);
+                    select m).AsEnumerable();
         }
 
         /// <summary>
@@ -337,7 +335,6 @@ namespace CosmoMonger.Models
             return message;
         }
 
-
         /// <summary>
         /// Deletes this message from the database.
         /// </summary>
@@ -364,6 +361,7 @@ namespace CosmoMonger.Models
                 {
                     throw new ArgumentException("Invalid Message Id", "messageId");
                 }
+
                 message.VisibleToSender = false;
             }
 
@@ -379,7 +377,7 @@ namespace CosmoMonger.Models
             return (from m in this.Messages
                     where m.VisibleToRecipient
                     orderby m.Time descending
-                    select m);
+                    select m).AsEnumerable();
         }
 
         /// <summary>
@@ -391,7 +389,7 @@ namespace CosmoMonger.Models
             return (from m in this.MessagesSent
                     where m.VisibleToSender
                     orderby m.Time descending
-                    select m);
+                    select m).AsEnumerable();
         }
     }
 }

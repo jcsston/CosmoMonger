@@ -5822,7 +5822,7 @@ namespace CosmoMonger.Models
 		
 		private double _ConsumptionFactor;
 		
-		private SystemGood.DemandTypes _Demand;
+		private SystemGood.DemandType _Demand;
 		
 		private EntityRef<Good> _Good;
 		
@@ -5844,7 +5844,7 @@ namespace CosmoMonger.Models
     partial void OnProductionFactorChanged();
     partial void OnConsumptionFactorChanging(double value);
     partial void OnConsumptionFactorChanged();
-    partial void OnDemandChanging(SystemGood.DemandTypes value);
+    partial void OnDemandChanging(SystemGood.DemandType value);
     partial void OnDemandChanged();
     #endregion
 		
@@ -5984,7 +5984,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Demand", DbType="Int NOT NULL", CanBeNull=false)]
-		public SystemGood.DemandTypes Demand
+		public SystemGood.DemandType Demand
 		{
 			get
 			{

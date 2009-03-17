@@ -16,6 +16,24 @@
     /// </summary>
     public class CombatController : GameController
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CombatController"/> class.
+        /// This is the default constructor that doesn't really to anything.
+        /// </summary>
+        public CombatController()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CombatController"/> class.
+        /// This constructor is used for unit testing purposes.
+        /// </summary>
+        /// <param name="manager">The game manager object to use.</param>
+        public CombatController(GameManager manager) 
+            : base(manager)
+        {
+        }
+
         public ActionResult Index()
         {
             return RedirectToAction("Attack");

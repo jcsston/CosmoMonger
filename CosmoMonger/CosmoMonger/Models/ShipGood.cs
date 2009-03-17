@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="ShipGood.cs" company="CosmoMonger">
-//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
 //-----------------------------------------------------------------------
@@ -8,11 +8,11 @@ namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Diagnostics;
-    using Microsoft.Practices.EnterpriseLibrary.Logging;
-    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using System.Data.Linq;
+    using System.Diagnostics;
+    using System.Linq;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
     /// Extension of the partial LINQ class ShipGood
@@ -44,16 +44,15 @@ namespace CosmoMonger.Models
             // Calcuate how much we will make selling these goods
             int profit = quantity * sellingGood.Price;
 
-            Logger.Write("Selling goods in ShipGood.Sell", "Model", 500, 0, TraceEventType.Information, "Selling Goods",
-                new Dictionary<string, object>
-                {
-                    { "PlayerId", manager.CurrentPlayer.PlayerId },
-                    { "ShipId", this.ShipId },
-                    { "GoodId", this.GoodId },
-                    { "Quantity", quantity },
-                    { "Profit", profit }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "PlayerId", manager.CurrentPlayer.PlayerId },
+                { "ShipId", this.ShipId },
+                { "GoodId", this.GoodId },
+                { "Quantity", quantity },
+                { "Profit", profit }
+            };
+            Logger.Write("Selling goods in ShipGood.Sell", "Model", 500, 0, TraceEventType.Information, "Selling Goods", props);
 
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
@@ -76,6 +75,7 @@ namespace CosmoMonger.Models
                 {
                     occ.Resolve(RefreshMode.OverwriteCurrentValues);
                 }
+
                 // This does have the chance of a stack overflow, we should find out in testing
                 this.Sell(manager, quantity);
                 return;

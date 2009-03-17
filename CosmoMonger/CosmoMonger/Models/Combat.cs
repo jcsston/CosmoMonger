@@ -142,9 +142,8 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Checks the turn time left.
+        /// Checks the turn time left. Auto-charging JumpDrive if no time is left in the turn.
         /// </summary>
-        /// <returns></returns>
         public void CheckTurnTimeLeft()
         {
             // Check if any time is left
@@ -207,19 +206,18 @@ namespace CosmoMonger.Models
             // Deduct turn points
             this.TurnPointsLeft -= firingWeapon.TurnCost;
 
-            Logger.Write("Attacking ship fired weapon", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.FireWeapon",
-                new Dictionary<string, object>
-                {
-                    { "CombatId", this.CombatId },
-                    { "TurnShipId", this.ShipTurn.ShipId },
-                    { "OtherShipId", this.ShipOther.ShipId },
-                    { "ShieldStrength", shieldStrength },
-                    { "WeaponDamage", weaponDamage },
-                    { "NewDamageShield", newDamageShield },
-                    { "NewDamageHull", newDamageHull },
-                    { "TurnPointsLeft", this.TurnPointsLeft }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "CombatId", this.CombatId },
+                { "TurnShipId", this.ShipTurn.ShipId },
+                { "OtherShipId", this.ShipOther.ShipId },
+                { "ShieldStrength", shieldStrength },
+                { "WeaponDamage", weaponDamage },
+                { "NewDamageShield", newDamageShield },
+                { "NewDamageHull", newDamageHull },
+                { "TurnPointsLeft", this.TurnPointsLeft }
+            };
+            Logger.Write("Attacking ship fired weapon", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.FireWeapon", props);
 
             // Update turn action time
             this.LastActionTime = DateTime.Now;
@@ -277,14 +275,13 @@ namespace CosmoMonger.Models
 
             this.Surrendered = true;
 
-            Logger.Write("Offered surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OfferSurrender",
-                new Dictionary<string, object>
-                {
-                    { "CombatId", this.CombatId },
-                    { "TurnShipId", this.ShipTurn.ShipId},
-                    { "OtherShipId", this.ShipOther.ShipId }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "CombatId", this.CombatId },
+                { "TurnShipId", this.ShipTurn.ShipId },
+                { "OtherShipId", this.ShipOther.ShipId }
+            };
+            Logger.Write("Offered surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OfferSurrender", props);
 
             // Update turn action time
             this.LastActionTime = DateTime.Now;
@@ -316,14 +313,13 @@ namespace CosmoMonger.Models
                 throw new InvalidOperationException("No surrender offered");
             }
 
-            Logger.Write("Accepted surrender", "Model", 150, 0, TraceEventType.Verbose, "Combat.AcceptSurrender",
-                new Dictionary<string, object>
-                {
-                    { "CombatId", this.CombatId },
-                    { "TurnShipId", this.ShipTurn.ShipId},
-                    { "OtherShipId", this.ShipOther.ShipId }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "CombatId", this.CombatId },
+                { "TurnShipId", this.ShipTurn.ShipId },
+                { "OtherShipId", this.ShipOther.ShipId }
+            };
+            Logger.Write("Accepted surrender", "Model", 150, 0, TraceEventType.Verbose, "Combat.AcceptSurrender", props);
 
             // In space the cargo will go
             this.SendCargoIntoSpace(this.ShipOther);
@@ -331,12 +327,13 @@ namespace CosmoMonger.Models
             // Move enemy cargo from space into our cargo bays
             this.LoadCargo();
 
-            // Update records
+            // Update player records
             Player turnPlayer = this.ShipTurn.Players.SingleOrDefault();
             if (turnPlayer != null)
             {
                 turnPlayer.ForcedSurrenders++;
             }
+
             Player otherPlayer = this.ShipOther.Players.SingleOrDefault();
             if (otherPlayer != null)
             {
@@ -387,14 +384,13 @@ namespace CosmoMonger.Models
 
             this.CargoJettisoned = true;
 
-            Logger.Write("Jettisoned cargo", "Model", 150, 0, TraceEventType.Verbose, "Combat.JettisonShipCargo",
-                new Dictionary<string, object>
-                {
-                    { "CombatId", this.CombatId },
-                    { "TurnShipId", this.ShipTurn.ShipId},
-                    { "OtherShipId", this.ShipOther.ShipId }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "CombatId", this.CombatId },
+                { "TurnShipId", this.ShipTurn.ShipId },
+                { "OtherShipId", this.ShipOther.ShipId }
+            };
+            Logger.Write("Jettisoned cargo", "Model", 150, 0, TraceEventType.Verbose, "Combat.JettisonShipCargo", props);
 
             // Update turn action time
             this.LastActionTime = DateTime.Now;
@@ -441,37 +437,6 @@ namespace CosmoMonger.Models
             this.CleanupCombat();
         }
 
-        private void CleanupCombat()
-        {
-            // Check how much the longer the ship needed prep for jumping
-            if (this.ShipTurn.TargetSystemArrivalTime.HasValue && this.ShipTurn.TargetSystemArrivalTime > DateTime.Now)
-            {
-                // The ship still needs time to prep,
-                // Combat is non real-time so we will cheat here and make the ship instantly jump
-                this.ShipTurn.TargetSystemArrivalTime = DateTime.Now.AddSeconds(-1);
-            }
-
-            // Check how much the longer the other ship needed prep for jumping
-            if (this.ShipOther.TargetSystemArrivalTime.HasValue && this.ShipOther.TargetSystemArrivalTime > DateTime.Now)
-            {
-                // The other ship still needs time to prep,
-                // Combat is non real-time so we will cheat here and make the ship instantly jump
-                this.ShipOther.TargetSystemArrivalTime = DateTime.Now.AddSeconds(-1);
-            }
-
-            // Ensure both ships are no longer traveling
-            this.ShipTurn.CheckIfTraveling();
-            this.ShipOther.CheckIfTraveling();
-
-            // Repair both ships
-            this.ShipTurn.Repair();
-            this.ShipOther.Repair();
-
-            // Reset jump drive charges
-            this.ShipOther.CurrentJumpDriveCharge = 0;
-            this.ShipTurn.CurrentJumpDriveCharge = 0;
-        }
-
         /// <summary>
         /// Uses the rest of the current turn points to charge the jump drive. 
         /// If the jump drive becomes completely charged, the ship escapes and combat is ended.
@@ -508,12 +473,13 @@ namespace CosmoMonger.Models
                 // This ship escapes combat
                 this.Status = CombatStatus.ShipFled;
 
-                // Update records
+                // Update player records
                 Player turnPlayer = this.ShipTurn.Players.SingleOrDefault();
                 if (turnPlayer != null)
                 {
                     turnPlayer.FleeCount++;
                 }
+
                 Player otherPlayer = this.ShipOther.Players.SingleOrDefault();
                 if (otherPlayer != null)
                 {
@@ -660,16 +626,15 @@ namespace CosmoMonger.Models
             Player otherPlayer = this.ShipOther.Players.SingleOrDefault();
             if (turnPlayer != null && otherPlayer != null)
             {
-                Logger.Write("Transfering losing player credits to winner", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed",
-                    new Dictionary<string, object>
-                    {
-                        { "CombatId", this.CombatId },
-                        { "TurnPlayerId", turnPlayer.PlayerId },
-                        { "OtherPlayerId", otherPlayer.PlayerId },
-                        { "OtherPlayerCashCredits", otherPlayer.CashCredits },
-                        { "TurnPlayerCashCredits", turnPlayer.CashCredits }
-                    }
-                );
+                Dictionary<string, object> props = new Dictionary<string, object>
+                {
+                    { "CombatId", this.CombatId },
+                    { "TurnPlayerId", turnPlayer.PlayerId },
+                    { "OtherPlayerId", otherPlayer.PlayerId },
+                    { "OtherPlayerCashCredits", otherPlayer.CashCredits },
+                    { "TurnPlayerCashCredits", turnPlayer.CashCredits }
+                };
+                Logger.Write("Transfering losing player credits to winner", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
 
                 // Take the other players credits
                 this.CreditsLooted = otherPlayer.CashCredits;
@@ -700,15 +665,14 @@ namespace CosmoMonger.Models
 
                 otherPlayer.Ship = null;
 
-                Logger.Write("Relocating losing player to nearest system with bank", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed",
-                    new Dictionary<string, object>
-                    {
-                        { "CombatId", this.CombatId },
-                        { "TurnPlayerId", turnPlayer.PlayerId },
-                        { "OtherPlayerId", otherPlayer.PlayerId },
-                        { "BankSystemId", bankSystem.SystemId }
-                    }
-                );
+                props = new Dictionary<string, object>
+                {
+                    { "CombatId", this.CombatId },
+                    { "TurnPlayerId", turnPlayer.PlayerId },
+                    { "OtherPlayerId", otherPlayer.PlayerId },
+                    { "BankSystemId", bankSystem.SystemId }
+                };
+                Logger.Write("Relocating losing player to nearest system with bank", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
 
                 // Give the player a new ship in the bank system
                 otherPlayer.CreateStartingShip(bankSystem);
@@ -720,15 +684,14 @@ namespace CosmoMonger.Models
                 cloneCredits = Math.Max(cloneCredits, 0);
                 otherPlayer.CashCredits = (int)cloneCredits;
 
-                Logger.Write("Giving losing player starting cash credits", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed",
-                    new Dictionary<string, object>
-                    {
-                        { "CombatId", this.CombatId },
-                        { "TurnPlayerId", turnPlayer.PlayerId },
-                        { "OtherPlayerId", otherPlayer.PlayerId },
-                        { "CashCredits", otherPlayer.CashCredits }
-                    }
-                );
+                props = new Dictionary<string, object>
+                {
+                    { "CombatId", this.CombatId },
+                    { "TurnPlayerId", turnPlayer.PlayerId },
+                    { "OtherPlayerId", otherPlayer.PlayerId },
+                    { "CashCredits", otherPlayer.CashCredits }
+                };
+                Logger.Write("Giving losing player starting cash credits", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
 
                 // Update player stats
                 otherPlayer.ShipsLost++;
@@ -787,6 +750,7 @@ namespace CosmoMonger.Models
 
                 // Into space the good goes...
                 good.Quantity += shipGood.Quantity;
+
                 // The good is no longer on the ship
                 shipGood.Quantity = 0;
             }
@@ -832,16 +796,15 @@ namespace CosmoMonger.Models
                 good.QuantityPickedUp = quantityLoaded;
             }
 
-            Logger.Write("Picked up cargo", "Model", 150, 0, TraceEventType.Verbose, "Combat.LoadCargo",
-                new Dictionary<string, object>
-                {
-                    { "CombatId", this.CombatId },
-                    { "TurnShipId", this.ShipTurn.ShipId },
-                    { "OtherShipId", this.ShipOther.ShipId },
-                    { "TotalCargoCount", this.CombatGoods.Sum(g => g.Quantity) },
-                    { "TotalPickupCount", this.CombatGoods.Sum(g => g.QuantityPickedUp) }
-                }
-            );
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "CombatId", this.CombatId },
+                { "TurnShipId", this.ShipTurn.ShipId },
+                { "OtherShipId", this.ShipOther.ShipId },
+                { "TotalCargoCount", this.CombatGoods.Sum(g => g.Quantity) },
+                { "TotalPickupCount", this.CombatGoods.Sum(g => g.QuantityPickedUp) }
+            };
+            Logger.Write("Picked up cargo", "Model", 150, 0, TraceEventType.Verbose, "Combat.LoadCargo", props);
 
             // Update the player stats on looted cargo
             Player shipPlayer = this.ShipTurn.Players.SingleOrDefault();
@@ -866,6 +829,41 @@ namespace CosmoMonger.Models
                     occ.Resolve(RefreshMode.KeepChanges);
                 }
             }
+        }
+
+        /// <summary>
+        /// Cleanups after the combat. Ensures that both ships have completed traveling, 
+        /// are repaired, and have had their JumpDrive charge discharged.
+        /// </summary>
+        private void CleanupCombat()
+        {
+            // Check how much the longer the ship needed prep for jumping
+            if (this.ShipTurn.TargetSystemArrivalTime.HasValue && this.ShipTurn.TargetSystemArrivalTime > DateTime.Now)
+            {
+                // The ship still needs time to prep,
+                // Combat is non real-time so we will cheat here and make the ship instantly jump
+                this.ShipTurn.TargetSystemArrivalTime = DateTime.Now.AddSeconds(-1);
+            }
+
+            // Check how much the longer the other ship needed prep for jumping
+            if (this.ShipOther.TargetSystemArrivalTime.HasValue && this.ShipOther.TargetSystemArrivalTime > DateTime.Now)
+            {
+                // The other ship still needs time to prep,
+                // Combat is non real-time so we will cheat here and make the ship instantly jump
+                this.ShipOther.TargetSystemArrivalTime = DateTime.Now.AddSeconds(-1);
+            }
+
+            // Ensure both ships are no longer traveling
+            this.ShipTurn.CheckIfTraveling();
+            this.ShipOther.CheckIfTraveling();
+
+            // Repair both ships
+            this.ShipTurn.Repair();
+            this.ShipOther.Repair();
+
+            // Reset jump drive charges
+            this.ShipOther.CurrentJumpDriveCharge = 0;
+            this.ShipTurn.CurrentJumpDriveCharge = 0;
         }
     }
 }

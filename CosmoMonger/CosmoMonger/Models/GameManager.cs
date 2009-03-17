@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------
 // <copyright file="GameManager.cs" company="CosmoMonger">
-//     Copyright (c) 2008 CosmoMonger. All rights reserved.
+//     Copyright (c) 2008-2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
 //-----------------------------------------------------------------------
@@ -224,13 +224,18 @@ namespace CosmoMonger.Models
                                                     where g.Good == good
                                                     select g.Price).SingleOrDefault();
                 }
+
                 priceTable.Add(prices);
             }
 
             return priceTable;
         }
 
-        public virtual Good [] GetGoods()
+        /// <summary>
+        /// Gets an array of all the possible good types.
+        /// </summary>
+        /// <returns>Array of good types.</returns>
+        public virtual Good[] GetGoods()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from g in db.Goods select g).ToArray();
@@ -249,7 +254,7 @@ namespace CosmoMonger.Models
             return (from p in db.Players
                     where p.Alive
                     && (p.Name.Contains(name) || p.User.UserName.Contains(name))
-                    select p);
+                    select p).AsEnumerable();
         }
 
         /// <summary>
@@ -269,9 +274,14 @@ namespace CosmoMonger.Models
                     .Union(
                    (from p in db.Players
                     where p.Name.Contains(name)
-                    select p.User));
+                    select p.User)).AsEnumerable();
         }
 
+        /// <summary>
+        /// Gets the ship by it's id.
+        /// </summary>
+        /// <param name="shipId">The id of the ship to find.</param>
+        /// <returns>The matching Ship object or null if not found.</returns>
         public virtual Ship GetShip(int shipId)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
@@ -280,6 +290,11 @@ namespace CosmoMonger.Models
                     select s).SingleOrDefault();
         }
 
+        /// <summary>
+        /// Gets a combat record by it's id.
+        /// </summary>
+        /// <param name="combatId">The id of the combat record to find.</param>
+        /// <returns>The matching Combat record object or null if not found.</returns>
         public Combat GetCombat(int combatId)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
