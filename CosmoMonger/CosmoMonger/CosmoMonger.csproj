@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B853FB8E-E426-4E4F-A117-A6CCAEE0CA7A}</ProjectGuid>
     <ProjectTypeGuids>{603c0e0b-db56-11dc-be95-000d561079b0};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
@@ -146,11 +146,15 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\excanvas.js" />
     <Content Include="Scripts\excanvas.pack.js" />
+    <Content Include="Scripts\jquery.bgiframe.js" />
+    <Content Include="Scripts\jquery.dimensions.js" />
     <Content Include="Scripts\jquery.flot.js" />
     <Content Include="Scripts\jquery.flot.pack.js" />
     <Content Include="Scripts\jquery.jgrowl.js" />
     <Content Include="Scripts\jquery.jgrowl.min.js" />
     <Content Include="Scripts\jquery.spin-1.0.2.js" />
+    <Content Include="Scripts\jquery.tooltip.js" />
+    <Content Include="Scripts\jquery.tooltip.min.js" />
     <Content Include="Scripts\jquery.ui.all-1.5.3.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -251,9 +255,6 @@
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
