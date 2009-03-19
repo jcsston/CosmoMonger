@@ -9,7 +9,7 @@
 <% using (Html.BeginForm("ListRecords", "PlayerRecord")) { %>
 
 <p>
-<%=Html.DropDownList("recordType", new { onchange = "form.submit();" })%>
+<%=Html.DropDownList("recordType", (SelectList)ViewData["recordType"], new { onchange = "form.submit();" })%>
 
 <input type="submit" value="Refresh" />
 </p>
