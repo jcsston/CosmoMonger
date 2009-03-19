@@ -71,12 +71,12 @@
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("shipId", ex);
+                    ModelState.AddModelError("shipId", ex.Message, shipId);
                 }
             }
             else
             {
-                ModelState.AddModelError("shipId", "Invalid ship");
+                ModelState.AddModelError("shipId", "Invalid ship", shipId);
             }
             
             return View();
@@ -217,7 +217,11 @@
                 {
                     try
                     {
-                        selectedCombat.FireWeapon();
+                        bool weaponHit = selectedCombat.FireWeapon();
+                        if (!weaponHit)
+                        {
+                            message = "Your shot missed";
+                        }
                     }
                     catch (InvalidOperationException ex)
                     {

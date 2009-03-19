@@ -97,6 +97,7 @@
     <Compile Include="Controllers\FormsLogoutResult.cs" />
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\PlayerRecordController.cs" />
     <Compile Include="Controllers\ShipController.cs" />

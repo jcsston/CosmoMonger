@@ -151,7 +151,7 @@
                 .Returns(false)
                 .Verifiable();
             managerMock.Expect(m => m.CurrentPlayer.Ship.Travel(targetSystemMock.Object))
-                .Throws<ArgumentOutOfRangeException>()
+                .Throws(new ArgumentOutOfRangeException(null, "ArgumentOutOfRangeException"))
                 .AtMostOnce()
                 .Verifiable();
             // Normal Travel mocks
@@ -180,7 +180,7 @@
             ViewResult viewResult = (ViewResult)result;
             Assert.That(viewResult.ViewName, Is.SubsetOf(new string[] { "", "Travel" }), "Should return the Travel View");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
-            Assert.That(controller.ModelState["_FORM"].Errors[0].Exception, Is.TypeOf(typeof(ArgumentOutOfRangeException)), "Error for form should be ArgumentOutOfRangeException");
+            Assert.That(controller.ModelState["_FORM"].Errors[0].ErrorMessage, Is.EqualTo("ArgumentOutOfRangeException"), "Error for form should be ArgumentOutOfRangeException");
             Assert.That(controller.ViewData["IsTraveling"], Is.False, "The IsTraveling field should be false");
 
             managerMock.Verify();
@@ -209,7 +209,7 @@
                 .Returns(true)
                 .Verifiable();
             managerMock.Expect(m => m.CurrentPlayer.Ship.Travel(targetSystemMock.Object))
-                .Throws<InvalidOperationException>()
+                .Throws(new InvalidOperationException("InvalidOperationException"))
                 .AtMostOnce()
                 .Verifiable();
             // Normal Travel mocks
@@ -238,7 +238,7 @@
             ViewResult viewResult = (ViewResult)result;
             Assert.That(viewResult.ViewName, Is.SubsetOf(new string[]{"", "Travel"}), "Should return the Travel View");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
-            Assert.That(controller.ModelState["_FORM"].Errors[0].Exception, Is.TypeOf(typeof(InvalidOperationException)), "Error for form should be InvalidOperationException");
+            Assert.That(controller.ModelState["_FORM"].Errors[0].ErrorMessage, Is.EqualTo("InvalidOperationException"), "Error for form should be InvalidOperationException");
             Assert.That(controller.ViewData["IsTraveling"], Is.True, "The IsTraveling field should be true");
 
             managerMock.Verify();
@@ -262,7 +262,7 @@
                 .Returns(false)
                 .Verifiable();
             managerMock.Expect(m => m.CurrentPlayer.Ship.Travel(currentSystemMock.Object))
-                .Throws<ArgumentException>()
+                .Throws(new ArgumentException("ArgumentException"))
                 .AtMostOnce()
                 .Verifiable();
             // Normal Travel mocks
@@ -291,7 +291,7 @@
             ViewResult viewResult = (ViewResult)result;
             Assert.That(viewResult.ViewName, Is.SubsetOf(new string[] { "", "Travel" }), "Should return the Travel View");
             Assert.That(controller.ModelState.IsValid, Is.False, "An error should be returned");
-            Assert.That(controller.ModelState["_FORM"].Errors[0].Exception, Is.TypeOf(typeof(ArgumentException)), "Error for form should be ArgumentException");
+            Assert.That(controller.ModelState["_FORM"].Errors[0].ErrorMessage, Is.EqualTo("ArgumentException"), "Error for form should be ArgumentException");
             Assert.That(controller.ViewData["IsTraveling"], Is.False, "The IsTraveling field should be false");
 
             managerMock.Verify();

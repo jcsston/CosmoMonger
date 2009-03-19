@@ -68,12 +68,12 @@
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("userId", ex);
+                    ModelState.AddModelError("userId", ex.Message, userId);
                 }
             }
             else
             {
-                ModelState.AddModelError("userId", "Unable to find player");
+                ModelState.AddModelError("userId", "Unable to find player", userId);
             }
 
             return View();
@@ -99,7 +99,7 @@
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("buddyId", ex);
+                    ModelState.AddModelError("buddyId", ex.Message, buddyId);
                 }
             }
 
@@ -136,7 +136,7 @@
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("userId", ex);
+                    ModelState.AddModelError("userId", ex.Message, userId);
                 }
             }
 
@@ -163,7 +163,7 @@
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("antiBuddyId", ex);
+                    ModelState.AddModelError("antiBuddyId", ex.Message, antiBuddyId);
                 }
             }
 

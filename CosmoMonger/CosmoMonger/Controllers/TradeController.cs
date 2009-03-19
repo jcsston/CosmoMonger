@@ -85,19 +85,19 @@ namespace CosmoMonger.Controllers
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("quantity", ex);
+                    ModelState.AddModelError("quantity", ex.Message, quantity);
                 }
                 catch (ArgumentException ex)
                 {
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("quantity", ex);
+                    ModelState.AddModelError("quantity", ex.Message, quantity);
                 }
             }
             else
             {
-                ModelState.AddModelError("goodId", "Good is not sold in the system");
+                ModelState.AddModelError("goodId", "Good is not sold in the system", goodId);
             }
 
             return View();
@@ -126,19 +126,19 @@ namespace CosmoMonger.Controllers
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("quantity", ex);
+                    ModelState.AddModelError("quantity", ex.Message, quantity);
                 }
                 catch (InvalidOperationException ex)
                 {
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("goodId", ex);
+                    ModelState.AddModelError("goodId", ex.Message, quantity);
                 }
             }
             else
             {
-                ModelState.AddModelError("goodId", "Good is not bought in the system");
+                ModelState.AddModelError("goodId", "Good is not bought in the system", goodId);
             }
 
             return View();
@@ -177,7 +177,7 @@ namespace CosmoMonger.Controllers
             }
             else
             {
-                ModelState.AddModelError("systemId", "Invalid System");
+                ModelState.AddModelError("systemId", "Invalid System", systemId);
             }
 
             // Show the default action

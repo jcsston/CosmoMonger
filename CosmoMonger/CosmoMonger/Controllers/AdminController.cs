@@ -73,7 +73,7 @@
             }
             else
             {
-                ModelState.AddModelError("userId", "Invalid user id");
+                ModelState.AddModelError("userId", "Invalid user id", userId);
             }
 
             return View();
@@ -96,7 +96,7 @@
             }
             else
             {
-                ModelState.AddModelError("userId", "Invalid user id");
+                ModelState.AddModelError("userId", "Invalid user id", userId);
             }
 
             return View();

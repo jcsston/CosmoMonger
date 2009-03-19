@@ -123,7 +123,7 @@
             }
             else
             {
-                ModelState.AddModelError("messageId", "Invalid Message Id");
+                ModelState.AddModelError("messageId", "Invalid Message Id", messageId);
             }
 
             ViewData["Sent"] = sent ?? false;
@@ -150,7 +150,7 @@
                 // Log this exception
                 ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                ModelState.AddModelError("messageId", ex);
+                ModelState.AddModelError("messageId", ex.Message, messageId);
             }
 
             // If sent is null, default to false

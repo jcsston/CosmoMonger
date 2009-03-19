@@ -84,7 +84,7 @@ namespace CosmoMonger.Controllers
             Race race = this.ControllerGame.GetRace(raceId);
             if (race == null)
             {
-                ModelState.AddModelError("raceId", "Invalid Race selected");
+                ModelState.AddModelError("raceId", "Invalid Race selected", raceId);
                 return this.CreatePlayer();
             }
 
@@ -100,7 +100,7 @@ namespace CosmoMonger.Controllers
 
                 if (ex.ParamName == "name")
                 {
-                    ModelState.AddModelError("name", ex);
+                    ModelState.AddModelError("name", ex.Message, name);
                 }
                 else
                 {

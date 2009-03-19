@@ -83,12 +83,12 @@ namespace CosmoMonger.Controllers
             // Basic parameter validation
             if (String.IsNullOrEmpty(username))
             {
-                ModelState.AddModelError("username", "You must specify a username.");
+                ModelState.AddModelError("username", "You must specify a username.", username);
             }
 
             if (String.IsNullOrEmpty(password))
             {
-                ModelState.AddModelError("password", "You must specify a password.");
+                ModelState.AddModelError("password", "You must specify a password.", password);
             }
 
             if (ViewData.ModelState.IsValid)
@@ -165,18 +165,18 @@ namespace CosmoMonger.Controllers
             // Basic parameter validation
             if (String.IsNullOrEmpty(username))
             {
-                ModelState.AddModelError("username", "You must specify a username.");
+                ModelState.AddModelError("username", "You must specify a username.", username);
             }
 
             if (String.IsNullOrEmpty(email))
             {
-                ModelState.AddModelError("email", "You must specify an email address.");
+                ModelState.AddModelError("email", "You must specify an email address.", email);
             }
 
             if (password == null || password.Length < this.Provider.MinRequiredPasswordLength)
             {
                 string passwordError = String.Format(CultureInfo.CurrentCulture, "You must specify a new password of {0} or more characters.", this.Provider.MinRequiredPasswordLength);
-                ModelState.AddModelError("password", passwordError);
+                ModelState.AddModelError("password", passwordError, password);
             }
 
             if (!String.Equals(password, confirmPassword, StringComparison.Ordinal))
@@ -207,7 +207,7 @@ namespace CosmoMonger.Controllers
                         { "ErrorCode", humanResponse.ErrorCode }
                     };
                     Logger.Write("Failed reCAPTCHA attempt", "Controller", 200, 0, TraceEventType.Verbose, "Failed reCAPTCHA attempt", props);
-                    ModelState.AddModelError("recaptcha", "reCAPTCHA failed to verify");
+                    ModelState.AddModelError("recaptcha", "reCAPTCHA failed to verify", humanValidator.Response);
                 }
             }
 
@@ -265,13 +265,13 @@ namespace CosmoMonger.Controllers
                         ExceptionPolicy.HandleException(ex, "Controller Policy");
 
                         // Failed to send e-mail
-                        ModelState.AddModelError("_FORM", ex);
+                        ModelState.AddModelError("_FORM", ex.Message);
                     }
                 }
                 else
                 {
                     // Username is invalid
-                    ModelState.AddModelError("username", "Invalid username");
+                    ModelState.AddModelError("username", "Invalid username", username);
                 }
             }
 
@@ -305,14 +305,12 @@ namespace CosmoMonger.Controllers
                 }
                 else
                 {
-                    //ModelState.SetModelValue("username", new ValueProviderResult(verificationCode, verificationCode, null));
-                    ModelState.AddModelError("verificationCode", "Invalid verification code");
+                    ModelState.AddModelError("verificationCode", "Invalid verification code", verificationCode);
                 }
             }
             else
             {
-                //ModelState.SetModelValue("username", new ValueProviderResult(username, username, null));
-                ModelState.AddModelError("username", "Invalid username");
+                ModelState.AddModelError("username", "Invalid username", username);
             }
 
             return View();
@@ -353,13 +351,13 @@ namespace CosmoMonger.Controllers
             // Basic parameter validation
             if (String.IsNullOrEmpty(currentPassword))
             {
-                ModelState.AddModelError("currentPassword", "You must specify a current password.");
+                ModelState.AddModelError("currentPassword", "You must specify a current password.", currentPassword);
             }
 
             if (newPassword == null || newPassword.Length < this.Provider.MinRequiredPasswordLength)
             {
                 string passwordError = String.Format(CultureInfo.CurrentCulture, "You must specify a new password of {0} or more characters.", this.Provider.MinRequiredPasswordLength);
-                ModelState.AddModelError("newPassword", passwordError);
+                ModelState.AddModelError("newPassword", passwordError, newPassword);
             }
 
             if (!String.Equals(newPassword, confirmPassword, StringComparison.Ordinal))
@@ -432,7 +430,7 @@ namespace CosmoMonger.Controllers
             // Basic parameter validation
             if (String.IsNullOrEmpty(email))
             {
-                ModelState.AddModelError("email", "You must specify a new email.");
+                ModelState.AddModelError("email", "You must specify a new email.", email);
             }
 
             if (ModelState.IsValid)
@@ -451,7 +449,7 @@ namespace CosmoMonger.Controllers
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
                     // Display error
-                    ModelState.AddModelError("email", ex);
+                    ModelState.AddModelError("email", ex.Message, email);
                 }
             }
 

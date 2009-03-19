@@ -69,14 +69,14 @@
                 // Log this exception
                 ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                ModelState.AddModelError("_FORM", ex);
+                ModelState.AddModelError("_FORM", ex.Message);
             }
             catch (ArgumentOutOfRangeException ex)
             {
                 // Log this exception
                 ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                ModelState.AddModelError("depositCredits", ex);
+                ModelState.AddModelError("depositCredits", ex.Message, depositCredits);
             }
 
             //return RedirectToAction("Bank");
@@ -101,14 +101,14 @@
                 // Log this exception
                 ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                ModelState.AddModelError("_FORM", ex);
+                ModelState.AddModelError("_FORM", ex.Message);
             }
             catch (ArgumentOutOfRangeException ex)
             {
                 // Log this exception
                 ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                ModelState.AddModelError("withdrawCredits", ex);
+                ModelState.AddModelError("withdrawCredits", ex.Message, withdrawCredits);
             }
 
             //return RedirectToAction("Bank");
