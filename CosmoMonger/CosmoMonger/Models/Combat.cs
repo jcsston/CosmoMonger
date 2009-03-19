@@ -160,9 +160,10 @@ namespace CosmoMonger.Models
         /// picked up and victory is declared. If the opposing ship is player driven then
         /// the player is cloned on a nearby planet with a bank and given a small ship to get started again.
         /// </summary>
+        /// <returns>true if weapon hit, false otherwise</returns>
         /// <exception cref="InvalidOperationException">Thrown if combat is over</exception>
-        /// /// <exception cref="ArgumentOutOfRangeException">Thrown if not enough turn points are left to fire weapon</exception>
-        public void FireWeapon()
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if not enough turn points are left to fire weapon</exception>
+        public bool FireWeapon()
         {
             // Check that the combat is still in-progress
             if (this.Status != CombatStatus.Incomplete)
@@ -180,28 +181,23 @@ namespace CosmoMonger.Models
                 throw new ArgumentOutOfRangeException("Not enough turn points left to fire weapon", "TurnCost");
             }
 
-            // Activate other ship shields
-            // Formula is: ShieldStrength * (1 - (ShieldDamage / 100))
-            // which means 0% damage gives full power, 50% damage gives half power, 100% damage gives no shield power
-            double shieldStrength = this.ShipOther.Shield.Strength * (1.0 - (this.ShipOther.DamageShield / 100.0));
-
-            // Weapon: 8
-            // Shield: 10
-
             // Power up weapon
-            // Damage should be at least 1, even with powerful shields
-            double weaponDamage = Math.Max(this.ShipTurn.Weapon.Power - shieldStrength, 1.0);
+            double weaponDamage = this.ShipTurn.Weapon.Power;
 
-            // Apply damage
-            // Half goes to shields and the rest goes to the hull
-            // Max damage is 100%
-            // TODO: Divide by .5?
-            double newDamageShield = Math.Ceiling(this.ShipOther.DamageShield + (weaponDamage / 0.5));
-            this.ShipOther.DamageShield = (int)Math.Min(newDamageShield, 100);
-            
-            double newDamageHull = this.ShipOther.DamageHull + ((weaponDamage / 1.5) * (this.ShipOther.DamageShield / 100.0));
-            newDamageHull = Math.Ceiling(newDamageHull);
-            this.ShipOther.DamageHull = (int)Math.Min(newDamageHull, 100);
+            // Apply racial factor to weapons -/+ 10%
+            weaponDamage *= 1.0 + (this.ShipTurn.Race.Weapons / 10.0);
+
+            // Determine if the weapon will miss
+            Random rnd = new Random();
+            bool weaponMiss = false;
+            if (weaponMiss)
+            {
+                // Clear the weapon damage amount
+                weaponDamage = 0;
+            }
+
+            // Apply damage to the other ship
+            this.ShipOther.ApplyDamage(weaponDamage);
 
             // Deduct turn points
             this.TurnPointsLeft -= firingWeapon.TurnCost;
@@ -211,10 +207,7 @@ namespace CosmoMonger.Models
                 { "CombatId", this.CombatId },
                 { "TurnShipId", this.ShipTurn.ShipId },
                 { "OtherShipId", this.ShipOther.ShipId },
-                { "ShieldStrength", shieldStrength },
                 { "WeaponDamage", weaponDamage },
-                { "NewDamageShield", newDamageShield },
-                { "NewDamageHull", newDamageHull },
                 { "TurnPointsLeft", this.TurnPointsLeft }
             };
             Logger.Write("Attacking ship fired weapon", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.FireWeapon", props);
@@ -251,6 +244,8 @@ namespace CosmoMonger.Models
                 // No more turn points left, end turn
                 this.EndTurn();
             }
+
+            return !weaponMiss;
         }
 
         /// <summary>
@@ -458,8 +453,11 @@ namespace CosmoMonger.Models
             // Formula: x = 100 / (ChargeTime / 2)
             // This means that if it takes 12 seconds to jump, it will take 6 turns to escape
             // or if it takes 4 seconds to jump, it will take 2 turns to escape
-            int jumpDriveChargePerTurn = 100 / (this.ShipTurn.JumpDrive.ChargeTime / 2);
+            double jumpDriveChargePerTurn = 100.0 / (this.ShipTurn.JumpDrive.ChargeTime / 2.0);
             
+            // Apply racial jumpdrive boost/decrease
+            jumpDriveChargePerTurn *= 1.0 + (this.ShipTurn.Race.Engine / 10.0);
+
             // Based on many turn points left is how much the normal jumpdrive will charge
             // if you only have half your turn points left, you will only get half the normal charge amount
             int jumpDriveChargeCurrentTurn = (int)(jumpDriveChargePerTurn * (1.0 * this.TurnPointsLeft / Combat.PointsPerTurn));

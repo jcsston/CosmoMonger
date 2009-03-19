@@ -127,6 +127,22 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Gets the race of this ship, player or NPC.
+        /// </summary>
+        /// <value>The race of the ship.</value>
+        public virtual Race Race
+        {
+            get
+            {
+                return (from p in this.Players
+                        select p.Race)
+                        .Union(
+                        (from n in this.Npcs
+                         select n.Race)).SingleOrDefault();
+            }
+        }
+
+        /// <summary>
         /// Starts the ship traveling to the target system.
         /// </summary>
         /// <param name="targetSystem">The target system to travel to.</param>
@@ -433,6 +449,50 @@ namespace CosmoMonger.Models
                     occ.Resolve(RefreshMode.KeepChanges);
                 }
             }
+        }
+
+        /// <summary>
+        /// Applies the damage of a weapon hit to the ship.
+        /// </summary>
+        /// <remarks>Does not apply changes to database, must call SubmitChanges to save.</remarks>
+        /// <param name="weaponDamage">The full weapon damage amount.</param>
+        public void ApplyDamage(double weaponDamage)
+        {
+            // Grab ship base shield strength
+            double shieldPower = this.Shield.Strength;
+
+            // Apply racial factor to shields -/+ 10%
+            shieldPower *= 1.0 + (this.Race.Shields / 10.0);
+
+            // Formula is: ShieldStrength * (1 - (ShieldDamage / 100))
+            // Which means 0% damage gives full power, 50% damage gives half power, 
+            // and 100% damage gives no shield power
+            shieldPower *= 1.0 - (this.DamageShield / 100.0);
+
+            // Reduce the weapon damage, depending on shield power
+            weaponDamage = Math.Max(weaponDamage - shieldPower, 1.0);
+
+            // 50% of the damage goes to shields and rest goes to the hull
+            double newDamageShield = this.DamageShield + (weaponDamage / 0.5);
+            newDamageShield = Math.Ceiling(newDamageShield);
+
+            double newDamageHull = this.DamageHull + ((weaponDamage / 1.5) * (this.DamageShield / 100.0));
+            newDamageHull = Math.Ceiling(newDamageHull);
+
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "ShipId", this.ShipId },
+                { "WeaponDamage", weaponDamage },
+                { "DamageShield", this.DamageShield },
+                { "DamageHull", this.DamageHull },
+                { "NewDamageShield", newDamageShield },
+                { "NewDamageHull", newDamageHull }
+            };
+            Logger.Write("Applyed damage to ship", "Model", 150, 0, TraceEventType.Verbose, "Ship.ApplyDamage", props);
+
+            // Max damage is 100%
+            this.DamageShield = (int)Math.Min(newDamageShield, 100);
+            this.DamageHull = (int)Math.Min(newDamageHull, 100);
         }
 
         /// <summary>

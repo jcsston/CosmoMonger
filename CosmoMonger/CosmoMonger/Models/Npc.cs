@@ -185,6 +185,7 @@ namespace CosmoMonger.Models
         {
             Logger.Write("Enter Npc.UpdateSystemGoodCount", "NPC", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            Dictionary<string, object> props;
 
             // Mark the next time the system good count will need to be updated
             this.NextActionTime = DateTime.Now.AddMinutes(Npc.MinutesBetweenSystemGoodUpdates);
@@ -236,20 +237,14 @@ namespace CosmoMonger.Models
                     int lackingGoodCount = (int)(rnd.Next(10) * adjustedProductionFactor);
                     selectedProducingSystemGood.Quantity += lackingGoodCount;
 
-                    Logger.Write(
-                        "Producing Goods", 
-                        "NPC", 
-                        500, 
-                        0, 
-                        TraceEventType.Verbose, 
-                        "Producing Goods",
-                        new Dictionary<string, object>
-                        {
-                            { "SystemId", selectedProducingSystemGood.SystemId },
-                            { "GoodId", selectedProducingSystemGood.GoodId },
-                            { "Quantity", selectedProducingSystemGood.Quantity },
-                            { "AddedQuantity", lackingGoodCount }
-                        });
+                    props = new Dictionary<string, object>
+                    {
+                        { "SystemId", selectedProducingSystemGood.SystemId },
+                        { "GoodId", selectedProducingSystemGood.GoodId },
+                        { "Quantity", selectedProducingSystemGood.Quantity },
+                        { "AddedQuantity", lackingGoodCount }
+                    };
+                    Logger.Write("Producing Goods", "NPC", 500, 0, TraceEventType.Verbose, "Producing Goods", props);
 
                     // Update the total good count
                     totalSystemGoodCount += lackingGoodCount;
@@ -299,20 +294,14 @@ namespace CosmoMonger.Models
                 usageGoodCount = Math.Min(usageGoodCount, selectedConsumingSystemGood.Quantity);
                 selectedConsumingSystemGood.Quantity -= usageGoodCount;
 
-                Logger.Write(
-                    "Consuming Goods", 
-                    "NPC", 
-                    500, 
-                    0, 
-                    TraceEventType.Verbose, 
-                    "Consuming Goods",
-                    new Dictionary<string, object>
-                    {
-                        { "SystemId", selectedConsumingSystemGood.SystemId },
-                        { "GoodId", selectedConsumingSystemGood.GoodId },
-                        { "Quantity", selectedConsumingSystemGood.Quantity },
-                        { "RemovedQuantity", usageGoodCount }
-                    });
+                props = new Dictionary<string, object>
+                {
+                    { "SystemId", selectedConsumingSystemGood.SystemId },
+                    { "GoodId", selectedConsumingSystemGood.GoodId },
+                    { "Quantity", selectedConsumingSystemGood.Quantity },
+                    { "RemovedQuantity", usageGoodCount }
+                };
+                Logger.Write("Consuming Goods", "NPC", 500, 0, TraceEventType.Verbose, "Consuming Goods", props);
 
                 try
                 {
@@ -388,21 +377,15 @@ namespace CosmoMonger.Models
                 // Take average of previous and current price multipler
                 good.PriceMultiplier = (oldPriceMultipler + newPriceMultipler) / 2.0;
 
-                Logger.Write(
-                    "Adjusting Good Price", 
-                    "NPC", 
-                    500, 
-                    0, 
-                    TraceEventType.Verbose, 
-                    "Adjusting Good Price",
-                    new Dictionary<string, object>
-                        {
-                            { "SystemId", good.SystemId },
-                            { "GoodId", good.GoodId },
-                            { "PriceMultiplier", good.PriceMultiplier },
-                            { "NewPriceMultipler", newPriceMultipler },
-                            { "OldPriceMultipler", oldPriceMultipler }
-                        });
+                Dictionary<string, object> props = new Dictionary<string, object>
+                {
+                    { "SystemId", good.SystemId },
+                    { "GoodId", good.GoodId },
+                    { "PriceMultiplier", good.PriceMultiplier },
+                    { "NewPriceMultipler", newPriceMultipler },
+                    { "OldPriceMultipler", oldPriceMultipler }
+                };
+                Logger.Write("Adjusting Good Price", "NPC", 500, 0, TraceEventType.Verbose, "Adjusting Good Price", props);
 
                 try
                 {
