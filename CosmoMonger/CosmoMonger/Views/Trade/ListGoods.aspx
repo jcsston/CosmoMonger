@@ -8,8 +8,7 @@
     <script type="text/javascript" src="/Scripts/jquery.dimensions.js"></script>
      <script type="text/javascript">
       <!--
-
-        $(document).ready(function() {
+         $(document).ready(function() {
             $('input[name=quantity]').map(function(index, domElement) {
                 var buyGood = false;
                 var goodId = null;

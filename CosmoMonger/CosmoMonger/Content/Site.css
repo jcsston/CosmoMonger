@@ -669,10 +669,35 @@ table.grid th
     border-bottom: solid thin;
 }
 
+/* Combat CSS */
 table.combat
 {
     width: 100%;
     text-align: center;
+}
+
+div.combatBar
+{
+    border: solid thin blue; 
+    width: 75px; 
+    height: 175px;
+}
+
+div.combatHull
+{
+    background-color: blue; 
+}
+
+div.combatShield
+{
+    background-color: green; 
+}
+
+div.combatBar div
+{
+    width: 100%; 
+    height: 0%; 
+    background-color: black;
 }
 
 /* jGrowl CSS */
@@ -808,3 +833,29 @@ div.jGrowl div.jGrowl-closer {
 {
 	margin: 0; 
 }
+
+/* jQuery UI Dialog CSS */
+/*
+.ui-dialog-buttonpane
+{
+    right: 0px;
+    padding: 10px;
+}
+.ui-dialog-titlebar
+{
+    color: black;
+    background: white;
+    padding: 5px;
+}
+.ui-dialog-titlebar-close
+{
+    position: absolute;
+    right: 10px;
+}
+.ui-dialog-content
+{
+    padding: 10px;
+    background: silver;
+    color: black;
+}
+*/

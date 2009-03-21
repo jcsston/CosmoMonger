@@ -207,8 +207,23 @@ namespace CosmoMonger.Models
                     this.TargetSystemId = null;
                     this.TargetSystemArrivalTime = null;
 
-                    // Send changes to the database
-                    db.SubmitChanges();
+                    try
+                    {
+                        // Save database changes
+                        db.SubmitChanges(ConflictMode.ContinueOnConflict);
+                    }
+                    catch (ChangeConflictException ex)
+                    {
+                        ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                        // Another thread has made changes to the combat record, this is invalid
+                        // and so we use our values and ignore the new data
+                        foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                        {
+                            // Refresh current values from database
+                            occ.Resolve(RefreshMode.KeepCurrentValues);
+                        }
+                    }
                 }
                 else
                 {

@@ -34,11 +34,19 @@
         {
         }
 
+        /// <summary>
+        /// Index action, redirects to Attack action.
+        /// </summary>
+        /// <returns>Redirect to the Atack action</returns>
         public ActionResult Index()
         {
             return RedirectToAction("Attack");
         }
 
+        /// <summary>
+        /// List ships to attack
+        /// </summary>
+        /// <returns>Attack view filled in with list of ships to attack. Redirect to CombatStart if a combat is in progress.</returns>
         public ActionResult Attack()
         {
             Ship playerShip = this.ControllerGame.CurrentPlayer.Ship;

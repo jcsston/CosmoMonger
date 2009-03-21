@@ -31,6 +31,11 @@ namespace CosmoMonger.Models
         public const int SecondsPerTurn = 30;
 
         /// <summary>
+        /// Random number generator used for combat.
+        /// </summary>
+        private Random rnd = new Random();
+
+        /// <summary>
         /// This enum describes the meaning of the Combat.Status field
         /// </summary>
         public enum CombatStatus
@@ -187,9 +192,14 @@ namespace CosmoMonger.Models
             // Apply racial factor to weapons -/+ 10%
             weaponDamage *= 1.0 + (this.ShipTurn.Race.Weapons / 10.0);
 
-            // Determine if the weapon will miss
-            Random rnd = new Random();
-            bool weaponMiss = false;
+            // Get the weapon accuracy
+            double weaponAccuracy = Weapon.BaseAccuracy;
+
+            // Apply racial factor to accuracy -/+ 10%
+            weaponAccuracy *= 1.0 + (this.ShipTurn.Race.Accuracy / 10.0);
+            
+            // Determine if the weapon will miss based on accuracy rating
+            bool weaponMiss = (weaponAccuracy < rnd.Next(100));
             if (weaponMiss)
             {
                 // Clear the weapon damage amount
@@ -210,7 +220,7 @@ namespace CosmoMonger.Models
                 { "WeaponDamage", weaponDamage },
                 { "TurnPointsLeft", this.TurnPointsLeft }
             };
-            Logger.Write("Attacking ship fired weapon", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.FireWeapon", props);
+            Logger.Write("Attacking ship fired weapon", "Model", 150, 0, TraceEventType.Verbose, "Combat.FireWeapon", props);
 
             // Update turn action time
             this.LastActionTime = DateTime.Now;
@@ -276,7 +286,7 @@ namespace CosmoMonger.Models
                 { "TurnShipId", this.ShipTurn.ShipId },
                 { "OtherShipId", this.ShipOther.ShipId }
             };
-            Logger.Write("Offered surrender", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OfferSurrender", props);
+            Logger.Write("Offered surrender", "Model", 150, 0, TraceEventType.Verbose, "Combat.OfferSurrender", props);
 
             // Update turn action time
             this.LastActionTime = DateTime.Now;

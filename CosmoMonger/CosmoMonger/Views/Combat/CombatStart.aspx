@@ -5,10 +5,8 @@
     <!--
         var combatId = null;
         var playerNotified = false;
-        
-        function updateCombatStatus(data, noTimeout) {
-            // Update data format is defined in CombatController.BuildCombatStatus
-            
+
+        function updateShipStats(data) {
             // Update player/enemy hull/shield damage
             var playerHull = $('#playerHull');
             if (playerHull.css('height') != data.playerHull + '%') {
@@ -23,7 +21,7 @@
                     $('#playerShip').hide("explode", { number: 9 }, 1000);
                 }
             }
-            
+
             var playerShield = $('#playerShield');
             if (playerShield.css('height') != data.playerShield + '%') {
                 if (data.playerShield > 8) {
@@ -33,7 +31,7 @@
                 }
                 playerShield.animate({ height: data.playerShield + '%' }, "normal");
             }
-            
+
             var enemyHull = $('#enemyHull');
             if (enemyHull.css('height') != data.enemyHull + '%') {
                 if (data.enemyHull > 8) {
@@ -47,7 +45,7 @@
                     $('#enemyShip').hide("explode", { number: 9 }, 1000);
                 }
             }
-            
+
             var enemyShield = $('#enemyShield');
             if (enemyShield.css('height') != data.enemyShield + '%') {
                 if (data.enemyShield > 8) {
@@ -59,52 +57,117 @@
             }
 
             $("#jumpDriveCharge").text(data.jumpDriveCharge);
-            if (data.turn) {
-                // Enable turn buttons
-                $(".turnAction").attr("disabled", "");
-                $("#turnActions caption").html("Current Turn: <b>Yours</b>");
-                $("#timeLeft").text(parseInt(data.timeLeft));
-                //$("#turnActions").show("slow");
-                $("#turnPoints").text(data.turnPoints);
+        }
 
-                // Check if we need to prompt the player
-                if (data.surrendered && !playerNotified) {
-                    // Other player has offered surrender
-                    playerNotified = true;
-                    var acceptSurrender = confirm('Other player has offered surrender, accept?');
-                    if (acceptSurrender) {
-                        $(".turnAction").attr("disabled", "disabled");
-                        $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {
-                            updateCombatStatus(data.status, true);
-                            if (data.message) {
-                                alert(data.message);
-                            }
-                        });
-                    }
-                } else if (data.cargoJettisoned && !playerNotified) {
-                    // Other player has jettisoned cargo
-                    playerNotified = true;
-                    var pickupCargo = confirm('Other player has jettisoned ' + data.cargoJettisoned + ' cargo items, pickup? If we pickup the cargo the other player will escape, if not the cargo will be lost.');
-                    if (pickupCargo) {
-                        $(".turnAction").attr("disabled", "disabled");
-                        $.getJSON('/Combat/PickupCargo', { combatId: combatId }, function(data) {
-                            updateCombatStatus(data.status, true);
-                            if (data.message) {
-                                alert(data.message);
-                            }
-                        });
-                    }
+        function showPlayerDialog(title, content, buttons) {
+            $("<div />")
+            .html(content)
+            .addClass("dialog")
+            .dialog({
+                modal: true,
+                overlay: {
+                    opacity: 0.5,
+                    background: "black"
+                },
+                title: title,
+                buttons: buttons
+            });
+        }
+        
+
+        function surrenderOffered(data) {
+            playerNotified = true;
+            showPlayerDialog("Accept Surrender?", "Other player has offered surrender, accept?", {
+                "Accept": function() {
+                    $(".turnAction").attr("disabled", "disabled");
+                    $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {
+                        updateCombatStatus(data.status, true);
+                        if (data.message) {
+                            alert(data.message);
+                        }
+                    });
+                },
+                "Ignore": function() {
+                    $(this).dialog("close");
                 }
-            } else {
-                // Hide turn actions
-                //$("#turnActions").slideUp("slow");
-                $(".turnAction").attr("disabled", "disabled");
-                $("#turnPoints").text(0);
-                $("#timeLeft").text(0);
-                $("#turnActions caption").html("Current Turn: <b>Enemy</b>");
+            });
 
-                // Reset player notifications
-                playerNotified = false;
+            /*
+            var acceptSurrender = confirm('Other player has offered surrender, accept?');
+            if (acceptSurrender) {
+            $(".turnAction").attr("disabled", "disabled");
+            $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {
+            updateCombatStatus(data.status, true);
+            if (data.message) {
+            alert(data.message);
+            }
+            });
+            }
+            */
+        }
+
+        function cargoToPickup(data) {
+            playerNotified = true;
+            var content = 'Other player has jettisoned ' + data.cargoJettisoned 
+                       + ' cargo items, pickup? <br />'
+                       + ' If we pickup the cargo the other player will escape, if not the cargo will be lost.';
+
+            showPlayerDialog("Pickup Cargo?", content, {
+                "Pickup": function() {
+                    $(".turnAction").attr("disabled", "disabled");
+                    $.getJSON('/Combat/PickupCargo', { combatId: combatId }, function(data) {
+                        updateCombatStatus(data.status, true);
+                        if (data.message) {
+                            alert(data.message);
+                        }
+                    });
+                },
+                "Ignore": function() {
+                    $(this).dialog("close");
+                }
+            });
+        }
+
+        function processPlayerTurn(data) {
+            // Enable turn buttons
+            $(".turnAction").attr("disabled", "");
+            $("#turnActions caption").html("Current Turn: <b>Yours</b>");
+            $("#timeLeft").text(parseInt(data.timeLeft));
+            //$("#turnActions").show("slow");
+            $("#turnPoints").text(data.turnPoints);
+
+            // Check if we need to prompt the player
+            if (data.surrendered && !playerNotified) {
+                // Other player has offered surrender
+                surrenderOffered(data);
+
+            } else if (data.cargoJettisoned && !playerNotified) {
+                // Other player has jettisoned cargo
+                cargoToPickup(data);
+            }
+        }
+
+        function processEnemyTurn(data) {
+            // Hide turn actions
+            //$("#turnActions").slideUp("slow");
+            $(".turnAction").attr("disabled", "disabled");
+            $("#turnPoints").text(0);
+            $("#timeLeft").text(0);
+            $(".dialog").dialog("close");
+            $("#turnActions caption").html("Current Turn: <b>Enemy</b>");
+
+            // Reset player notifications
+            playerNotified = false;
+        }
+        
+        function updateCombatStatus(data, noTimeout) {
+            // Update data format is defined in CombatController.BuildCombatStatus
+            updateShipStats(data);    
+            
+            if (data.turn) {
+                processPlayerTurn(data);
+            } else {
+                processEnemyTurn(data);
             }
             
             // Done updating status, Has combat been completed?
@@ -131,7 +194,6 @@
                     if (data.message) {
                         alert(data.message);
                     }
-                    //$(".turnAction").attr("disabled", "");
                 });
             });
 
@@ -142,7 +204,6 @@
                     if (data.message) {
                         alert(data.message);
                     }
-                    //$(".turnAction").attr("disabled", "");
                 });
             });
 
@@ -153,7 +214,6 @@
                     if (data.message) {
                         alert(data.message);
                     }
-                    //$(".turnAction").attr("disabled", "");
                 });
             });
 
@@ -164,7 +224,6 @@
                     if (data.message) {
                         alert(data.message);
                     }
-                    //$(".turnAction").attr("disabled", "");
                 });
             });
 
@@ -189,48 +248,52 @@
         <tr>
             <td rowspan="2">
                 Hull
-                <div style="border: solid thin blue; background-color: blue; width: 75px; height: 175px;">
-                    <div id="playerHull" style="width: 100%; height: 0%; background-color: black"></div>
+                <div class="combatBar combatHull">
+                    <div id="playerHull"></div>
                 </div>
             </td>
             <td rowspan="2">
                 Shield
-                <div style="border: solid thin blue; background-color: green; width: 75px; height: 175px;">
-                    <div id="playerShield" style="width: 100%; height: 0%; background-color: black"></div>
+                <div class="combatBar combatShield">
+                    <div id="playerShield"></div>
                 </div>
             </td>
             <td>
                 <%=Html.Encode(ViewData["PlayerName"]) %>
                 <br />
-                <img id="playerShip" alt="Your Ship" src="/Content/BaseShip/<%=Html.AttributeEncode(playerShip.BaseShip.Name) %>.png" />
+                <img id="playerShip" alt="Your Ship" 
+                    title="<%=Html.AttributeEncode(playerShip.BaseShip.Name) %>" 
+                    src="/Content/BaseShip/<%=Html.AttributeEncode(playerShip.BaseShip.Name) %>.png" />
                 <br />
-                Your Ship
+                Your <%=Html.Encode(playerShip.Race.Name) %> Ship
             </td>
             <td>&nbsp;</td>
             <td>
                 <%=Html.Encode(ViewData["EnemyName"]) %>
                 <br />
-                <img id="enemyShip" alt="Enemy Ship" src="/Content/BaseShip/<%=Html.AttributeEncode(enemyShip.BaseShip.Name) %>.png" />
+                <img id="enemyShip" alt="Enemy Ship" 
+                    title="<%=Html.AttributeEncode(enemyShip.BaseShip.Name) %>" 
+                    src="/Content/BaseShip/<%=Html.AttributeEncode(enemyShip.BaseShip.Name) %>.png" />
                 <br />
-                Enemy Ship
+                Enemy <%=Html.Encode(enemyShip.Race.Name) %> Ship
             </td>
             <td rowspan="2">
                 Shield
-                <div style="border: solid thin blue; background-color: green; width: 75px; height: 175px;">
-                    <div id="enemyShield" style="width: 100%; height: 0%; background-color: black"></div>
+                <div class="combatBar combatShield">
+                    <div id="enemyShield"></div>
                 </div>
             </td>
             <td rowspan="2">
                 Hull
-                <div style="border: solid thin blue; background-color: blue; width: 75px; height: 175px;">
-                    <div id="enemyHull" style="width: 100%; height: 0%; background-color: black"></div>
+                <div class="combatBar combatHull">
+                    <div id="enemyHull"></div>
                 </div>
             </td>
         </tr>
         <tr>
-            <td>Primary Weapon: <%=Html.Encode(playerShip.Weapon.Name) %></td>
+            <td>Weapon: <%=Html.Encode(playerShip.Weapon.Name) %></td>
             <td>&nbsp;</td>
-            <td>Primary Weapon: <%=Html.Encode(enemyShip.Weapon.Name) %></td>
+            <td>Weapon: <%=Html.Encode(enemyShip.Weapon.Name) %></td>
         </tr>
     </table>
     <hr />

@@ -133,6 +133,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Utility\DataContextFactory.cs" />
     <Compile Include="Models\Utility\LoggingTextWriter.cs" />
+    <Compile Include="Models\Weapon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

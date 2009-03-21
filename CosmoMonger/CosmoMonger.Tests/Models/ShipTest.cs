@@ -200,14 +200,21 @@
 
             player1.Ship.Attack(player2.Ship);
             Combat combat = player1.Ship.InProgressCombat;
+            int weaponFires = 0;
+            int weaponMisses = 0;
 
             while (combat.Status == Combat.CombatStatus.Incomplete)
             {
                 Console.WriteLine("Player 2 Shield {0} Hull: {1}", player2.Ship.DamageShield, player2.Ship.DamageHull);
                 // Max out turn points for testing
                 player1.Ship.InProgressCombat.TurnPointsLeft = 999;
-                player1.Ship.InProgressCombat.FireWeapon();
+                if (!player1.Ship.InProgressCombat.FireWeapon())
+                {
+                    weaponMisses++;
+                }
+                weaponFires++;
             }
+            Console.WriteLine("Weapon Fires: {0} Misses: {1} Perc: {2}", weaponFires, weaponMisses, (100.0 / weaponFires * weaponMisses));
         }
 
         [Test]
