@@ -165,7 +165,7 @@
       <Column Name="Accuracy" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="HomeSystemId" Storage="_HomeSystem" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Description" Type="System.String" DbType="varchar(1000) NOT NULL" CanBeNull="false" />
-      <Column Name="RacialEnemyId" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
+      <Column Name="RacialEnemyId" Type="System.Int32" DbType="int NULL" CanBeNull="true" />
       <Column Name="RacialPreferenceId" Type="System.Int32" DbType="int NULL" CanBeNull="true" />
       <Association Name="Race_Npc" Member="Npcs" ThisKey="RaceId" OtherKey="RaceId" Type="Npc" />
       <Association Name="Race_Player" Member="Players" ThisKey="RaceId" OtherKey="RaceId" Type="Player" />

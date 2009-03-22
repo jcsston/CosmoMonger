@@ -3737,7 +3737,7 @@ namespace CosmoMonger.Models
 		
 		private string _Description;
 		
-		private int _RacialEnemyId;
+		private System.Nullable<int> _RacialEnemyId;
 		
 		private System.Nullable<int> _RacialPreferenceId;
 		
@@ -3777,7 +3777,7 @@ namespace CosmoMonger.Models
     partial void OnHomeSystemIdChanged();
     partial void OnDescriptionChanging(string value);
     partial void OnDescriptionChanged();
-    partial void OnRacialEnemyIdChanging(int value);
+    partial void OnRacialEnemyIdChanging(System.Nullable<int> value);
     partial void OnRacialEnemyIdChanged();
     partial void OnRacialPreferenceIdChanging(System.Nullable<int> value);
     partial void OnRacialPreferenceIdChanged();
@@ -3960,8 +3960,8 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_RacialEnemyId", DbType="int NOT NULL")]
-		public int RacialEnemyId
+		[Column(Storage="_RacialEnemyId", DbType="int NULL")]
+		public System.Nullable<int> RacialEnemyId
 		{
 			get
 			{
@@ -4134,7 +4134,7 @@ namespace CosmoMonger.Models
 					}
 					else
 					{
-						this._RacialEnemyId = default(int);
+						this._RacialEnemyId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("RacialEnemy");
 				}

@@ -85,10 +85,10 @@
     SystemGood[] systemGoods = (SystemGood[])ViewData["SystemGoods"];
     ShipGood[] shipGoods = (ShipGood[])ViewData["ShipGoods"];
 %>
-<h1 class="goods">Buy &amp; Sell in the <%=Html.Encode(currentSystem.Name) %> System</h1>
+<h1 class="goods">Buying &amp; Selling in the <%=Html.Encode(currentSystem.Name) %> System</h1>
 <hr />
 <table class="goods">
-<tr><td rowspan="11"><img class="systemImg" alt="System Image" src="/Content/System/<%=Html.Encode(currentSystem.Name) %>.png" /></td><th>Name</th><th>Base Price</th><th>Price</th><th># in System</th><th>Buy</th><th># in Ship</th><th>Sell</th></tr>
+<tr><td rowspan="14"><img class="systemImg" alt="System Image" src="/Content/System/<%=Html.Encode(currentSystem.Name) %>.png" /></td><th>Name</th><th>Base Price</th><th>Price</th><th># in System</th><th>Buy</th><th># in Ship</th><th>Sell</th></tr>
 <%
     foreach (SystemGood good in systemGoods)
     {
@@ -134,6 +134,9 @@
 <%
     }
 %>
+        <tr><td colspan="7">&nbsp;</td></tr>
+        <tr><td colspan="7">To see a bigger picture of a good, move your mouse cursor over the small picture in front of the name.</td></tr>
+        <tr><td colspan="7">* Illegal Goods.  Intergalatic Police will fine you for carrying these goods!</td></tr>
 </table>
 <hr />
 <table class="goods goodsCenter">

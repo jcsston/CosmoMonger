@@ -145,12 +145,13 @@
     <Content Include="Content\BaseShip\Weed Wacker.png" />
     <Content Include="Content\BaseShip\Widow Maker.png" />
     <Content Include="Content\Goods\Artificial Intelligences.png" />
-    <Content Include="Content\Goods\DeathRays.png" />
-    <Content Include="Content\Goods\FoodCubes.png" />
+    <Content Include="Content\Goods\Death Rays.png" />
+    <Content Include="Content\Goods\Food Cubes.png" />
     <Content Include="Content\Goods\Fuel Rods.png" />
     <Content Include="Content\Goods\Fullerene.png" />
     <Content Include="Content\Goods\Machine Parts.png" />
     <Content Include="Content\Goods\Nanites.png" />
+    <Content Include="Content\Goods\Nova Fizz.png" />
     <Content Include="Content\Goods\Water.png" />
     <Content Include="Content\Goods\Zowie.png" />
     <Content Include="Content\IGBank.png" />

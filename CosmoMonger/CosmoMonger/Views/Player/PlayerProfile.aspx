@@ -41,7 +41,7 @@
            racePref = player.Race.RacialPreference.Name + "s";
        }
            
-            %>
+    %>
     <td class="vp-columnData"><%=racePref%></td>
 </tr>
 <tr>
@@ -50,7 +50,18 @@
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td class="vp-columnData">Racial Enemy:</td>
-    <td class="vp-columnData"><%=player.Race.RacialEnemy.Name%>s</td>
+    <% string raceEnemy;
+           if (player.Race.RacialEnemy == null)
+       {
+           raceEnemy = "None";
+       }
+       else
+       {
+           raceEnemy = player.Race.RacialEnemy.Name + "s";
+       }
+           
+    %>
+    <td class="vp-columnData"><%=raceEnemy%></td>
 </tr>
 <tr>
     <td class="vp-columnData">Ship Trade-In Value:</td>
