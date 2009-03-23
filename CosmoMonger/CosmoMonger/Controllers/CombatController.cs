@@ -9,6 +9,7 @@
     using CosmoMonger.Models;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using System.Collections;
 
     /// <summary>
     /// This controller handles all combat related tasks such as selecting a ship to attack,
@@ -46,7 +47,7 @@
         /// <summary>
         /// List ships to attack
         /// </summary>
-        /// <returns>Attack view filled in with list of ships to attack. Redirect to CombatStart if a combat is in progress.</returns>
+        /// <returns>Attack view. Redirect to CombatStart if a combat is in progress.</returns>
         public ActionResult Attack()
         {
             Ship playerShip = this.ControllerGame.CurrentPlayer.Ship;
@@ -56,9 +57,6 @@
                 // Redirect to combat start
                 return RedirectToAction("CombatStart");
             }
-
-            ViewData["Ships"] = playerShip.CosmoSystem.GetShipsInSystem().Where(s => s != playerShip);
-            ViewData["ShipsToAttack"] = playerShip.GetShipsToAttack();
 
             return View();
         }
@@ -90,6 +88,38 @@
             return View();
         }
 
+        /// <summary>
+        /// Fetch updated list of ships to attack
+        /// </summary>
+        /// <returns>JSON array.</returns>
+        public JsonResult GetShipList()
+        {
+            Ship playerShip = this.ControllerGame.CurrentPlayer.Ship;
+
+            // Check if there is a combat in progress
+            if (playerShip.InProgressCombat != null)
+            {
+                return Json(new { inProgressCombat = true });
+            }
+
+            ArrayList shipList = new ArrayList();
+
+            IEnumerable<Ship> shipsInSystem = playerShip.GetOtherShipsInSystem();
+            IEnumerable<Ship> attackableShips = playerShip.GetShipsToAttack();
+            foreach (Ship ship in shipsInSystem)
+            {
+                shipList.Add(new
+                {
+                    shipId = ship.ShipId,
+                    playerName = HttpUtility.HtmlEncode(ship.Players.Select(p => p.Name).SingleOrDefault()),
+                    shipType = HttpUtility.HtmlEncode(ship.BaseShip.Name),
+                    attackable = attackableShips.Contains(ship)
+                });
+            }
+
+            return Json(shipList);
+        }
+
         public ActionResult CombatStart()
         {
             Combat currentCombat = this.ControllerGame.CurrentPlayer.Ship.InProgressCombat;
@@ -100,12 +130,12 @@
                 ViewData["PlayerShip"] = this.ControllerGame.CurrentPlayer.Ship;
                 if (this.ControllerGame.CurrentPlayer.Ship == currentCombat.AttackerShip)
                 {
-                    ViewData["EnemyName"] = currentCombat.DefenderShip.Players.Single().Name;
+                    ViewData["EnemyName"] = currentCombat.DefenderShip.Name;
                     ViewData["EnemyShip"] = currentCombat.DefenderShip;
                 }
                 else
                 {
-                    ViewData["EnemyName"] = currentCombat.AttackerShip.Players.Single().Name;
+                    ViewData["EnemyName"] = currentCombat.AttackerShip.Name;
                     ViewData["EnemyShip"] = currentCombat.AttackerShip;
                 }
 
@@ -113,6 +143,7 @@
             }
             else
             {
+                ModelState.AddModelError("_FORM", "No combat in progress");
                 return View("CombatNone");
             }
         }
@@ -177,13 +208,18 @@
                             ViewData["CargoLost"] = combat.CombatGoods;
                         }
                         break;
+                    case Combat.CombatStatus.Incomplete:
+                        // Combat is incomplete
+                        return RedirectToAction("CombatStart");
                 }
 
                 return View();
             }
             else
             {
-                return View("NoCombat");
+                ModelState.AddModelError("combatId", "Invalid Combat Id", combatId);
+
+                return View("CombatNone");
             }
         }
 

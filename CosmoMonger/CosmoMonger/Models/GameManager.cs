@@ -295,7 +295,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="combatId">The id of the combat record to find.</param>
         /// <returns>The matching Combat record object or null if not found.</returns>
-        public Combat GetCombat(int combatId)
+        public virtual Combat GetCombat(int combatId)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from c in db.Combats

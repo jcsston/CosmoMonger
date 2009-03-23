@@ -117,6 +117,66 @@
         }
 
         [Test]
+        public void JettisonCargo()
+        {
+            // Add good 1 to player 1
+            player1.Ship.AddGood(1, 10);
+
+            // Player 1 jettisons cargo
+            combat.JettisonCargo();
+
+            Assert.That(combat.ShipTurn, Is.EqualTo(player2.Ship), "Should now be player 2's turn");
+            Assert.That(combat.TurnPointsLeft, Is.EqualTo(Combat.PointsPerTurn), "Player 2's turn points left should match points per turn");
+            Assert.That(combat.CargoJettisoned, Is.True, "Player 1 should have jettisoned cargo");
+            Assert.That(combat.CargoJettisonedCount, Is.EqualTo(10), "10 items should have been jettisoned");
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), MatchType = MessageMatch.Contains, ExpectedMessage = "No")]
+        public void JettisonCargoWithNoGoods()
+        {
+            combat.JettisonCargo();
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), MatchType = MessageMatch.Contains, ExpectedMessage = "already")]
+        public void JettisonCargoToJettisonedCargoShip()
+        {
+            // Add good 1 to player 1
+            player1.Ship.AddGood(1, 10);
+
+            // Player 1 jettisons cargo
+            combat.JettisonCargo();
+
+            // Add good 1 to player 2
+            player2.Ship.AddGood(1, 10);
+
+            // Now Player 2 tries to jettison cargo also
+            // This is not allowed (does not make any sense to do so)
+            combat.JettisonCargo();
+        }
+
+        [Test]
+        public void PickupCargo()
+        {
+            // Add good 1 to player 1
+            player1.Ship.AddGood(1, 10);
+
+            combat.JettisonCargo();
+            combat.PickupCargo();
+
+            ShipGood good1 = player2.Ship.GetGood(1);
+            Assert.That(good1.Quantity, Is.EqualTo(10), "Player 2 should have 10 of good 1 now");
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), MatchType = MessageMatch.Contains, ExpectedMessage = "No")]
+        public void PickupCargoNoCargo()
+        {
+            combat.PickupCargo();
+        }
+
+        [Test]
         public void ChargeJumpdrive()
         {
             combat.ChargeJumpDrive();

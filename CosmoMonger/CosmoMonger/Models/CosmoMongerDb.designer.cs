@@ -1760,7 +1760,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Complete", DbType="int NOT NULL", CanBeNull=false)]
-		public Combat.CombatStatus Status
+		public virtual Combat.CombatStatus Status
 		{
 			get
 			{
@@ -1833,7 +1833,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Ship_Combat", Storage="_Ship", ThisKey="AttackerShipId", OtherKey="ShipId", IsForeignKey=true)]
-		public Ship AttackerShip
+		public virtual Ship AttackerShip
 		{
 			get
 			{
@@ -1867,7 +1867,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Ship_Combat1", Storage="_Ship1", ThisKey="DefenderShipId", OtherKey="ShipId", IsForeignKey=true)]
-		public Ship DefenderShip
+		public virtual Ship DefenderShip
 		{
 			get
 			{

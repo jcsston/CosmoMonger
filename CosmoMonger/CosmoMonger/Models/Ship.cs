@@ -143,6 +143,22 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Gets the 'name' of this ship, player name or NPC name.
+        /// </summary>
+        /// <value>The name of the ship.</value>
+        public virtual string Name
+        {
+            get
+            {
+                return (from p in this.Players
+                        select p.Name)
+                        .Union(
+                        (from n in this.Npcs
+                         select n.Name)).SingleOrDefault();
+            }
+        }
+
+        /// <summary>
         /// Starts the ship traveling to the target system.
         /// </summary>
         /// <param name="targetSystem">The target system to travel to.</param>
@@ -346,6 +362,17 @@ namespace CosmoMonger.Models
         public virtual IEnumerable<Ship> GetShipsToAttack()
         {
             return (from s in this.CosmoSystem.GetLeavingShips()
+                    where s != this
+                    select s).AsEnumerable();
+        }
+
+        /// <summary>
+        /// Gets the other ships in system.
+        /// </summary>
+        /// <returns>An array of Ship objects that are currently in the system, (includes ones we can attack)</returns>
+        public virtual IEnumerable<Ship> GetOtherShipsInSystem()
+        {
+            return (from s in this.CosmoSystem.GetShipsInSystem()
                     where s != this
                     select s).AsEnumerable();
         }
