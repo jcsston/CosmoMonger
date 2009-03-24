@@ -3860,46 +3860,66 @@
   </changeSet>
   <changeSet author="Roger Boykin" id="72">
     <comment>Adding spaces to good names. Removing human bonus and penalties.  Making RacialEnemyId nullable.</comment>
-	<update tableName="Good">
-		<column name="Name" value="Food Cubes"/>
-		<where>GoodId=1</where>
-    </update>		
-	<update tableName="Good">
-		<column name="Name" value="Death Rays"/>
-		<where>GoodId=4</where>
-    </update>
-	<update tableName="Good">
-		<column name="Name" value="Nova Fizz"/>
-		<where>GoodId=7</where>	  
-	</update>
-	<modifyColumn tableName="Race">
-		<column name="RacialEnemyId" type="int">
-			<constraints nullable="true" />
-		</column>
-    </modifyColumn>
-	<update tableName="Race">
-		<column name="Weapons" value="0"/>
-		<where>RaceId=5</where>
-	</update>
-	<update tableName="Race">
-		<column name="Shields" value="0"/>
-		<where>RaceId=5</where>
-	</update>
-	<update tableName="Race">
-		<column name="Engine" value="0"/>
-		<where>RaceId=5</where>
-	</update>
-	<update tableName="Race">
-		<column name="Accuracy" value="0"/>
-		<where>RaceId=5</where>
-	</update>
-	<update tableName="Race">
-		<column name="RacialEnemyId" value="Null"/>
-		<where>RaceId=5</where>
-	</update>
-	<update tableName="Race">
+	  <update tableName="Good">
+		  <column name="Name" value="Food Cubes"/>
+		  <where>GoodId=1</where>
+      </update>		
+	  <update tableName="Good">
+		  <column name="Name" value="Death Rays"/>
+		  <where>GoodId=4</where>
+      </update>
+	  <update tableName="Good">
+		  <column name="Name" value="Nova Fizz"/>
+		  <where>GoodId=7</where>	  
+	  </update>
+	  <modifyColumn tableName="Race">
+		  <column name="RacialEnemyId" type="int">
+			  <constraints nullable="true" />
+		  </column>
+      </modifyColumn>
+	  <update tableName="Race">
+		  <column name="Weapons" value="0"/>
+		  <where>RaceId=5</where>
+	  </update>
+	  <update tableName="Race">
+		  <column name="Shields" value="0"/>
+		  <where>RaceId=5</where>
+	  </update>
+	  <update tableName="Race">
+		  <column name="Engine" value="0"/>
+		  <where>RaceId=5</where>
+	  </update>
+	  <update tableName="Race">
+		  <column name="Accuracy" value="0"/>
+		  <where>RaceId=5</where>
+	  </update>
+	  <update tableName="Race">
+		  <column name="RacialEnemyId" value="Null"/>
+		  <where>RaceId=5</where>
+	  </update>
+	  <update tableName="Race">
       <column name="Description" value="Humans are smarter than some alien species and dumber than others.  Human-based technology produces ship components that are strictly average in terms of performance.  All this mediocrity makes Humans the perfect race to pick for users who do not wish to be troubled by all those pesky bonuses and penalties that plague the other races."/>
       <where>RaceId=5</where>
     </update>
+  </changeSet>
+  <changeSet author="Jory Stone" id="73">
+    <comment>Adding a special Cleaner NPCs to cleanup after inactive users.</comment>
+    <sql>SET IDENTITY_INSERT NpcType ON</sql>
+    <insert tableName="NpcType">
+      <column name="NpcTypeId" valueNumeric="3" />
+      <column name="Name" value="Cleaner" />
+    </insert>
+    <sql>SET IDENTITY_INSERT NpcType OFF</sql>
+    <sql>SET IDENTITY_INSERT Npc ON</sql>
+    <insert tableName="Npc">
+      <column name="NpcId" valueNumeric="3" />
+      <column name="NpcTypeId" valueNumeric="3" />
+      <column name="Name" value="Cleaner NPC" />
+      <column name="Credits" valueNumeric="0" />
+      <column name="Bounty" valueNumeric="0" />
+      <column name="Badness" valueNumeric="0" />
+      <column name="NextActionTime" value="1/1/2009" />
+    </insert>
+    <sql>SET IDENTITY_INSERT Npc OFF</sql>
   </changeSet>
 </databaseChangeLog>

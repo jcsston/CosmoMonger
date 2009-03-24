@@ -28,6 +28,11 @@ namespace CosmoMonger.Models
         public const int MinutesBetweenSystemGoodUpdates = 2;
 
         /// <summary>
+        /// Constant for the number of minutes to schedule between cleaner sweeps.
+        /// </summary>
+        public const int MinutesBetweenCleanerSweeps = 1;
+        
+        /// <summary>
         /// A persistent random number generator for Npc code.
         /// </summary>
         private static Random rnd = new Random();
@@ -47,6 +52,10 @@ namespace CosmoMonger.Models
                 case 2:
                     // Special system good price NPC
                     this.UpdateSystemGoodPrice();
+                    break;
+                case 3:
+                    // Cleaner NPC
+                    this.Cleaner();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("NpcTypeId", this.NpcTypeId, "Invalid NPC Type");
@@ -408,6 +417,49 @@ namespace CosmoMonger.Models
 
                     continue;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Cleaner NPC. Looks for inactive users and makes sure that are not stuck in travel.
+        /// </summary>
+        private void Cleaner()
+        {
+            Logger.Write("Enter Npc.UpdateSystemGoodPrice", "NPC", 100, 0, TraceEventType.Verbose);
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Mark the next time traveling players will need cleaning
+            this.NextActionTime = DateTime.Now.AddMinutes(Npc.MinutesBetweenCleanerSweeps);
+            try
+            {
+                // Send changes to database
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to this Npc object, 
+                // which means another thread has already started cleaning
+                // We shouldn't redo that work, and so we exit
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    // Refresh current values from database
+                    occ.Resolve(RefreshMode.OverwriteCurrentValues);
+                }
+
+                return;
+            }
+
+            // Find traveling ships past due & players who haven't been active for the past minute
+            var shipsNeedingCleaning = (from p in db.Players
+                                        where p.Ship.TargetSystemArrivalTime < DateTime.Now
+                                        && p.LastPlayed.AddMinutes(1) < DateTime.Now
+                                        select p.Ship);
+            foreach (Ship ship in shipsNeedingCleaning)
+            {
+                // Fix travel state
+                ship.CheckIfTraveling();
             }
         }
     }
