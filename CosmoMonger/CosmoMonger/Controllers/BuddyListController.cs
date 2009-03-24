@@ -15,6 +15,24 @@
     public class BuddyListController : GameController
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="BuddyListController"/> class.
+        /// This is the default constructor that doesn't really to anything.
+        /// </summary>
+        public BuddyListController()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BuddyListController"/> class.
+        /// This constructor is used for unit testing purposes.
+        /// </summary>
+        /// <param name="manager">The game manager object to use.</param>
+        public BuddyListController(GameManager manager) 
+            : base(manager)
+        {
+        }
+
+        /// <summary>
         /// Redirects to the BuddyList action.
         /// </summary>
         public ActionResult Index()
@@ -102,6 +120,10 @@
                     ModelState.AddModelError("buddyId", ex.Message, buddyId);
                 }
             }
+            else
+            {
+                ModelState.AddModelError("buddyId", "Unable to find player", buddyId);
+            }
 
             return View();
         }
@@ -139,6 +161,10 @@
                     ModelState.AddModelError("userId", ex.Message, userId);
                 }
             }
+            else
+            {
+                ModelState.AddModelError("userId", "Unable to find player", userId);
+            }
 
             return View();
         }
@@ -165,6 +191,10 @@
 
                     ModelState.AddModelError("antiBuddyId", ex.Message, antiBuddyId);
                 }
+            }
+            else
+            {
+                ModelState.AddModelError("antiBuddyId", "Unable to find player", antiBuddyId);
             }
 
             return View();

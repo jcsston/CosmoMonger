@@ -93,6 +93,7 @@
     <Compile Include="Controllers\AccountControllerTest.cs" />
     <Compile Include="Controllers\AdminControllerTest.cs" />
     <Compile Include="Controllers\BankControllerTest.cs" />
+    <Compile Include="Controllers\BuddyListControllerTest.cs" />
     <Compile Include="Controllers\CachingXmlResolver.cs" />
     <Compile Include="Controllers\CombatControllerTest.cs" />
     <Compile Include="Controllers\CommunicationControllerTest.cs" />
