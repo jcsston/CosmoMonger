@@ -2427,8 +2427,8 @@
   <changeSet author="Jory Stone" id="52">
     <comment>Making the RaceId column not nullable in the System table. Adding not null constraint to the Password column in the User table.</comment>
     <addNotNullConstraint tableName="System" columnName="RaceId" defaultNullValue="1" columnDataType="int" />
-	<addNotNullConstraint tableName="User" columnName="Password" defaultNullValue="" columnDataType="varchar(160)" />
-	<addNotNullConstraint tableName="Player" columnName="TimePlayed" defaultNullValue="0" columnDataType="float" />
+	  <addNotNullConstraint tableName="User" columnName="Password" defaultNullValue="" columnDataType="varchar(160)" />
+	  <addNotNullConstraint tableName="Player" columnName="TimePlayed" defaultNullValue="0" columnDataType="float" />
   </changeSet>
   <changeSet author="Jory Stone" id="53">
     <comment>Adding Unique Constraint to the Player table</comment>
@@ -2506,7 +2506,6 @@
   <changeSet author="Roger Boykin" id="60">
     <comment>
       Adding Demand column to SystemGood Table. Making changes to SystemGood Table to stabilize the
-
       economy.
     </comment>
     <addColumn tableName="SystemGood">
@@ -2643,12 +2642,12 @@
       <column name="Demand" value="1"/>
       <where>SystemId=2 AND GoodId=7</where>
     </update>
-    <update tableName="SystemGood">      <column name="ProductionFactor" value="0.6"/>
+    <update tableName="SystemGood">      
+      <column name="ProductionFactor" value="0.6"/>
       <column name="ConsumptionFactor" value="0.4"/>
       <column name="PriceMultiplier" value="1.0" />
       <column name="Demand" value="3"/>
       <where>SystemId=2 AND GoodId=8</where>
-
     </update>
     <update tableName="SystemGood">
       <column name="ProductionFactor" value="0.6"/>
@@ -3922,4 +3921,66 @@
     </insert>
     <sql>SET IDENTITY_INSERT Npc OFF</sql>
   </changeSet>
+  <!--
+  <changeSet author="Jory Stone" id="74">
+    <comment>Adding PlayerRecord table to track player stats by hourly snapshots</comment>
+    <createTable tableName="PlayerRecord">
+      <column name="PlayerRecordId" type="int" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PlayerRecord"/>
+      </column>
+      <column name="PlayerId" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="RecordTime" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TimePlayed" type="float">
+        <constraints nullable="false"/>
+      </column>
+      <column name="Reputation" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="NetWorth" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="BountyTotal" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="HighestBounty" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CurrentBounty" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ShipsDestroyed" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ForcedSurrenders" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ForcedFlees" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CargoLootedWorth" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ShipsLost" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SurrenderCount" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="FleeCount" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CargoLostWorth" type="int">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="PlayerId" baseTableName="PlayerRecord" constraintName="FK_Player_PlayerRecord_PlayerId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="PlayerId" referencedTableName="Player" />
+    <createIndex tableName="PlayerRecord" indexName="IDX_PlayerRecord_PlayerId">
+      <column name="PlayerId" />
+    </createIndex>
+  </changeSet>
+  -->
 </databaseChangeLog>
