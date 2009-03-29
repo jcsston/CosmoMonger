@@ -238,6 +238,7 @@ namespace CosmoMonger.Models
                 // We have to delete all objects in the database related to this user
                 var playerShips = (from p in db.Players where p.User == matchingUser select p.Ship);
                 var playerShipIds = (from p in db.Players where p.User == matchingUser select p.Ship.ShipId);
+                db.PlayerRecords.DeleteAllOnSubmit(from r in db.PlayerRecords where r.Player.User == matchingUser select r);
                 db.Players.DeleteAllOnSubmit(from p in db.Players where p.User == matchingUser select p);
                 List<int> playerCombatIds = (from c in db.Combats
                                              where playerShipIds.Contains(c.AttackerShipId)
@@ -405,7 +406,7 @@ namespace CosmoMonger.Models
             {
                 if (userIsOnline)
                 {
-                    matchingUser.LastActivity = DateTime.Now;
+                    matchingUser.LastActivity = DateTime.UtcNow;
                 }
 
                 return new CosmoMongerMembershipUser(matchingUser);

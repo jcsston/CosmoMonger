@@ -197,7 +197,7 @@ namespace CosmoMonger.Models
             Dictionary<string, object> props;
 
             // Mark the next time the system good count will need to be updated
-            this.NextActionTime = DateTime.Now.AddMinutes(Npc.MinutesBetweenSystemGoodUpdates);
+            this.NextActionTime = DateTime.UtcNow.AddMinutes(Npc.MinutesBetweenSystemGoodUpdates);
             try
             {
                 // Send changes to database
@@ -344,7 +344,7 @@ namespace CosmoMonger.Models
             
             // begin commenting out if I don't want to wait
             // Mark the next time the system good prices will need to be updated
-            this.NextActionTime = DateTime.Now.AddMinutes(Npc.MinutesBetweenSystemGoodUpdates);
+            this.NextActionTime = DateTime.UtcNow.AddMinutes(Npc.MinutesBetweenSystemGoodUpdates);
             try
             {
                 // Send changes to database
@@ -429,7 +429,7 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Mark the next time traveling players will need cleaning
-            this.NextActionTime = DateTime.Now.AddMinutes(Npc.MinutesBetweenCleanerSweeps);
+            this.NextActionTime = DateTime.UtcNow.AddMinutes(Npc.MinutesBetweenCleanerSweeps);
             try
             {
                 // Send changes to database
@@ -453,8 +453,8 @@ namespace CosmoMonger.Models
 
             // Find traveling ships past due & players who haven't been active for the past minute
             var shipsNeedingCleaning = (from p in db.Players
-                                        where p.Ship.TargetSystemArrivalTime < DateTime.Now
-                                        && p.LastPlayed.AddMinutes(1) < DateTime.Now
+                                        where p.Ship.TargetSystemArrivalTime < DateTime.UtcNow
+                                        && p.LastPlayed.AddMinutes(1) < DateTime.UtcNow
                                         select p.Ship);
             foreach (Ship ship in shipsNeedingCleaning)
             {

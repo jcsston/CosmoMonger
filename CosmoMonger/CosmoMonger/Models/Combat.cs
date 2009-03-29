@@ -152,7 +152,7 @@ namespace CosmoMonger.Models
         {
             get
             {
-                return this.LastActionTime.AddSeconds(Combat.SecondsPerTurn) - DateTime.Now;
+                return this.LastActionTime.AddSeconds(Combat.SecondsPerTurn) - DateTime.UtcNow;
             }
         }
 
@@ -233,7 +233,7 @@ namespace CosmoMonger.Models
             Logger.Write("Attacking ship fired weapon", "Model", 150, 0, TraceEventType.Verbose, "Combat.FireWeapon", props);
 
             // Update turn action time
-            this.LastActionTime = DateTime.Now;
+            this.LastActionTime = DateTime.UtcNow;
 
             try
             {
@@ -299,7 +299,7 @@ namespace CosmoMonger.Models
             Logger.Write("Offered surrender", "Model", 150, 0, TraceEventType.Verbose, "Combat.OfferSurrender", props);
 
             // Update turn action time
-            this.LastActionTime = DateTime.Now;
+            this.LastActionTime = DateTime.UtcNow;
 
             db.SubmitChanges();
 
@@ -362,7 +362,7 @@ namespace CosmoMonger.Models
             this.Status = CombatStatus.ShipSurrendered;
 
             // Update turn action time
-            this.LastActionTime = DateTime.Now;
+            this.LastActionTime = DateTime.UtcNow;
 
             // Cleanup combat
             this.CleanupCombat();
@@ -411,7 +411,7 @@ namespace CosmoMonger.Models
             Logger.Write("Jettisoned cargo", "Model", 150, 0, TraceEventType.Verbose, "Combat.JettisonShipCargo", props);
 
             // Update turn action time
-            this.LastActionTime = DateTime.Now;
+            this.LastActionTime = DateTime.UtcNow;
 
             db.SubmitChanges();
 
@@ -447,7 +447,7 @@ namespace CosmoMonger.Models
             this.Status = CombatStatus.CargoPickup;
 
             // Update turn action time
-            this.LastActionTime = DateTime.Now;
+            this.LastActionTime = DateTime.UtcNow;
 
             db.SubmitChanges();
 
@@ -535,7 +535,7 @@ namespace CosmoMonger.Models
             }
 
             // Update turn action time
-            this.LastActionTime = DateTime.Now;
+            this.LastActionTime = DateTime.UtcNow;
 
             db.SubmitChanges();
         }
@@ -927,19 +927,19 @@ namespace CosmoMonger.Models
         private void CleanupCombat()
         {
             // Check how much the longer the ship needed prep for jumping
-            if (this.ShipTurn.TargetSystemArrivalTime.HasValue && this.ShipTurn.TargetSystemArrivalTime > DateTime.Now)
+            if (this.ShipTurn.TargetSystemArrivalTime.HasValue && this.ShipTurn.TargetSystemArrivalTime > DateTime.UtcNow)
             {
                 // The ship still needs time to prep,
                 // Combat is non real-time so we will cheat here and make the ship instantly jump
-                this.ShipTurn.TargetSystemArrivalTime = DateTime.Now.AddSeconds(-1);
+                this.ShipTurn.TargetSystemArrivalTime = DateTime.UtcNow.AddSeconds(-1);
             }
 
             // Check how much the longer the other ship needed prep for jumping
-            if (this.ShipOther.TargetSystemArrivalTime.HasValue && this.ShipOther.TargetSystemArrivalTime > DateTime.Now)
+            if (this.ShipOther.TargetSystemArrivalTime.HasValue && this.ShipOther.TargetSystemArrivalTime > DateTime.UtcNow)
             {
                 // The other ship still needs time to prep,
                 // Combat is non real-time so we will cheat here and make the ship instantly jump
-                this.ShipOther.TargetSystemArrivalTime = DateTime.Now.AddSeconds(-1);
+                this.ShipOther.TargetSystemArrivalTime = DateTime.UtcNow.AddSeconds(-1);
             }
 
             // Ensure both ships are no longer traveling

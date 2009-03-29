@@ -190,10 +190,18 @@ namespace CosmoMonger.Models
             // Get the travel time
             int travelTime = this.JumpDrive.ChargeTime;
 
+
+            // Update the player stats
+            Player shipPlayer = this.Players.SingleOrDefault();
+            if (shipPlayer != null)
+            {
+                shipPlayer.DistanceTraveled += this.GetSystemDistance(targetSystem);
+            }
+
             // Update the database
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             this.TargetSystemId = targetSystem.SystemId;
-            this.TargetSystemArrivalTime = DateTime.Now.AddSeconds(travelTime);
+            this.TargetSystemArrivalTime = DateTime.UtcNow.AddSeconds(travelTime);
             db.SubmitChanges();
 
             return travelTime;
@@ -212,7 +220,7 @@ namespace CosmoMonger.Models
                 Debug.Assert(this.TargetSystemId.HasValue, "There also should be a target system");
 
                 // Has the arrival time passed?
-                if (this.TargetSystemArrivalTime < DateTime.Now)
+                if (this.TargetSystemArrivalTime < DateTime.UtcNow)
                 {
                     CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
@@ -330,7 +338,7 @@ namespace CosmoMonger.Models
             combat.Surrendered = false;
             combat.Turn = 0;
             combat.CargoJettisoned = false;
-            combat.LastActionTime = DateTime.Now;
+            combat.LastActionTime = DateTime.UtcNow;
 
             // Save changes to the database
             db.Combats.InsertOnSubmit(combat);

@@ -65,7 +65,7 @@ namespace CosmoMonger.Controllers
                         lock (this.ControllerContext.HttpContext.Application.SyncRoot) 
                         {
                             object lastNpcUpdate = this.ControllerContext.HttpContext.Application["LastNpcUpdate"];
-                            if (lastNpcUpdate == null || (DateTime.Now - (DateTime)lastNpcUpdate).TotalSeconds > 5)
+                            if (lastNpcUpdate == null || (DateTime.UtcNow - (DateTime)lastNpcUpdate).TotalSeconds > 5)
                             {
                                 // Spawn thread to do NPC actions
                                 Thread npcThread = new Thread(new ThreadStart(CosmoManager.DoPendingNPCActions));
@@ -73,7 +73,7 @@ namespace CosmoMonger.Controllers
                                 npcThread.Start();
 
                                 // Update NPC Counter
-                                this.ControllerContext.HttpContext.Application["LastNpcUpdate"] = DateTime.Now;
+                                this.ControllerContext.HttpContext.Application["LastNpcUpdate"] = DateTime.UtcNow;
                             }
                         }
 

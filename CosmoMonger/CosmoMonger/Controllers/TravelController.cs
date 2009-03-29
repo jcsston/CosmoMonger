@@ -126,7 +126,7 @@ namespace CosmoMonger.Controllers
             Ship currentShip = this.ControllerGame.CurrentPlayer.Ship;
             bool inCombat = (currentShip.InProgressCombat != null);
             bool inTravel = currentShip.CheckIfTraveling();
-            TimeSpan travelTime = (currentShip.TargetSystemArrivalTime ?? DateTime.Now) - DateTime.Now;
+            TimeSpan travelTime = (currentShip.TargetSystemArrivalTime ?? DateTime.UtcNow) - DateTime.UtcNow;
 
             return Json(new { combat = inCombat, travel = inTravel, travelTime = travelTime.TotalSeconds });
         }

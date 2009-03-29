@@ -8,6 +8,7 @@ namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Configuration;
     using System.Diagnostics;    
     using System.Linq;
@@ -89,52 +90,134 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Fetches the top records of players based on the recordType argument. 
         /// If the recordType is invalid an ArgumentException is thrown.
+        /// The returned value pairs have the record value nicely formated with the Player as the key.
         /// </summary>
-        /// <param name="recordType">
-        /// Type of the record.
-        /// Valid recordType values are: 
-        /// NetWorth, BountyTotal HighestBounty, ShipsDestroyed, ForcedSurrenders, ForcedFlees, 
-        /// CargoLooted, ShipsLost, SurrenderCount, FleeCount, and CargoLost.
-        /// </param>
+        /// <param name="recordType">Type of the record.</param>
         /// <param name="limit">The number of top players to return</param>
-        /// <returns>Array of Player objects</returns>
-        public virtual Player[] GetTopPlayers(string recordType, int limit)
+        /// <returns>Array of Player / record value pairs</returns>
+        public virtual KeyValuePair<Player, string> [] GetTopPlayers(Player.RecordType recordType, int limit)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            
+            // Fetch the top player records
             switch (recordType)
             {
-                case "NetWorth":
-                    return (from p in db.Players orderby p.NetWorth descending, p.Name select p).Take(limit).ToArray();
+                case Player.RecordType.NetWorth:
+                    return (from p in db.Players 
+                            orderby p.NetWorth descending, 
+                            p.Name 
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("${0}", p.NetWorth)))
+                            .ToArray();
 
-                case "BountyTotal":
-                    return (from p in db.Players orderby p.BountyTotal descending, p.Name select p).Take(limit).ToArray();
+                case Player.RecordType.BountyCollected:
+                    return (from p in db.Players 
+                            orderby p.BountyCollected descending, 
+                            p.Name 
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("${0}", p.BountyCollected)))
+                            .ToArray();
 
-                case "HighestBounty":
-                    return (from p in db.Players orderby p.HighestBounty descending, p.Name select p).Take(limit).ToArray();
+                case Player.RecordType.Bounty:
+                    return (from p in db.Players 
+                            orderby p.Bounty descending, 
+                            p.Name 
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("${0}", p.Bounty)))
+                            .ToArray();
 
-                case "ShipsDestroyed":
-                    return (from p in db.Players orderby p.ShipsDestroyed descending, p.Name select p).Take(limit).ToArray();
+                case Player.RecordType.ShipsDestroyed:
+                    return (from p in db.Players 
+                            orderby p.ShipsDestroyed descending, 
+                            p.Name 
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.ShipsDestroyed)))
+                            .ToArray();
 
-                case "ForcedSurrenders":
-                    return (from p in db.Players orderby p.ForcedSurrenders descending, p.Name select p).Take(limit).ToArray();
+                case Player.RecordType.ForcedSurrenders:
+                    return (from p in db.Players 
+                            orderby p.ForcedSurrenders descending, 
+                            p.Name 
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.ForcedSurrenders)))
+                            .ToArray();
 
-                case "ForcedFlees":
-                    return (from p in db.Players orderby p.ForcedFlees descending, p.Name select p).Take(limit).ToArray();
+                case Player.RecordType.ForcedFlees:
+                    return (from p in db.Players 
+                            orderby p.ForcedFlees descending, 
+                            p.Name 
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.ForcedFlees)))
+                            .ToArray();
 
-                case "CargoLooted":
-                    return (from p in db.Players orderby p.CargoLootedWorth descending, p.Name select p).Take(limit).ToArray();
+                case Player.RecordType.CargoLootedWorth:
+                    return (from p in db.Players 
+                            orderby p.CargoLootedWorth descending, 
+                            p.Name 
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("${0}", p.CargoLootedWorth)))
+                            .ToArray();
 
-                case "ShipsLost":
-                    return (from p in db.Players orderby p.ShipsLost descending, p.Name select p).Take(limit).ToArray();
+                case Player.RecordType.ShipsLost:
+                    return (from p in db.Players 
+                            orderby p.ShipsLost descending, 
+                            p.Name 
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.ShipsLost)))
+                            .ToArray();
 
-                case "SurrenderCount":
-                    return (from p in db.Players orderby p.SurrenderCount descending, p.Name select p).Take(limit).ToArray();
+                case Player.RecordType.SurrenderCount:
+                    return (from p in db.Players 
+                            orderby p.SurrenderCount descending, 
+                            p.Name 
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.SurrenderCount)))
+                            .ToArray();
 
-                case "FleeCount":
-                    return (from p in db.Players orderby p.FleeCount descending, p.Name select p).Take(limit).ToArray();
+                case Player.RecordType.FleeCount:
+                    return (from p in db.Players 
+                            orderby p.FleeCount descending, 
+                            p.Name 
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.FleeCount)))
+                            .ToArray();
 
-                case "CargoLost":
-                    return (from p in db.Players orderby p.CargoLostWorth descending, p.Name select p).Take(limit).ToArray();
+                case Player.RecordType.CargoLostWorth:
+                    return (from p in db.Players 
+                            orderby p.CargoLostWorth descending, 
+                            p.Name 
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("${0}", p.CargoLostWorth)))
+                            .ToArray();
+
+                case Player.RecordType.DistanceTraveled:
+                    return (from p in db.Players
+                            orderby p.DistanceTraveled descending,
+                            p.Name
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:N02}", p.DistanceTraveled)))
+                            .ToArray();
+
+                case Player.RecordType.GoodsTraded:
+                    return (from p in db.Players
+                            orderby p.GoodsTraded descending,
+                            p.Name
+                            select p)
+                            .Take(limit)
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.GoodsTraded)))
+                            .ToArray();
 
                 default:
                     throw new ArgumentException("Invalid recordType in GetTopPlayers", "recordType");

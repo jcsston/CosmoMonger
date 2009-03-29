@@ -87,21 +87,14 @@
         }
 
         [Test]
-        public void GetTopPlayersEmptyRecordType()
+        public void GetTopPlayersBounty()
         {
             Player testPlayer = this.CreateTestPlayer();
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
-            Player[] topPlayers = null;
-            try
-            {
-                topPlayers = manager.GetTopPlayers("", 10);
-            }
-            catch (ArgumentException ex)
-            {
-                Assert.That(ex.ParamName, Is.EqualTo("recordType"), "recordType should be the failed argument");
-            }
-            Assert.That(topPlayers, Is.Null, "GetTopPlayers should fail with an empty record type");
+            KeyValuePair<Player, string>[] topPlayers = null;
+            topPlayers = manager.GetTopPlayers(Player.RecordType.Bounty, 20);
+            Assert.That(topPlayers.Length, Is.LessThanOrEqualTo(20), "Returned array should be 20 or less items");
         }
 
         [Test]
@@ -110,7 +103,7 @@
             Player testPlayer = this.CreateTestPlayer();
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
-            Player[] topPlayers = manager.GetTopPlayers("NetWorth", 10);
+            KeyValuePair<Player, string> [] topPlayers = manager.GetTopPlayers(Player.RecordType.NetWorth, 10);
             Assert.That(topPlayers, Is.Not.Null, "GetTopPlayers should return an array of records");
             Assert.That(topPlayers.Length, Is.LessThanOrEqualTo(10), "Returned array should be 10 or less items");
         }

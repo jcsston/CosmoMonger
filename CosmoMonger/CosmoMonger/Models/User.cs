@@ -65,7 +65,7 @@ namespace CosmoMonger.Models
             player.Name = name;
             player.Race = race;
             player.Alive = true;
-            player.LastPlayed = DateTime.Now;
+            player.LastPlayed = DateTime.UtcNow;
 
             // Starting credits is 2000
             player.CashCredits = 2000;
@@ -274,7 +274,7 @@ namespace CosmoMonger.Models
             msg.SenderUser = this;
             msg.Subject = subject;
             msg.Content = message;
-            msg.Time = DateTime.Now;
+            msg.Time = DateTime.UtcNow;
             msg.VisibleToRecipient = true;
             msg.VisibleToSender = true;
 

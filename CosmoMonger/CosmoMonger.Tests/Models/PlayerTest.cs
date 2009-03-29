@@ -304,7 +304,7 @@
             // Arrange
             Player testPlayer = this.CreateTestPlayer();
             // Set last time played to 1 minute ago
-            testPlayer.LastPlayed = DateTime.Now.AddMinutes(-1);
+            testPlayer.LastPlayed = DateTime.UtcNow.AddMinutes(-1);
 
             // Act
             testPlayer.UpdatePlayTime();
@@ -321,7 +321,7 @@
             // Arrange
             Player testPlayer = this.CreateTestPlayer();
             // Set last time played to 6 minute ago
-            testPlayer.LastPlayed = DateTime.Now.AddMinutes(-6);
+            testPlayer.LastPlayed = DateTime.UtcNow.AddMinutes(-6);
 
             // Act
             testPlayer.UpdatePlayTime();

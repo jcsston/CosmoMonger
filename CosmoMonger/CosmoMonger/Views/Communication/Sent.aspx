@@ -1,6 +1,11 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Messaging - Sent</title>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("tr.gridrow td:first-child").datetimeUTCtoLocal();
+        });
+    </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <h1>Messaging</h1>

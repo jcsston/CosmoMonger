@@ -153,7 +153,14 @@ foreach (Race race in (Race[])ViewData["Races"])
     races[i, 4] = race.Accuracy.ToString();
     races[i, 5] = race.HomeSystem.Name;
     races[i, 6] = race.Description;
-    races[i, 7] = race.RacialEnemy.Name;
+    if (race.RacialEnemy != null)
+    {
+        races[i, 7] = race.RacialEnemy.Name;
+    }
+    else
+    {
+        races[i, 7] = "None";
+    }
     if (race.RacialPreference != null)
     {
         races[i, 8] = race.RacialPreference.Name;

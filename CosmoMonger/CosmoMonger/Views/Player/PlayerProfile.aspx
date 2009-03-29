@@ -80,7 +80,7 @@
     <td class="vp-headers" colspan="2">Time Played</td>
 </tr>
 <tr>
-    <td class="vp-columnData">$<%=player.BountyTotal%></td>
+    <td class="vp-columnData">$<%=player.Bounty%></td>
     <td class="vp-columnData">Credits</td>
     <td align="center" colspan="2">Warning! This is irrevisible!</td>
     <td align="center" colspan="2">Time Limit = 168 hours</td>

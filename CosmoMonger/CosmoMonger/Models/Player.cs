@@ -19,6 +19,16 @@ namespace CosmoMonger.Models
     /// </summary>
     public partial class Player
     {
+        public enum RecordType
+        {
+            NetWorth, 
+            BountyCollected, Bounty, 
+            ShipsDestroyed, ForcedSurrenders, ForcedFlees,
+            CargoLootedWorth, ShipsLost, SurrenderCount, 
+            FleeCount, CargoLostWorth, 
+            DistanceTraveled, GoodsTraded
+        }
+
         /// <summary>
         /// Gets the reputation level.
         /// </summary>
@@ -172,6 +182,66 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Updates the player record snapshot, creating a new one if needed.
+        /// </summary>
+        public virtual void UpdateRecordSnapshot()
+        {
+            int currentSnapshotAge = (int)(this.TimePlayed - this.LastRecordSnapshotAge);
+            
+            // If the last snap is older than 1min, we need to create a new one
+            if (currentSnapshotAge > 60)
+            {
+                CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+                // Create new PlayerRecord row
+                PlayerRecord record = new PlayerRecord();
+                record.PlayerId = this.PlayerId;
+                record.RecordTime = DateTime.UtcNow;
+                record.TimePlayed = this.TimePlayed;
+
+                // Copy record values
+                record.Bounty = this.Bounty;
+                record.BountyCollected = this.BountyCollected;
+                record.CargoLootedWorth = this.CargoLootedWorth;
+                record.CargoLostWorth = this.CargoLostWorth;
+                record.FleeCount = this.FleeCount;
+                record.ForcedFlees = this.ForcedFlees;
+                record.ForcedSurrenders = this.ForcedSurrenders;
+                record.NetWorth = this.NetWorth;
+                record.Reputation = this.Reputation;
+                record.ShipsDestroyed = this.ShipsDestroyed;
+                record.ShipsLost = this.ShipsLost;
+                record.SurrenderCount = this.SurrenderCount;
+                record.GoodsTraded = this.GoodsTraded;
+                record.DistanceTraveled = this.DistanceTraveled;
+
+                // Insert record
+                db.PlayerRecords.InsertOnSubmit(record);
+
+                // Update snapshot age
+                this.LastRecordSnapshotAge = (int)this.TimePlayed;
+
+                try
+                {
+                    // Send changes to database
+                    db.SubmitChanges(ConflictMode.ContinueOnConflict);
+                }
+                catch (ChangeConflictException ex)
+                {
+                    ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                    // Another thread has made changes to this Player row, 
+                    // Most likely from browsing multiple pages at once.
+                    // We will force this update of playtime as this one should be more recent
+                    foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                    {
+                        occ.Resolve(RefreshMode.KeepChanges);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Updates the play time for this player.
         /// </summary>
         public virtual void UpdatePlayTime()
@@ -180,7 +250,7 @@ namespace CosmoMonger.Models
             if (this.Alive)
             {
                 // Calcuate time since last play
-                TimeSpan playTimeLength = DateTime.Now - this.LastPlayed;
+                TimeSpan playTimeLength = DateTime.UtcNow - this.LastPlayed;
 
                 // Login timeout is 5 minutes, so we ignore times greater than 5 minutes
                 if (playTimeLength.TotalMinutes < 5)
@@ -197,7 +267,7 @@ namespace CosmoMonger.Models
                 }
 
                 // Update last play datetime
-                this.LastPlayed = DateTime.Now;
+                this.LastPlayed = DateTime.UtcNow;
 
                 try
                 {
@@ -223,6 +293,9 @@ namespace CosmoMonger.Models
                         occ.Resolve(RefreshMode.KeepChanges);
                     }
                 }
+
+                // Update player records
+                this.UpdateRecordSnapshot();
             }
         }
 

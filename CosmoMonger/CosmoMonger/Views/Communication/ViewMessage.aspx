@@ -1,6 +1,11 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>View Message</title>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#messageTime").datetimeUTCtoLocal();
+        });
+    </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <h1>View Message</h1>
@@ -15,7 +20,7 @@
     <tr>
         <td>Subject:</td>
         <td colspan="2"><%=Html.Encode(ViewData["Subject"]) %></td>
-        <td><%=Html.Encode(ViewData["Time"]) %></td>
+        <td id="messageTime"><%=Html.Encode(ViewData["Time"]) %></td>
     </tr>
     <tr>
         <td colspan="4"><pre style="font-size: 1.5em;"><%=Html.Encode(ViewData["Content"]) %></pre></td>

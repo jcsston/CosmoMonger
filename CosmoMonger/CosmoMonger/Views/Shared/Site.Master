@@ -8,6 +8,7 @@
     <script type="text/javascript" src="/Scripts/jquery-1.2.6.min.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.ui.all-1.5.3.js"></script>
 <% if (Request.IsAuthenticated) { %>
+    <script type="text/javascript" src="/Scripts/date.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.jgrowl.min.js"></script>
     <script type="text/javascript">
     <!--
@@ -24,7 +25,12 @@
                 lastMessageCount = messageCount;
                 for (var i = 0; i < data.length; i++) {
                     var msg = data[i];
-                    var msgDate = new Date(msg.time);
+                    
+                    // Convert the UTC time to local
+                    var utcMsgDate = new Date(msg.time);
+                    var msgDate = new Date(utcMsgDate);
+                    msgDate.add('m', -(utcMsgDate.getTimezoneOffset()));
+
                     var notice = 'Subject: ' + msg.subject
                         + '<br />Date: ' + msgDate.toLocaleDateString()
                         + '<br />Time: ' + msgDate.toLocaleTimeString()

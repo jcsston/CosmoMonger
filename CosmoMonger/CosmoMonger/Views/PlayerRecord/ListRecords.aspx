@@ -6,11 +6,12 @@
 <h1>Top Records</h1>
 <br />
 <h3>Please select a record for display...</h3> 
-<% using (Html.BeginForm("ListRecords", "PlayerRecord")) { %>
-
+<% 
+SelectList recordType = (SelectList)ViewData["recordType"];
+using (Html.BeginForm("ListRecords", "PlayerRecord")) { 
+%>
 <p>
-<%=Html.DropDownList("recordType", (SelectList)ViewData["recordType"], new { onchange = "form.submit();" })%>
-
+<%=Html.DropDownList("recordType", recordType, new { onchange = "form.submit();" })%>
 <input type="submit" value="Refresh" />
 </p>
 <% } %>
@@ -18,92 +19,47 @@
 <table class="bigTable">
  <tr>
     <td class="lr-columnEmpty">&nbsp;</td>
-    <td class="lr-columnHeaders">(User Name) - Player Name</td>
-    <td class="lr-columnHeaders"><% 
-            switch ((string)ViewData["SelectedRecordType"])
+    <td class="lr-columnHeaders">Player Name - (User Name)</td>
+    <td class="lr-columnHeaders"><%
+            switch ((Player.RecordType)recordType.SelectedValue)
             {
-                case "NetWorth":
-                    Response.Write("Net Worth");
+                case Player.RecordType.Bounty:
+                    Response.Write("Player Bounty");
                     break;
-                case "BountyTotal":
-                    Response.Write("Bounties Collected");
-                    break;
-                case "HighestBounty":
-                    Response.Write("Highest Bounty");
-                    break;
-                case "ShipsDestroyed":
+                case Player.RecordType.ShipsDestroyed:
                     Response.Write("Opponent's Destroyed");
                     break;
-                case "ForcedSurrenders":
+                case Player.RecordType.ForcedSurrenders:
                     Response.Write("Surrendered Opponents");
                     break;
-                case "ForcedFlees":
+                case Player.RecordType.ForcedFlees:
                     Response.Write("Fled Opponents");
                     break;
-                case "CargoLooted":
+                case Player.RecordType.CargoLootedWorth:
                     Response.Write("Captured Cargo");
                     break;
-                case "ShipsLost":
-                    Response.Write("Ships Lost");
-                    break;
-                case "SurrenderCount":
+                case Player.RecordType.SurrenderCount:
                     Response.Write("Times Surrendered");
                     break;
-                case "FleeCount":
+                case Player.RecordType.FleeCount:
                     Response.Write("Times Fled");
                     break;
-                case "CargoLost":
+                case Player.RecordType.CargoLostWorth:
                     Response.Write("Lost Cargo");
                     break;
                 default:
-                    throw new ArgumentException("Invalid recordType in GetTopPlayers", "recordType");
-            }%></td>
+                    Response.Write(Html.Encode(ViewData["SelectedRecordType"]));
+                    break;
+                    
+            } %></td>
       <td class="lr-columnEmpty">&nbsp;</td>      
  </tr>
-<% foreach (CosmoMonger.Models.Player player in (CosmoMonger.Models.Player[])ViewData["TopRecords"])
+<% foreach (KeyValuePair<Player, string> record in (KeyValuePair<Player, string>[])ViewData["TopRecords"])
 {  %>
  <tr>
     <td class="lr-columnEmpty">&nbsp;</td>
-    <td class="lr-columnLeft">(<%=Html.Encode(player.User.UserName) %>) - <%= Html.Encode(player.Name) %></td>
-    <td class="lr-columnRight"><% 
-            switch ((string)ViewData["SelectedRecordType"])
-            {
-                case "NetWorth":
-                    Response.Write("$" + player.NetWorth);
-                    break;
-                case "BountyTotal":
-                    Response.Write("$" + player.BountyTotal);
-                    break;
-                case "HighestBounty":
-                    Response.Write("$" + player.HighestBounty);
-                    break;
-                case "ShipsDestroyed":
-                    Response.Write(player.ShipsDestroyed);
-                    break;
-                case "ForcedSurrenders":
-                    Response.Write(player.ForcedSurrenders);
-                    break;
-                case "ForcedFlees":
-                    Response.Write(player.ForcedFlees);
-                    break;
-                case "CargoLooted":
-                    Response.Write("$" + player.CargoLootedWorth);
-                    break;
-                case "ShipsLost":
-                    Response.Write(player.ShipsLost);
-                    break;
-                case "SurrenderCount":
-                    Response.Write(player.SurrenderCount);
-                    break;
-                case "FleeCount":
-                    Response.Write(player.FleeCount);
-                    break;
-                case "CargoLost":
-                    Response.Write("$" + player.CargoLostWorth);
-                    break;
-                default:
-                    throw new ArgumentException("Invalid recordType in GetTopPlayers", "recordType");
-            } %></td>
+    <td class="lr-columnLeft"><%=Html.Encode(record.Key.Name) %> - (<%=Html.Encode(record.Key.User.UserName) %>)</td>
+    <td class="lr-columnRight"><%=Html.Encode(record.Value) %></td>
     <td class="lr-columnEmpty">&nbsp;</td>
  </tr>
  <% } %>

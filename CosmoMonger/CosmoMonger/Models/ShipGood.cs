@@ -91,6 +91,9 @@ namespace CosmoMonger.Models
             // Add to the players cash credits account
             manager.CurrentPlayer.CashCredits += profit;
 
+            // Update the player stats
+            manager.CurrentPlayer.GoodsTraded += quantity;
+
             try
             {
                 // Commit changes to the database

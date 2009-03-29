@@ -194,7 +194,7 @@
                 messageData.Add(new
                 {
                     from = HttpUtility.HtmlEncode(msg.SenderUser.UserName),
-                    time = msg.Time.ToString("R"),
+                    time = msg.Time.ToUniversalTime().ToString("R"),
                     subject = HttpUtility.HtmlEncode(msg.Subject),
                     id = msg.MessageId
                 });

@@ -7,8 +7,10 @@
 namespace CosmoMonger.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
     using CosmoMonger.Models;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// This controller handles listing the hall of fame player records 
@@ -49,7 +51,7 @@ namespace CosmoMonger.Controllers
         /// <returns>Returns ListRecords(string) with a record type of NetWorth</returns>
         public ActionResult ListRecords()
         {
-            return this.ListRecords("NetWorth");
+            return this.ListRecords(Player.RecordType.NetWorth);
         }
 
         /// <summary>
@@ -59,24 +61,19 @@ namespace CosmoMonger.Controllers
         /// <param name="recordType">Type of the record to order the list by.</param>
         /// <returns>The ListRecords view filled in with the top player record model data</returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult ListRecords(string recordType)
+        public ActionResult ListRecords(Player.RecordType recordType)
         {
-            ViewData["recordType"] = new SelectList(new string[] 
-            { 
-                "NetWorth",   
-                "BountyTotal",
-                "HighestBounty",
-                "ShipsDestroyed",
-                "ForcedSurrenders",
-                "ForcedFlees",
-                "CargoLooted",
-                "ShipsLost",
-                "SurrenderCount",
-                "FleeCount",
-                "CargoLost"
-            }, recordType);
+            // Build the record type selection list
+            var recordTypes = from Player.RecordType s in Enum.GetValues(typeof(Player.RecordType))
+                              select new { ID = s, Name = Regex.Replace(s.ToString(), "([A-Z])", " $1", RegexOptions.Compiled).Trim() };
+            ViewData["recordType"] = new SelectList(recordTypes, "ID", "Name", recordType);
+            
+            // Format the current record type nicely
+            ViewData["SelectedRecordType"] = Regex.Replace(recordType.ToString(), "([A-Z])", " $1", RegexOptions.Compiled).Trim();
+
+            // Fetch the records
             ViewData["TopRecords"] = this.ControllerGame.GetTopPlayers(recordType, 10);
-            ViewData["SelectedRecordType"] = recordType;
+
             return View();
         }
 

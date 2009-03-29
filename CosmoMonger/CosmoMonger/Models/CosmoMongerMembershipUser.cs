@@ -132,7 +132,7 @@ namespace CosmoMonger.Models
         {
             get
             {
-                return this.user.LastLogin.GetValueOrDefault(DateTime.Now);
+                return this.user.LastLogin.GetValueOrDefault(DateTime.UtcNow);
             }
 
             set
@@ -210,7 +210,7 @@ namespace CosmoMonger.Models
             user.Password = Cryptographer.CreateHash("SHA512", password);
             user.Active = true;
             user.Validated = false;
-            user.Joined = DateTime.Now;
+            user.Joined = DateTime.UtcNow;
 
             // Insert the user record into the database
             db.Users.InsertOnSubmit(user);
@@ -256,7 +256,7 @@ namespace CosmoMonger.Models
             if (validPassword && this.IsApproved)
             {
                 this.user.LoginAttemptCount = 0;
-                this.user.LastLogin = DateTime.Now;
+                this.user.LastLogin = DateTime.UtcNow;
                 db.SubmitChanges();
                 return true;
             }
@@ -370,7 +370,7 @@ namespace CosmoMonger.Models
             // Check that is has been at least 5 minutes since the last
             if (this.user.LastVerificationSent.HasValue)
             {
-                TimeSpan timeSinceLastVerificationEmail = DateTime.Now - this.user.LastVerificationSent.Value;
+                TimeSpan timeSinceLastVerificationEmail = DateTime.UtcNow - this.user.LastVerificationSent.Value;
 
                 // It needs to be at least 5 minutes since the last verification e-mail
                 if (timeSinceLastVerificationEmail.TotalMinutes < 5)
@@ -415,7 +415,7 @@ namespace CosmoMonger.Models
             }
 
             // Update datetime of last verification e-mail sent
-            this.user.LastVerificationSent = DateTime.Now;
+            this.user.LastVerificationSent = DateTime.UtcNow;
 
             db.SubmitChanges();
         }

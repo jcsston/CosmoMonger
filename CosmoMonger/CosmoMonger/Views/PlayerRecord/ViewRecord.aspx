@@ -4,7 +4,7 @@
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 <h1>View Record</h1>
-<% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["Player"]; %>
+<% Player player = (Player)ViewData["Player"]; %>
 <table style="width: 100%">
 <tr>
     <td class="vr-playerName" colspan="3"><%= Html.Encode(player.Name) %></td>
@@ -13,10 +13,14 @@
     <td>&nbsp;</td>
 </tr>
 <tr>
-    <td class="vr-highBounty" colspan="3">Highest Bounty</td>
+    <td class="vr-highBounty">Bounty</td>
+    <td class="vr-highBounty">Distance Traveled</td>
+    <td class="vr-highBounty">Goods Traded</td>
 </tr>
 <tr>
-    <td class="vr-highBounty" colspan="3">$&nbsp;<%= Html.Encode(player.HighestBounty) %></td>
+    <td class="vr-highBounty">$&nbsp;<%= Html.Encode(player.Bounty) %></td>
+    <td class="vr-highBounty"><%= Html.Encode(player.DistanceTraveled.ToString("N02"))%> sectors</td>
+    <td class="vr-highBounty"><%= Html.Encode(player.GoodsTraded) %> sold</td>
 </tr>
 <tr>
     <td>&nbsp;</td>

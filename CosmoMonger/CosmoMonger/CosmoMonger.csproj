@@ -132,7 +132,10 @@
     <Compile Include="Models\SystemShip.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Utility\DataContextFactory.cs" />
+    <Compile Include="Models\Utility\IPropertyAccessor.cs" />
     <Compile Include="Models\Utility\LoggingTextWriter.cs" />
+    <Compile Include="Models\Utility\PropertyAccessor.cs" />
+    <Compile Include="Models\Utility\PropertyAccessorException.cs" />
     <Compile Include="Models\Weapon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

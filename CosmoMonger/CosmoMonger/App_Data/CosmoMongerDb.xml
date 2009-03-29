@@ -3921,9 +3921,8 @@
     </insert>
     <sql>SET IDENTITY_INSERT Npc OFF</sql>
   </changeSet>
-  <!--
   <changeSet author="Jory Stone" id="74">
-    <comment>Adding PlayerRecord table to track player stats by hourly snapshots</comment>
+    <comment>Adding PlayerRecord table to track player stats, new record rows will be created hourly</comment>
     <createTable tableName="PlayerRecord">
       <column name="PlayerRecordId" type="int" autoIncrement="true">
         <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PlayerRecord"/>
@@ -3943,13 +3942,10 @@
       <column name="NetWorth" type="int">
         <constraints nullable="false"/>
       </column>
-      <column name="BountyTotal" type="int">
+      <column name="PlayerBounty" type="int">
         <constraints nullable="false"/>
       </column>
-      <column name="HighestBounty" type="int">
-        <constraints nullable="false"/>
-      </column>
-      <column name="CurrentBounty" type="int">
+      <column name="BountyCollected" type="int">
         <constraints nullable="false"/>
       </column>
       <column name="ShipsDestroyed" type="int">
@@ -3982,5 +3978,57 @@
       <column name="PlayerId" />
     </createIndex>
   </changeSet>
-  -->
+  <changeSet author="Jory Stone" id="75">
+    <comment>Renamed BountyTotal and HighestBounty columns on the Player table to BountyCollected and Bounty.</comment>
+    <renameColumn tableName="Player" oldColumnName="BountyTotal" newColumnName="BountyCollected" />
+    <renameColumn tableName="Player" oldColumnName="HighestBounty" newColumnName="Bounty" />
+    <renameColumn tableName="PlayerRecord" oldColumnName="PlayerBounty" newColumnName="Bounty" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="76">
+    <comment>Added LastRecordSnapshotAge column to Player table to track age of player when last player record snapshot was taken</comment>
+    <addColumn tableName="Player">
+      <column name="LastRecordSnapshotAge" type="int" />
+    </addColumn>
+    <addNotNullConstraint tableName="Player" columnName="LastRecordSnapshotAge" columnDataType="int" defaultNullValue="0" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="77">
+    <comment>Added DistanceTraveling and GoodsTraded column to Player and PlayerRecord tables to track more player stats</comment>
+    <addColumn tableName="Player">
+      <column name="DistanceTraveled" type="int" />
+    </addColumn>
+    <addColumn tableName="Player">
+      <column name="GoodsTraded" type="int" />
+    </addColumn>
+    <addColumn tableName="PlayerRecord">
+      <column name="DistanceTraveled" type="int" />
+    </addColumn>
+    <addColumn tableName="PlayerRecord">
+      <column name="GoodsTraded" type="int" />
+    </addColumn>
+    <addNotNullConstraint tableName="Player" columnName="DistanceTraveled" columnDataType="int" defaultNullValue="0" />
+    <addNotNullConstraint tableName="Player" columnName="GoodsTraded" columnDataType="int" defaultNullValue="0" />
+    <addNotNullConstraint tableName="PlayerRecord" columnName="DistanceTraveled" columnDataType="int" defaultNullValue="0" />
+    <addNotNullConstraint tableName="PlayerRecord" columnName="GoodsTraded" columnDataType="int" defaultNullValue="0" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="78">
+    <comment>Changing DistanceTraveling column on the Player and PlayerRecord tables to float from integer</comment>
+    <modifyColumn tableName="Player">
+      <column name="DistanceTraveled" type="float">
+        <constraints nullable="false"/>
+      </column>
+    </modifyColumn>
+    <modifyColumn tableName="PlayerRecord">
+      <column name="DistanceTraveled" type="float">
+        <constraints nullable="false"/>
+      </column>
+    </modifyColumn>
+  </changeSet>
+  <changeSet author="Jory Stone" id="79">
+    <comment>
+      Making DistanceTraveling column on the Player and PlayerRecord tables to not nullable.
+      A bug in Liquibase ignored the nullable constraints in the modifyColumn action.
+    </comment>
+    <addNotNullConstraint tableName="Player" columnName="DistanceTraveled" columnDataType="float" defaultNullValue="0" />
+    <addNotNullConstraint tableName="PlayerRecord" columnName="DistanceTraveled" columnDataType="float" defaultNullValue="0" />
+  </changeSet>
 </databaseChangeLog>

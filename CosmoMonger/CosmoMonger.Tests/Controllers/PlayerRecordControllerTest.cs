@@ -38,17 +38,17 @@
         public void ListRecords()
         {
             // Arrange
-            Player [] topPlayers = { new Player(), new Player() };
-            topPlayers[0].Name = "Player 1";
-            topPlayers[1].Name = "Player 2";
+            KeyValuePair<Player, string>[] topPlayers = { new KeyValuePair<Player, string>(new Player(), "0"), new KeyValuePair<Player, string>(new Player(), "1") };
+            topPlayers[0].Key.Name = "Player 1";
+            topPlayers[1].Key.Name = "Player 2";
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
-            managerMock.Expect(m => m.GetTopPlayers("NetWorth", 10))
+            managerMock.Expect(m => m.GetTopPlayers(Player.RecordType.NetWorth, 10))
                 .Returns(topPlayers).AtMostOnce().Verifiable();
             PlayerRecordController controller = new PlayerRecordController(managerMock.Object);
 
             // Act
-            ActionResult result = controller.ListRecords("NetWorth");
+            ActionResult result = controller.ListRecords(Player.RecordType.NetWorth);
 
             // Assert
             Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
