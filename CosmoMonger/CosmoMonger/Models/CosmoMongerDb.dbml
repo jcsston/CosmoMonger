@@ -10,6 +10,7 @@
       <Column Name="InitialJumpDriveId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="InitialWeaponId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="InitialShieldId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="HitFactor" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="BaseShip_Ship" Member="Ships" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="Ship" />
       <Association Name="BaseShip_SystemShip" Member="SystemShips" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="SystemShip" />
       <Association Name="Weapon_BaseShip" Member="InitialWeapon" Storage="_Weapon" ThisKey="InitialWeaponId" OtherKey="WeaponId" Type="Weapon" IsForeignKey="true" />

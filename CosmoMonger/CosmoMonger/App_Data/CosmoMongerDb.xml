@@ -4031,4 +4031,33 @@
     <addNotNullConstraint tableName="Player" columnName="DistanceTraveled" columnDataType="float" defaultNullValue="0" />
     <addNotNullConstraint tableName="PlayerRecord" columnName="DistanceTraveled" columnDataType="float" defaultNullValue="0" />
   </changeSet>
+  <changeSet author="Roger Boykin" id="80">
+    <comment>
+      Adding HitFactor to BaseShip table to make the size of the target ship affect accuracy during combat.
+    </comment>
+    <addColumn tableName="BaseShip">
+      <column name="HitFactor" type="int" />
+    </addColumn>
+    <addNotNullConstraint tableName="BaseShip" columnName="HitFactor" columnDataType="int" defaultNullValue="0" />
+    <update tableName="BaseShip">
+      <column name="HitFactor" value="-2"/>
+      <where>BaseShipId=1</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="HitFactor" value="-1"/>
+      <where>BaseShipId=2</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="HitFactor" value="0"/>
+      <where>BaseShipId=3</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="HitFactor" value="1"/>
+      <where>BaseShipId=4</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="HitFactor" value="2"/>
+      <where>BaseShipId=5</where>
+    </update>
+  </changeSet>
 </databaseChangeLog>

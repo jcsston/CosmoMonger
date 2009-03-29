@@ -207,6 +207,9 @@ namespace CosmoMonger.Models
 
             // Apply racial factor to accuracy -/+ 10%
             weaponAccuracy *= 1.0 + (this.ShipTurn.Race.Accuracy / 10.0);
+
+            // Apply target ship's HitFactor modifier to accuracy -/+20%
+            weaponAccuracy *= 1.0 + (this.ShipOther.BaseShip.HitFactor / 10.0);
             
             // Determine if the weapon will miss based on accuracy rating
             bool weaponMiss = (weaponAccuracy < rnd.Next(100));
