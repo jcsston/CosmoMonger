@@ -107,5 +107,29 @@ namespace CosmoMonger.Controllers
             ViewData["Player"] = this.ControllerGame.GetPlayer(playerId);
             return View();
         }
+
+        /// <summary>
+        /// This Action fetches the records of the passed in player via the GameManager.GetPlayerRecords method
+        /// and displays the detailed stats for that player through the ViewRecordHistory view.
+        /// </summary>
+        /// <returns>The ViewRecord view filled in with the player record history model data</returns>
+        public ActionResult ViewRecordHistory()
+        {
+            if (this.ControllerGame.CurrentPlayer == null)
+            {
+                // Go to the create action
+                return RedirectToAction("CreatePlayer", "Player");
+            }
+            else
+            {
+                // Otherwise, show the graph 
+                int playerId = this.ControllerGame.CurrentPlayer.PlayerId;
+                var recordTypes = from Player.RecordType s in Enum.GetValues(typeof(Player.RecordType))
+                                  select new { ID = s, Name = Regex.Replace(s.ToString(), "([A-Z])", " $1", RegexOptions.Compiled).Trim() };
+                ViewData["recordType"] = new SelectList(recordTypes, "ID", "Name", Player.RecordType.NetWorth);
+                ViewData["RecordHistory"] = this.ControllerGame.GetPlayerRecords(playerId);
+                return View();
+            }
+        }
     }
 }

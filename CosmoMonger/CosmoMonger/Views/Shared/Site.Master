@@ -84,6 +84,7 @@
                         <li><%= Html.ActionLink("Player Profile", "PlayerProfile", "Player")%></li>
                         <li><%= Html.ActionLink("Current Ship", "ViewShip", "Ship")%></li>
                         <li><%= Html.ActionLink("View Record", "ViewRecord", "PlayerRecord")%></li>
+                        <li><%= Html.ActionLink("Record History", "ViewRecordHistory", "PlayerRecord")%></li>
                         <li><%= Html.ActionLink("Top Records", "ListRecords", "PlayerRecord")%></li>
 
 

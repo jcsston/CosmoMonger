@@ -385,5 +385,14 @@ namespace CosmoMonger.Models
                     where c.CombatId == combatId
                     select c).SingleOrDefault();
         }
+
+        public virtual PlayerRecord [] GetPlayerRecords(int playerId)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            return (from r in db.PlayerRecords
+                    where r.PlayerId == playerId
+                    orderby r.RecordTime
+                    select r).ToArray();
+        }
     }
 }
