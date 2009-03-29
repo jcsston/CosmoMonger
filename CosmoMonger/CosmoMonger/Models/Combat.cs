@@ -215,9 +215,11 @@ namespace CosmoMonger.Models
                 // Clear the weapon damage amount
                 weaponDamage = 0;
             }
-
-            // Apply damage to the other ship
-            this.ShipOther.ApplyDamage(weaponDamage);
+            else
+            {
+                // Apply damage to the other ship
+                this.ShipOther.ApplyDamage(weaponDamage);
+            }
 
             // Deduct turn points
             this.TurnPointsLeft -= firingWeapon.TurnCost;
