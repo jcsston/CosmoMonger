@@ -4060,4 +4060,70 @@
       <where>BaseShipId=5</where>
     </update>
   </changeSet>
+  <changeSet author="Roger Boykin" id="81">
+    <comment>
+      Increasing TurnCost in Weapons Table to 5 times original value.
+    </comment>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="10"/>
+      <where>WeaponId=1</where>
+    </update>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="5"/>
+      <where>WeaponId=2</where>
+    </update>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="10"/>
+      <where>WeaponId=3</where>
+    </update>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="5"/>
+      <where>WeaponId=4</where>
+    </update>
+  </changeSet>
+  <changeSet author="Roger Boykin" id="82">
+    <comment>
+      Increasing TargetCount in Goods Table according to price.
+    </comment>
+    <update tableName="Good">
+      <column name="TargetCount" value="1000"/>
+      <where>GoodId=1</where>
+    </update>
+    <update tableName="Good">
+      <column name="TargetCount" value="1000"/>
+      <where>GoodId=2</where>
+    </update>
+    <update tableName="Good">
+      <column name="TargetCount" value="600"/>
+      <where>GoodId=3</where>
+    </update>
+    <update tableName="Good">
+      <column name="TargetCount" value="400"/>
+      <where>GoodId=4</where>
+    </update>
+    <update tableName="Good">
+      <column name="TargetCount" value="600"/>
+      <where>GoodId=5</where>
+    </update>
+    <update tableName="Good">
+      <column name="TargetCount" value="800"/>
+      <where>GoodId=6</where>
+    </update>
+    <update tableName="Good">
+      <column name="TargetCount" value="400"/>
+      <where>GoodId=7</where>
+    </update>
+    <update tableName="Good">
+      <column name="TargetCount" value="800"/>
+      <where>GoodId=8</where>
+    </update>
+    <update tableName="Good">
+      <column name="TargetCount" value="200"/>
+      <where>GoodId=9</where>
+    </update>
+    <update tableName="Good">
+      <column name="TargetCount" value="200"/>
+      <where>GoodId=10</where>
+    </update>
+  </changeSet> 
 </databaseChangeLog>
