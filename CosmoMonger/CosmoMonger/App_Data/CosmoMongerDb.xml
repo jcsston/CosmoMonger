@@ -4126,4 +4126,13 @@
       <where>GoodId=10</where>
     </update>
   </changeSet> 
+  <!--
+  <changeSet author="Jory Stone" id="81">
+    <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>
+    <addColumn tableName="Player">
+      <column name="CurrentPlayerRecordId" type="int" />
+    </addColumn>
+    <addNotNullConstraint tableName="Player" columnName="CurrentPlayerRecordId" columnDataType="int" defaultNullValue="0" />
+  </changeSet>
+  -->
 </databaseChangeLog>

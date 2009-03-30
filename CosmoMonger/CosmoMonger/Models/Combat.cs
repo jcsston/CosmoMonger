@@ -489,7 +489,17 @@ namespace CosmoMonger.Models
             // Based on many turn points left is how much the normal jumpdrive will charge
             // if you only have half your turn points left, you will only get half the normal charge amount
             int jumpDriveChargeCurrentTurn = (int)(jumpDriveChargePerTurn * (1.0 * this.TurnPointsLeft / Combat.PointsPerTurn));
-            
+
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "CombatId", this.CombatId },
+                { "TurnShipId", this.ShipTurn.ShipId },
+                { "ChargePerTurn", jumpDriveChargePerTurn },
+                { "ChargeCurrentTurn", jumpDriveChargeCurrentTurn },
+                { "CurrentJumpDriveCharge", this.ShipTurn.CurrentJumpDriveCharge }
+            };
+            Logger.Write("Charging JumpDrive", "Model", 150, 0, TraceEventType.Verbose, "Combat.ChargeJumpDrive", props);
+
             this.ShipTurn.CurrentJumpDriveCharge += jumpDriveChargeCurrentTurn;
             this.TurnPointsLeft = 0;
 
