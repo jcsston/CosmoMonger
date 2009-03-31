@@ -11,6 +11,9 @@ namespace CosmoMonger.Controllers
     using System.Web.Mvc;
     using CosmoMonger.Models;
     using System.Text.RegularExpressions;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Web;
 
     /// <summary>
     /// This controller handles listing the hall of fame player records 
@@ -127,9 +130,35 @@ namespace CosmoMonger.Controllers
                 var recordTypes = from Player.RecordType s in Enum.GetValues(typeof(Player.RecordType))
                                   select new { ID = s, Name = Regex.Replace(s.ToString(), "([A-Z])", " $1", RegexOptions.Compiled).Trim() };
                 ViewData["recordType"] = new SelectList(recordTypes, "ID", "Name", Player.RecordType.NetWorth);
+
                 ViewData["RecordHistory"] = this.ControllerGame.GetPlayerRecords(playerId);
+
                 return View();
             }
+        }
+
+        /// <summary>
+        /// This Action will build a list of high ranking records via the GameManager.GetTopPlayers
+        /// method to pass to the ListRecords View.
+        /// </summary>
+        /// <param name="recordType">Type of the record to order the list by.</param>
+        /// <returns>The ListRecords view filled in with the top player record model data</returns>
+        public JsonResult GetRecordHistory(Player.RecordType recordType)
+        {
+            // Fetch the records
+            ArrayList dataSet = new ArrayList();
+
+            int playerId = this.ControllerGame.CurrentPlayer.PlayerId;
+            PlayerRecord[] recordHistory = this.ControllerGame.GetPlayerRecords(playerId);
+
+            FastDynamicPropertyAccessor.PropertyAccessor prop = new FastDynamicPropertyAccessor.PropertyAccessor(typeof(PlayerRecord), recordType.ToString());
+            foreach (PlayerRecord record in recordHistory)
+            {
+                dataSet.Add(new object[] { record.TimePlayed, prop.Get(record) });
+            }
+
+            return Json(dataSet);
+            //return Json(new { label = recordType.ToString(), data = dataSet });
         }
     }
 }
