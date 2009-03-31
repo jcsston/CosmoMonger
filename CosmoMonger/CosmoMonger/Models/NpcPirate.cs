@@ -19,5 +19,10 @@ namespace CosmoMonger.Models
     /// </summary>
     public class NpcPirate : NpcBase
     {
+        public NpcPirate(Npc npcRow)
+            : base(npcRow)
+        {
+
+        }
     }
 }
