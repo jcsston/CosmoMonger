@@ -76,7 +76,6 @@ namespace CosmoMonger.Controllers
                                 this.ControllerContext.HttpContext.Application["LastNpcUpdate"] = DateTime.UtcNow;
                             }
                         }
-
                     }
                     else
                     {

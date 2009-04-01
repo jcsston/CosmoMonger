@@ -26,16 +26,16 @@ body
 
 a:link
 {
-    color: green;/* was #034af3 */
+    color: #00FF00;
     text-decoration: underline;
 }
 a:visited
 {
-    color: #FFFF00;/* was #505abc */
+    color: #33CC33;
 }
 a:hover
 {
-    color: #1d60ff;
+    color: #99FF99;
     text-decoration: none;
 }
 a:active
