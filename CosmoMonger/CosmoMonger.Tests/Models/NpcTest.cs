@@ -16,7 +16,8 @@
         [Test]
         public void CalculatePriceMultipler()
         {
-            Npc npc = new Npc();
+            Npc npcRow = new Npc();
+            CosmoMonger.Models.Npcs.NpcGoodBalancer npc = new CosmoMonger.Models.Npcs.NpcGoodBalancer(npcRow);
 
             for (int goodCount = 0; goodCount < 20; goodCount++)
             {

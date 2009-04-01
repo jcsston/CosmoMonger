@@ -4168,6 +4168,25 @@
       <where>WeaponId=4</where>
     </update>
   </changeSet>
+  <changeSet author="Jory Stone" id="85">
+    <comment>Replacing the GoodCount and GoodPrice NPCs with a single GoodBalancer NPC. Replaced GoodPrice NPC with NpcBalancer.</comment>
+    <update tableName="NpcType">
+      <column name="Name" value="GoodBalancer" />
+      <where>NpcTypeId=1</where>
+    </update>
+    <update tableName="Npc">
+      <column name="Name" value="Good Balancer" />
+      <where>NpcTypeId=1</where>
+    </update>
+    <update tableName="NpcType">
+      <column name="Name" value="NpcBalancer" />
+      <where>NpcTypeId=2</where>
+    </update>
+    <update tableName="Npc">
+      <column name="Name" value="Npc Balancer" />
+      <where>NpcTypeId=2</where>
+    </update>
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

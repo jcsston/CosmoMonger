@@ -124,9 +124,12 @@
     <Compile Include="Models\Combat.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Npc.cs" />
-    <Compile Include="Models\NpcBase.cs" />
-    <Compile Include="Models\NpcPirate.cs" />
-    <Compile Include="Models\NpcTrader.cs" />
+    <Compile Include="Models\Npcs\NpcBalancer.cs" />
+    <Compile Include="Models\Npcs\NpcBase.cs" />
+    <Compile Include="Models\Npcs\NpcGoodBalancer.cs" />
+    <Compile Include="Models\Npcs\NpcPirate.cs" />
+    <Compile Include="Models\Npcs\NpcTrader.cs" />
+    <Compile Include="Models\Npcs\NpcCleaner.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\PriceTableEntry.cs" />
     <Compile Include="Models\Ship.cs" />

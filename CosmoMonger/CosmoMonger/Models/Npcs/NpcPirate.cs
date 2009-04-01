@@ -1,11 +1,11 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="NpcTrader.cs" company="CosmoMonger">
+// <copyright file="NpcPirate.cs" company="CosmoMonger">
 //     Copyright (c) 2009 CosmoMonger. All rights reserved.
 // </copyright>
-// <author>Roger Boykin</author>
+// <author>Jory Stone</author>
 //-----------------------------------------------------------------------
 
-namespace CosmoMonger.Models
+namespace CosmoMonger.Models.Npcs
 {
     using System;
     using System.Collections.Generic;
@@ -15,18 +15,25 @@ namespace CosmoMonger.Models
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
-    /// Contains logic for NPC Traders
+    /// Contains logic for NPC Pirates
     /// </summary>
-    public class NpcTrader : NpcBase
+    public class NpcPirate : NpcBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NpcTrader"/> class.
+        /// Initializes a new instance of the <see cref="NpcPirate"/> class.
         /// </summary>
         /// <param name="npcRow">The NPC row reference.</param>
-        public NpcTrader(Npc npcRow)
+        public NpcPirate(Npc npcRow)
             : base(npcRow)
         {
+        }
 
+        /// <summary>
+        /// Does the action.
+        /// </summary>
+        public override void DoAction()
+        {
+            throw new NotImplementedException();
         }
     }
 }
