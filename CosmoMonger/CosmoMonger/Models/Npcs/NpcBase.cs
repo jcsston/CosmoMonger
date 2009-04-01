@@ -22,11 +22,6 @@ namespace CosmoMonger.Models.Npcs
     public abstract class NpcBase
     {
         /// <summary>
-        /// A persistent random number generator for Npc code.
-        /// </summary>
-        private static Random rnd = new Random();
-
-        /// <summary>
         /// Holds the NPC row reference
         /// </summary>
         private Npc npcRow = null;
@@ -39,18 +34,6 @@ namespace CosmoMonger.Models.Npcs
         public NpcBase(Npc npcRow)
         {
             this.npcRow = npcRow;
-        }
-
-        /// <summary>
-        /// Gets the static Random instance.
-        /// </summary>
-        /// <value>A reference to the static Random instance.</value>
-        protected Random Rnd
-        {
-            get
-            {
-                return NpcBase.rnd;
-            }
         }
 
         /// <summary>

@@ -29,6 +29,11 @@ namespace CosmoMonger.Models.Npcs
         public const int MinutesBetweenSystemGoodUpdates = 2;
 
         /// <summary>
+        /// A persistent random number generator for Npc code.
+        /// </summary>
+        private static Random rnd = new Random();
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="NpcGoodBalancer"/> class.
         /// </summary>
         /// <param name="npcRow">The NPC row reference.</param>
