@@ -4125,7 +4125,49 @@
       <column name="TargetCount" value="200"/>
       <where>GoodId=10</where>
     </update>
-  </changeSet> 
+  </changeSet>
+  <changeSet author="Roger Boykin" id="83">
+    <comment>
+      Decreasing TurnCost in Weapons Table to 3 times original value.
+    </comment>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="6"/>
+      <where>WeaponId=1</where>
+    </update>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="3"/>
+      <where>WeaponId=2</where>
+    </update>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="6"/>
+      <where>WeaponId=3</where>
+    </update>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="3"/>
+      <where>WeaponId=4</where>
+    </update>
+  </changeSet>
+  <changeSet author="Roger Boykin" id="84">
+    <comment>
+      Decreasing TurnCost in Weapons Table to 2 times original value.
+    </comment>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="4"/>
+      <where>WeaponId=1</where>
+    </update>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="2"/>
+      <where>WeaponId=2</where>
+    </update>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="4"/>
+      <where>WeaponId=3</where>
+    </update>
+    <update tableName="Weapon">
+      <column name="TurnCost" value="2"/>
+      <where>WeaponId=4</where>
+    </update>
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

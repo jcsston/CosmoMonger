@@ -126,6 +126,7 @@
     <Compile Include="Models\Npc.cs" />
     <Compile Include="Models\NpcBase.cs" />
     <Compile Include="Models\NpcPirate.cs" />
+    <Compile Include="Models\NpcTrader.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\PriceTableEntry.cs" />
     <Compile Include="Models\Ship.cs" />

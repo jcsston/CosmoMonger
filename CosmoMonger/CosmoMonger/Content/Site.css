@@ -26,12 +26,12 @@ body
 
 a:link
 {
-    color: #034af3;
+    color: green;/* was #034af3 */
     text-decoration: underline;
 }
 a:visited
 {
-    color: #505abc;
+    color: #FFFF00;/* was #505abc */
 }
 a:hover
 {
