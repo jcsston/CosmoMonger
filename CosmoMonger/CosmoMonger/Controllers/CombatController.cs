@@ -108,12 +108,21 @@
             IEnumerable<Ship> attackableShips = playerShip.GetShipsToAttack();
             foreach (Ship ship in shipsInSystem)
             {
+                string timeSinceLastActivity = "";
+                Player shipPlayer = ship.Players.SingleOrDefault();
+                if (shipPlayer != null)
+                {
+                    TimeSpan ts = DateTime.UtcNow - shipPlayer.LastPlayed;
+                    timeSinceLastActivity = CosmoMonger.Models.Utility.FormatTimeSpan.HumaneFormat(ts);
+                }
+
                 shipList.Add(new
                 {
                     shipId = ship.ShipId,
                     playerName = HttpUtility.HtmlEncode(ship.Players.Select(p => p.Name).SingleOrDefault()),
                     shipType = HttpUtility.HtmlEncode(ship.BaseShip.Name),
-                    attackable = attackableShips.Contains(ship)
+                    attackable = attackableShips.Contains(ship),
+                    lastActivity = timeSinceLastActivity
                 });
             }
 

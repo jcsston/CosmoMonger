@@ -44,7 +44,7 @@
 
             int playerCost = systemWater.Price * 20;
             int systemStartingCount = systemWater.Quantity;
-            systemWater.Buy(manager, 20);
+            systemWater.Buy(manager, 20, systemWater.Price);
 
             Assert.That(systemWater.Quantity, Is.EqualTo(systemStartingCount - 20), "System should now have 20 few water goods");
             Assert.That(testPlayer.CashCredits, Is.EqualTo(playerStartingCash - playerCost), "Player should have less cash credits now after buying");
@@ -79,7 +79,7 @@
 
             try
             {
-                systemWater.Buy(manager, 20);
+                systemWater.Buy(manager, 20, systemWater.Price);
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -123,7 +123,7 @@
             int systemStartingCount = systemWater.Quantity;
             try
             {
-                systemWater.Buy(manager, 20);
+                systemWater.Buy(manager, 20, systemWater.Price);
             }
             catch (ArgumentException ex)
             {
@@ -167,7 +167,7 @@
             int systemStartingCount = systemWater.Quantity;
             try
             {
-                systemWater.Buy(manager, 2000);
+                systemWater.Buy(manager, 2000, systemWater.Price);
             }
             catch (ArgumentException ex)
             {

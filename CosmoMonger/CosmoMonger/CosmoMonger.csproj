@@ -135,6 +135,7 @@
     <Compile Include="Models\SystemShip.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Utility\DataContextFactory.cs" />
+    <Compile Include="Models\Utility\FormatTimeSpan.cs" />
     <Compile Include="Models\Utility\IPropertyAccessor.cs" />
     <Compile Include="Models\Utility\LoggingTextWriter.cs" />
     <Compile Include="Models\Utility\PropertyAccessor.cs" />
@@ -199,6 +200,7 @@
     <Content Include="Content\TravelBackground.jpg" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\date.js" />
     <Content Include="Scripts\excanvas.js" />
     <Content Include="Scripts\excanvas.pack.js" />
     <Content Include="Scripts\jquery.bgiframe.js" />

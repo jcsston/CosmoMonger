@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Attack Ship</title>
     <script type="text/javascript">
-    <!--        
+    <!--
         function updateShipList(data) {
             var shipList = $("#shipList");
 
@@ -14,21 +14,23 @@
                 var listTable = '<table class="grid">';
 
                 // Add header row
-                listTable += "<tr><th>Player Name</th><th>Ship Type</th><th>Attack</th></tr>";
+                listTable += "<tr><th>Player Name</th><th>Ship Type</th><th>Last Activity</th><th>Attack</th></tr>";
 
                 // Build attack rows
                 for (var i = 0; i < data.length; i++) {
                     var ship = data[i];
-                    listTable += "<tr><td>" + ship.playerName + "</td>"
-                            + "<td>" + ship.shipType + "</td><td>";
+                    listTable += "<tr><td>" + ship.playerName + "</td><td>" 
+                            + ship.shipType + "</td><td>"
+                            + ship.lastActivity + "</td><td>";
                     if (ship.attackable) {
                         listTable += '<form action="/Combat/Attack" method="post"><div>'
                              + '<input type="hidden" name="shipId" value="' + ship.shipId + '" />'
                              + '<input type="submit" value="Attack" />'
                              + '</div></form>';
                     } else {
-                        listTable += "Docked";
+                        listTable += "Docked"
                     }
+
                     listTable += "</td></tr>";
                 }
 
