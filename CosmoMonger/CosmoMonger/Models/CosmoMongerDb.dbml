@@ -42,7 +42,7 @@
   <Table Name="Good" Member="Goods">
     <Type Name="Good">
       <Column Name="GoodId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Modifier="Virtual" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="BasePrice" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Contraband" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="TargetCount" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
@@ -226,7 +226,7 @@
       <Column Name="ShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="GoodId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Good_ShipGood" Member="Good" ThisKey="GoodId" OtherKey="GoodId" Type="Good" IsForeignKey="true" />
+      <Association Name="Good_ShipGood" Member="Good" Modifier="Virtual" ThisKey="GoodId" OtherKey="GoodId" Type="Good" IsForeignKey="true" />
       <Association Name="Ship_ShipGood" Member="Ship" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
     </Type>
   </Table>
@@ -257,7 +257,7 @@
       <Column Name="ProductionFactor" Type="System.Double" DbType="float NOT NULL" CanBeNull="false" />
       <Column Name="ConsumptionFactor" Type="System.Double" DbType="float NOT NULL" CanBeNull="false" />
       <Column Name="Demand" Type="SystemGood.DemandType" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Good_SystemGood" Member="Good" ThisKey="GoodId" OtherKey="GoodId" Type="Good" IsForeignKey="true" />
+      <Association Name="Good_SystemGood" Member="Good" Modifier="Virtual" ThisKey="GoodId" OtherKey="GoodId" Type="Good" IsForeignKey="true" />
       <Association Name="CosmoSystem_SystemGood" Member="CosmoSystem" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>

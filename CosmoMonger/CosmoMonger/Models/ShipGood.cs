@@ -24,9 +24,13 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="manager">The current GameManager object.</param>
         /// <param name="quantity">The quantity of goods to sell.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when trying to sell more goods than avaiable on the ship.</exception>
+        /// <param name="price">The price of the goods to sell at.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown on quantity param when trying to sell more goods than avaiable on the ship.
+        /// Thrown on price param when asking price is different than the actual current price.
+        /// </exception>
         /// <exception cref="InvalidOperationException">Thrown when the good is not bought in the current system.</exception>
-        public virtual void Sell(GameManager manager, int quantity)
+        public virtual void Sell(GameManager manager, int quantity, int price)
         {
             // Check the the good is actually sold/bought in the current system
             SystemGood sellingGood = this.Ship.CosmoSystem.GetGood(this.GoodId);
@@ -41,6 +45,11 @@ namespace CosmoMonger.Models
                 throw new ArgumentOutOfRangeException("quantity", quantity, "Unable to sell more goods than aboard");
             }
 
+            if (sellingGood.Price != price)
+            {
+                throw new ArgumentOutOfRangeException("price", price, "Asking price does not match current price");
+            }
+
             // Calcuate how much we will make selling these goods
             int profit = quantity * sellingGood.Price;
 
@@ -50,6 +59,7 @@ namespace CosmoMonger.Models
                 { "ShipId", this.ShipId },
                 { "GoodId", this.GoodId },
                 { "Quantity", quantity },
+                { "Price", price },
                 { "Profit", profit }
             };
             Logger.Write("Selling goods in ShipGood.Sell", "Model", 500, 0, TraceEventType.Information, "Selling Goods", props);
@@ -77,7 +87,7 @@ namespace CosmoMonger.Models
                 }
 
                 // This does have the chance of a stack overflow, we should find out in testing
-                this.Sell(manager, quantity);
+                this.Sell(manager, quantity, price);
                 return;
             }
 

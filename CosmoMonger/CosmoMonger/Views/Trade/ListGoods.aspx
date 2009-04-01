@@ -109,6 +109,7 @@
 %>
             <div>
             <%=Html.Hidden("goodId", good.GoodId, new { id = "buyGoodId" + good.GoodId })%>
+            <%=Html.Hidden("price", good.Price, new { id = "buyPrice" + good.GoodId })%>
             <%=Html.TextBox("quantity", 0, new { id = "buyQuantity" + good.GoodId, size = 2, maxlength = 3 })%>
             <input id="buyGood<%=good.GoodId %>" type="submit" value="Buy" />
             </div>
@@ -123,6 +124,7 @@
 %>
             <div>
             <%=Html.Hidden("goodId", good.GoodId, new { id = "sellGoodId" + good.GoodId })%>
+            <%=Html.Hidden("price", good.Price, new { id = "sellPrice" + good.GoodId })%>
             <%=Html.TextBox("quantity", shipGoodQuantity, new { id = "sellQuantity" + good.GoodId, size = 2, maxlength = 3 })%>
             <input id="sellGood<%=good.GoodId %>" type="submit" value="Sell" />
             </div>

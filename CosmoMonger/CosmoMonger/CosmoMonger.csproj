@@ -253,10 +253,12 @@
     <Content Include="Views\Ship\ListShips.aspx" />
     <Content Include="Views\Ship\ViewShip.aspx" />
     <Content Include="Views\Trade\BuyGoods.aspx" />
+    <Content Include="Views\Trade\BuyGoodsPriceChange.aspx" />
     <Content Include="Views\Trade\GraphGoodPrice.aspx" />
     <Content Include="Views\Trade\ListGoods.aspx" />
     <Content Include="Views\Trade\PriceTable.aspx" />
     <Content Include="Views\Trade\SellGoods.aspx" />
+    <Content Include="Views\Trade\SellGoodsPriceChange.aspx" />
     <Content Include="Views\Travel\Travel.aspx" />
     <Content Include="Views\Travel\TravelInProgress.aspx" />
     <Content Include="Web.config" />

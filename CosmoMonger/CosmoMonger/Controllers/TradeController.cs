@@ -68,16 +68,19 @@ namespace CosmoMonger.Controllers
         /// </summary>
         /// <param name="goodId">The good id.</param>
         /// <param name="quantity">The quantity of goods to buy.</param>
-        /// <returns>Redirect to ListGoods action on success, ListGoods view on error</returns>
+        /// <param name="price">The price to buy the good at.</param>
+        /// <returns>
+        /// Redirect to ListGoods action on success, ListGoods view on error
+        /// </returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult BuyGoods(int goodId, int quantity)
+        public ActionResult BuyGoods(int goodId, int quantity, int price)
         {
             SystemGood systemGood = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetGood(goodId);
             if (systemGood != null)
             {
                 try
                 {
-                    systemGood.Buy(this.ControllerGame, quantity);
+                    systemGood.Buy(this.ControllerGame, quantity, price);
                     return RedirectToAction("ListGoods");
                 }
                 catch (ArgumentOutOfRangeException ex)
@@ -85,7 +88,22 @@ namespace CosmoMonger.Controllers
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("quantity", ex.Message, quantity);
+                    if (ex.ParamName == "price")
+                    {
+                        // Price has changed on the good
+                        // Confirm the player still wants to buy the good
+                        ViewData["goodId"] = goodId;
+                        ViewData["quantity"] = quantity;
+                        ViewData["oldPrice"] = price;
+                        ViewData["newPrice"] = systemGood.Price;
+                        ViewData["goodName"] = systemGood.Good.Name;
+
+                        return View("BuyGoodsPriceChange");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("quantity", ex.Message, quantity);
+                    }
                 }
                 catch (ArgumentException ex)
                 {
@@ -108,17 +126,20 @@ namespace CosmoMonger.Controllers
         /// Sells goods via the ShipGood.Sell method, redirects to the ListGoods action.
         /// </summary>
         /// <param name="goodId">The good id.</param>
-        /// <param name="quantity">The quantity.</param>
-        /// <returns>Redirect to ListGoods action on success, ListGoods view on error</returns>
+        /// <param name="quantity">The quantity of the good to sell.</param>
+        /// <param name="price">The price to sell the good at.</param>
+        /// <returns>
+        /// Redirect to ListGoods action on success, ListGoods view on error
+        /// </returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult SellGoods(int goodId, int quantity)
+        public ActionResult SellGoods(int goodId, int quantity, int price)
         {
             ShipGood shipGood = this.ControllerGame.CurrentPlayer.Ship.GetGood(goodId);
             if (shipGood != null)
             {
                 try
                 {
-                    shipGood.Sell(this.ControllerGame, quantity);
+                    shipGood.Sell(this.ControllerGame, quantity, price);
                     return RedirectToAction("ListGoods");
                 }
                 catch (ArgumentOutOfRangeException ex)
@@ -126,7 +147,28 @@ namespace CosmoMonger.Controllers
                     // Log this exception
                     ExceptionPolicy.HandleException(ex, "Controller Policy");
 
-                    ModelState.AddModelError("quantity", ex.Message, quantity);
+                    if (ex.ParamName == "price")
+                    {
+                        // Go to the SellGoodsPriceChange view
+                        // Price has changed on the good
+                        // Confirm the player still wants to sell the good
+                        ViewData["goodId"] = goodId;
+                        ViewData["quantity"] = quantity;
+                        ViewData["oldPrice"] = price;
+                        ViewData["goodName"] = shipGood.Good.Name;
+                        // Try to get the current price
+                        SystemGood systemGood = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetGood(goodId);
+                        if (systemGood != null)
+                        {
+                            ViewData["newPrice"] = systemGood.Price;
+                        }
+
+                        return View("SellGoodsPriceChange");
+                    } 
+                    else 
+                    {
+                        ModelState.AddModelError("quantity", ex.Message, quantity);
+                    }
                 }
                 catch (InvalidOperationException ex)
                 {

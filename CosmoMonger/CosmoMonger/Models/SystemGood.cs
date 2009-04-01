@@ -53,7 +53,7 @@ namespace CosmoMonger.Models
         /// Gets the actual price of the good.
         /// Calcuated by taking the Good.BasePrice and the SystemGood.PriceMultiplier
         /// </summary>
-        public int Price
+        public virtual int Price
         {
             get
             {
@@ -66,14 +66,23 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="manager">The current GameManager object.</param>
         /// <param name="quantity">The quantity of the good to buy.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when trying to buy more goods than avaiable in the system.</exception>
+        /// <param name="price">The price to buy the good at.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown on quantity param when trying to buy more goods than avaiable in the system.
+        /// Thrown on price param when asking price is different than the actual current price.
+        /// </exception>
         /// <exception cref="ArgumentException">Thrown when there is not enough credits or cargo space to buy the requested number of goods.</exception>
-        public virtual void Buy(GameManager manager, int quantity)
+        public virtual void Buy(GameManager manager, int quantity, int price)
         {
             // Check that we are not trying to buy more goods than there is
             if (this.Quantity < quantity)
             {
                 throw new ArgumentOutOfRangeException("quantity", quantity, "Unable to buy more goods than at the system");
+            }
+
+            if (this.Price != price)
+            {
+                throw new ArgumentOutOfRangeException("price", price, "Asking price does not match current price");
             }
 
             // Check if the player has enough money to buy the goods
@@ -96,6 +105,7 @@ namespace CosmoMonger.Models
                 { "SystemId", this.SystemId },
                 { "GoodId", this.GoodId },
                 { "Quantity", quantity },
+                { "Price", price },
                 { "TotalCost", totalCost }
             };
             Logger.Write("Buying goods in SystemGood.Buy", "Model", 500, 0, TraceEventType.Information, "Buying Goods", props);
@@ -124,7 +134,7 @@ namespace CosmoMonger.Models
                 }
 
                 // This does have the chance of a stack overflow, we should find out in testing
-                this.Buy(manager, quantity);
+                this.Buy(manager, quantity, price);
                 return;
             }
 
