@@ -106,5 +106,53 @@
 
             managerMock.Verify();
         }
+
+        [Test]
+        public void ViewRecordHistory()
+        {
+            // Arrange
+            Player player = new Player();
+            player.PlayerId = 1;
+            Mock<User> userMock = new Mock<User>();
+            Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
+            managerMock.Expect(m => m.CurrentPlayer)
+                .Returns(player).AtMostOnce().Verifiable();
+            PlayerRecordController controller = new PlayerRecordController(managerMock.Object);
+
+            // Act
+            ActionResult result = controller.ViewRecordHistory();
+
+            // Assert
+            Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
+            Assert.That(controller.ModelState.IsValid, "No errors should be returned");
+            Assert.That(controller.ViewData["recordType"], Is.InstanceOfType(typeof(SelectList)), "The recordType field should be a SelectList of the record types");
+
+            managerMock.Verify();
+        }
+
+        [Test]
+        public void GetRecordHistory()
+        {
+            // Arrange
+            Player player = new Player();
+            player.PlayerId = 1;
+            Mock<User> userMock = new Mock<User>();
+            Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
+            managerMock.Expect(m => m.CurrentPlayer)
+                .Returns(player).AtMostOnce().Verifiable();
+            PlayerRecord[] records = new PlayerRecord[]{ new PlayerRecord() };
+            managerMock.Expect(m => m.GetPlayerRecords(1))
+                .Returns(records).AtMostOnce().Verifiable();
+            PlayerRecordController controller = new PlayerRecordController(managerMock.Object);
+
+            // Act
+            ActionResult result = controller.GetRecordHistory(Player.RecordType.NetWorth);
+
+            // Assert
+            Assert.That(result, Is.TypeOf(typeof(JsonResult)), "Should return a JSON result");
+            Assert.That(controller.ModelState.IsValid, "No errors should be returned");
+
+            managerMock.Verify();
+        }
     }
 }

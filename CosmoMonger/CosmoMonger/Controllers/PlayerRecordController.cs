@@ -7,13 +7,13 @@
 namespace CosmoMonger.Controllers
 {
     using System;
-    using System.Linq;
-    using System.Web.Mvc;
-    using CosmoMonger.Models;
-    using System.Text.RegularExpressions;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
     using System.Web;
+    using System.Web.Mvc;
+    using CosmoMonger.Models;
 
     /// <summary>
     /// This controller handles listing the hall of fame player records 
@@ -112,10 +112,12 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
-        /// This Action fetches the records of the passed in player via the GameManager.GetPlayerRecords method
-        /// and displays the detailed stats for that player through the ViewRecordHistory view.
+        /// This Action fetches the possible record types and passes it to the ViewRecordHistory view.
+        /// The ViewRecordHistory uses AJAX calls to the GetRecordHistory action to retrive the actual data.
         /// </summary>
-        /// <returns>The ViewRecord view filled in with the player record history model data</returns>
+        /// <returns>
+        /// The ViewRecord view filled in with the record types
+        /// </returns>
         public ActionResult ViewRecordHistory()
         {
             if (this.ControllerGame.CurrentPlayer == null)
@@ -125,24 +127,23 @@ namespace CosmoMonger.Controllers
             }
             else
             {
-                // Otherwise, show the graph 
-                int playerId = this.ControllerGame.CurrentPlayer.PlayerId;
+                // Otherwise show the possible record types
                 var recordTypes = from Player.RecordType s in Enum.GetValues(typeof(Player.RecordType))
                                   select new { ID = s, Name = Regex.Replace(s.ToString(), "([A-Z])", " $1", RegexOptions.Compiled).Trim() };
                 ViewData["recordType"] = new SelectList(recordTypes, "ID", "Name", Player.RecordType.NetWorth);
-
-                ViewData["RecordHistory"] = this.ControllerGame.GetPlayerRecords(playerId);
 
                 return View();
             }
         }
 
         /// <summary>
-        /// This Action will build a list of high ranking records via the GameManager.GetTopPlayers
-        /// method to pass to the ListRecords View.
+        /// This Action will take a record type and build an array of previous records for the current player.
+        /// Each array entry is a pair, { TimePlayer, RecordValue }
         /// </summary>
-        /// <param name="recordType">Type of the record to order the list by.</param>
-        /// <returns>The ListRecords view filled in with the top player record model data</returns>
+        /// <param name="recordType">Type of the record to fetch for the current player.</param>
+        /// <returns>
+        /// A JSON of the player record history array.
+        /// </returns>
         public JsonResult GetRecordHistory(Player.RecordType recordType)
         {
             // Fetch the records
@@ -158,7 +159,6 @@ namespace CosmoMonger.Controllers
             }
 
             return Json(dataSet);
-            //return Json(new { label = recordType.ToString(), data = dataSet });
         }
     }
 }
