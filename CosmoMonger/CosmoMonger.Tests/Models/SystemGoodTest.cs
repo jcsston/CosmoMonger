@@ -25,7 +25,7 @@
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
             // Store the player starting cash
-            int playerStartingCash = testPlayer.CashCredits;
+            int playerStartingCash = testPlayer.Ship.Credits;
 
             // Check that the ship is empty
             Assert.That(testShip.ShipGoods.Count, Is.EqualTo(0), "Ship should start out with no goods on-board");
@@ -44,10 +44,10 @@
 
             int playerCost = systemWater.Price * 20;
             int systemStartingCount = systemWater.Quantity;
-            systemWater.Buy(manager, 20, systemWater.Price);
+            systemWater.Buy(testShip, 20, systemWater.Price);
 
             Assert.That(systemWater.Quantity, Is.EqualTo(systemStartingCount - 20), "System should now have 20 few water goods");
-            Assert.That(testPlayer.CashCredits, Is.EqualTo(playerStartingCash - playerCost), "Player should have less cash credits now after buying");
+            Assert.That(testPlayer.Ship.Credits, Is.EqualTo(playerStartingCash - playerCost), "Player should have less cash credits now after buying");
         }
 
         [Test]
@@ -79,7 +79,7 @@
 
             try
             {
-                systemWater.Buy(manager, 20, systemWater.Price);
+                systemWater.Buy(testShip, 20, systemWater.Price);
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -102,7 +102,7 @@
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
             // Reduce the player starting cash
-            testPlayer.CashCredits = 10;
+            testPlayer.Ship.Credits = 10;
 
             // Check that the ship is empty
             Assert.That(testShip.ShipGoods.Count, Is.EqualTo(0), "Ship should start out with no goods on-board");
@@ -123,7 +123,7 @@
             int systemStartingCount = systemWater.Quantity;
             try
             {
-                systemWater.Buy(manager, 20, systemWater.Price);
+                systemWater.Buy(testShip, 20, systemWater.Price);
             }
             catch (ArgumentException ex)
             {
@@ -146,7 +146,7 @@
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
             // Make the player super rich to afford buying lots of goods
-            testPlayer.CashCredits = 1000000000;
+            testPlayer.Ship.Credits = 1000000000;
 
             // Check that the ship is empty
             Assert.That(testShip.ShipGoods.Count, Is.EqualTo(0), "Ship should start out with no goods on-board");
@@ -167,7 +167,7 @@
             int systemStartingCount = systemWater.Quantity;
             try
             {
-                systemWater.Buy(manager, 2000, systemWater.Price);
+                systemWater.Buy(testShip, 2000, systemWater.Price);
             }
             catch (ArgumentException ex)
             {

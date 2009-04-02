@@ -14,12 +14,11 @@
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-<% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["CurrentPlayer"]; %>
-<% CosmoMonger.Models.CosmoSystem cSystem = ViewData["CurrentSystem"] as CosmoMonger.Models.CosmoSystem; %>
+<% bool hasBank = (bool)ViewData["BankAvailable"]; %>
 
-<% if (cSystem.HasBank == true)
+<% if (hasBank)
    { %> 
-<h1>Welcome To The Intergalactic Bank of <%= Html.Encode(cSystem.Name)%></h1>
+<h1>Welcome To The Intergalactic Bank of <%= Html.Encode(ViewData["SystemName"])%></h1>
 <% } %>
 <% else
     { %>
@@ -30,7 +29,7 @@
     <td align="center"><img id="BankLogo" src="/Content/IGBank.png" alt="Bank Logo" /></td>
 </tr>
 <tr>
-    <td class="bank-columnHeaders"><%= Html.Encode(player.Name) %>'s Bank Account</td>
+    <td class="bank-columnHeaders"><%= Html.Encode(ViewData["PlayerName"]) %>'s Bank Account</td>
 </tr>
 <tr>
     <td>&nbsp;</td>
@@ -39,9 +38,9 @@
     <td class="bank-columnHeaders">Account Balance</td>
 </tr>
 <tr>
-    <td class="bank-data" id="bankCredits">$&nbsp;<%= Html.Encode(player.BankCredits) %></td>
+    <td class="bank-data" id="bankCredits">$&nbsp;<%= Html.Encode(ViewData["BankCredits"]) %></td>
 </tr>
-<% if (cSystem.HasBank == true)
+<% if (hasBank)
    { %>
    
 <tr><td class="bank-data">
@@ -56,10 +55,10 @@
 <% } %>
 
 </td></tr>   
-<tr><td class="bank-columnHeaders">Cash Available for Deposit</td>
+<tr><td class="bank-columnHeaders">Credits Available for Deposit</td>
 </tr>
 <tr>
-    <td class="bank-data" id="cashCredits">$&nbsp;<%= Html.Encode(player.CashCredits) %></td>
+    <td class="bank-data" id="cashCredits">$&nbsp;<%= Html.Encode(ViewData["CashCredits"])%></td>
 </tr>
 
 <tr><td class="bank-data">

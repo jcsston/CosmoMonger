@@ -134,13 +134,13 @@
 
             // Give the player some starting bank credits
             testPlayer.BankCredits = 2000;
-            testPlayer.CashCredits = 1500;
+            testPlayer.Ship.Credits = 1500;
 
             // Act
             testPlayer.BankDeposit(1000);
 
             // Assert
-            Assert.That(testPlayer.CashCredits, Is.EqualTo(500), "Player should have 1000 fewer cash credits");
+            Assert.That(testPlayer.Ship.Credits, Is.EqualTo(500), "Player should have 1000 fewer cash credits");
             Assert.That(testPlayer.BankCredits, Is.EqualTo(3000), "Player should have 1000 fewer bank credits");
         }
 
@@ -169,7 +169,7 @@
         {
             // Arrange
             Player testPlayer = this.CreateTestPlayer();
-            testPlayer.CashCredits = 2000;
+            testPlayer.Ship.Credits = 2000;
 
             // Act, should throw an exception
             testPlayer.BankDeposit(2500);
@@ -181,7 +181,7 @@
         {
             // Arrange
             Player testPlayer = this.CreateTestPlayer();
-            testPlayer.CashCredits = 1000;
+            testPlayer.Ship.Credits = 1000;
             testPlayer.BankCredits = 1000;
 
             // Act, should throw an exception
@@ -196,13 +196,13 @@
 
             // Give the player some starting bank credits
             testPlayer.BankCredits = 2000;
-            testPlayer.CashCredits = 500;
+            testPlayer.Ship.Credits = 500;
 
             // Act
             testPlayer.BankWithdraw(1000);
 
             // Assert
-            Assert.That(testPlayer.CashCredits, Is.EqualTo(1500), "Player should have 1000 more cash credits");
+            Assert.That(testPlayer.Ship.Credits, Is.EqualTo(1500), "Player should have 1000 more cash credits");
             Assert.That(testPlayer.BankCredits, Is.EqualTo(1000), "Player should have 1000 fewer bank credits");
         }
 
@@ -243,7 +243,7 @@
         {
             // Arrange
             Player testPlayer = this.CreateTestPlayer();
-            testPlayer.CashCredits = 1000;
+            testPlayer.Ship.Credits = 1000;
             testPlayer.BankCredits = 1000;
 
             // Act, should throw an exception

@@ -45,9 +45,13 @@
         /// <returns>The Bank View</returns>
         public ActionResult Bank()
         {
-            ViewData["CurrentPlayer"] = this.ControllerGame.CurrentPlayer;
-            ViewData["BankAvailable"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.HasBank;
-            ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
+            Player currentPlayer = this.ControllerGame.CurrentPlayer;
+            ViewData["PlayerName"] = currentPlayer.Name;
+            ViewData["CashCredits"] = currentPlayer.Ship.Credits;
+            ViewData["BankCredits"] = currentPlayer.BankCredits;
+            ViewData["BankAvailable"] = currentPlayer.Ship.CosmoSystem.HasBank;
+            ViewData["SystemName"] = currentPlayer.Ship.CosmoSystem.Name;
+
             return View();
         }
 

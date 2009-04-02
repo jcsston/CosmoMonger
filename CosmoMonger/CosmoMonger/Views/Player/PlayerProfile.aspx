@@ -26,8 +26,8 @@
     <td class="vp-columnData"><%= player.Race.Name%></td>
 </tr>
 <tr>
-    <td class="vp-columnData">Cash Credits:</td>
-    <td class="vp-columnData">$<%= player.CashCredits%></td>
+    <td class="vp-columnData">Credits:</td>
+    <td class="vp-columnData">$<%= player.Ship.Credits %></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
         <td class="vp-columnData">Racial Preference:</td>

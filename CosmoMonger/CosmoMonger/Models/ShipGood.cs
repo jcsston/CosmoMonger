@@ -22,7 +22,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Sells the specified quantity of goods off the ship.
         /// </summary>
-        /// <param name="manager">The current GameManager object.</param>
+        /// <param name="currentShip">The Ship object to use for this transaction.</param>
         /// <param name="quantity">The quantity of goods to sell.</param>
         /// <param name="price">The price of the goods to sell at.</param>
         /// <exception cref="ArgumentOutOfRangeException">
@@ -30,7 +30,7 @@ namespace CosmoMonger.Models
         /// Thrown on price param when asking price is different than the actual current price.
         /// </exception>
         /// <exception cref="InvalidOperationException">Thrown when the good is not bought in the current system.</exception>
-        public virtual void Sell(GameManager manager, int quantity, int price)
+        public virtual void Sell(Ship currentShip, int quantity, int price)
         {
             // Check the the good is actually sold/bought in the current system
             SystemGood sellingGood = this.Ship.CosmoSystem.GetGood(this.GoodId);
@@ -55,7 +55,6 @@ namespace CosmoMonger.Models
 
             Dictionary<string, object> props = new Dictionary<string, object>
             {
-                { "PlayerId", manager.CurrentPlayer.PlayerId },
                 { "ShipId", this.ShipId },
                 { "GoodId", this.GoodId },
                 { "Quantity", quantity },
@@ -87,7 +86,7 @@ namespace CosmoMonger.Models
                 }
 
                 // This does have the chance of a stack overflow, we should find out in testing
-                this.Sell(manager, quantity, price);
+                this.Sell(currentShip, quantity, price);
                 return;
             }
 
@@ -98,11 +97,15 @@ namespace CosmoMonger.Models
                 // TODO: Should we delete this object?
             }
 
-            // Add to the players cash credits account
-            manager.CurrentPlayer.CashCredits += profit;
+            // Add to the ship credit account
+            currentShip.Credits += profit;
 
-            // Update the player stats
-            manager.CurrentPlayer.GoodsTraded += quantity;
+            Player currentPlayer = currentShip.Players.SingleOrDefault();
+            if (currentPlayer != null)
+            {
+                // Update the player stats
+                currentPlayer.GoodsTraded += quantity;
+            }
 
             try
             {

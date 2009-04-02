@@ -64,11 +64,13 @@ namespace CosmoMonger.Controllers
         /// <returns>The ListShips view filled with the ships available for purchase</returns>
         public ActionResult ListShips()
         {
-            ViewData["CurrentShip"] = this.ControllerGame.CurrentPlayer.Ship;
-            ViewData["Ships"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetAvailableShips();
-            ViewData["CashCredits"] = this.ControllerGame.CurrentPlayer.CashCredits;
-            ViewData["BankCredits"] = this.ControllerGame.CurrentPlayer.BankCredits;
-            ViewData["FreeCargoSpace"] = this.ControllerGame.CurrentPlayer.Ship.CargoSpaceFree;
+            Player currentPlayer = this.ControllerGame.CurrentPlayer;
+
+            ViewData["CurrentShip"] = currentPlayer.Ship;
+            ViewData["Ships"] = currentPlayer.Ship.CosmoSystem.GetAvailableShips();
+            ViewData["CashCredits"] = currentPlayer.Ship.Credits;
+            ViewData["BankCredits"] = currentPlayer.BankCredits;
+            ViewData["FreeCargoSpace"] = currentPlayer.Ship.CargoSpaceFree;
 
             return View();
         }
@@ -87,7 +89,7 @@ namespace CosmoMonger.Controllers
             {
                 try
                 {
-                    shipToBuy.Buy(this.ControllerGame);
+                    shipToBuy.Buy(this.ControllerGame.CurrentPlayer.Ship);
                     // Success, redirect to display the newly bought ship
                     return RedirectToAction("ViewShip");
                 }

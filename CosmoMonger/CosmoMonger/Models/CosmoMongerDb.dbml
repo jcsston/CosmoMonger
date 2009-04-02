@@ -111,7 +111,6 @@
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="RaceId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ShipId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Credits" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Aggression" Storage="_Badness" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Bounty" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="NextActionTime" Storage="_LastActionTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" />
@@ -142,7 +141,6 @@
       <Column Name="Reputation" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ShipId" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="BankCredits" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="CashCredits" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TimePlayed" Modifier="Virtual" Type="System.Double" DbType="float NOT NULL" CanBeNull="false" />
       <Column Name="LastPlayed" Modifier="Virtual" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="NetWorth" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -215,6 +213,7 @@
       <Column Name="TargetSystemId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="CurrentJumpDriveCharge" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TargetSystemArrivalTime" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
+      <Column Name="Credits" Modifier="Virtual" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
       <Association Name="Ship_Combat" Member="CombatsAttacker" Storage="_InProgressCombats" ThisKey="ShipId" OtherKey="AttackerShipId" Type="Combat" />
       <Association Name="Ship_Combat1" Member="CombatsDefender" Storage="_InProgressCombats1" ThisKey="ShipId" OtherKey="DefenderShipId" Type="Combat" />
       <Association Name="Ship_Npc" Member="Npcs" ThisKey="ShipId" OtherKey="ShipId" Type="Npc" />

@@ -666,9 +666,6 @@ namespace CosmoMonger.Models
             this.ShipTurn.TargetSystemId = null;
             this.ShipTurn.TargetSystemArrivalTime = null;
 
-            Player turnPlayer = this.ShipTurn.Players.SingleOrDefault();
-            Player otherPlayer = this.ShipOther.Players.SingleOrDefault();
-
             // Destroy some of the other ship's credits/cargo
             double creditsCargoDestroyedPerc = rnd.Next(Combat.CreditsCargoDestroyedPercentMin, Combat.CreditsCargoDestroyedPercentMax) / 100.0;
             Dictionary<string, object> props;
@@ -682,7 +679,7 @@ namespace CosmoMonger.Models
                 {
                     { "CombatId", this.CombatId },
                     { "OtherShipId", good.ShipId },
-                    { "GoodId", otherPlayer.CashCredits },
+                    { "GoodId", good.GoodId },
                     { "Quantity", good.Quantity },
                     { "QuantityDestroyed", goodsDestroyed }
                 };
@@ -692,45 +689,40 @@ namespace CosmoMonger.Models
                 good.Quantity -= goodsDestroyed;
             }
 
-            if (otherPlayer != null)
-            {
-                // Calculate how many credits to destroy
-                int cashCreditsDestroyed = (int)Math.Round(otherPlayer.CashCredits * creditsCargoDestroyedPerc);
+            // Calculate how many credits to destroy
+            int cashCreditsDestroyed = (int)Math.Round(this.ShipOther.Credits * creditsCargoDestroyedPerc);
 
-                props = new Dictionary<string, object>
-                {
-                    { "CombatId", this.CombatId },
-                    { "TurnPlayerId", turnPlayer.PlayerId },
-                    { "OtherPlayerId", otherPlayer.PlayerId },
-                    { "OtherPlayerCashCredits", otherPlayer.CashCredits },
-                    { "CashCreditsDestroyed", cashCreditsDestroyed }
-                };
-                Logger.Write("Destroying some of losing player cash credits", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
-            
-                // Destroy credits
-                otherPlayer.CashCredits -= cashCreditsDestroyed;
-            }
+            props = new Dictionary<string, object>
+            {
+                { "CombatId", this.CombatId },
+                { "OtherShipCredits", this.ShipOther.Credits },
+                { "CashCreditsDestroyed", cashCreditsDestroyed }
+            };
+            Logger.Write("Destroying some of losing shipcredits", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
+        
+            // Destroy credits
+            this.ShipOther.Credits -= cashCreditsDestroyed;
+
             // Sending cargo into space
             this.SendCargoIntoSpace(this.ShipOther);
 
             // Move cargo into our cargo bays
             this.LoadCargo();
 
-            if (turnPlayer != null && otherPlayer != null)
+            props = new Dictionary<string, object>
             {
-                props = new Dictionary<string, object>
-                {
-                    { "CombatId", this.CombatId },
-                    { "TurnPlayerId", turnPlayer.PlayerId },
-                    { "OtherPlayerId", otherPlayer.PlayerId },
-                    { "OtherPlayerCashCredits", otherPlayer.CashCredits },
-                    { "TurnPlayerCashCredits", turnPlayer.CashCredits }
-                };
-                Logger.Write("Transfering losing player credits to winner", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
+                { "CombatId", this.CombatId },
+                { "OtherShipCredits", this.ShipOther.Credits },
+                { "TurnShipCredits", this.ShipTurn.Credits }
+            };
+            Logger.Write("Transfering losing player credits to winner", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
 
-                // Take the other players credits
-                this.StealCredits();
+            // Take the other ship credits
+            this.StealCredits();
 
+            Player otherPlayer = this.ShipOther.Players.SingleOrDefault();
+            if (otherPlayer != null)
+            {
                 // Relocate other player to nearest system with a bank
                 CosmoSystem bankSystem = this.ShipOther.GetNearestBankSystem();
 
@@ -742,7 +734,6 @@ namespace CosmoMonger.Models
                 props = new Dictionary<string, object>
                 {
                     { "CombatId", this.CombatId },
-                    { "TurnPlayerId", turnPlayer.PlayerId },
                     { "OtherPlayerId", otherPlayer.PlayerId },
                     { "BankSystemId", bankSystem.SystemId }
                 };
@@ -751,37 +742,41 @@ namespace CosmoMonger.Models
                 // Give the player a new ship in the bank system
                 otherPlayer.CreateStartingShip(bankSystem);
 
-                // Update player stats
+                // Restore ship credits
+                otherPlayer.Ship.Credits = otherPlayerOldShip.Credits;
+
+                // Update other player stats
                 otherPlayer.ShipsLost++;
-                
-                turnPlayer.ShipsDestroyed++;
-
-                // Combat has ended
-                this.Status = CombatStatus.ShipDestroyed;
-
-                try
-                {
-                    db.SubmitChanges(ConflictMode.ContinueOnConflict);
-                }
-                catch (ChangeConflictException ex)
-                {
-                    ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                    // Another thread has made changes to the player or combat records
-                    // Overwrite those changes
-                    foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                    {
-                        occ.Resolve(RefreshMode.KeepChanges);
-                    }
-                }
-
-                // Cleanup combat
-                this.CleanupCombat();
             }
-            else
+
+            // Update turn player stats
+            Player turnPlayer = this.ShipTurn.Players.SingleOrDefault();
+            if (turnPlayer != null)
             {
-                throw new NotImplementedException("Non-player ship or NPC combat not supported");
+                turnPlayer.ShipsDestroyed++;
             }
+
+            // Combat has ended
+            this.Status = CombatStatus.ShipDestroyed;
+
+            try
+            {
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to the player or combat records
+                // Overwrite those changes
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    occ.Resolve(RefreshMode.KeepChanges);
+                }
+            }
+
+            // Cleanup combat
+            this.CleanupCombat();
         }
 
         /// <summary>
@@ -791,40 +786,43 @@ namespace CosmoMonger.Models
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
-            Player turnPlayer = this.ShipTurn.Players.SingleOrDefault();
-            Player otherPlayer = this.ShipOther.Players.SingleOrDefault();
-            if (turnPlayer != null && otherPlayer != null)
+
+            Dictionary<string, object> props = new Dictionary<string, object>
             {
-                Dictionary<string, object> props = new Dictionary<string, object>
-                {
-                    { "CombatId", this.CombatId },
-                    { "TurnPlayerId", turnPlayer.PlayerId },
-                    { "OtherPlayerId", otherPlayer.PlayerId },
-                    { "OtherPlayerCashCredits", otherPlayer.CashCredits },
-                    { "TurnPlayerCashCredits", turnPlayer.CashCredits }
-                };
-                Logger.Write("Transfering losing player credits to winner", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
+                { "CombatId", this.CombatId },
+                { "TurnShipId", this.ShipTurn.ShipId },
+                { "OtherShipId", this.ShipOther.ShipId },
+                { "TurnShipCredits", this.ShipTurn.Credits },
+                { "OtherShipCredits", this.ShipOther.Credits }
+            };
+            Logger.Write("Transfering losing ship credits to winner", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
 
-                // Take the other players credits
-                this.CreditsLooted = otherPlayer.CashCredits;
-                turnPlayer.CashCredits += otherPlayer.CashCredits;
-                otherPlayer.CashCredits = 0;
+            // Take the other ship credits
+            this.CreditsLooted = this.ShipOther.Credits;
+            this.ShipOther.Credits = 0;
 
+            // Give to the winner ship
+            this.ShipTurn.Credits += this.CreditsLooted;
+
+            // If loser is player, give him starting credits
+            Player otherPlayer = this.ShipOther.Players.SingleOrDefault();
+            if (otherPlayer != null)
+            {
                 // Give the player some starting credits
                 double cloneCredits = 2000 - ((otherPlayer.BankCredits + 1) / 5000.0 * 2000);
 
                 // Ignore negative values
                 cloneCredits = Math.Max(cloneCredits, 0);
-                otherPlayer.CashCredits = (int)cloneCredits;
+                this.ShipOther.Credits = (int)cloneCredits;
 
                 props = new Dictionary<string, object>
                 {
                     { "CombatId", this.CombatId },
-                    { "TurnPlayerId", turnPlayer.PlayerId },
+                    { "TurnShipId", this.ShipTurn.ShipId },
                     { "OtherPlayerId", otherPlayer.PlayerId },
-                    { "CashCredits", otherPlayer.CashCredits }
+                    { "Credits", this.ShipOther.Credits }
                 };
-                Logger.Write("Giving losing player starting cash credits", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
+                Logger.Write("Giving losing player starting credits", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
             }
 
             try

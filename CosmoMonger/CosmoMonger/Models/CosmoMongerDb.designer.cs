@@ -2597,8 +2597,6 @@ namespace CosmoMonger.Models
 		
 		private System.Nullable<int> _ShipId;
 		
-		private int _Credits;
-		
 		private int _Badness;
 		
 		private int _Bounty;
@@ -2635,8 +2633,6 @@ namespace CosmoMonger.Models
     partial void OnRaceIdChanged();
     partial void OnShipIdChanging(System.Nullable<int> value);
     partial void OnShipIdChanged();
-    partial void OnCreditsChanging(int value);
-    partial void OnCreditsChanged();
     partial void OnAggressionChanging(int value);
     partial void OnAggressionChanged();
     partial void OnBountyChanging(int value);
@@ -2769,26 +2765,6 @@ namespace CosmoMonger.Models
 					this._ShipId = value;
 					this.SendPropertyChanged("ShipId");
 					this.OnShipIdChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_Credits", DbType="Int NOT NULL")]
-		public int Credits
-		{
-			get
-			{
-				return this._Credits;
-			}
-			set
-			{
-				if ((this._Credits != value))
-				{
-					this.OnCreditsChanging(value);
-					this.SendPropertyChanging();
-					this._Credits = value;
-					this.SendPropertyChanged("Credits");
-					this.OnCreditsChanged();
 				}
 			}
 		}
@@ -3274,8 +3250,6 @@ namespace CosmoMonger.Models
 		
 		private int _BankCredits;
 		
-		private int _CashCredits;
-		
 		private double _TimePlayed;
 		
 		private System.DateTime _LastPlayed;
@@ -3336,8 +3310,6 @@ namespace CosmoMonger.Models
     partial void OnShipIdChanged();
     partial void OnBankCreditsChanging(int value);
     partial void OnBankCreditsChanged();
-    partial void OnCashCreditsChanging(int value);
-    partial void OnCashCreditsChanged();
     partial void OnTimePlayedChanging(double value);
     partial void OnTimePlayedChanged();
     partial void OnLastPlayedChanging(System.DateTime value);
@@ -3531,26 +3503,6 @@ namespace CosmoMonger.Models
 					this._BankCredits = value;
 					this.SendPropertyChanged("BankCredits");
 					this.OnBankCreditsChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_CashCredits", DbType="Int NOT NULL")]
-		public virtual int CashCredits
-		{
-			get
-			{
-				return this._CashCredits;
-			}
-			set
-			{
-				if ((this._CashCredits != value))
-				{
-					this.OnCashCreditsChanging(value);
-					this.SendPropertyChanging();
-					this._CashCredits = value;
-					this.SendPropertyChanged("CashCredits");
-					this.OnCashCreditsChanged();
 				}
 			}
 		}
@@ -4858,6 +4810,8 @@ namespace CosmoMonger.Models
 		
 		private System.Nullable<System.DateTime> _TargetSystemArrivalTime;
 		
+		private int _Credits;
+		
 		private EntitySet<Combat> _InProgressCombats;
 		
 		private EntitySet<Combat> _InProgressCombats1;
@@ -4910,6 +4864,8 @@ namespace CosmoMonger.Models
     partial void OnCurrentJumpDriveChargeChanged();
     partial void OnTargetSystemArrivalTimeChanging(System.Nullable<System.DateTime> value);
     partial void OnTargetSystemArrivalTimeChanged();
+    partial void OnCreditsChanging(int value);
+    partial void OnCreditsChanged();
     #endregion
 		
 		public Ship()
@@ -5204,6 +5160,26 @@ namespace CosmoMonger.Models
 					this._TargetSystemArrivalTime = value;
 					this.SendPropertyChanged("TargetSystemArrivalTime");
 					this.OnTargetSystemArrivalTimeChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Credits", DbType="int NOT NULL")]
+		public virtual int Credits
+		{
+			get
+			{
+				return this._Credits;
+			}
+			set
+			{
+				if ((this._Credits != value))
+				{
+					this.OnCreditsChanging(value);
+					this.SendPropertyChanging();
+					this._Credits = value;
+					this.SendPropertyChanged("Credits");
+					this.OnCreditsChanged();
 				}
 			}
 		}

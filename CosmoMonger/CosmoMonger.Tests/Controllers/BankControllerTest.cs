@@ -40,6 +40,8 @@
             // Arrange
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
+            managerMock.Expect(m => m.CurrentPlayer.Name)
+                .Returns("Player Name").Verifiable();
             managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.HasBank)
                 .Returns(true).Verifiable();
             BankController controller = new BankController(managerMock.Object);
@@ -50,7 +52,7 @@
             // Assert
             Assert.That(result, Is.TypeOf(typeof(ViewResult)), "Should return a view");
             Assert.That(controller.ModelState.IsValid, "No errors should be returned");
-            Assert.That(controller.ViewData["CurrentPlayer"], Is.SameAs(managerMock.Object.CurrentPlayer), "The CurrentPlayer field should have a reference to the player object");
+            Assert.That(controller.ViewData["PlayerName"], Is.EqualTo("Player Name"), "The PlayerName field should have a reference to the player name");
             Assert.That(controller.ViewData["BankAvailable"], Is.True, "The BankAvailable field should be true");
             managerMock.Verify();
         }

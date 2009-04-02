@@ -55,7 +55,7 @@ namespace CosmoMonger.Controllers
             ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
             ViewData["SystemGoods"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetGoods();
             ViewData["ShipGoods"] = this.ControllerGame.CurrentPlayer.Ship.GetGoods();
-            ViewData["CashCredits"] = this.ControllerGame.CurrentPlayer.CashCredits;
+            ViewData["CashCredits"] = this.ControllerGame.CurrentPlayer.Ship.Credits;
             ViewData["BankCredits"] = this.ControllerGame.CurrentPlayer.BankCredits;
             ViewData["FreeCargoSpace"] = this.ControllerGame.CurrentPlayer.Ship.CargoSpaceFree;
 
@@ -80,7 +80,7 @@ namespace CosmoMonger.Controllers
             {
                 try
                 {
-                    systemGood.Buy(this.ControllerGame, quantity, price);
+                    systemGood.Buy(this.ControllerGame.CurrentPlayer.Ship, quantity, price);
                     return RedirectToAction("ListGoods");
                 }
                 catch (ArgumentOutOfRangeException ex)
@@ -139,7 +139,7 @@ namespace CosmoMonger.Controllers
             {
                 try
                 {
-                    shipGood.Sell(this.ControllerGame, quantity, price);
+                    shipGood.Sell(this.ControllerGame.CurrentPlayer.Ship, quantity, price);
                     return RedirectToAction("ListGoods");
                 }
                 catch (ArgumentOutOfRangeException ex)

@@ -67,9 +67,6 @@ namespace CosmoMonger.Models
             player.Alive = true;
             player.LastPlayed = DateTime.UtcNow;
 
-            // Starting credits is 2000
-            player.CashCredits = 2000;
-
             // Assign the default starting location based on the race
             CosmoSystem startingSystem = race.HomeSystem;
             if (startingSystem == null)
@@ -80,6 +77,9 @@ namespace CosmoMonger.Models
 
             // Create a new ship for this player
             player.CreateStartingShip(startingSystem);
+
+            // Starting credits is 2000
+            player.Ship.Credits = 2000;
 
             player.UpdateNetWorth();
 

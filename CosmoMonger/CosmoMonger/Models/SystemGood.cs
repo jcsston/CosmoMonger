@@ -64,7 +64,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Buys the specified quantity of goods from the system.
         /// </summary>
-        /// <param name="manager">The current GameManager object.</param>
+        /// <param name="currentShip">The Ship object to use for this transaction.</param>
         /// <param name="quantity">The quantity of the good to buy.</param>
         /// <param name="price">The price to buy the good at.</param>
         /// <exception cref="ArgumentOutOfRangeException">
@@ -72,7 +72,7 @@ namespace CosmoMonger.Models
         /// Thrown on price param when asking price is different than the actual current price.
         /// </exception>
         /// <exception cref="ArgumentException">Thrown when there is not enough credits or cargo space to buy the requested number of goods.</exception>
-        public virtual void Buy(GameManager manager, int quantity, int price)
+        public virtual void Buy(Ship currentShip, int quantity, int price)
         {
             // Check that we are not trying to buy more goods than there is
             if (this.Quantity < quantity)
@@ -85,23 +85,22 @@ namespace CosmoMonger.Models
                 throw new ArgumentOutOfRangeException("price", price, "Asking price does not match current price");
             }
 
-            // Check if the player has enough money to buy the goods
+            // Check if the ship has enough money to buy the goods
             int totalCost = (int)this.Price * quantity;
-            if (manager.CurrentPlayer.CashCredits < totalCost)
+            if (currentShip.Credits < totalCost)
             {
                 throw new ArgumentException("Not enough credits to buy requested number of goods", "quantity");
             }
             
-            // Check if the player has enough cargo space to carry the goods
-            Ship playerShip = manager.CurrentPlayer.Ship;
-            if (playerShip.CargoSpaceFree < quantity)
+            // Check if the ship has enough cargo space to carry the goods
+            if (currentShip.CargoSpaceFree < quantity)
             {
                 throw new ArgumentException("Not enough cargo space to carry requested number of goods", "quantity");
             }
 
             Dictionary<string, object> props = new Dictionary<string, object>
             {
-                { "PlayerId", manager.CurrentPlayer.PlayerId },
+                { "ShipId", currentShip.ShipId },
                 { "SystemId", this.SystemId },
                 { "GoodId", this.GoodId },
                 { "Quantity", quantity },
@@ -134,18 +133,18 @@ namespace CosmoMonger.Models
                 }
 
                 // This does have the chance of a stack overflow, we should find out in testing
-                this.Buy(manager, quantity, price);
+                this.Buy(currentShip, quantity, price);
                 return;
             }
 
             // Add the goods to the player ship
-            int addedQuantity = playerShip.AddGood(this.GoodId, quantity);
+            int addedQuantity = currentShip.AddGood(this.GoodId, quantity);
             
             // We should have checked that the ship had enough space to hold the good already
             Debug.Assert(addedQuantity == quantity, "The ship should have enough space to hold all the goods");
 
-            // Charge the player for the goods
-            manager.CurrentPlayer.CashCredits -= totalCost;
+            // Charge the ship for the goods
+            currentShip.Credits -= totalCost;
 
             try
             {

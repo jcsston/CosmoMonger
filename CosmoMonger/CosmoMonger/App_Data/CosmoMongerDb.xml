@@ -4258,6 +4258,23 @@
       <where>SystemId=8</where>
     </update>
   </changeSet>
+  <changeSet author="Jory Stone" id="91">
+    <comment>Moving CashCredits from Player table to Ship table. Removing Credits column from Npc table.</comment>
+    <addColumn tableName="Ship">
+      <column name="Credits" type="int" />
+    </addColumn>
+    <sql>
+      /* Migrate Player credits */
+      UPDATE Ship SET Credits = (SELECT CashCredits FROM Player p WHERE p.ShipId = Ship.ShipId)
+      WHERE EXISTS (SELECT 1 FROM Player p WHERE p.ShipId = Ship.ShipId);
+      /* Migrate NPC credits */
+      UPDATE Ship SET Credits = (SELECT Credits FROM Npc n WHERE n.ShipId = Ship.ShipId)
+      WHERE EXISTS (SELECT 1 FROM Npc n WHERE n.ShipId = Ship.ShipId);
+    </sql>
+    <addNotNullConstraint tableName="Ship" columnName="Credits" columnDataType="int" defaultNullValue="0" />
+    <dropColumn tableName="Npc" columnName="Credits" />
+    <dropColumn tableName="Player" columnName="CashCredits" />
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

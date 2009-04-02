@@ -32,22 +32,21 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Buys this ship.
         /// </summary>
-        /// <param name="manager">The GameManger object to use for this transaction.</param>
+        /// <param name="currentShip">The Ship object to use for this transaction.</param>
         /// <exception cref="InvalidOperationException">Thrown when not enough credits to buy the new ship or not enough cargo space to hold current goods in new ship</exception>
-        public virtual void Buy(GameManager manager)
+        public virtual void Buy(Ship currentShip)
         {
             // Calcuate the total cost to the player
-            int totalCost = this.Price - manager.CurrentPlayer.Ship.TradeInValue;
+            int totalCost = this.Price - currentShip.TradeInValue;
 
             // Check if the player has enough credits to buy the ship,
             // We check if the totalCost is postive as the player could make a profit by getting a smaller ship
-            if (totalCost > 0 && manager.CurrentPlayer.CashCredits < totalCost)
+            if (totalCost > 0 && currentShip.Credits < totalCost)
             {
                 throw new InvalidOperationException("Not enough credits to buy ship");
             }
 
             // Check if the new ship has enough cargo space to transfer everything 
-            Ship currentShip = manager.CurrentPlayer.Ship;
             int cargoSpaceNeeded = currentShip.CargoSpaceTotal - currentShip.CargoSpaceFree;
             if (cargoSpaceNeeded > this.BaseShip.CargoSpace)
             {
@@ -56,7 +55,7 @@ namespace CosmoMonger.Models
 
             Dictionary<string, object> props = new Dictionary<string, object>
             {
-                { "PlayerId", manager.CurrentPlayer.PlayerId },
+                { "ShipId", currentShip.ShipId },
                 { "OldShipBaseId", currentShip.BaseShipId },
                 { "NewShipBaseId", this.BaseShipId }
             };
@@ -85,7 +84,7 @@ namespace CosmoMonger.Models
             this.Quantity -= 1;
 
             // Charge the player
-            manager.CurrentPlayer.CashCredits -= totalCost;
+            currentShip.Credits -= totalCost;
 
             // Swap in the players new ship
             currentShip.BaseShip = this.BaseShip;

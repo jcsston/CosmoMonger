@@ -592,5 +592,18 @@ namespace CosmoMonger.Models
                 player.UpdateNetWorth();
             }
         }
+
+        /// <summary>
+        /// A property changed event, called when Credits is changed.
+        /// </summary>
+        partial void OnCreditsChanged()
+        {
+            // Because Credits has changed we need to update NetWorth for players
+            Player player = this.Players.SingleOrDefault();
+            if (player != null)
+            {
+                player.UpdateNetWorth();
+            }
+        }
     }
 }

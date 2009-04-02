@@ -40,7 +40,7 @@
 %>
 </table>
 <table class="goods goodsCenter">
-    <tr><th>Cash Credits</th><th>Bank Credits</th><th>Cargo Space Free</th></tr>
+    <tr><th>Credits</th><th>Bank Credits</th><th>Cargo Space Free</th></tr>
     <tr><td>$<%= ViewData["CashCredits"] %></td><td>$<%= ViewData["BankCredits"]%></td><td id="FreeCargoSpace"><%= ViewData["FreeCargoSpace"] %></td></tr>
 </table>
 </asp:Content>

@@ -25,7 +25,7 @@
             GameManager manager = new GameManager(testPlayer.User.UserName);
             
             // Store the player starting cash
-            int playerStartingCash = testPlayer.CashCredits;
+            int playerStartingCash = testPlayer.Ship.Credits;
 
             // Add some water to this ship for us to sell
             Good water = (from g in db.Goods
@@ -47,10 +47,10 @@
             }
             int playerProfit = systemWater.Price * 10;
             int systemStartingCount = systemWater.Quantity;
-            shipGood.Sell(manager, 10, systemWater.Price);
+            shipGood.Sell(testShip, 10, systemWater.Price);
 
             Assert.That(systemWater.Quantity, Is.EqualTo(systemStartingCount + 10), "System should now have 10 more water goods");
-            Assert.That(testPlayer.CashCredits, Is.EqualTo(playerStartingCash + playerProfit), "Player should have more cash credits now after selling");
+            Assert.That(testPlayer.Ship.Credits, Is.EqualTo(playerStartingCash + playerProfit), "Player should have more cash credits now after selling");
         }
 
         [Test]
@@ -66,7 +66,7 @@
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
             // Store the player starting cash
-            int playerStartingCash = testPlayer.CashCredits;
+            int playerStartingCash = testPlayer.Ship.Credits;
 
             // Add some water to this ship for us to sell
             Good water = (from g in db.Goods
@@ -89,7 +89,7 @@
             }
             try
             {
-                shipGood.Sell(manager, 10, systemWater.Price);
+                shipGood.Sell(testShip, 10, systemWater.Price);
             }
             catch (InvalidOperationException ex)
             {
@@ -133,7 +133,7 @@
 
             try
             {
-                shipGood.Sell(manager, 20, systemWater.Price);
+                shipGood.Sell(testShip, 20, systemWater.Price);
             }
             catch (ArgumentOutOfRangeException ex)
             {

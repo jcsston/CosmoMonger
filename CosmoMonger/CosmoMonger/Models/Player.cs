@@ -83,12 +83,12 @@ namespace CosmoMonger.Models
                 { "PlayerId", this.PlayerId },
                 { "Credits", credits },
                 { "BankCredits", this.BankCredits },
-                { "CashCredits", this.CashCredits }
+                { "ShipCredits", this.Ship.Credits }
             };
             Logger.Write("Withdrawing credits from bank in Player.BankWithdraw", "Model", 500, 0, TraceEventType.Verbose, "Withdrawing credits", props);
 
             this.BankCredits -= credits;
-            this.CashCredits += credits;
+            this.Ship.Credits += credits;
 
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             db.SubmitChanges();
@@ -115,7 +115,7 @@ namespace CosmoMonger.Models
             }
 
             // Check that the player has enough credits to deposit
-            if (this.CashCredits < credits)
+            if (this.Ship.Credits < credits)
             {
                 throw new ArgumentOutOfRangeException("credits", "Cannot deposit more credits than available in cash");
             }
@@ -125,11 +125,11 @@ namespace CosmoMonger.Models
                 { "PlayerId", this.PlayerId },
                 { "Credits", credits },
                 { "BankCredits", this.BankCredits },
-                { "CashCredits", this.CashCredits }
+                { "ShipCredits", this.Ship.Credits }
             };
             Logger.Write("Depositing credits into bank in Player.BankDeposit", "Model", 500, 0, TraceEventType.Verbose, "Depositing credits", props);
 
-            this.CashCredits -= credits;
+            this.Ship.Credits -= credits;
             this.BankCredits += credits;
 
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
@@ -141,7 +141,7 @@ namespace CosmoMonger.Models
         /// </summary>
         public virtual void UpdateNetWorth()
         {
-            int netWorth = this.BankCredits + this.CashCredits;
+            int netWorth = this.BankCredits + this.Ship.Credits;
             if (this.Ship != null)
             {
                 netWorth += this.Ship.TradeInValue + this.Ship.CargoWorth;
@@ -357,15 +357,6 @@ namespace CosmoMonger.Models
 
             db.Ships.InsertOnSubmit(playerShip);
             this.Ship = playerShip;
-        }
-
-        /// <summary>
-        /// A property changed event, called when CashCredits is changed.
-        /// </summary>
-        partial void OnCashCreditsChanged()
-        {
-            // Because CashCredits has changed we need to update NetWorth
-            this.UpdateNetWorth();
         }
 
         /// <summary>

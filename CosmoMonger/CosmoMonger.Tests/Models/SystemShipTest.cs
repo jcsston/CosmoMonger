@@ -44,16 +44,16 @@
             // Arrange
             SystemShip ship = this.CreateSystemShip();
             Mock<User> userMock = new Mock<User>();
-            Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
+            Mock<Ship> shipMock = new Mock<Ship>();
             // Trade value is 500
-            managerMock.Expect(m => m.CurrentPlayer.Ship.TradeInValue)
+            shipMock.Expect(s => s.TradeInValue)
                 .Returns(500).AtMostOnce().Verifiable();
             // Cash on hand is 5000
-            managerMock.Expect(m => m.CurrentPlayer.CashCredits)
+            shipMock.Expect(s => s.Credits)
                 .Returns(5000).AtMostOnce().Verifiable();
 
             // Act, should throw an exception
-            ship.Buy(managerMock.Object);
+            ship.Buy(shipMock.Object);
         }
 
         [Test]
@@ -63,21 +63,21 @@
             // Arrange
             SystemShip ship = this.CreateSystemShip();
             Mock<User> userMock = new Mock<User>();
-            Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
+            Mock<Ship> shipMock = new Mock<Ship>();
             // Trade value is 5500
-            managerMock.Expect(m => m.CurrentPlayer.Ship.TradeInValue)
+            shipMock.Expect(s => s.TradeInValue)
                 .Returns(5500).AtMostOnce().Verifiable();
             // Cargo space is 200, with 50 free
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CargoSpaceTotal)
+            shipMock.Expect(s => s.CargoSpaceTotal)
                 .Returns(200).AtMostOnce().Verifiable();
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CargoSpaceFree)
+            shipMock.Expect(s => s.CargoSpaceFree)
                 .Returns(50).AtMostOnce().Verifiable();
             // Cash on hand is 5000
-            managerMock.Expect(m => m.CurrentPlayer.CashCredits)
+            shipMock.Expect(s => s.Credits)
                 .Returns(5000).AtMostOnce().Verifiable();
 
             // Act, should throw an exception
-            ship.Buy(managerMock.Object);
+            ship.Buy(shipMock.Object);
         }
 
         [Test]
@@ -85,28 +85,27 @@
         {
             // Arrange
             SystemShip ship = this.CreateSystemShip();
-            
-            Mock<User> userMock = new Mock<User>();
-            Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
+
+            Mock<Ship> shipMock = new Mock<Ship>();
             // Trade value is 5500
-            managerMock.Expect(m => m.CurrentPlayer.Ship.TradeInValue)
+            shipMock.Expect(s => s.TradeInValue)
                 .Returns(5500).Verifiable();
             // Cargo space is 50, with 25 free
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CargoSpaceTotal)
+            shipMock.Expect(s => s.CargoSpaceTotal)
                 .Returns(50).Verifiable();
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CargoSpaceFree)
+            shipMock.Expect(s => s.CargoSpaceFree)
                 .Returns(25).Verifiable();
             // Cash on hand is 5000
-            managerMock.Expect(m => m.CurrentPlayer.CashCredits)
+            shipMock.Expect(s => s.Credits)
                 .Returns(5000).Verifiable();
 
             // Act
-            ship.Buy(managerMock.Object);
+            ship.Buy(shipMock.Object);
 
             // Assert
-            managerMock.Verify();
+            shipMock.Verify();
             // Cost of the ship should be 2000 credits
-            managerMock.VerifySet(m => m.CurrentPlayer.CashCredits, 5000 - 2000);
+            shipMock.VerifySet(s => s.Credits, 5000 - 2000);
             Assert.That(ship.Quantity, Is.EqualTo(0), "Should be no ships left in the system of this model");
         }
 
@@ -116,27 +115,26 @@
             // Arrange
             SystemShip ship = this.CreateSystemShip();
 
-            Mock<User> userMock = new Mock<User>();
-            Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
+            Mock<Ship> shipMock = new Mock<Ship>();
             // Trade value is 15500
-            managerMock.Expect(m => m.CurrentPlayer.Ship.TradeInValue)
+            shipMock.Expect(s => s.TradeInValue)
                 .Returns(15500).AtMostOnce().Verifiable();
             // Cargo space is 50, with 25 free
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CargoSpaceTotal)
+            shipMock.Expect(s => s.CargoSpaceTotal)
                 .Returns(50).AtMostOnce().Verifiable();
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CargoSpaceFree)
+            shipMock.Expect(s => s.CargoSpaceFree)
                 .Returns(25).AtMostOnce().Verifiable();
             // Cash on hand is 500
-            managerMock.Expect(m => m.CurrentPlayer.CashCredits)
+            shipMock.Expect(s => s.Credits)
                 .Returns(500).AtMostOnce().Verifiable();
 
             // Act
-            ship.Buy(managerMock.Object);
+            ship.Buy(shipMock.Object);
 
             // Assert
-            managerMock.Verify();
+            shipMock.Verify();
             // Cost of the ship should be -8000 credits
-            managerMock.VerifySet(m => m.CurrentPlayer.CashCredits, 500 - (-8000));
+            shipMock.VerifySet(s => s.Credits, 500 - (-8000));
             Assert.That(ship.Quantity, Is.EqualTo(0), "Should be no ships left in the system of this model");
         }
 
@@ -146,31 +144,30 @@
             // Arrange
             SystemShip ship = this.CreateSystemShip();
             BaseShip playerBaseShip = new BaseShip();
-            
-            Mock<User> userMock = new Mock<User>();
-            Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
+
+            Mock<Ship> shipMock = new Mock<Ship>();
             // Setup player base ship model
-            managerMock.Expect(m => m.CurrentPlayer.Ship.BaseShip)
+            shipMock.Expect(s => s.BaseShip)
                 .Returns(playerBaseShip).Verifiable();
             // Trade value is 5500
-            managerMock.Expect(m => m.CurrentPlayer.Ship.TradeInValue)
+            shipMock.Expect(s => s.TradeInValue)
                 .Returns(5500).Verifiable();
             // Cargo space is 50, with 25 free
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CargoSpaceTotal)
+            shipMock.Expect(s => s.CargoSpaceTotal)
                 .Returns(50).Verifiable();
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CargoSpaceFree)
+            shipMock.Expect(s => s.CargoSpaceFree)
                 .Returns(25).Verifiable();
             // Cash on hand is 5000
-            managerMock.Expect(m => m.CurrentPlayer.CashCredits)
+            shipMock.Expect(s => s.Credits)
                 .Returns(5000).Verifiable();
 
             // Act
-            ship.Buy(managerMock.Object);
+            ship.Buy(shipMock.Object);
 
             // Assert
-            managerMock.Verify();
+            shipMock.Verify();
             // Cost of the ship should be 2000 credits
-            managerMock.VerifySet(m => m.CurrentPlayer.CashCredits, 5000 - 2000);
+            shipMock.VerifySet(m => m.Credits, 5000 - 2000);
             Assert.That(ship.Quantity, Is.EqualTo(0), "Should be no ships left in the system of this model");
             Assert.That(ship.CosmoSystem.SystemShips.Where(m => m.BaseShip == playerBaseShip && m.Quantity == 1), Is.Not.Empty, "The players base ship should have been added to the system for sale");
         }
@@ -186,30 +183,29 @@
             playerSystemShip.CosmoSystem = ship.CosmoSystem;
             playerSystemShip.Quantity = 2;
 
-            Mock<User> userMock = new Mock<User>();
-            Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
+            Mock<Ship> shipMock = new Mock<Ship>();
             // Setup player base ship model
-            managerMock.Expect(m => m.CurrentPlayer.Ship.BaseShip)
+            shipMock.Expect(s => s.BaseShip)
                 .Returns(playerBaseShip).Verifiable();
             // Trade value is 5500
-            managerMock.Expect(m => m.CurrentPlayer.Ship.TradeInValue)
+            shipMock.Expect(s => s.TradeInValue)
                 .Returns(5500).Verifiable();
             // Cargo space is 50, with 25 free
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CargoSpaceTotal)
+            shipMock.Expect(s => s.CargoSpaceTotal)
                 .Returns(50).Verifiable();
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CargoSpaceFree)
+            shipMock.Expect(s => s.CargoSpaceFree)
                 .Returns(25).Verifiable();
             // Cash on hand is 5000
-            managerMock.Expect(m => m.CurrentPlayer.CashCredits)
+            shipMock.Expect(s => s.Credits)
                 .Returns(5000).Verifiable();
 
             // Act
-            ship.Buy(managerMock.Object);
+            ship.Buy(shipMock.Object);
 
             // Assert
-            managerMock.Verify();
+            shipMock.Verify();
             // Cost of the ship should be 2000 credits
-            managerMock.VerifySet(m => m.CurrentPlayer.CashCredits, 5000 - 2000);
+            shipMock.VerifySet(m => m.Credits, 5000 - 2000);
             Assert.That(ship.Quantity, Is.EqualTo(0), "Should be no ships left in the system of this model");
             Assert.That(ship.CosmoSystem.SystemShips.Where(m => m.BaseShip == playerBaseShip && m.Quantity == 3), Is.Not.Empty, "The players base ship should have been added to the system for sale");
         }
