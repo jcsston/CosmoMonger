@@ -43,7 +43,7 @@ namespace CosmoMonger.Controllers
         public ActionResult ProcessEvents()
         {
             // Do NPC work
-            CosmoManager.DoPendingNPCActions();
+            CosmoManager.DoPendingNPCActions(null);
 
             // Show the normal home page
             return RedirectToAction("Index");

@@ -12,6 +12,7 @@ namespace CosmoMonger.Models
     using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
     using System.Web;
     using System.Web.Security;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
@@ -63,11 +64,12 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Calls DoAction on all NPCs in the galaxy. 
-        /// This method will be called every 5 seconds to keep the NPCs 
+        /// Calls DoAction on all NPCs in the galaxy.
+        /// This method will be called every 5 seconds to keep the NPCs
         /// busy in the galaxy.
         /// </summary>
-        public static void DoPendingNPCActions()
+        /// <param name="ignore">Ignore this parameter, added so that the method sig would match WaitCallback.</param>
+        public static void DoPendingNPCActions(object ignore)
         {
             Logger.Write("Enter CosmoMonger.DoPendingNPCActions", "Model", 200, 0, TraceEventType.Verbose);
 

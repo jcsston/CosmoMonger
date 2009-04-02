@@ -72,6 +72,13 @@
                     this.ControllerGame.CurrentPlayer.Ship.Attack(shipToAttack);
                     return RedirectToAction("CombatStart");
                 }
+                catch (ArgumentException ex)
+                {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
+                    ModelState.AddModelError("shipId", ex.Message, shipId);
+                }
                 catch (InvalidOperationException ex)
                 {
                     // Log this exception
@@ -116,11 +123,13 @@
                     timeSinceLastActivity = CosmoMonger.Models.Utility.FormatTimeSpan.HumaneFormat(ts);
                 }
 
+                bool inCombat = ship.InProgressCombat != null;
                 shipList.Add(new
                 {
                     shipId = ship.ShipId,
                     playerName = HttpUtility.HtmlEncode(ship.Players.Select(p => p.Name).SingleOrDefault()),
                     shipType = HttpUtility.HtmlEncode(ship.BaseShip.Name),
+                    inCombat = inCombat,
                     attackable = attackableShips.Contains(ship),
                     lastActivity = timeSinceLastActivity
                 });

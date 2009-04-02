@@ -552,7 +552,21 @@ namespace CosmoMonger.Models
             // Update turn action time
             this.LastActionTime = DateTime.UtcNow;
 
-            db.SubmitChanges();
+            try
+            {
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to one of this combat record
+                // Overwrite those changes
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    occ.Resolve(RefreshMode.KeepChanges);
+                }
+            }
         }
 
         /// <summary>

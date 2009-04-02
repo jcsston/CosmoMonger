@@ -67,11 +67,9 @@ namespace CosmoMonger.Controllers
                             object lastNpcUpdate = this.ControllerContext.HttpContext.Application["LastNpcUpdate"];
                             if (lastNpcUpdate == null || (DateTime.UtcNow - (DateTime)lastNpcUpdate).TotalSeconds > 5)
                             {
-                                // Spawn thread to do NPC actions
-                                Thread npcThread = new Thread(new ThreadStart(CosmoManager.DoPendingNPCActions));
-                                npcThread.Name = "NPC Thread";
-                                npcThread.Start();
-
+                                // Queue thread to do NPC actions
+                                ThreadPool.QueueUserWorkItem(new WaitCallback(CosmoManager.DoPendingNPCActions));
+                                
                                 // Update NPC Counter
                                 this.ControllerContext.HttpContext.Application["LastNpcUpdate"] = DateTime.UtcNow;
                             }

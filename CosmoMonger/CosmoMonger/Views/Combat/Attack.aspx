@@ -22,7 +22,10 @@
                     listTable += "<tr><td>" + ship.playerName + "</td><td>" 
                             + ship.shipType + "</td><td>"
                             + ship.lastActivity + "</td><td>";
-                    if (ship.attackable) {
+                    if (ship.inCombat) {
+                        listTable += 'In Combat';
+                        
+                    }  else if (ship.attackable) {
                         listTable += '<form action="/Combat/Attack" method="post"><div>'
                              + '<input type="hidden" name="shipId" value="' + ship.shipId + '" />'
                              + '<input type="submit" value="Attack" />'
@@ -56,6 +59,9 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <h1>Attack Ship</h1>
+<p>
+<%=Html.ValidationSummary("Unable to Attack") %>
+</p>
 <p id="shipList">
 Loading...
 </p>
