@@ -2605,11 +2605,21 @@ namespace CosmoMonger.Models
 		
 		private System.DateTime _LastActionTime;
 		
+		private System.Nullable<int> _LastVisitedSystemId;
+		
+		private System.Nullable<int> _LastAttackedShipId;
+		
+		private System.Nullable<System.DateTime> _NextTravelTime;
+		
 		private EntityRef<NpcType> _NpcType;
 		
 		private EntityRef<Race> _Race;
 		
 		private EntityRef<Ship> _Ship;
+		
+		private EntityRef<Ship> _LastAttackedShip;
+		
+		private EntityRef<CosmoSystem> _LastVisitedSystem;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2627,12 +2637,18 @@ namespace CosmoMonger.Models
     partial void OnShipIdChanged();
     partial void OnCreditsChanging(int value);
     partial void OnCreditsChanged();
-    partial void OnBadnessChanging(int value);
-    partial void OnBadnessChanged();
+    partial void OnAggressionChanging(int value);
+    partial void OnAggressionChanged();
     partial void OnBountyChanging(int value);
     partial void OnBountyChanged();
     partial void OnNextActionTimeChanging(System.DateTime value);
     partial void OnNextActionTimeChanged();
+    partial void OnLastVisitedSystemIdChanging(System.Nullable<int> value);
+    partial void OnLastVisitedSystemIdChanged();
+    partial void OnLastAttackedShipIdChanging(System.Nullable<int> value);
+    partial void OnLastAttackedShipIdChanged();
+    partial void OnNextTravelTimeChanging(System.Nullable<System.DateTime> value);
+    partial void OnNextTravelTimeChanged();
     #endregion
 		
 		public Npc()
@@ -2640,6 +2656,8 @@ namespace CosmoMonger.Models
 			this._NpcType = default(EntityRef<NpcType>);
 			this._Race = default(EntityRef<Race>);
 			this._Ship = default(EntityRef<Ship>);
+			this._LastAttackedShip = default(EntityRef<Ship>);
+			this._LastVisitedSystem = default(EntityRef<CosmoSystem>);
 			OnCreated();
 		}
 		
@@ -2776,7 +2794,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Badness", DbType="Int NOT NULL")]
-		public int Badness
+		public int Aggression
 		{
 			get
 			{
@@ -2786,11 +2804,11 @@ namespace CosmoMonger.Models
 			{
 				if ((this._Badness != value))
 				{
-					this.OnBadnessChanging(value);
+					this.OnAggressionChanging(value);
 					this.SendPropertyChanging();
 					this._Badness = value;
-					this.SendPropertyChanged("Badness");
-					this.OnBadnessChanged();
+					this.SendPropertyChanged("Aggression");
+					this.OnAggressionChanged();
 				}
 			}
 		}
@@ -2831,6 +2849,74 @@ namespace CosmoMonger.Models
 					this._LastActionTime = value;
 					this.SendPropertyChanged("NextActionTime");
 					this.OnNextActionTimeChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_LastVisitedSystemId", DbType="int")]
+		public System.Nullable<int> LastVisitedSystemId
+		{
+			get
+			{
+				return this._LastVisitedSystemId;
+			}
+			set
+			{
+				if ((this._LastVisitedSystemId != value))
+				{
+					if (this._LastVisitedSystem.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLastVisitedSystemIdChanging(value);
+					this.SendPropertyChanging();
+					this._LastVisitedSystemId = value;
+					this.SendPropertyChanged("LastVisitedSystemId");
+					this.OnLastVisitedSystemIdChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_LastAttackedShipId", DbType="int")]
+		public System.Nullable<int> LastAttackedShipId
+		{
+			get
+			{
+				return this._LastAttackedShipId;
+			}
+			set
+			{
+				if ((this._LastAttackedShipId != value))
+				{
+					if (this._LastAttackedShip.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLastAttackedShipIdChanging(value);
+					this.SendPropertyChanging();
+					this._LastAttackedShipId = value;
+					this.SendPropertyChanged("LastAttackedShipId");
+					this.OnLastAttackedShipIdChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_NextTravelTime", DbType="datetime")]
+		public System.Nullable<System.DateTime> NextTravelTime
+		{
+			get
+			{
+				return this._NextTravelTime;
+			}
+			set
+			{
+				if ((this._NextTravelTime != value))
+				{
+					this.OnNextTravelTimeChanging(value);
+					this.SendPropertyChanging();
+					this._NextTravelTime = value;
+					this.SendPropertyChanged("NextTravelTime");
+					this.OnNextTravelTimeChanged();
 				}
 			}
 		}
@@ -2933,6 +3019,74 @@ namespace CosmoMonger.Models
 						this._ShipId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("Ship");
+				}
+			}
+		}
+		
+		[Association(Name="Ship_Npc1", Storage="_LastAttackedShip", ThisKey="LastAttackedShipId", OtherKey="ShipId", IsForeignKey=true)]
+		public Ship LastAttackedShip
+		{
+			get
+			{
+				return this._LastAttackedShip.Entity;
+			}
+			set
+			{
+				Ship previousValue = this._LastAttackedShip.Entity;
+				if (((previousValue != value) 
+							|| (this._LastAttackedShip.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LastAttackedShip.Entity = null;
+						previousValue.NpcsAttacked.Remove(this);
+					}
+					this._LastAttackedShip.Entity = value;
+					if ((value != null))
+					{
+						value.NpcsAttacked.Add(this);
+						this._LastAttackedShipId = value.ShipId;
+					}
+					else
+					{
+						this._LastAttackedShipId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("LastAttackedShip");
+				}
+			}
+		}
+		
+		[Association(Name="CosmoSystem_Npc", Storage="_LastVisitedSystem", ThisKey="LastVisitedSystemId", OtherKey="SystemId", IsForeignKey=true)]
+		public CosmoSystem LastVisitedSystem
+		{
+			get
+			{
+				return this._LastVisitedSystem.Entity;
+			}
+			set
+			{
+				CosmoSystem previousValue = this._LastVisitedSystem.Entity;
+				if (((previousValue != value) 
+							|| (this._LastVisitedSystem.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LastVisitedSystem.Entity = null;
+						previousValue.NpcsVisited.Remove(this);
+					}
+					this._LastVisitedSystem.Entity = value;
+					if ((value != null))
+					{
+						value.NpcsVisited.Add(this);
+						this._LastVisitedSystemId = value.SystemId;
+					}
+					else
+					{
+						this._LastVisitedSystemId = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("LastVisitedSystem");
 				}
 			}
 		}
@@ -4710,6 +4864,8 @@ namespace CosmoMonger.Models
 		
 		private EntitySet<Npc> _Npcs;
 		
+		private EntitySet<Npc> _NpcsAttacked;
+		
 		private EntitySet<Player> _Players;
 		
 		private EntitySet<ShipGood> _ShipGoods;
@@ -4761,6 +4917,7 @@ namespace CosmoMonger.Models
 			this._InProgressCombats = new EntitySet<Combat>(new Action<Combat>(this.attach_InProgressCombats), new Action<Combat>(this.detach_InProgressCombats));
 			this._InProgressCombats1 = new EntitySet<Combat>(new Action<Combat>(this.attach_InProgressCombats1), new Action<Combat>(this.detach_InProgressCombats1));
 			this._Npcs = new EntitySet<Npc>(new Action<Npc>(this.attach_Npcs), new Action<Npc>(this.detach_Npcs));
+			this._NpcsAttacked = new EntitySet<Npc>(new Action<Npc>(this.attach_NpcsAttacked), new Action<Npc>(this.detach_NpcsAttacked));
 			this._Players = new EntitySet<Player>(new Action<Player>(this.attach_Players), new Action<Player>(this.detach_Players));
 			this._ShipGoods = new EntitySet<ShipGood>(new Action<ShipGood>(this.attach_ShipGoods), new Action<ShipGood>(this.detach_ShipGoods));
 			this._BaseShip = default(EntityRef<BaseShip>);
@@ -5090,6 +5247,19 @@ namespace CosmoMonger.Models
 			}
 		}
 		
+		[Association(Name="Ship_Npc1", Storage="_NpcsAttacked", ThisKey="ShipId", OtherKey="LastAttackedShipId")]
+		public EntitySet<Npc> NpcsAttacked
+		{
+			get
+			{
+				return this._NpcsAttacked;
+			}
+			set
+			{
+				this._NpcsAttacked.Assign(value);
+			}
+		}
+		
 		[Association(Name="Ship_Player", Storage="_Players", ThisKey="ShipId", OtherKey="ShipId")]
 		public virtual EntitySet<Player> Players
 		{
@@ -5342,6 +5512,18 @@ namespace CosmoMonger.Models
 			entity.Ship = null;
 		}
 		
+		private void attach_NpcsAttacked(Npc entity)
+		{
+			this.SendPropertyChanging();
+			entity.LastAttackedShip = this;
+		}
+		
+		private void detach_NpcsAttacked(Npc entity)
+		{
+			this.SendPropertyChanging();
+			entity.LastAttackedShip = null;
+		}
+		
 		private void attach_Players(Player entity)
 		{
 			this.SendPropertyChanging();
@@ -5577,6 +5759,8 @@ namespace CosmoMonger.Models
 		
 		private int _RaceId;
 		
+		private EntitySet<Npc> _NpcsVisited;
+		
 		private EntitySet<Race> _Races;
 		
 		private EntitySet<Ship> _Ships;
@@ -5613,6 +5797,7 @@ namespace CosmoMonger.Models
 		
 		public CosmoSystem()
 		{
+			this._NpcsVisited = new EntitySet<Npc>(new Action<Npc>(this.attach_NpcsVisited), new Action<Npc>(this.detach_NpcsVisited));
 			this._Races = new EntitySet<Race>(new Action<Race>(this.attach_Races), new Action<Race>(this.detach_Races));
 			this._Ships = new EntitySet<Ship>(new Action<Ship>(this.attach_Ships), new Action<Ship>(this.detach_Ships));
 			this._SystemGoods = new EntitySet<SystemGood>(new Action<SystemGood>(this.attach_SystemGoods), new Action<SystemGood>(this.detach_SystemGoods));
@@ -5745,6 +5930,19 @@ namespace CosmoMonger.Models
 					this.SendPropertyChanged("RaceId");
 					this.OnRaceIdChanged();
 				}
+			}
+		}
+		
+		[Association(Name="CosmoSystem_Npc", Storage="_NpcsVisited", ThisKey="SystemId", OtherKey="LastVisitedSystemId")]
+		public EntitySet<Npc> NpcsVisited
+		{
+			get
+			{
+				return this._NpcsVisited;
+			}
+			set
+			{
+				this._NpcsVisited.Assign(value);
 			}
 		}
 		
@@ -5891,6 +6089,18 @@ namespace CosmoMonger.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_NpcsVisited(Npc entity)
+		{
+			this.SendPropertyChanging();
+			entity.LastVisitedSystem = this;
+		}
+		
+		private void detach_NpcsVisited(Npc entity)
+		{
+			this.SendPropertyChanging();
+			entity.LastVisitedSystem = null;
 		}
 		
 		private void attach_Races(Race entity)

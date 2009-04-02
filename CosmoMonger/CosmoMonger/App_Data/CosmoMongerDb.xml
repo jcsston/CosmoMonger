@@ -4223,6 +4223,16 @@
         <column name="Name" type="STRING"/>
     </loadData>
   </changeSet>
+  <changeSet author="Jory Stone" id="89">
+    <renameColumn tableName="Npc" oldColumnName="Badness" newColumnName="Aggression" columnDataType="int" />
+    <addColumn tableName="Npc">
+      <column name="LastVisitedSystemId" type="int" />
+      <column name="LastAttackedShipId" type="int" />
+      <column name="NextTravelTime" type="datetime" />
+    </addColumn>
+    <addForeignKeyConstraint baseColumnNames="LastVisitedSystemId" baseTableName="Npc" constraintName="FK_System_Npc_LastVisitedSystemId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
+    <addForeignKeyConstraint baseColumnNames="LastAttackedShipId" baseTableName="Npc" constraintName="FK_Ship_Npc_LastShipAttackedId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

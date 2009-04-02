@@ -56,7 +56,7 @@ namespace CosmoMonger.Models.Npcs
         {
             // Setup some sane defaults for the required fields
             this.NpcRow.Credits = 0;
-            this.NpcRow.Badness = 0;
+            this.NpcRow.Aggression = 0;
             this.NpcRow.NextActionTime = DateTime.UtcNow;
 
             // Give a default name
