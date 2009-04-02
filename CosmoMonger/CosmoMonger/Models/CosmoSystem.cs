@@ -8,8 +8,10 @@ namespace CosmoMonger.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Linq;
     using System.Diagnostics;
     using System.Linq;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
@@ -21,7 +23,7 @@ namespace CosmoMonger.Models
         /// Returns the ships available for purchase in the system.
         /// </summary>
         /// <returns>Array of SystemShip available in the system</returns>
-        public virtual SystemShip[] GetAvailableShips()
+        public virtual SystemShip[] GetBuyableShips()
         {
             return (from ss in this.SystemShips
                     where ss.Quantity > 0
@@ -36,7 +38,7 @@ namespace CosmoMonger.Models
         /// The SystemShip with the matching base ship id. 
         /// If the SystemShip doesn't exist, null is returned.
         /// </returns>
-        public virtual SystemShip GetShip(int shipId)
+        public virtual SystemShip GetBuyableShip(int shipId)
         {
             return (from ss in this.SystemShips
                     where ss.BaseShipId == shipId
@@ -191,6 +193,43 @@ namespace CosmoMonger.Models
                     where (s.Players.Any(p => p.Alive) || s.Npcs.Any())
                     && s.DamageHull < 100
                     select s).AsEnumerable();
+        }
+
+        /// <summary>
+        /// Creates a new ship in this system.
+        /// Note, changes are not submitted to database
+        /// </summary>
+        /// <param name="shipName">Name of the base ship model to use.</param>
+        /// <returns>The newly create Ship object. (has already been added to the db.Insert queue)</returns>
+        /// <exception cref="ArgumentException">Thrown when a Base Ship Model with the requested name is not found</exception>
+        public virtual Ship CreateShip(string shipName)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Create a new ship
+            Ship newShip = new Ship();
+
+            // Assign the default base ship type
+            BaseShip baseShip = (from bs in db.BaseShips
+                                 where bs.Name == shipName
+                                 select bs).SingleOrDefault();
+            if (baseShip == null)
+            {
+                Logger.Write("Unable to load base ship from database", "Model", 1000, 0, TraceEventType.Critical);
+                throw new ArgumentException("Unable to load base ship model from database", "shipName");
+            }
+
+            newShip.BaseShip = baseShip;
+            newShip.CosmoSystem = this;
+
+            // Setup default upgrades
+            newShip.JumpDrive = newShip.BaseShip.InitialJumpDrive;
+            newShip.Shield = newShip.BaseShip.InitialShield;
+            newShip.Weapon = newShip.BaseShip.InitialWeapon;
+
+            db.Ships.InsertOnSubmit(newShip);
+            
+            return newShip;
         }
     }
 }

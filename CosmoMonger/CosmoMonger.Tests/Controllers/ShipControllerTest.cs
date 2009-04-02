@@ -59,7 +59,7 @@
 
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetAvailableShips())
+            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetBuyableShips())
                 .Returns(ships).AtMostOnce().Verifiable();
             ShipController controller = new ShipController(managerMock.Object);
 
@@ -81,7 +81,7 @@
             Mock<SystemShip> shipMock = new Mock<SystemShip>();
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetShip(1))
+            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetBuyableShip(1))
                 .Returns(shipMock.Object).AtMostOnce().Verifiable();
 
             shipMock.Expect(m => m.Buy(managerMock.Object.CurrentPlayer.Ship))
@@ -106,7 +106,7 @@
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
 
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetShip(-5))
+            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetBuyableShip(-5))
                 .Returns<SystemShip>(null).AtMostOnce().Verifiable();
             ShipController controller = new ShipController(managerMock.Object);
 
@@ -129,7 +129,7 @@
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
 
-            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetShip(5))
+            managerMock.Expect(m => m.CurrentPlayer.Ship.CosmoSystem.GetBuyableShip(5))
                 .Returns(shipMock.Object).AtMostOnce().Verifiable();
 
             shipMock.Expect(m => m.Buy(managerMock.Object.CurrentPlayer.Ship))

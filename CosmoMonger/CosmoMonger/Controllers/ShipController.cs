@@ -59,7 +59,7 @@ namespace CosmoMonger.Controllers
 
         /// <summary>
         /// This action will fetch the avaiable ships in the current players system 
-        /// via the System.GetAvailableShips method and pass the data to the BuyShip view.
+        /// via the System.GetBuyableShips method and pass the data to the BuyShip view.
         /// </summary>
         /// <returns>The ListShips view filled with the ships available for purchase</returns>
         public ActionResult ListShips()
@@ -67,7 +67,7 @@ namespace CosmoMonger.Controllers
             Player currentPlayer = this.ControllerGame.CurrentPlayer;
 
             ViewData["CurrentShip"] = currentPlayer.Ship;
-            ViewData["Ships"] = currentPlayer.Ship.CosmoSystem.GetAvailableShips();
+            ViewData["Ships"] = currentPlayer.Ship.CosmoSystem.GetBuyableShips();
             ViewData["CashCredits"] = currentPlayer.Ship.Credits;
             ViewData["BankCredits"] = currentPlayer.BankCredits;
             ViewData["FreeCargoSpace"] = currentPlayer.Ship.CargoSpaceFree;
@@ -84,7 +84,7 @@ namespace CosmoMonger.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult BuyShip(int shipId)
         {
-            SystemShip shipToBuy = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetShip(shipId);
+            SystemShip shipToBuy = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetBuyableShip(shipId);
             if (shipToBuy != null)
             {
                 try

@@ -29,6 +29,19 @@ namespace CosmoMonger.Models.Npcs
         }
 
         /// <summary>
+        /// Setup the new Npc in the database, not required for all types.
+        /// If the Npc has a ship this should be overrided to handle creation of the ship.
+        /// </summary>
+        public override void Setup()
+        {
+            // Call base class setup method
+            base.Setup();
+
+            // Do further setup, create a ship
+
+        }
+
+        /// <summary>
         /// Does the action.
         /// </summary>
         public override void DoAction()

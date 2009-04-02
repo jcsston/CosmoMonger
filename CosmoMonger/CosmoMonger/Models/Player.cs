@@ -19,6 +19,11 @@ namespace CosmoMonger.Models
     /// </summary>
     public partial class Player
     {
+        /// <summary>
+        /// Name of the starting player ship
+        /// </summary>
+        public const string StartingShip = "Glorified Trash Can";
+
         public enum RecordType
         {
             NetWorth, 
@@ -87,11 +92,27 @@ namespace CosmoMonger.Models
             };
             Logger.Write("Withdrawing credits from bank in Player.BankWithdraw", "Model", 500, 0, TraceEventType.Verbose, "Withdrawing credits", props);
 
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
             this.BankCredits -= credits;
             this.Ship.Credits += credits;
 
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-            db.SubmitChanges();
+            try
+            {
+                // Send changes to database
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to this Player row, 
+                // Most likely from browsing multiple pages at once.
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    occ.Resolve(RefreshMode.KeepChanges);
+                }
+            }
         }
 
         /// <summary>
@@ -129,11 +150,27 @@ namespace CosmoMonger.Models
             };
             Logger.Write("Depositing credits into bank in Player.BankDeposit", "Model", 500, 0, TraceEventType.Verbose, "Depositing credits", props);
 
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
             this.Ship.Credits -= credits;
             this.BankCredits += credits;
 
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-            db.SubmitChanges();
+            try
+            {
+                // Send changes to database
+                db.SubmitChanges(ConflictMode.ContinueOnConflict);
+            }
+            catch (ChangeConflictException ex)
+            {
+                ExceptionPolicy.HandleException(ex, "SQL Policy");
+
+                // Another thread has made changes to this Player row, 
+                // Most likely from browsing multiple pages at once.
+                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                {
+                    occ.Resolve(RefreshMode.KeepChanges);
+                }
+            }
         }
 
         /// <summary>
@@ -334,29 +371,8 @@ namespace CosmoMonger.Models
                 throw new InvalidOperationException("Player already has a ship");
             }
 
-            // Create a new ship for the player
-            Ship playerShip = new Ship();
-
-            // Assign the default base ship type
-            BaseShip baseShip = (from bs in db.BaseShips
-                                 where bs.Name == "Glorified Trash Can"
-                                 select bs).SingleOrDefault();
-            if (baseShip == null)
-            {
-                Logger.Write("Unable to load player starting base ship from database", "Model", 1000, 0, TraceEventType.Critical);
-                throw new NotSupportedException("Unable to load base ship model from database");
-            }
-
-            playerShip.BaseShip = baseShip;
-            playerShip.CosmoSystem = startingSystem;
-
-            // Setup default upgrades
-            playerShip.JumpDrive = playerShip.BaseShip.InitialJumpDrive;
-            playerShip.Shield = playerShip.BaseShip.InitialShield;
-            playerShip.Weapon = playerShip.BaseShip.InitialWeapon;
-
-            db.Ships.InsertOnSubmit(playerShip);
-            this.Ship = playerShip;
+            // Create new player ship
+            this.Ship = startingSystem.CreateShip(Player.StartingShip);
         }
 
         /// <summary>

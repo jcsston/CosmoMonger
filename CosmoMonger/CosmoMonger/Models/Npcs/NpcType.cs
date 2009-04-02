@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="NpcBase.cs" company="CosmoMonger">
+// <copyright file="NpcType.cs" company="CosmoMonger">
 //     Copyright (c) 2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
