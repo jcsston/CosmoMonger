@@ -4233,6 +4233,31 @@
     <addForeignKeyConstraint baseColumnNames="LastVisitedSystemId" baseTableName="Npc" constraintName="FK_System_Npc_LastVisitedSystemId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
     <addForeignKeyConstraint baseColumnNames="LastAttackedShipId" baseTableName="Npc" constraintName="FK_Ship_Npc_LastShipAttackedId" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ShipId" referencedTableName="Ship"/>
   </changeSet>
+  <changeSet author="Roger Boykin" id="90">
+    <comment>
+      Moving the systems so systems of a particular race are located next to each other.
+    </comment>
+    <update tableName="System">
+      <column name="PositionX" value="6" />
+      <column name="PositionY" value="3" />
+      <where>SystemId=4</where>
+    </update>
+    <update tableName="System">
+      <column name="PositionX" value="8" />
+      <column name="PositionY" value="12" />
+      <where>SystemId=2</where>
+    </update>
+    <update tableName="System">
+      <column name="PositionX" value="20" />
+      <column name="PositionY" value="10" />
+      <where>SystemId=9</where>
+    </update>
+    <update tableName="System">
+      <column name="PositionX" value="18" />
+      <column name="PositionY" value="16" />
+      <where>SystemId=8</where>
+    </update>
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>
