@@ -176,7 +176,7 @@ namespace CosmoMonger.Models
         {
             return (from s in this.Ships
                     where s.TargetSystemId.HasValue
-                    && s.Players.Any(p => p.Alive)
+                    && (s.Players.Any(p => p.Alive) || s.Npcs.Any())
                     && s.DamageHull < 100
                     select s).AsEnumerable();
         }
@@ -188,7 +188,7 @@ namespace CosmoMonger.Models
         public virtual IEnumerable<Ship> GetShipsInSystem()
         {
             return (from s in this.Ships
-                    where s.Players.Any(p => p.Alive)
+                    where (s.Players.Any(p => p.Alive) || s.Npcs.Any())
                     && s.DamageHull < 100
                     select s).AsEnumerable();
         }

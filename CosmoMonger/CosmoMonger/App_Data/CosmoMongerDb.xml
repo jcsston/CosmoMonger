@@ -4275,6 +4275,14 @@
     <dropColumn tableName="Npc" columnName="Credits" />
     <dropColumn tableName="Player" columnName="CashCredits" />
   </changeSet>
+  <changeSet author="Jory Stone" id="92">
+    <comment>Removing NpcType table and changing NpcTypeId columns to NType column names.</comment>
+    <dropForeignKeyConstraint baseTableName="Npc" constraintName="FK_NpcType_Npc" />
+    <dropForeignKeyConstraint baseTableName="NpcName" constraintName="FK_NpcType_NpcName" />
+    <dropTable tableName="NpcType" />
+    <renameColumn tableName="Npc" oldColumnName="NpcTypeId" newColumnName="NType" columnDataType="int" />
+    <renameColumn tableName="NpcName" oldColumnName="NpcTypeId" newColumnName="NType" columnDataType="int" />
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

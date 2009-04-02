@@ -107,7 +107,7 @@
   <Table Name="Npc" Member="Npcs">
     <Type Name="Npc">
       <Column Name="NpcId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="NpcTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NType" Storage="_NpcTypeId" Type="CosmoMonger.Models.Npcs.NpcType" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="RaceId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ShipId" Type="System.Int32" DbType="Int" CanBeNull="true" />
@@ -117,19 +117,10 @@
       <Column Name="LastVisitedSystemId" Type="System.Int32" DbType="int" CanBeNull="true" />
       <Column Name="LastAttackedShipId" Type="System.Int32" DbType="int" CanBeNull="true" />
       <Column Name="NextTravelTime" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
-      <Association Name="NpcType_Npc" Member="NpcType" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="NpcType" IsForeignKey="true" />
       <Association Name="Race_Npc" Member="Race" ThisKey="RaceId" OtherKey="RaceId" Type="Race" IsForeignKey="true" />
       <Association Name="Ship_Npc" Member="Ship" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
       <Association Name="Ship_Npc1" Member="LastAttackedShip" ThisKey="LastAttackedShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
       <Association Name="CosmoSystem_Npc" Member="LastVisitedSystem" ThisKey="LastVisitedSystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="NpcType" Member="NpcTypes">
-    <Type Name="NpcType">
-      <Column Name="NpcTypeId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
-      <Association Name="NpcType_Npc" Member="Npcs" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="Npc" />
-      <Association Name="NpcType_NpcName" Member="NpcNames" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="NpcName" />
     </Type>
   </Table>
   <Table Name="dbo.Player" Member="Players">
@@ -368,9 +359,8 @@
   <Table Name="dbo.NpcName" Member="NpcNames">
     <Type Name="NpcName">
       <Column Name="NpcNameId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="NpcTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NType" Storage="_NpcTypeId" Type="CosmoMonger.Models.Npcs.NpcType" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
-      <Association Name="NpcType_NpcName" Member="NpcType" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="NpcType" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

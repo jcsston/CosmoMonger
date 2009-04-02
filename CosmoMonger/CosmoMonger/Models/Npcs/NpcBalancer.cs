@@ -14,6 +14,7 @@ namespace CosmoMonger.Models.Npcs
     using System.Web;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 using Microsoft.Practices.EnterpriseLibrary.Logging;
+    using System.Diagnostics;
 
     /// <summary>
     /// This class balances the number of active NPCs vs active Players to keep the galaxy alive.
@@ -86,9 +87,9 @@ using Microsoft.Practices.EnterpriseLibrary.Logging;
 
             // Grab the active NPCs we currently have
             IQueryable<Npc> activeNpcs = (from n in db.Npcs
-                                          where n.NpcType.Name == "Pirate"
-                                          || n.NpcType.Name == "Police"
-                                          || n.NpcType.Name == "Trader"
+                                          where n.NType == NpcType.Pirate
+                                          || n.NType == NpcType.Police
+                                          || n.NType == NpcType.Trader
                                           select n);
             
             // Calculate how many NPCs we need to create/delete
@@ -107,31 +108,25 @@ using Microsoft.Practices.EnterpriseLibrary.Logging;
                     if (npcTypePercent < NpcBalancer.PercentTraders)
                     {
                         // Produce trader
-                        newNpc.NpcType = (from t in db.NpcTypes
-                                          where t.Name == "Trader"
-                                          select t).Single();
+                        newNpc.NType = NpcType.Trader;
                         npc = new NpcTrader(newNpc);
                     }
                     else if (npcTypePercent < NpcBalancer.PercentPirates + NpcBalancer.PercentTraders)
                     {
                         // Produce pirate
-                        newNpc.NpcType = (from t in db.NpcTypes
-                                          where t.Name == "Pirate"
-                                          select t).Single();
+                        newNpc.NType = NpcType.Pirate;
                         npc = new NpcPirate(newNpc);
                     }
                     else if (npcTypePercent < NpcBalancer.PercentPolice + NpcBalancer.PercentPirates + NpcBalancer.PercentTraders)
                     {
                         // Produce Police
-                        newNpc.NpcType = (from t in db.NpcTypes
-                                          where t.Name == "Police"
-                                          select t).Single();
+                        newNpc.NType = NpcType.Police;
                         npc = new NpcPolice(newNpc);
                     }
 
                     // Give the NPC a good name
                     string npcName = (from name in db.NpcNames
-                                      where name.NpcType == newNpc.NpcType
+                                      where name.NType == newNpc.NType
                                       && !(from n in db.Npcs
                                            select n.Name)
                                           .Contains(name.Name)
@@ -140,7 +135,7 @@ using Microsoft.Practices.EnterpriseLibrary.Logging;
                     // Break out if we couldn't find a new name
                     if (npcName == null)
                     {
-                        Logger.Write(newNpc.NpcType.ToString(), "NPC", 1000, 0, System.Diagnostics.TraceEventType.Critical, "Out of NPC Names");
+                        Logger.Write(newNpc.NType.ToString(), "NPC", 1000, 0, TraceEventType.Critical, "Out of NPC Names");
                         break;
                     }
 

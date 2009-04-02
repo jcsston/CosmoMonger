@@ -125,6 +125,7 @@
     <Compile Include="Models\Combat.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Npc.cs" />
+    <Compile Include="Models\Npcs\NpcType.cs" />
     <Compile Include="Models\Npcs\NpcBalancer.cs" />
     <Compile Include="Models\Npcs\NpcBase.cs" />
     <Compile Include="Models\Npcs\NpcGoodBalancer.cs" />
@@ -307,10 +308,9 @@
   <Target Name="BeforeBuild">
   </Target>
 	-->
-<Target Name="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
-  <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)\..\$(ProjectName)" />
-</Target>
-
+  <Target Name="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)\..\$(ProjectName)" />
+  </Target>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">

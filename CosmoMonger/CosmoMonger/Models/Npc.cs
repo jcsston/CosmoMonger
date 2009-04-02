@@ -29,34 +29,34 @@ namespace CosmoMonger.Models
         {
             Logger.Write("Enter Npc.DoAction", "NPC", 200, 0, TraceEventType.Verbose);
             NpcBase npc = null;
-            switch (this.NpcTypeId)
+            switch (this.NType)
             {
-                case 1:
+                case NpcType.GoodBalancer:
                     // Special system good price/count balancer NPC
                     npc = new NpcGoodBalancer(this);
                     break;
-                case 2:
+                case NpcType.NpcBalancer:
                     // Npc Balancer NPC
                     npc = new NpcBalancer(this);
                     break;
-                case 3:
+                case NpcType.Cleaner:
                     // Cleaner NPC
                     npc = new NpcCleaner(this);
                     break;
-                case 4:
+                case NpcType.Trader:
                     // Trader NPC
                     npc = new NpcTrader(this);
                     break;
-                case 5:
+                case NpcType.Pirate:
                     // Pirate NPC
                     npc = new NpcPirate(this);
                     break;
-                case 6:
+                case NpcType.Police:
                     // Police NPC
                     npc = new NpcPolice(this);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("NpcTypeId", this.NpcTypeId, "Invalid NPC Type");
+                    throw new ArgumentOutOfRangeException("NType", this.NType, "Invalid NPC Type");
             }
 
             // Do the actual NPC action

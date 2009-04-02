@@ -61,7 +61,7 @@ namespace CosmoMonger.Models.Npcs
             // Give a default name
             if (this.NpcRow.Name == null)
             {
-                this.NpcRow.Name = this.NpcRow.NpcType.Name;
+                this.NpcRow.Name = this.NpcRow.NType.ToString();
             }
         }
 
