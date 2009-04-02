@@ -102,6 +102,9 @@ namespace CosmoMonger.Models
     partial void InsertPlayerRecord(PlayerRecord instance);
     partial void UpdatePlayerRecord(PlayerRecord instance);
     partial void DeletePlayerRecord(PlayerRecord instance);
+    partial void InsertNpcName(NpcName instance);
+    partial void UpdateNpcName(NpcName instance);
+    partial void DeleteNpcName(NpcName instance);
     #endregion
 		
 		public CosmoMongerDbDataContext() : 
@@ -323,6 +326,14 @@ namespace CosmoMonger.Models
 			get
 			{
 				return this.GetTable<PlayerRecord>();
+			}
+		}
+		
+		public System.Data.Linq.Table<NpcName> NpcNames
+		{
+			get
+			{
+				return this.GetTable<NpcName>();
 			}
 		}
 	}
@@ -2588,9 +2599,9 @@ namespace CosmoMonger.Models
 		
 		private int _Credits;
 		
-		private System.Nullable<int> _Badness;
+		private int _Badness;
 		
-		private System.Nullable<int> _Bounty;
+		private int _Bounty;
 		
 		private System.DateTime _LastActionTime;
 		
@@ -2616,9 +2627,9 @@ namespace CosmoMonger.Models
     partial void OnShipIdChanged();
     partial void OnCreditsChanging(int value);
     partial void OnCreditsChanged();
-    partial void OnBadnessChanging(System.Nullable<int> value);
+    partial void OnBadnessChanging(int value);
     partial void OnBadnessChanged();
-    partial void OnBountyChanging(System.Nullable<int> value);
+    partial void OnBountyChanging(int value);
     partial void OnBountyChanged();
     partial void OnNextActionTimeChanging(System.DateTime value);
     partial void OnNextActionTimeChanged();
@@ -2764,8 +2775,8 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_Badness", DbType="Int")]
-		public System.Nullable<int> Badness
+		[Column(Storage="_Badness", DbType="Int NOT NULL")]
+		public int Badness
 		{
 			get
 			{
@@ -2784,8 +2795,8 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_Bounty", DbType="Int")]
-		public System.Nullable<int> Bounty
+		[Column(Storage="_Bounty", DbType="Int NOT NULL")]
+		public int Bounty
 		{
 			get
 			{
@@ -2959,6 +2970,8 @@ namespace CosmoMonger.Models
 		
 		private EntitySet<Npc> _Npcs;
 		
+		private EntitySet<NpcName> _NpcNames;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2972,6 +2985,7 @@ namespace CosmoMonger.Models
 		public NpcType()
 		{
 			this._Npcs = new EntitySet<Npc>(new Action<Npc>(this.attach_Npcs), new Action<Npc>(this.detach_Npcs));
+			this._NpcNames = new EntitySet<NpcName>(new Action<NpcName>(this.attach_NpcNames), new Action<NpcName>(this.detach_NpcNames));
 			OnCreated();
 		}
 		
@@ -3028,6 +3042,19 @@ namespace CosmoMonger.Models
 			}
 		}
 		
+		[Association(Name="NpcType_NpcName", Storage="_NpcNames", ThisKey="NpcTypeId", OtherKey="NpcTypeId")]
+		public EntitySet<NpcName> NpcNames
+		{
+			get
+			{
+				return this._NpcNames;
+			}
+			set
+			{
+				this._NpcNames.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -3055,6 +3082,18 @@ namespace CosmoMonger.Models
 		}
 		
 		private void detach_Npcs(Npc entity)
+		{
+			this.SendPropertyChanging();
+			entity.NpcType = null;
+		}
+		
+		private void attach_NpcNames(NpcName entity)
+		{
+			this.SendPropertyChanging();
+			entity.NpcType = this;
+		}
+		
+		private void detach_NpcNames(NpcName entity)
 		{
 			this.SendPropertyChanging();
 			entity.NpcType = null;
@@ -8339,6 +8378,157 @@ namespace CosmoMonger.Models
 						this._PlayerId = default(int);
 					}
 					this.SendPropertyChanged("Player");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[Table(Name="dbo.NpcName")]
+	public partial class NpcName : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _NpcNameId;
+		
+		private int _NpcTypeId;
+		
+		private string _Name;
+		
+		private EntityRef<NpcType> _NpcType;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnNpcNameIdChanging(int value);
+    partial void OnNpcNameIdChanged();
+    partial void OnNpcTypeIdChanging(int value);
+    partial void OnNpcTypeIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    #endregion
+		
+		public NpcName()
+		{
+			this._NpcType = default(EntityRef<NpcType>);
+			OnCreated();
+		}
+		
+		[Column(Storage="_NpcNameId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int NpcNameId
+		{
+			get
+			{
+				return this._NpcNameId;
+			}
+			set
+			{
+				if ((this._NpcNameId != value))
+				{
+					this.OnNpcNameIdChanging(value);
+					this.SendPropertyChanging();
+					this._NpcNameId = value;
+					this.SendPropertyChanged("NpcNameId");
+					this.OnNpcNameIdChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_NpcTypeId", DbType="Int NOT NULL")]
+		public int NpcTypeId
+		{
+			get
+			{
+				return this._NpcTypeId;
+			}
+			set
+			{
+				if ((this._NpcTypeId != value))
+				{
+					if (this._NpcType.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnNpcTypeIdChanging(value);
+					this.SendPropertyChanging();
+					this._NpcTypeId = value;
+					this.SendPropertyChanged("NpcTypeId");
+					this.OnNpcTypeIdChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Name", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[Association(Name="NpcType_NpcName", Storage="_NpcType", ThisKey="NpcTypeId", OtherKey="NpcTypeId", IsForeignKey=true)]
+		public NpcType NpcType
+		{
+			get
+			{
+				return this._NpcType.Entity;
+			}
+			set
+			{
+				NpcType previousValue = this._NpcType.Entity;
+				if (((previousValue != value) 
+							|| (this._NpcType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._NpcType.Entity = null;
+						previousValue.NpcNames.Remove(this);
+					}
+					this._NpcType.Entity = value;
+					if ((value != null))
+					{
+						value.NpcNames.Add(this);
+						this._NpcTypeId = value.NpcTypeId;
+					}
+					else
+					{
+						this._NpcTypeId = default(int);
+					}
+					this.SendPropertyChanged("NpcType");
 				}
 			}
 		}

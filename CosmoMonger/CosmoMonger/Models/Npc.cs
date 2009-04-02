@@ -43,6 +43,18 @@ namespace CosmoMonger.Models
                     // Cleaner NPC
                     npc = new NpcCleaner(this);
                     break;
+                case 4:
+                    // Trader NPC
+                    npc = new NpcTrader(this);
+                    break;
+                case 5:
+                    // Pirate NPC
+                    npc = new NpcPirate(this);
+                    break;
+                case 6:
+                    // Police NPC
+                    npc = new NpcPolice(this);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("NpcTypeId", this.NpcTypeId, "Invalid NPC Type");
             }

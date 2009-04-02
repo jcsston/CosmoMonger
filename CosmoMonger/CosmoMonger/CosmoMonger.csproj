@@ -128,6 +128,7 @@
     <Compile Include="Models\Npcs\NpcBase.cs" />
     <Compile Include="Models\Npcs\NpcGoodBalancer.cs" />
     <Compile Include="Models\Npcs\NpcPirate.cs" />
+    <Compile Include="Models\Npcs\NpcPolice.cs" />
     <Compile Include="Models\Npcs\NpcTrader.cs" />
     <Compile Include="Models\Npcs\NpcCleaner.cs" />
     <Compile Include="Models\Player.cs" />

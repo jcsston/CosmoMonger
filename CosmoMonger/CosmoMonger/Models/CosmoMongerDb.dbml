@@ -112,8 +112,8 @@
       <Column Name="RaceId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ShipId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Credits" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Badness" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Bounty" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Badness" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Bounty" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="NextActionTime" Storage="_LastActionTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" />
       <Association Name="NpcType_Npc" Member="NpcType" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="NpcType" IsForeignKey="true" />
       <Association Name="Race_Npc" Member="Race" ThisKey="RaceId" OtherKey="RaceId" Type="Race" IsForeignKey="true" />
@@ -125,6 +125,7 @@
       <Column Name="NpcTypeId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Association Name="NpcType_Npc" Member="Npcs" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="Npc" />
+      <Association Name="NpcType_NpcName" Member="NpcNames" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="NpcName" />
     </Type>
   </Table>
   <Table Name="dbo.Player" Member="Players">
@@ -356,6 +357,14 @@
       <Column Name="DistanceTraveled" Type="System.Double" DbType="float NOT NULL" CanBeNull="false" />
       <Column Name="GoodsTraded" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
       <Association Name="Player_PlayerRecord" Member="Player" ThisKey="PlayerId" OtherKey="PlayerId" Type="Player" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.NpcName" Member="NpcNames">
+    <Type Name="NpcName">
+      <Column Name="NpcNameId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="NpcTypeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="NpcType_NpcName" Member="NpcType" ThisKey="NpcTypeId" OtherKey="NpcTypeId" Type="NpcType" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

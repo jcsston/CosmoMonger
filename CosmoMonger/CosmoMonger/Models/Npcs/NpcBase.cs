@@ -49,6 +49,24 @@ namespace CosmoMonger.Models.Npcs
         }
 
         /// <summary>
+        /// Setup the new Npc in the database, not required for all types.
+        /// If the Npc has a ship this should be overrided to handle creation of the ship.
+        /// </summary>
+        public virtual void Setup()
+        {
+            // Setup some sane defaults for the required fields
+            this.NpcRow.Credits = 0;
+            this.NpcRow.Badness = 0;
+            this.NpcRow.NextActionTime = DateTime.UtcNow;
+
+            // Give a default name
+            if (this.NpcRow.Name == null)
+            {
+                this.NpcRow.Name = this.NpcRow.NpcType.Name;
+            }
+        }
+
+        /// <summary>
         /// Does the action for the Npc. Needs to call SetNextActionDelay to schedule next call time.
         /// </summary>
         public abstract void DoAction();

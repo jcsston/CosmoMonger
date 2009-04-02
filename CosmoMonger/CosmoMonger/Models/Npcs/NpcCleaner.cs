@@ -57,8 +57,12 @@ namespace CosmoMonger.Models.Npcs
                                         select p.Ship);
             foreach (Ship ship in shipsNeedingCleaning)
             {
-                // Fix travel state
-                ship.CheckIfTraveling();
+                // Check that the ship is not in combat
+                if (ship.InProgressCombat == null)
+                {
+                    // Fix travel state
+                    ship.CheckIfTraveling();
+                }
             }
         }
     }

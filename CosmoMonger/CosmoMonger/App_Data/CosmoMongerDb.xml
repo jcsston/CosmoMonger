@@ -4187,6 +4187,42 @@
       <where>NpcTypeId=2</where>
     </update>
   </changeSet>
+  <changeSet author="Jory Stone" id="86">
+    <sql>SET IDENTITY_INSERT NpcType ON</sql>
+    <insert tableName="NpcType">
+      <column name="NpcTypeId" valueNumeric="4" />
+      <column name="Name" value="Trader" />
+    </insert>
+    <insert tableName="NpcType">
+      <column name="NpcTypeId" valueNumeric="5" />
+      <column name="Name" value="Pirate" />
+    </insert>
+    <insert tableName="NpcType">
+      <column name="NpcTypeId" valueNumeric="6" />
+      <column name="Name" value="Police" />
+    </insert>
+    <sql>SET IDENTITY_INSERT NpcType OFF</sql>
+  </changeSet>
+  <changeSet author="Jory Stone" id="87">
+    <createTable tableName="NpcName">
+      <column name="NpcNameId" type="int" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="PK_NpcName"/>
+      </column>
+      <column name="NpcTypeId" type="int">
+        <constraints nullable="false" />
+      </column>
+      <column name="Name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="NpcTypeId" baseTableName="NpcName" constraintName="FK_NpcType_NpcName" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="NpcTypeId" referencedTableName="NpcType"/>
+  </changeSet>
+  <changeSet author="Jory Stone" id="88">
+    <loadData tableName="NpcName" file="NpcNames.csv">
+        <column name="NpcTypeId" type="NUMERIC"/>
+        <column name="Name" type="STRING"/>
+    </loadData>
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

@@ -33,7 +33,12 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         public override void DoAction()
         {
-            throw new NotImplementedException();
+            if (!this.SetNextActionDelay(new TimeSpan(0, 1, 0))) 
+            {
+                return;
+            }
+
+            // throw new NotImplementedException();
         }
     }
 }

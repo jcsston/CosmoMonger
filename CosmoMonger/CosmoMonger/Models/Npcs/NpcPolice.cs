@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="NpcPirate.cs" company="CosmoMonger">
+// <copyright file="NpcPolice.cs" company="CosmoMonger">
 //     Copyright (c) 2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
@@ -15,15 +15,15 @@ namespace CosmoMonger.Models.Npcs
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
-    /// Contains logic for NPC Pirates
+    /// Contains logic for NPC Police
     /// </summary>
-    public class NpcPirate : NpcBase
+    public class NpcPolice : NpcBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NpcPirate"/> class.
+        /// Initializes a new instance of the <see cref="NpcPolice"/> class.
         /// </summary>
         /// <param name="npcRow">The NPC row reference.</param>
-        public NpcPirate(Npc npcRow)
+        public NpcPolice(Npc npcRow)
             : base(npcRow)
         {
         }
