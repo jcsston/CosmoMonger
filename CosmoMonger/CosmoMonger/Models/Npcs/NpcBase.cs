@@ -13,6 +13,7 @@ namespace CosmoMonger.Models.Npcs
     using System.Diagnostics;
     using System.Linq;
     using System.Web;
+    using CosmoMonger.Models.Utility;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 
@@ -21,6 +22,11 @@ namespace CosmoMonger.Models.Npcs
     /// </summary>
     public abstract class NpcBase
     {
+        /// <summary>
+        /// A random number generator for Npc code.
+        /// </summary>
+        protected ProbablityCalculator rnd = new ProbablityCalculator();
+
         /// <summary>
         /// Holds the NPC row reference
         /// </summary>
@@ -57,12 +63,6 @@ namespace CosmoMonger.Models.Npcs
             // Setup some sane defaults for the required fields
             this.NpcRow.Aggression = 0;
             this.NpcRow.NextActionTime = DateTime.UtcNow;
-
-            // Give a default name
-            if (this.NpcRow.Name == null)
-            {
-                this.NpcRow.Name = this.NpcRow.NType.ToString();
-            }
         }
 
         /// <summary>
@@ -96,6 +96,13 @@ namespace CosmoMonger.Models.Npcs
                 // We shouldn't redo that work, and so we exit
                 foreach (ObjectChangeConflict occ in db.ChangeConflicts)
                 {
+                    // Log each conflict
+                    foreach (MemberChangeConflict mcc in occ.MemberConflicts)
+                    {
+                        string memberDetails = string.Format("{0}.{1} O: {2} D: {3} C: {4}", mcc.Member.DeclaringType.Name, mcc.Member.Name, mcc.OriginalValue, mcc.DatabaseValue, mcc.CurrentValue);
+                        Logger.Write(memberDetails, "NPC", 10, 0, TraceEventType.Verbose, "SQL Change Conflict Details");
+                    }
+
                     // Refresh current values from database
                     occ.Resolve(RefreshMode.OverwriteCurrentValues);
                 }

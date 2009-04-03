@@ -125,6 +125,7 @@
     <Compile Include="Models\Combat.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Npc.cs" />
+    <Compile Include="Models\Npcs\NpcShipBase.cs" />
     <Compile Include="Models\Npcs\NpcType.cs" />
     <Compile Include="Models\Npcs\NpcBalancer.cs" />
     <Compile Include="Models\Npcs\NpcBase.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Models\Utility\FormatTimeSpan.cs" />
     <Compile Include="Models\Utility\IPropertyAccessor.cs" />
     <Compile Include="Models\Utility\LoggingTextWriter.cs" />
+    <Compile Include="Models\Utility\ProbablityCalculator.cs" />
     <Compile Include="Models\Utility\PropertyAccessor.cs" />
     <Compile Include="Models\Utility\PropertyAccessorException.cs" />
     <Compile Include="Models\Weapon.cs" />

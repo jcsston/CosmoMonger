@@ -7,6 +7,7 @@
 namespace CosmoMonger.Controllers
 {
     using System;
+    using System.Threading;
     using System.Web.Mvc;
     using CosmoMonger.Controllers.Attributes;
     using CosmoMonger.Models;
@@ -43,10 +44,10 @@ namespace CosmoMonger.Controllers
         public ActionResult ProcessEvents()
         {
             // Do NPC work
-            CosmoManager.DoPendingNPCActions(null);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(CosmoManager.DoPendingNPCActions));
 
             // Show the normal home page
-            return RedirectToAction("Index");
+            return View("Index");
         }
     }
 }

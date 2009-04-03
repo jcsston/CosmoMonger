@@ -11,6 +11,7 @@ namespace CosmoMonger.Models
     using System.Data.Linq;
     using System.Diagnostics;
     using System.Linq;
+    using CosmoMonger.Models.Utility;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 
@@ -41,9 +42,9 @@ namespace CosmoMonger.Models
         public const int CreditsCargoDestroyedPercentMax = 25;
 
         /// <summary>
-        /// Random number generator used for combat.
+        /// Probablity Calculator used for combat.
         /// </summary>
-        private Random rnd = new Random();
+        private ProbablityCalculator rnd = new ProbablityCalculator();
 
         /// <summary>
         /// This enum describes the meaning of the Combat.Status field
@@ -212,7 +213,7 @@ namespace CosmoMonger.Models
             weaponAccuracy *= 1.0 + (this.ShipOther.BaseShip.HitFactor / 10.0);
             
             // Determine if the weapon will miss based on accuracy rating
-            bool weaponMiss = (weaponAccuracy < rnd.Next(100));
+            bool weaponMiss = this.rnd.SelectByProbablity(new bool[] { false, true }, new double[] { weaponAccuracy, 1.0 - weaponAccuracy });
             if (weaponMiss)
             {
                 // Clear the weapon damage amount
@@ -667,7 +668,7 @@ namespace CosmoMonger.Models
             this.ShipTurn.TargetSystemArrivalTime = null;
 
             // Destroy some of the other ship's credits/cargo
-            double creditsCargoDestroyedPerc = rnd.Next(Combat.CreditsCargoDestroyedPercentMin, Combat.CreditsCargoDestroyedPercentMax) / 100.0;
+            double creditsCargoDestroyedPerc = this.rnd.Next(Combat.CreditsCargoDestroyedPercentMin, Combat.CreditsCargoDestroyedPercentMax) / 100.0;
             Dictionary<string, object> props;
 
             foreach (ShipGood good in this.ShipOther.ShipGoods)

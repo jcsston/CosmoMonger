@@ -14,12 +14,12 @@
                 var listTable = '<table class="grid">';
 
                 // Add header row
-                listTable += "<tr><th>Player Name</th><th>Ship Type</th><th>Last Activity</th><th>Attack</th></tr>";
+                listTable += "<tr><th>Name</th><th>Ship Type</th><th>Last Activity</th><th>Attack</th></tr>";
 
                 // Build attack rows
                 for (var i = 0; i < data.length; i++) {
                     var ship = data[i];
-                    listTable += "<tr><td>" + ship.playerName + "</td><td>" 
+                    listTable += "<tr><td>" + ship.shipName + "</td><td>" 
                             + ship.shipType + "</td><td>"
                             + ship.lastActivity + "</td><td>";
                     if (ship.inCombat) {

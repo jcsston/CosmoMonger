@@ -10,11 +10,12 @@ namespace CosmoMonger.Models.Npcs
     using System;
     using System.Collections.Generic;
     using System.Data.Linq;
+    using System.Diagnostics;
     using System.Linq;
     using System.Web;
+    using CosmoMonger.Models.Utility;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
-using Microsoft.Practices.EnterpriseLibrary.Logging;
-    using System.Diagnostics;
+    using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
     /// This class balances the number of active NPCs vs active Players to keep the galaxy alive.
@@ -24,32 +25,27 @@ using Microsoft.Practices.EnterpriseLibrary.Logging;
         /// <summary>
         /// The number of players we want active at all time
         /// </summary>
-        public const int TargetActivePlayers = 25;
+        public const int TargetActivePlayers = 1; // 25
 
         /// <summary>
         /// The mininum number of Npcs that should always be active
         /// </summary>
-        public const int MinNpcs = 10;
+        public const int MinNpcs = 1; // 10
 
         /// <summary>
         /// Percent of generated traders
         /// </summary>
-        public const int PercentTraders = 50;
+        public const double PercentTraders = 0.50;
 
         /// <summary>
         /// Percent of generated pirates
         /// </summary>
-        public const int PercentPirates = 25;
+        public const double PercentPirates = 0.25;
 
         /// <summary>
         /// Percent of generated police
         /// </summary>
-        public const int PercentPolice = 25;
-
-        /// <summary>
-        /// A persistent random number generator for Npc code.
-        /// </summary>
-        private static Random rnd = new Random();
+        public const double PercentPolice = 0.25;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NpcBalancer"/> class.
@@ -104,24 +100,29 @@ using Microsoft.Practices.EnterpriseLibrary.Logging;
                     NpcBase npc = null;
 
                     // Which type will we produce?
-                    int npcTypePercent = rnd.Next(100);
-                    if (npcTypePercent < NpcBalancer.PercentTraders)
+                    NpcType[] npcTypes = { NpcType.Pirate, NpcType.Trader, NpcType.Police };
+                    double[] npcProbablity = { NpcBalancer.PercentPirates, NpcBalancer.PercentTraders, NpcBalancer.PercentPolice };
+                    newNpc.NType = this.rnd.SelectByProbablity(npcTypes, npcProbablity);
+
+                    switch (newNpc.NType)
                     {
-                        // Produce trader
-                        newNpc.NType = NpcType.Trader;
-                        npc = new NpcTrader(newNpc);
-                    }
-                    else if (npcTypePercent < NpcBalancer.PercentPirates + NpcBalancer.PercentTraders)
-                    {
-                        // Produce pirate
-                        newNpc.NType = NpcType.Pirate;
-                        npc = new NpcPirate(newNpc);
-                    }
-                    else if (npcTypePercent < NpcBalancer.PercentPolice + NpcBalancer.PercentPirates + NpcBalancer.PercentTraders)
-                    {
-                        // Produce Police
-                        newNpc.NType = NpcType.Police;
-                        npc = new NpcPolice(newNpc);
+                        case NpcType.Pirate:
+                            // Produce pirate
+                            npc = new NpcPirate(newNpc);
+                            break;
+
+                        case NpcType.Trader:
+                            // Produce trader
+                            npc = new NpcTrader(newNpc);
+                            break;
+
+                        case NpcType.Police:
+                            // Produce Police
+                            npc = new NpcPolice(newNpc);
+                            break;
+
+                        default:
+                            throw new InvalidOperationException("Unknown NpcType selected");
                     }
 
                     // Give the NPC a good name
@@ -156,7 +157,7 @@ using Microsoft.Practices.EnterpriseLibrary.Logging;
                     {
                         ExceptionPolicy.HandleException(ex, "SQL Policy");
 
-                        // Another thread has made changes to one of this combat record
+                        // Another thread has made changes to one of this npc record
                         // Overwrite those changes
                         foreach (ObjectChangeConflict occ in db.ChangeConflicts)
                         {

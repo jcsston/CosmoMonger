@@ -9,12 +9,14 @@ namespace CosmoMonger.Models
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Data.Linq;
     using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
     using System.Threading;
     using System.Web;
     using System.Web.Security;
+    using CosmoMonger.Models.Utility;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
@@ -28,7 +30,7 @@ namespace CosmoMonger.Models
         /// <returns>LINQ CosmoMongerDbDataContext object</returns>
         public static CosmoMongerDbDataContext GetDbContext()
         {
-            CosmoMongerDbDataContext db = Utility.DataContextFactory.GetScopedDataContext<CosmoMongerDbDataContext>("CosmoMonger", ConfigurationManager.ConnectionStrings["CosmoMongerConnectionString"].ConnectionString);
+            CosmoMongerDbDataContext db = DataContextFactory.GetScopedDataContext<CosmoMongerDbDataContext>("CosmoMonger", ConfigurationManager.ConnectionStrings["CosmoMongerConnectionString"].ConnectionString);
             
             // We only add the logger to the DataContext if sql query logging is enabled
             LogEntry sqlEntry = new LogEntry(String.Empty, "SQL", 1, 0, TraceEventType.Verbose, "LINQ SQL", null);
@@ -42,6 +44,19 @@ namespace CosmoMonger.Models
             }
 
             return db;
+        }
+
+        /// <summary>
+        /// Gets a new CosmoMonger db context.
+        /// Deletes the current one and creates a new one.
+        /// Any objects retrived previous must be retrived again with this context to be tracked.
+        /// </summary>
+        /// <returns>LINQ CosmoMongerDbDataContext object</returns>
+        public static CosmoMongerDbDataContext GetDbContextNew()
+        {
+            DataContextFactory.ClearScopedDataContext<CosmoMongerDbDataContext>();
+
+            return CosmoManager.GetDbContext();
         }
 
         /// <summary>
@@ -73,7 +88,9 @@ namespace CosmoMonger.Models
         {
             Logger.Write("Enter CosmoMonger.DoPendingNPCActions", "Model", 200, 0, TraceEventType.Verbose);
 
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContextNew();
+            
+
             var npcsNeedingAction = (from n in db.Npcs
                                     where n.NextActionTime < DateTime.UtcNow
                                     select n);

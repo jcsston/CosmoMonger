@@ -17,7 +17,7 @@ namespace CosmoMonger.Models.Npcs
     /// <summary>
     /// Contains logic for NPC Traders
     /// </summary>
-    public class NpcTrader : NpcBase
+    public class NpcTrader : NpcShipBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NpcTrader"/> class.
@@ -33,7 +33,7 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         public override void DoAction()
         {
-            if (!this.SetNextActionDelay(new TimeSpan(0, 1, 0))) 
+            if (!this.SetNextActionDelay(new TimeSpan(0, 0, 10))) 
             {
                 return;
             }

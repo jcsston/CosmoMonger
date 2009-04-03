@@ -17,7 +17,7 @@ namespace CosmoMonger.Models.Npcs
     /// <summary>
     /// Contains logic for NPC Police
     /// </summary>
-    public class NpcPolice : NpcBase
+    public class NpcPolice : NpcShipBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NpcPolice"/> class.
@@ -36,9 +36,6 @@ namespace CosmoMonger.Models.Npcs
         {
             // Call base class setup method
             base.Setup();
-
-            // Do further setup, create a ship
-
         }
 
         /// <summary>
@@ -46,7 +43,7 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         public override void DoAction()
         {
-            if (!this.SetNextActionDelay(new TimeSpan(0, 1, 0)))
+            if (!this.SetNextActionDelay(new TimeSpan(0, 0, 10)))
             {
                 return;
             }
