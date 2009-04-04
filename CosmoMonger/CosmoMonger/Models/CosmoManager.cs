@@ -54,7 +54,7 @@ namespace CosmoMonger.Models
         /// <returns>LINQ CosmoMongerDbDataContext object</returns>
         public static CosmoMongerDbDataContext GetDbContextNew()
         {
-            DataContextFactory.ClearScopedDataContext<CosmoMongerDbDataContext>();
+            DataContextFactory.ClearScopedDataContext<CosmoMongerDbDataContext>("CosmoMonger");
 
             return CosmoManager.GetDbContext();
         }
@@ -79,6 +79,11 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Lock object used to prevent multiple npc threads
+        /// </summary>
+        static private object npcLock = new object();
+
+        /// <summary>
         /// Calls DoAction on all NPCs in the galaxy.
         /// This method will be called every 5 seconds to keep the NPCs
         /// busy in the galaxy.
@@ -86,18 +91,41 @@ namespace CosmoMonger.Models
         /// <param name="ignore">Ignore this parameter, added so that the method sig would match WaitCallback.</param>
         public static void DoPendingNPCActions(object ignore)
         {
-            Logger.Write("Enter CosmoMonger.DoPendingNPCActions", "Model", 200, 0, TraceEventType.Verbose);
+            Logger.Write("Entering", "Model", 200, 0, TraceEventType.Start, "CosmoMonger.DoPendingNPCActions");
 
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContextNew();
-            
-
-            var npcsNeedingAction = (from n in db.Npcs
-                                    where n.NextActionTime < DateTime.UtcNow
-                                    select n);
-            foreach (Npc npc in npcsNeedingAction)
+            lock (npcLock)
             {
-                npc.DoAction();
+                CosmoMongerDbDataContext db = CosmoManager.GetDbContextNew();
+
+                /*
+                db.Refresh(RefreshMode.OverwriteCurrentValues, db.Npcs);
+                db.Refresh(RefreshMode.OverwriteCurrentValues, db.Combats);
+                db.Refresh(RefreshMode.OverwriteCurrentValues, db.Ships);
+                */
+
+                DateTime queryTime = db.ExecuteQuery<DateTime>("SELECT MAX(LastPlayed) FROM Player").Single();
+                DateTime linqTime = db.Players.Max(p => p.LastPlayed);
+                Dictionary<string, object> props = new Dictionary<string, object>
+                {
+                    { "CosmoMongerDbDataContext", db.GetHashCode() },
+                    { "QueryMaxLastPlayedTime", queryTime },
+                    { "LinqMaxLastPlayedTime", linqTime }
+                };
+                Logger.Write("Entered", "Model", 200, 0, TraceEventType.Resume, "CosmoMonger.DoPendingNPCActions", props);
+                
+
+                var npcsNeedingAction = (from n in db.Npcs
+                                        where n.NextActionTime < DateTime.UtcNow
+                                        select n);
+                foreach (Npc npc in npcsNeedingAction)
+                {
+                    npc.DoAction();
+                }
+
+                db.SaveChanges();
             }
+
+            Logger.Write("Exit", "Model", 200, 0, TraceEventType.Stop, "CosmoMonger.DoPendingNPCActions");
         }
     }
 }

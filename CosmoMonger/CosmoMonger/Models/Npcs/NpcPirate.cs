@@ -48,7 +48,7 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         public override void DoAction()
         {
-            if (!this.SetNextActionDelay(new TimeSpan(0, 0, 10)))
+            if (!this.SetNextActionDelay(new TimeSpan(0, 0, 5)))
             {
                 return;
             }
@@ -65,138 +65,155 @@ namespace CosmoMonger.Models.Npcs
             if (npcShip.InProgressCombat != null)
             {
                 // In Combat!
-                Combat combat = npcShip.InProgressCombat;
-
-                props = new Dictionary<string, object>
-                {
-                    { "NpcId", this.NpcRow.NpcId },
-                    { "CombatId", combat.CombatId },
-                    { "TurnShipId", combat.ShipTurn.ShipId },
-                    { "ShipId", npcShip.ShipId }
-                };
-                Logger.Write("Pirate in Combat", "NPC", 150, 0, TraceEventType.Verbose, "Pirate in Combat", props);
-
-                if (combat.ShipTurn.ShipId == npcShip.ShipId)
-                {
-                    Logger.Write("Pirate Combat Turn", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
-
-                    try
-                    {
-                        while (combat.ShipTurn.ShipId == npcShip.ShipId)
-                        {
-                            // Fire until we cannot any more!
-                            combat.FireWeapon();
-
-                            Logger.Write("Fired weapon", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
-
-                            // Wait five seconds before firing again
-                            //Thread.Sleep(5000);
-                        }
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        // Combat over, ignore
-                        ExceptionPolicy.HandleException(ex, "NPC Policy");
-                    }
-                    catch (ArgumentOutOfRangeException ex)
-                    {
-                        // Out of turn points
-                        ExceptionPolicy.HandleException(ex, "NPC Policy");
-
-                        // Escape
-                        combat.ChargeJumpDrive();
-
-                        Logger.Write("Charged JumpDrive", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
-                    }
-
-                    Logger.Write("Ended Combat Turn", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
-                }
+                this.DoCombat();
             }
             else if (this.NpcRow.NextTravelTime < DateTime.UtcNow)
             {
                 // Attack?
                 if (this.rnd.SelectByProbablity(new bool[] { true, false }, new double[] { 0.50, 0.50 }))
                 {
-                    // Look for a ship to attack
-                    IEnumerable<Ship> attackableShips = npcShip.GetShipsToAttack();
-
-                    // Exclude police ships
-                    IEnumerable<Ship> targetableShips = (from s in attackableShips
-                                                         where s.Npcs.Any(n => n.NType != NpcType.Police)
-                                                         || s.Players.Any()
-                                                         select s).AsEnumerable();
-
-                    props = new Dictionary<string, object>
-                    {
-                        { "NpcId", this.NpcRow.NpcId },
-                        { "AttackableShips", attackableShips.Count() },
-                        { "TargetableShips", targetableShips.Count() },
-                    };
-                    Logger.Write("Looking for ships to attack", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Prowl", props);
-
-                    Ship shipToAttack = this.rnd.SelectOne(targetableShips);
-                    if (shipToAttack != null)
-                    {
-                        props = new Dictionary<string, object>
-                        {
-                            { "NpcId", this.NpcRow.NpcId },
-                            { "TargetShipId", shipToAttack.ShipId }
-                        };
-                        Logger.Write("Attacking Ship", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Attacking", props);
-
-                        try
-                        {
-                            // Attack!
-                            npcShip.Attack(shipToAttack);
-                            Logger.Write("Attacked Ship", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Attacked", props);
-                        }
-                        catch (InvalidOperationException ex)
-                        {
-                            ExceptionPolicy.HandleException(ex, "NPC Policy");
-                        }
-                        catch (ArgumentException ex)
-                        {
-                            ExceptionPolicy.HandleException(ex, "NPC Policy");
-                        }
-                    }
+                    this.DoAttack();
                 }
                 else
                 {
-                    // We travel to any system in range
-                    CosmoSystem[] inRangeSystems = npcShip.GetInRangeSystems();
-                    CosmoSystem targetSystem = this.rnd.SelectOne(inRangeSystems);
-
-                    // Start traveling
-                    int travelTime = npcShip.Travel(targetSystem);
-
-                    props = new Dictionary<string, object>
-                    {
-                        { "NpcId", this.NpcRow.NpcId },
-                        { "TargetSystemId", targetSystem.SystemId },
-                        { "TravelTime", travelTime },
-                    };
-                    Logger.Write("Traveling to new System", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Travel", props);
+                    this.DoTravel();
                 }
 
                 // Set next travel time
                 this.NpcRow.NextTravelTime = DateTime.UtcNow.AddMinutes(1);
-            }
-
-            try
+            } 
+            else 
             {
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to one of this npc record
-                // Overwrite those changes
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
+                props = new Dictionary<string, object>
                 {
-                    occ.Resolve(RefreshMode.KeepChanges);
+                    { "NpcId", this.NpcRow.NpcId },
+                    { "NextTravelTime", this.NpcRow.NextTravelTime },
+                    { "UtcNow", DateTime.UtcNow }
+                };
+                Logger.Write("Waiting for NextTravelTime", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Wait", props);
+            }
+
+            db.SaveChanges();
+        }
+
+        /// <summary>
+        /// Handles Pirate Combat
+        /// </summary>
+        private void DoCombat()
+        {
+            Ship npcShip = this.NpcRow.Ship;
+            Combat combat = npcShip.InProgressCombat;
+
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "NpcId", this.NpcRow.NpcId },
+                { "CombatId", combat.CombatId },
+                { "TurnShipId", combat.ShipTurn.ShipId },
+                { "ShipId", npcShip.ShipId }
+            };
+            Logger.Write("Pirate in Combat", "NPC", 150, 0, TraceEventType.Verbose, "Pirate in Combat", props);
+
+            if (combat.ShipTurn.ShipId == npcShip.ShipId)
+            {
+                Logger.Write("Pirate Combat Turn", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
+
+                try
+                {
+                    while (combat.ShipTurn.ShipId == npcShip.ShipId && combat.Status == Combat.CombatStatus.Incomplete)
+                    {
+                        // Fire until we cannot any more!
+                        combat.FireWeapon();
+
+                        Logger.Write("Fired weapon", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
+                    }
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    // Out of turn points
+                    ExceptionPolicy.HandleException(ex, "NPC Policy");
+
+                    // Escape
+                    combat.ChargeJumpDrive();
+
+                    Logger.Write("Charged JumpDrive", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
+                }
+
+                Logger.Write("Ended Combat Turn", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
+            }
+        }
+
+        /// <summary>
+        /// Handles a Pirate selecting and attacking a ship
+        /// </summary>
+        private void DoAttack()
+        {
+            Ship npcShip = this.NpcRow.Ship;
+
+            // Look for a ship to attack
+            IEnumerable<Ship> attackableShips = npcShip.GetShipsToAttack();
+
+            // Exclude police ships
+            IEnumerable<Ship> targetableShips = (from s in attackableShips
+                                                 where s.Npcs.Any(n => n.NType != NpcType.Police)
+                                                 || s.Players.Any()
+                                                 select s).AsEnumerable();
+
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "NpcId", this.NpcRow.NpcId },
+                { "AttackableShips", attackableShips.Count() },
+                { "TargetableShips", targetableShips.Count() },
+            };
+            Logger.Write("Looking for ships to attack", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Prowl", props);
+
+            Ship shipToAttack = this.rnd.SelectOne(targetableShips);
+            if (shipToAttack != null)
+            {
+                props = new Dictionary<string, object>
+                {
+                    { "NpcId", this.NpcRow.NpcId },
+                    { "TargetShipId", shipToAttack.ShipId }
+                };
+                Logger.Write("Attacking Ship", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Attacking", props);
+
+                try
+                {
+                    // Attack!
+                    npcShip.Attack(shipToAttack);
+                    Logger.Write("Attacked Ship", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Attacked", props);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ExceptionPolicy.HandleException(ex, "NPC Policy");
+                }
+                catch (ArgumentException ex)
+                {
+                    ExceptionPolicy.HandleException(ex, "NPC Policy");
                 }
             }
+        }
+
+        /// <summary>
+        /// Handles the pirate traveling to a new system
+        /// </summary>
+        private void DoTravel()
+        {
+            Ship npcShip = this.NpcRow.Ship;
+
+            // We travel to any system in range
+            CosmoSystem[] inRangeSystems = npcShip.GetInRangeSystems();
+            CosmoSystem targetSystem = this.rnd.SelectOne(inRangeSystems);
+
+            // Start traveling
+            int travelTime = npcShip.Travel(targetSystem);
+
+            Dictionary<string, object> props = new Dictionary<string, object>
+            {
+                { "NpcId", this.NpcRow.NpcId },
+                { "TargetSystemId", targetSystem.SystemId },
+                { "TravelTime", travelTime },
+            };
+            Logger.Write("Traveling to new System", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Travel", props);
         }
     }
 }

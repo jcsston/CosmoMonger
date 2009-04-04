@@ -82,33 +82,7 @@ namespace CosmoMonger.Models.Npcs
             // Mark the next time this NPC will need to do an action
             this.npcRow.NextActionTime = DateTime.UtcNow.Add(delay);
 
-            try
-            {
-                // Send changes to database
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to this Npc object, 
-                // which means another thread has already started
-                // We shouldn't redo that work, and so we exit
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    // Log each conflict
-                    foreach (MemberChangeConflict mcc in occ.MemberConflicts)
-                    {
-                        string memberDetails = string.Format("{0}.{1} O: {2} D: {3} C: {4}", mcc.Member.DeclaringType.Name, mcc.Member.Name, mcc.OriginalValue, mcc.DatabaseValue, mcc.CurrentValue);
-                        Logger.Write(memberDetails, "NPC", 10, 0, TraceEventType.Verbose, "SQL Change Conflict Details");
-                    }
-
-                    // Refresh current values from database
-                    occ.Resolve(RefreshMode.OverwriteCurrentValues);
-                }
-
-                return false;
-            }
+            db.SaveChanges();
 
             return true;
         }

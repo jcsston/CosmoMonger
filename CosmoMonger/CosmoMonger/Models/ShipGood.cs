@@ -68,27 +68,8 @@ namespace CosmoMonger.Models
             // Transfer the good(s) to the system
             sellingGood.Quantity += quantity;
 
-            try
-            {
-                // Commit changes to the database
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to the SystemGood row, 
-                // which could be from the number of goods or the price changing 
-                // Best case to toss our changes and try to sell the good again
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.OverwriteCurrentValues);
-                }
-
-                // This does have the chance of a stack overflow, we should find out in testing
-                this.Sell(currentShip, quantity, price);
-                return;
-            }
+            // Commit changes to the database
+            db.SaveChanges();
 
             // Remove good(s) from the ship
             this.Quantity -= quantity;
@@ -107,23 +88,8 @@ namespace CosmoMonger.Models
                 currentPlayer.GoodsTraded += quantity;
             }
 
-            try
-            {
-                // Commit changes to the database
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to the players record, this is invalid
-                // and so we use our values and ignore the new data
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    // Refresh current values from database
-                    occ.Resolve(RefreshMode.KeepCurrentValues);
-                }
-            }
+            // Commit changes to the database
+            db.SaveChanges();
         }
     }
 }

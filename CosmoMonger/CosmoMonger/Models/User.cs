@@ -84,7 +84,7 @@ namespace CosmoMonger.Models
             player.UpdateNetWorth();
 
             db.Players.InsertOnSubmit(player);
-            db.SubmitChanges();
+            db.SaveChanges();
 
             return player;
         }
@@ -116,7 +116,7 @@ namespace CosmoMonger.Models
             this.Email = email;
 
             // Save changes
-            db.SubmitChanges();
+            db.SaveChanges();
         }
         
         /// <summary>
@@ -155,7 +155,7 @@ namespace CosmoMonger.Models
             buddyEntry.FriendId = buddy.UserId;
             db.BuddyLists.InsertOnSubmit(buddyEntry);
 
-            db.SubmitChanges();
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace CosmoMonger.Models
             }
 
             db.BuddyLists.DeleteOnSubmit(buddyToRemove);
-            db.SubmitChanges();
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace CosmoMonger.Models
             ignoreEntry.AntiFriendId = ignoreUser.UserId;
             db.IgnoreLists.InsertOnSubmit(ignoreEntry);
 
-            db.SubmitChanges();
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace CosmoMonger.Models
             }
 
             db.IgnoreLists.DeleteOnSubmit(antiFriendToRemove);
-            db.SubmitChanges();
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace CosmoMonger.Models
             db.Messages.InsertOnSubmit(msg);
 
             // Save changes to database
-            db.SubmitChanges();
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace CosmoMonger.Models
             this.Active = false;
 
             // Save changes to database
-            db.SubmitChanges();
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace CosmoMonger.Models
             this.Active = true;
 
             // Save changes to database
-            db.SubmitChanges();
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -365,7 +365,7 @@ namespace CosmoMonger.Models
                 message.VisibleToSender = false;
             }
 
-            db.SubmitChanges();
+            db.SaveChanges();
         }
 
         /// <summary>

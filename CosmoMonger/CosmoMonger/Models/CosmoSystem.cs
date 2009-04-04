@@ -166,8 +166,8 @@ namespace CosmoMonger.Models
             // Add the correct number of goods to the system
             systemGood.Quantity += quantity;
 
-            // Save changes to the database
-            db.SubmitChanges();
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>

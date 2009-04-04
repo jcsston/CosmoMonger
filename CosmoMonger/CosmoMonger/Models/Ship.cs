@@ -202,7 +202,7 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             this.TargetSystemId = targetSystem.SystemId;
             this.TargetSystemArrivalTime = DateTime.UtcNow.AddSeconds(travelTime);
-            db.SubmitChanges();
+            db.SaveChanges();
 
             return travelTime;
         }
@@ -231,23 +231,7 @@ namespace CosmoMonger.Models
                     this.TargetSystemId = null;
                     this.TargetSystemArrivalTime = null;
 
-                    try
-                    {
-                        // Save database changes
-                        db.SubmitChanges(ConflictMode.ContinueOnConflict);
-                    }
-                    catch (ChangeConflictException ex)
-                    {
-                        ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                        // Another thread has made changes to the combat record, this is invalid
-                        // and so we use our values and ignore the new data
-                        foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                        {
-                            // Refresh current values from database
-                            occ.Resolve(RefreshMode.KeepCurrentValues);
-                        }
-                    }
+                    db.SaveChanges();
                 }
                 else
                 {
@@ -345,7 +329,7 @@ namespace CosmoMonger.Models
 
             try
             {
-                db.SubmitChanges();
+                db.SaveChanges();
             }
             catch (SqlException ex)
             {
@@ -424,23 +408,7 @@ namespace CosmoMonger.Models
                 shipGood.Quantity += actualQuantity;
             }
 
-            try
-            {
-                // Save changes to the database
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to the ShipGood row, this is invalid
-                // and so we use our values and ignore the new data
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    // Keep our changes, but update other data
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            db.SaveChanges();
 
             // Return the number of goods added to the ship
             return actualQuantity;
@@ -484,21 +452,7 @@ namespace CosmoMonger.Models
             this.DamageShield = 0;
             this.DamageWeapon = 0;
 
-            try
-            {
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to this ship record
-                // Keep our changes, but update the other values
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            db.SaveChanges();
         }
 
         /// <summary>

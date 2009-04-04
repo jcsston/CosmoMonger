@@ -61,6 +61,7 @@ namespace CosmoMonger.Models
             };
             Logger.Write("Buying new ship in SystemShip.Buy", "Model", 500, 0, TraceEventType.Information, "Buying Ship", props);
 
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             // 'Trade-in' the current ship
             SystemShip tradeInShip = (from ss in this.CosmoSystem.SystemShips
                                       where ss.BaseShip == currentShip.BaseShip
@@ -95,8 +96,7 @@ namespace CosmoMonger.Models
             currentShip.Weapon = this.BaseShip.InitialWeapon;
 
             // Commit changes to the database
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-            db.SubmitChanges();
+            db.SaveChanges();
         }
     }
 }

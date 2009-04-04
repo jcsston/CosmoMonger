@@ -270,19 +270,23 @@
             return context;
         }
 
-        public static void ClearScopedDataContext<T>()
+        public static void ClearScopedDataContext<T>(string key)
         {
             if (HttpContext.Current != null)
             {
                 // Clear web request storage
-                string key = "__WRSCDC_" + HttpContext.Current.GetHashCode().ToString("x") + Thread.CurrentContext.ContextID.ToString();
+                //string key = "__WRSCDC_" + HttpContext.Current.GetHashCode().ToString("x") + Thread.CurrentContext.ContextID.ToString();
                 HttpContext.Current.Items[key] = null;
             }
             else
             {
                 // Clear TLS
-                string key = "__WRSCDC_" + Thread.CurrentContext.ContextID.ToString();
-                Thread.FreeNamedDataSlot(key);
+                //string key = "__WRSCDC_" + Thread.CurrentContext.ContextID.ToString();
+                LocalDataStoreSlot threadData = Thread.GetNamedDataSlot(key);
+                if (threadData != null)
+                {
+                    Thread.SetData(threadData, null);
+                }
             }
         }
     }

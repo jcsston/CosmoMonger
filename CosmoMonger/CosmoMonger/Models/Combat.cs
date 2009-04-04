@@ -241,23 +241,8 @@ namespace CosmoMonger.Models
             // Update turn action time
             this.LastActionTime = DateTime.UtcNow;
 
-            try
-            {
-                // Save database changes
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to the combat record, this is invalid
-                // and so we use our values and ignore the new data
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    // Refresh current values from database
-                    occ.Resolve(RefreshMode.KeepCurrentValues);
-                }
-            }
+            // Save database changes
+            db.SaveChanges();
 
             // Did we destory the other ship?
             if (this.ShipOther.Destroyed)
@@ -307,7 +292,8 @@ namespace CosmoMonger.Models
             // Update turn action time
             this.LastActionTime = DateTime.UtcNow;
 
-            db.SubmitChanges();
+            // Save database changes
+            db.SaveChanges();
 
             // Turn is ended
             this.SwapTurn();
@@ -370,10 +356,14 @@ namespace CosmoMonger.Models
             // Update turn action time
             this.LastActionTime = DateTime.UtcNow;
 
+            // End combat turn
+            this.EndTurn();
+
             // Cleanup combat
             this.CleanupCombat();
 
-            db.SubmitChanges();
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -419,9 +409,10 @@ namespace CosmoMonger.Models
             // Update turn action time
             this.LastActionTime = DateTime.UtcNow;
 
-            db.SubmitChanges();
+            // Save database changes
+            db.SaveChanges();
 
-            // Turn is ended
+            // Swap Turn to other player
             this.SwapTurn();
         }
 
@@ -455,7 +446,11 @@ namespace CosmoMonger.Models
             // Update turn action time
             this.LastActionTime = DateTime.UtcNow;
 
-            db.SubmitChanges();
+            // Save database changes
+            db.SaveChanges();
+
+            // End combat turn
+            this.EndTurn();
 
             // Cleanup combat
             this.CleanupCombat();
@@ -523,69 +518,38 @@ namespace CosmoMonger.Models
                     otherPlayer.ForcedFlees++;
                 }
 
-                try
-                {
-                    // Save database changes
-                    db.SubmitChanges(ConflictMode.ContinueOnConflict);
-                }
-                catch (ChangeConflictException ex)
-                {
-                    ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                    // Another thread has made changes to the combat record, this is invalid
-                    // and so we use our values and ignore the new data
-                    foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                    {
-                        // Refresh current values from database
-                        occ.Resolve(RefreshMode.KeepCurrentValues);
-                    }
-                }
+                // Save database changes
+                db.SaveChanges();
 
                 // Cleanup combat
                 this.CleanupCombat();
             }
-            else
-            {
-                // Ship did not escape yet, so it's the other ships turn
-                this.EndTurn();
-            }
-
+            
             // Update turn action time
             this.LastActionTime = DateTime.UtcNow;
 
-            try
-            {
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
+            // Save database changes
+            db.SaveChanges();
 
-                // Another thread has made changes to one of this combat record
-                // Overwrite those changes
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            // End combat turn
+            this.EndTurn();
         }
 
         /// <summary>
         /// Ends the current ships turn. Giving control to the other ship.
-        /// This does check the surrender and cargo flags.
+        /// This does check the surrender and cargo flags, so do not call when offering surrender
+        /// or jettisoning cargo.
         /// </summary>
         public void EndTurn()
         {
-            // Check that the combat is still in-progress
-            if (this.Status != CombatStatus.Incomplete)
-            {
-                throw new InvalidOperationException("Combat is over");
-            }
-
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
-            this.SwapTurn();
-
+            // Only swap turns if combat is still in-progress
+            if (this.Status != CombatStatus.Incomplete)
+            {
+                this.SwapTurn();
+            }
+            
             // Check if surrender was not accepted
             if (this.Surrendered)
             {
@@ -603,7 +567,8 @@ namespace CosmoMonger.Models
                 this.CargoJettisoned = false;
             }
 
-            db.SubmitChanges();
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -637,21 +602,8 @@ namespace CosmoMonger.Models
             // Rest the turn point counter
             this.TurnPointsLeft = Combat.PointsPerTurn;
 
-            try
-            {
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to one of this combat record
-                // Overwrite those changes
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -760,24 +712,14 @@ namespace CosmoMonger.Models
             // Combat has ended
             this.Status = CombatStatus.ShipDestroyed;
 
-            try
-            {
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to the player or combat records
-                // Overwrite those changes
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            // Save database changes
+            db.SaveChanges();
 
             // Cleanup combat
             this.CleanupCombat();
+
+            // End combat turn
+            this.EndTurn();
         }
 
         /// <summary>
@@ -826,21 +768,8 @@ namespace CosmoMonger.Models
                 Logger.Write("Giving losing player starting credits", "Model", 150, 0, TraceEventType.Verbose, "InProgressCombat.OtherShipDestroyed", props);
             }
 
-            try
-            {
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to one of the player records
-                // Overwrite those changes
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -880,21 +809,8 @@ namespace CosmoMonger.Models
                 shipPlayer.CargoLostWorth += cargoWorth;
             }
 
-            try
-            {
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to the ship or combat goods
-                // Keep our changes
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -931,21 +847,8 @@ namespace CosmoMonger.Models
                 shipPlayer.CargoLootedWorth += cargoWorth;
             }
 
-            try
-            {
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to the ship or combat goods
-                // Keep our changes
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>

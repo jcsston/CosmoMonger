@@ -117,6 +117,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CosmoMongerDb.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\CosmoMongerDbDataContext.cs" />
     <Compile Include="Models\CosmoMongerMembershipProvider.cs" />
     <Compile Include="Models\CosmoMongerMembershipUser.cs" />
     <Compile Include="Models\CosmoSystem.cs" />

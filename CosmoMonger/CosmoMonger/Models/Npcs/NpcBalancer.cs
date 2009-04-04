@@ -149,21 +149,7 @@ namespace CosmoMonger.Models.Npcs
                     // Setup the NPC
                     npc.Setup();
 
-                    try
-                    {
-                        db.SubmitChanges(ConflictMode.ContinueOnConflict);
-                    }
-                    catch (ChangeConflictException ex)
-                    {
-                        ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                        // Another thread has made changes to one of this npc record
-                        // Overwrite those changes
-                        foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                        {
-                            occ.Resolve(RefreshMode.KeepChanges);
-                        }
-                    }
+                    db.SaveChanges();
                 }
             }
             else if (npcAdjustment < 0)
@@ -197,21 +183,7 @@ namespace CosmoMonger.Models.Npcs
                 */
             }
 
-            try
-            {
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to one of this combat record
-                // Overwrite those changes
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            db.SaveChanges();
         }
     }
 }

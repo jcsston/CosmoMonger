@@ -23,7 +23,9 @@ namespace CosmoMonger.Models
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             this.Received = true;
-            db.SubmitChanges();
+
+            // Save database changes
+            db.SaveChanges();
         }
     }
 }

@@ -97,22 +97,8 @@ namespace CosmoMonger.Models
             this.BankCredits -= credits;
             this.Ship.Credits += credits;
 
-            try
-            {
-                // Send changes to database
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to this Player row, 
-                // Most likely from browsing multiple pages at once.
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -155,22 +141,8 @@ namespace CosmoMonger.Models
             this.Ship.Credits -= credits;
             this.BankCredits += credits;
 
-            try
-            {
-                // Send changes to database
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to this Player row, 
-                // Most likely from browsing multiple pages at once.
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -215,7 +187,9 @@ namespace CosmoMonger.Models
 
             // Update this player
             this.Name = name;
-            db.SubmitChanges();
+
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -258,23 +232,8 @@ namespace CosmoMonger.Models
                 // Update snapshot age
                 this.LastRecordSnapshotAge = (int)this.TimePlayed;
 
-                try
-                {
-                    // Send changes to database
-                    db.SubmitChanges(ConflictMode.ContinueOnConflict);
-                }
-                catch (ChangeConflictException ex)
-                {
-                    ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                    // Another thread has made changes to this Player row, 
-                    // Most likely from browsing multiple pages at once.
-                    // We will force this update of playtime as this one should be more recent
-                    foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                    {
-                        occ.Resolve(RefreshMode.KeepChanges);
-                    }
-                }
+                // Save database changes
+                db.SaveChanges();
             }
         }
 
@@ -306,30 +265,8 @@ namespace CosmoMonger.Models
                 // Update last play datetime
                 this.LastPlayed = DateTime.UtcNow;
 
-                try
-                {
-                    // Send changes to database
-                    db.SubmitChanges(ConflictMode.ContinueOnConflict);
-                }
-                catch (ChangeConflictException ex)
-                {
-                    ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                    // Another thread has made changes to this Player row, 
-                    // Most likely from browsing multiple pages at once.
-                    // We will force this update of playtime as this one should be more recent
-                    foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                    {
-                        // Log each conflict
-                        foreach (MemberChangeConflict mcc in occ.MemberConflicts)
-                        {
-                            string memberDetails = string.Format("{0}.{1} O: {2} D: {3} C: {4}", mcc.Member.DeclaringType.Name, mcc.Member.Name, mcc.OriginalValue, mcc.DatabaseValue, mcc.CurrentValue);
-                            Logger.Write(memberDetails, "Model", 10, 0, TraceEventType.Verbose, "SQL Change Conflict Details");
-                        }
-
-                        occ.Resolve(RefreshMode.KeepChanges);
-                    }
-                }
+                // Save database changes
+                db.SaveChanges();
 
                 // Update player records
                 this.UpdateRecordSnapshot();
@@ -353,8 +290,8 @@ namespace CosmoMonger.Models
             // Kill this player
             this.Alive = false;
 
-            // Send changes to the database
-            db.SubmitChanges();
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>

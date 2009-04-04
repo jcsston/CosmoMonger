@@ -115,27 +115,8 @@ namespace CosmoMonger.Models
             // We don't delete the SystemGood even if quantity is 0 because the SystemGood also signals if the system buys the good
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
-            try
-            {
-                // Commit changes to the database
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to this SystemGood row, 
-                // which could be from the number of goods or the price changing 
-                // Best case to toss our changes and try to buy the good again
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    occ.Resolve(RefreshMode.OverwriteCurrentValues);
-                }
-
-                // This does have the chance of a stack overflow, we should find out in testing
-                this.Buy(currentShip, quantity, price);
-                return;
-            }
+            // Commit changes to the database
+            db.SaveChanges();
 
             // Add the goods to the player ship
             int addedQuantity = currentShip.AddGood(this.GoodId, quantity);
@@ -146,23 +127,8 @@ namespace CosmoMonger.Models
             // Charge the ship for the goods
             currentShip.Credits -= totalCost;
 
-            try
-            {
-                // Commit changes to the database
-                db.SubmitChanges(ConflictMode.ContinueOnConflict);
-            }
-            catch (ChangeConflictException ex)
-            {
-                ExceptionPolicy.HandleException(ex, "SQL Policy");
-
-                // Another thread has made changes to the players record, this is invalid
-                // and so we use our values and ignore the new data
-                foreach (ObjectChangeConflict occ in db.ChangeConflicts)
-                {
-                    // Keep our changes, but update other data
-                    occ.Resolve(RefreshMode.KeepChanges);
-                }
-            }
+            // Commit changes to the database
+            db.SaveChanges();
         }
 
         /// <summary>

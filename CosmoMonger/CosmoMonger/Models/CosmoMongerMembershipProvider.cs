@@ -261,7 +261,9 @@ namespace CosmoMonger.Models
                                               || m.SenderUserId == matchingUser.UserId
                                               select m);
                 db.Users.DeleteOnSubmit(matchingUser);
-                db.SubmitChanges();
+                
+                // Save database changes
+                db.SaveChanges();
                 
                 ////db.Log = null;
 

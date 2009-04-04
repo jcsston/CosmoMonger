@@ -214,7 +214,9 @@ namespace CosmoMonger.Models
 
             // Insert the user record into the database
             db.Users.InsertOnSubmit(user);
-            db.SubmitChanges();
+
+            // Save database changes
+            db.SaveChanges();
 
             return new CosmoMongerMembershipUser(user);
         }
@@ -234,7 +236,9 @@ namespace CosmoMonger.Models
             {
                 // Update the users password
                 this.user.Password = Cryptographer.CreateHash("SHA512", newPassword);
-                db.SubmitChanges();
+                
+                // Save database changes
+                db.SaveChanges();
                 return true;
             }
 
@@ -257,7 +261,9 @@ namespace CosmoMonger.Models
             {
                 this.user.LoginAttemptCount = 0;
                 this.user.LastLogin = DateTime.UtcNow;
-                db.SubmitChanges();
+
+                // Save database changes
+                db.SaveChanges();
                 return true;
             }
             else if (!this.IsLockedOut)
@@ -271,7 +277,7 @@ namespace CosmoMonger.Models
                     // Make the user disabled in the database right now, to prevent attacks 
                     // from simply ending the connection if the login takes too long
                     this.user.Active = false;
-                    db.SubmitChanges();
+                    db.SaveChanges();
 
                     try
                     {
@@ -298,7 +304,8 @@ namespace CosmoMonger.Models
                     this.user.Active = true;
                 }
 
-                db.SubmitChanges();
+                // Save database changes
+                db.SaveChanges();
             }
 
             return false;
@@ -320,7 +327,9 @@ namespace CosmoMonger.Models
             {
                 // Verify the user
                 this.user.Validated = true;
-                db.SubmitChanges();
+                
+                // Save database changes
+                db.SaveChanges();
                 return true;
             }
             else
@@ -341,7 +350,9 @@ namespace CosmoMonger.Models
             if (this.user != null)
             {
                 this.user.Active = true;
-                db.SubmitChanges();
+
+                // Save database changes
+                db.SaveChanges();
                 return true;
             }
 
@@ -417,7 +428,8 @@ namespace CosmoMonger.Models
             // Update datetime of last verification e-mail sent
             this.user.LastVerificationSent = DateTime.UtcNow;
 
-            db.SubmitChanges();
+            // Save database changes
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -430,7 +442,8 @@ namespace CosmoMonger.Models
 
             this.user.SessionID = sessionId;
 
-            db.SubmitChanges();
+            // Save database changes
+            db.SaveChanges();
         }
     }
 }
