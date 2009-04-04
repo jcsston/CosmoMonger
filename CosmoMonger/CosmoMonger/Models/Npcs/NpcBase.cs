@@ -30,7 +30,7 @@ namespace CosmoMonger.Models.Npcs
         /// <summary>
         /// Holds the NPC row reference
         /// </summary>
-        private Npc npcRow = null;
+        protected Npc npcRow = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NpcBase"/> class.
@@ -43,26 +43,14 @@ namespace CosmoMonger.Models.Npcs
         }
 
         /// <summary>
-        /// Gets the NPC row reference.
-        /// </summary>
-        /// <value>The NPC row reference.</value>
-        protected Npc NpcRow
-        {
-            get
-            {
-                return this.npcRow;
-            }
-        }
-
-        /// <summary>
         /// Setup the new Npc in the database, not required for all types.
         /// If the Npc has a ship this should be overrided to handle creation of the ship.
         /// </summary>
         public virtual void Setup()
         {
             // Setup some sane defaults for the required fields
-            this.NpcRow.Aggression = 0;
-            this.NpcRow.NextActionTime = DateTime.UtcNow;
+            this.npcRow.Aggression = 0;
+            this.npcRow.NextActionTime = DateTime.UtcNow;
         }
 
         /// <summary>

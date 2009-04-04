@@ -24,6 +24,26 @@ namespace CosmoMonger.Models.Npcs
     public class NpcPirate : NpcShipBase
     {
         /// <summary>
+        /// The base of amount of credits we always ensure that a pirate has aboard
+        /// </summary>
+        public const int BaseCreditAmount = 1000;
+
+        /// <summary>
+        /// Standard delay to wait between traveling and attacking
+        /// </summary>
+        public static TimeSpan DelayBeforeNextTravel = new TimeSpan(0, 1, 0);
+
+        /// <summary>
+        /// Standard delay to wait between actions
+        /// </summary>
+        public static TimeSpan DelayBeforeNextAction = new TimeSpan(0, 0, 0, 5);
+
+        /// <summary>
+        /// Combat delay to wait between actions
+        /// </summary>
+        public static TimeSpan DelayBeforeNextActionCombat = new TimeSpan(0, 0, 0, 0, 750);
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="NpcPirate"/> class.
         /// </summary>
         /// <param name="npcRow">The NPC row reference.</param>
@@ -48,18 +68,16 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         public override void DoAction()
         {
-            if (!this.SetNextActionDelay(new TimeSpan(0, 0, 5)))
+            if (!this.SetNextActionDelay(NpcPirate.DelayBeforeNextAction))
             {
                 return;
             }
 
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-            Ship npcShip = this.NpcRow.Ship;
+            Ship npcShip = this.npcRow.Ship;
 
             // Check if we are still traveling
             npcShip.CheckIfTraveling();
-
-            Dictionary<string, object> props;
 
             // Check if we are currently in combat
             if (npcShip.InProgressCombat != null)
@@ -67,8 +85,15 @@ namespace CosmoMonger.Models.Npcs
                 // In Combat!
                 this.DoCombat();
             }
-            else if (this.NpcRow.NextTravelTime < DateTime.UtcNow)
+            else if (this.npcRow.NextTravelTime < DateTime.UtcNow)
             {
+                // Check if we need to give this pirate some credits
+                if (npcShip.Credits < NpcPirate.BaseCreditAmount)
+                {
+                    // Poor pirate has no gold, give him some to start
+                    npcShip.Credits = BaseCreditAmount;
+                }
+
                 // Attack?
                 if (this.rnd.SelectByProbablity(new bool[] { true, false }, new double[] { 0.50, 0.50 }))
                 {
@@ -80,14 +105,14 @@ namespace CosmoMonger.Models.Npcs
                 }
 
                 // Set next travel time
-                this.NpcRow.NextTravelTime = DateTime.UtcNow.AddMinutes(1);
+                this.npcRow.NextTravelTime = DateTime.UtcNow.Add(NpcPirate.DelayBeforeNextTravel);
             } 
             else 
             {
-                props = new Dictionary<string, object>
+                Dictionary<string, object> props = new Dictionary<string, object>
                 {
-                    { "NpcId", this.NpcRow.NpcId },
-                    { "NextTravelTime", this.NpcRow.NextTravelTime },
+                    { "NpcId", this.npcRow.NpcId },
+                    { "NextTravelTime", this.npcRow.NextTravelTime },
                     { "UtcNow", DateTime.UtcNow }
                 };
                 Logger.Write("Waiting for NextTravelTime", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Wait", props);
@@ -101,12 +126,12 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         private void DoCombat()
         {
-            Ship npcShip = this.NpcRow.Ship;
+            Ship npcShip = this.npcRow.Ship;
             Combat combat = npcShip.InProgressCombat;
 
             Dictionary<string, object> props = new Dictionary<string, object>
             {
-                { "NpcId", this.NpcRow.NpcId },
+                { "NpcId", this.npcRow.NpcId },
                 { "CombatId", combat.CombatId },
                 { "TurnShipId", combat.ShipTurn.ShipId },
                 { "ShipId", npcShip.ShipId }
@@ -119,9 +144,17 @@ namespace CosmoMonger.Models.Npcs
 
                 try
                 {
-                    while (combat.ShipTurn.ShipId == npcShip.ShipId && combat.Status == Combat.CombatStatus.Incomplete)
+                    // We fire our weapon twice
+                    for (int i = 0; i < 2; i++)
                     {
-                        // Fire until we cannot any more!
+                        // Check if our turn is over
+                        if (combat.ShipTurn.ShipId != npcShip.ShipId || combat.Status != Combat.CombatStatus.Incomplete)
+                        {
+                            // Break out
+                            break;
+                        }
+
+                        // Fire weapon!
                         combat.FireWeapon();
 
                         Logger.Write("Fired weapon", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
@@ -139,6 +172,9 @@ namespace CosmoMonger.Models.Npcs
                 }
 
                 Logger.Write("Ended Combat Turn", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
+
+                // Set a shorter delay before the next action
+                this.SetNextActionDelay(NpcPirate.DelayBeforeNextActionCombat);
             }
         }
 
@@ -147,7 +183,7 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         private void DoAttack()
         {
-            Ship npcShip = this.NpcRow.Ship;
+            Ship npcShip = this.npcRow.Ship;
 
             // Look for a ship to attack
             IEnumerable<Ship> attackableShips = npcShip.GetShipsToAttack();
@@ -156,12 +192,17 @@ namespace CosmoMonger.Models.Npcs
             IEnumerable<Ship> targetableShips = (from s in attackableShips
                                                  where (s.Npcs.Any(n => n.NType != NpcType.Police)
                                                  || s.Players.Any())
-                                                 && s != this.NpcRow.LastAttackedShip
+                                                 && s != this.npcRow.LastAttackedShip
                                                  select s).AsEnumerable();
+
+            // Filter out ships that are already in combat
+            targetableShips = (from s in targetableShips
+                               where s.InProgressCombat == null
+                               select s).AsEnumerable();
 
             Dictionary<string, object> props = new Dictionary<string, object>
             {
-                { "NpcId", this.NpcRow.NpcId },
+                { "NpcId", this.npcRow.NpcId },
                 { "AttackableShips", attackableShips.Count() },
                 { "TargetableShips", targetableShips.Count() },
             };
@@ -172,7 +213,7 @@ namespace CosmoMonger.Models.Npcs
             {
                 props = new Dictionary<string, object>
                 {
-                    { "NpcId", this.NpcRow.NpcId },
+                    { "NpcId", this.npcRow.NpcId },
                     { "TargetShipId", shipToAttack.ShipId }
                 };
                 Logger.Write("Attacking Ship", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Attacking", props);
@@ -181,7 +222,7 @@ namespace CosmoMonger.Models.Npcs
                 {
                     // Attack!
                     npcShip.Attack(shipToAttack);
-                    this.NpcRow.LastAttackedShip = shipToAttack;
+                    this.npcRow.LastAttackedShip = shipToAttack;
                     Logger.Write("Attacked Ship", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Attacked", props);
                 }
                 catch (InvalidOperationException ex)
@@ -200,7 +241,7 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         private void DoTravel()
         {
-            Ship npcShip = this.NpcRow.Ship;
+            Ship npcShip = this.npcRow.Ship;
 
             // We travel to any system in range
             CosmoSystem[] inRangeSystems = npcShip.GetInRangeSystems();
@@ -211,7 +252,7 @@ namespace CosmoMonger.Models.Npcs
 
             Dictionary<string, object> props = new Dictionary<string, object>
             {
-                { "NpcId", this.NpcRow.NpcId },
+                { "NpcId", this.npcRow.NpcId },
                 { "TargetSystemId", targetSystem.SystemId },
                 { "TravelTime", travelTime },
             };

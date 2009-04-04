@@ -83,6 +83,15 @@ namespace CosmoMonger.Models
         /// </summary>
         static private object npcLock = new object();
 
+        public static void NpcThreadEntry()
+        {
+            while (true)
+            {
+                Thread.Sleep(2000);
+                CosmoManager.DoPendingNPCActions(null);
+            }
+        }
+
         /// <summary>
         /// Calls DoAction on all NPCs in the galaxy.
         /// This method will be called every 5 seconds to keep the NPCs
@@ -97,26 +106,14 @@ namespace CosmoMonger.Models
             {
                 CosmoMongerDbDataContext db = CosmoManager.GetDbContextNew();
 
-                /*
-                db.Refresh(RefreshMode.OverwriteCurrentValues, db.Npcs);
-                db.Refresh(RefreshMode.OverwriteCurrentValues, db.Combats);
-                db.Refresh(RefreshMode.OverwriteCurrentValues, db.Ships);
-                */
-
-                DateTime queryTime = db.ExecuteQuery<DateTime>("SELECT MAX(LastPlayed) FROM Player").Single();
-                DateTime linqTime = db.Players.Max(p => p.LastPlayed);
-                Dictionary<string, object> props = new Dictionary<string, object>
-                {
-                    { "CosmoMongerDbDataContext", db.GetHashCode() },
-                    { "QueryMaxLastPlayedTime", queryTime },
-                    { "LinqMaxLastPlayedTime", linqTime }
-                };
-                Logger.Write("Entered", "Model", 200, 0, TraceEventType.Resume, "CosmoMonger.DoPendingNPCActions", props);
+                Logger.Write("Entered", "Model", 200, 0, TraceEventType.Resume, "CosmoMonger.DoPendingNPCActions");
                 
 
-                var npcsNeedingAction = (from n in db.Npcs
-                                        where n.NextActionTime < DateTime.UtcNow
-                                        select n);
+                // Process the 10 oldest Npc actions at a time to keep load down
+                IQueryable<Npc> npcsNeedingAction = (from n in db.Npcs
+                                                     where n.NextActionTime < DateTime.UtcNow
+                                                     orderby n.NextActionTime
+                                                     select n).Take(10);
                 foreach (Npc npc in npcsNeedingAction)
                 {
                     npc.DoAction();

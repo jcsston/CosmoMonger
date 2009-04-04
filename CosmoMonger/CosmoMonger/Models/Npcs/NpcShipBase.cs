@@ -44,7 +44,7 @@ namespace CosmoMonger.Models.Npcs
             Race npcRace = this.rnd.SelectOne(db.Races);
             
             // Assign the race
-            this.NpcRow.Race = npcRace;
+            this.npcRow.Race = npcRace;
 
             // We only start in systems with the same race
             IQueryable<CosmoSystem> possibleStartingSystems = (from s in db.CosmoSystems
@@ -57,10 +57,10 @@ namespace CosmoMonger.Models.Npcs
 
             // Create the NPC ship
             Ship npcShip = startingSystem.CreateShip(startingShipModel.Name);
-            this.NpcRow.Ship = npcShip;
+            this.npcRow.Ship = npcShip;
 
             // Set the next travel time to now
-            this.NpcRow.NextTravelTime = DateTime.UtcNow;
+            this.npcRow.NextTravelTime = DateTime.UtcNow;
         }
     }
 }

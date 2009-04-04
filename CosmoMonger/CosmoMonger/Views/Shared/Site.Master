@@ -181,12 +181,13 @@
             string message = this.ViewContext.RouteData.Values["controller"] + "." + this.ViewContext.RouteData.Values["action"];
             Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(message, "Page Log", 800, 0, System.Diagnostics.TraceEventType.Verbose, "Master Page Log", props);
             
+            /*
             int workerAvailable = 0;
             int completionPortAvailable = 0;
             System.Threading.ThreadPool.GetAvailableThreads(out workerAvailable, out completionPortAvailable);
 
             Microsoft.Practices.EnterpriseLibrary.Logging.Logger.Write(string.Format("Worker Threads Available: {0} Completion Port Threads Available: {1}", workerAvailable, completionPortAvailable), "View", 300, 0, System.Diagnostics.TraceEventType.Verbose, "Thread Pool Status");
-
+            */
         %>
         Processing Time: <%=processingTime%> seconds
      </p>

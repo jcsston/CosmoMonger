@@ -64,6 +64,19 @@ namespace CosmoMonger.Controllers
                         // Check if we need to do NPC AI processing
                         lock (this.ControllerContext.HttpContext.Application.SyncRoot) 
                         {
+                            // Check if the npc thread has been started
+                            Thread npcThread = (Thread)this.ControllerContext.HttpContext.Application["NpcThread"];
+                            if (npcThread == null) 
+                            {
+                                // Startup the NPC thread
+                                npcThread = new Thread(new ThreadStart(CosmoManager.NpcThreadEntry));
+                                npcThread.IsBackground = true;
+                                npcThread.Start();
+
+                                // Keep a reference so we can detect if it's been started or not
+                                this.ControllerContext.HttpContext.Application["NpcThread"] = npcThread;
+                            }
+                            /*
                             object lastNpcUpdate = this.ControllerContext.HttpContext.Application["LastNpcUpdate"];
                             if (lastNpcUpdate == null || (DateTime.UtcNow - (DateTime)lastNpcUpdate).TotalSeconds > 5)
                             {
@@ -73,6 +86,7 @@ namespace CosmoMonger.Controllers
                                 // Update NPC Counter
                                 this.ControllerContext.HttpContext.Application["LastNpcUpdate"] = DateTime.UtcNow;
                             }
+                            */
                         }
                     }
                     else
