@@ -104,6 +104,13 @@
     <Compile Include="Controllers\ShipController.cs" />
     <Compile Include="Controllers\TradeController.cs" />
     <Compile Include="Controllers\TravelController.cs" />
+    <Compile Include="DatabaseSize.aspx.cs">
+      <DependentUpon>DatabaseSize.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DatabaseSize.aspx.designer.cs">
+      <DependentUpon>DatabaseSize.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -207,6 +214,7 @@
     <Content Include="Content\System\Vance%27s Folly.png" />
     <Content Include="Content\tombstone1.png" />
     <Content Include="Content\TravelBackground.jpg" />
+    <Content Include="DatabaseSize.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\date.js" />
