@@ -154,8 +154,9 @@ namespace CosmoMonger.Models.Npcs
 
             // Exclude police ships
             IEnumerable<Ship> targetableShips = (from s in attackableShips
-                                                 where s.Npcs.Any(n => n.NType != NpcType.Police)
-                                                 || s.Players.Any()
+                                                 where (s.Npcs.Any(n => n.NType != NpcType.Police)
+                                                 || s.Players.Any())
+                                                 && s != this.NpcRow.LastAttackedShip
                                                  select s).AsEnumerable();
 
             Dictionary<string, object> props = new Dictionary<string, object>
@@ -180,6 +181,7 @@ namespace CosmoMonger.Models.Npcs
                 {
                     // Attack!
                     npcShip.Attack(shipToAttack);
+                    this.NpcRow.LastAttackedShip = shipToAttack;
                     Logger.Write("Attacked Ship", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Attacked", props);
                 }
                 catch (InvalidOperationException ex)

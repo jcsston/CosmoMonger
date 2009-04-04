@@ -30,7 +30,7 @@ namespace CosmoMonger.Models.Npcs
         /// <summary>
         /// The mininum number of Npcs that should always be active
         /// </summary>
-        public const int MinNpcs = 1; // 10
+        public const int MinNpcs = 100; // 10
 
         /// <summary>
         /// Percent of generated traders
@@ -100,7 +100,9 @@ namespace CosmoMonger.Models.Npcs
                     NpcBase npc = null;
 
                     // Which type will we produce?
-                    NpcType[] npcTypes = { NpcType.Pirate, NpcType.Trader, NpcType.Police };
+                    //NpcType[] npcTypes = { NpcType.Pirate, NpcType.Trader, NpcType.Police };
+                    // Only Pirates for now
+                    NpcType[] npcTypes = { NpcType.Pirate, NpcType.Pirate, NpcType.Pirate };
                     double[] npcProbablity = { NpcBalancer.PercentPirates, NpcBalancer.PercentTraders, NpcBalancer.PercentPolice };
                     newNpc.NType = this.rnd.SelectByProbablity(npcTypes, npcProbablity);
 

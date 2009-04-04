@@ -234,6 +234,7 @@ namespace CosmoMonger.Models
                 { "TurnShipId", this.ShipTurn.ShipId },
                 { "OtherShipId", this.ShipOther.ShipId },
                 { "WeaponDamage", weaponDamage },
+                { "WeaponAccuracy", weaponAccuracy },
                 { "TurnPointsLeft", this.TurnPointsLeft }
             };
             Logger.Write("Attacking ship fired weapon", "Model", 150, 0, TraceEventType.Verbose, "Combat.FireWeapon", props);
@@ -545,7 +546,7 @@ namespace CosmoMonger.Models
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             // Only swap turns if combat is still in-progress
-            if (this.Status != CombatStatus.Incomplete)
+            if (this.Status == CombatStatus.Incomplete)
             {
                 this.SwapTurn();
             }

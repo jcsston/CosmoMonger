@@ -4283,6 +4283,19 @@
     <renameColumn tableName="Npc" oldColumnName="NpcTypeId" newColumnName="NType" columnDataType="int" />
     <renameColumn tableName="NpcName" oldColumnName="NpcTypeId" newColumnName="NType" columnDataType="int" />
   </changeSet>
+  <changeSet author="Jory Stone" id="93">
+    <comment>Removing ship Npcs that don't have a ship...</comment>
+    <delete tableName="Npc">
+      <where>NType IN (4, 5, 6) AND ShipId IS NULL</where>
+    </delete>
+  </changeSet>
+  <changeSet author="Jory Stone" id="94">
+    <comment>Loading new Pirate names created by Caleb</comment>
+    <loadData tableName="NpcName" file="NpcNames2.csv">
+      <column name="NType" type="NUMERIC" />
+      <column name="Name" type="STRING" />
+    </loadData>
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

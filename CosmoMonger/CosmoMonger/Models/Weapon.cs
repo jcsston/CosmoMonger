@@ -19,6 +19,6 @@ namespace CosmoMonger.Models
         /// <summary>
         /// The base accuracy for weapons.
         /// </summary>
-        public const int BaseAccuracy = 75;
+        public const double BaseAccuracy = 0.75;
     }
 }
