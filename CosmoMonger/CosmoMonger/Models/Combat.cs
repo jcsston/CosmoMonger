@@ -200,14 +200,21 @@ namespace CosmoMonger.Models
             // Power up weapon
             double weaponDamage = this.ShipTurn.Weapon.Power;
 
-            // Apply racial factor to weapons -/+ 10%
-            weaponDamage *= 1.0 + (this.ShipTurn.Race.Weapons / 10.0);
+            Race turnRace = this.ShipTurn.Race;
+            if (turnRace != null)
+            {
+                // Apply racial factor to weapons -/+ 10%
+                weaponDamage *= 1.0 + (turnRace.Weapons / 10.0);
+            }
 
             // Get the weapon accuracy
             double weaponAccuracy = Weapon.BaseAccuracy;
 
-            // Apply racial factor to accuracy -/+ 10%
-            weaponAccuracy *= 1.0 + (this.ShipTurn.Race.Accuracy / 10.0);
+            if (turnRace != null)
+            {
+                // Apply racial factor to accuracy -/+ 10%
+                weaponAccuracy *= 1.0 + (turnRace.Accuracy / 10.0);
+            }
 
             // Apply target ship's HitFactor modifier to accuracy -/+20%
             weaponAccuracy *= 1.0 + (this.ShipOther.BaseShip.HitFactor / 10.0);
@@ -479,9 +486,13 @@ namespace CosmoMonger.Models
             // This means that if it takes 12 seconds to jump, it will take 6 turns to escape
             // or if it takes 4 seconds to jump, it will take 2 turns to escape
             double jumpDriveChargePerTurn = 100.0 / (this.ShipTurn.JumpDrive.ChargeTime / 2.0);
-            
-            // Apply racial jumpdrive boost/decrease
-            jumpDriveChargePerTurn *= 1.0 + (this.ShipTurn.Race.Engine / 10.0);
+
+            Race turnRace = this.ShipTurn.Race;
+            if (turnRace != null)
+            {
+                // Apply racial jumpdrive boost/decrease
+                jumpDriveChargePerTurn *= 1.0 + (turnRace.Engine / 10.0);
+            }
 
             // Based on many turn points left is how much the normal jumpdrive will charge
             // if you only have half your turn points left, you will only get half the normal charge amount

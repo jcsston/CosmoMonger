@@ -25,12 +25,12 @@ namespace CosmoMonger.Models.Npcs
         /// <summary>
         /// The number of players we want active at all time
         /// </summary>
-        public const int TargetActivePlayers = 1; // 25
+        public const int TargetActivePlayers = 25;
 
         /// <summary>
         /// The mininum number of Npcs that should always be active
         /// </summary>
-        public const int MinNpcs = 100; // 10
+        public const int MinNpcs = 10;
 
         /// <summary>
         /// Percent of generated traders

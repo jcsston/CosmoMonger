@@ -465,8 +465,12 @@ namespace CosmoMonger.Models
             // Grab ship base shield strength
             double shieldPower = this.Shield.Strength;
 
-            // Apply racial factor to shields -/+ 10%
-            shieldPower *= 1.0 + (this.Race.Shields / 10.0);
+            Race shipRace = this.Race;
+            if (shipRace != null)
+            {
+                // Apply racial factor to shields -/+ 10%
+                shieldPower *= 1.0 + (shipRace.Shields / 10.0);
+            }
 
             // Formula is: ShieldStrength * (1 - (ShieldDamage / 100))
             // Which means 0% damage gives full power, 50% damage gives half power, 
