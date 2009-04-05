@@ -112,6 +112,7 @@
     <Compile Include="Models\CombatTest.cs" />
     <Compile Include="Models\NpcTest.cs" />
     <Compile Include="Models\PlayerTest.cs" />
+    <Compile Include="Models\Utility\FormatTimeSpanTest.cs" />
     <Compile Include="Models\Utility\ProbablityCalculatorTest.cs" />
     <Compile Include="Models\ShipGoodTest.cs" />
     <Compile Include="Models\ShipTest.cs" />

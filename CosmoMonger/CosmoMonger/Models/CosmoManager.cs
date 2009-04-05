@@ -17,6 +17,7 @@ namespace CosmoMonger.Models
     using System.Web;
     using System.Web.Security;
     using CosmoMonger.Models.Utility;
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
 
     /// <summary>
@@ -49,7 +50,7 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Gets a new CosmoMonger db context.
         /// Deletes the current one and creates a new one.
-        /// Any objects retrived previous must be retrived again with this context to be tracked.
+        /// Any objects retrived previously must be retrived again with this context to be tracked.
         /// </summary>
         /// <returns>LINQ CosmoMongerDbDataContext object</returns>
         public static CosmoMongerDbDataContext GetDbContextNew()
@@ -79,16 +80,30 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Lock object used to prevent multiple npc threads
+        /// The thread entry point for NPC Processing thread
         /// </summary>
-        static private object npcLock = new object();
-
         public static void NpcThreadEntry()
         {
-            while (true)
+            try
             {
-                Thread.Sleep(2000);
-                CosmoManager.DoPendingNPCActions(null);
+                while (true)
+                {
+                    Thread.Sleep(1000);
+                    CosmoManager.DoPendingNPCActions(null);
+
+                    // Check if any players has played in the last 5 minutes
+                    CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+                    DateTime lastPlaytime = db.Players.Max(p => p.LastPlayed);
+                    if (lastPlaytime.AddMinutes(5) < DateTime.UtcNow)
+                    {
+                        // No players in the system, exit the loop
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionPolicy.HandleException(ex, "NPC Policy");
             }
         }
 
@@ -100,29 +115,22 @@ namespace CosmoMonger.Models
         /// <param name="ignore">Ignore this parameter, added so that the method sig would match WaitCallback.</param>
         public static void DoPendingNPCActions(object ignore)
         {
-            Logger.Write("Entering", "Model", 200, 0, TraceEventType.Start, "CosmoMonger.DoPendingNPCActions");
 
-            lock (npcLock)
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContextNew();            
+
+            // Process the 10 oldest Npc actions at a time to keep load down
+            IQueryable<Npc> npcsNeedingAction = (from n in db.Npcs
+                                                 where n.NextActionTime < DateTime.UtcNow
+                                                 orderby n.NextActionTime
+                                                 select n);
+            Logger.Write(string.Format("Processing 10 out of {0} pending NPCs", npcsNeedingAction.Count()), "Model", 200, 0, TraceEventType.Start, "CosmoMonger.DoPendingNPCActions");
+
+            foreach (Npc npc in npcsNeedingAction.Take(10))
             {
-                CosmoMongerDbDataContext db = CosmoManager.GetDbContextNew();
-
-                Logger.Write("Entered", "Model", 200, 0, TraceEventType.Resume, "CosmoMonger.DoPendingNPCActions");
-                
-
-                // Process the 10 oldest Npc actions at a time to keep load down
-                IQueryable<Npc> npcsNeedingAction = (from n in db.Npcs
-                                                     where n.NextActionTime < DateTime.UtcNow
-                                                     orderby n.NextActionTime
-                                                     select n).Take(10);
-                foreach (Npc npc in npcsNeedingAction)
-                {
-                    npc.DoAction();
-                }
-
-                db.SaveChanges();
+                npc.DoAction();
             }
 
-            Logger.Write("Exit", "Model", 200, 0, TraceEventType.Stop, "CosmoMonger.DoPendingNPCActions");
+            db.SaveChanges();
         }
     }
 }

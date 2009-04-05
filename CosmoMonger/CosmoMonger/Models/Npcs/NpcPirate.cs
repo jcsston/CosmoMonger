@@ -128,20 +128,19 @@ namespace CosmoMonger.Models.Npcs
         {
             Ship npcShip = this.npcRow.Ship;
             Combat combat = npcShip.InProgressCombat;
-
+            bool pirateTurn = (combat.ShipTurn.ShipId == npcShip.ShipId);
             Dictionary<string, object> props = new Dictionary<string, object>
             {
                 { "NpcId", this.npcRow.NpcId },
                 { "CombatId", combat.CombatId },
                 { "TurnShipId", combat.ShipTurn.ShipId },
-                { "ShipId", npcShip.ShipId }
+                { "ShipId", npcShip.ShipId },
+                { "PirateTurn", pirateTurn }
             };
             Logger.Write("Pirate in Combat", "NPC", 150, 0, TraceEventType.Verbose, "Pirate in Combat", props);
 
-            if (combat.ShipTurn.ShipId == npcShip.ShipId)
+            if (pirateTurn)
             {
-                Logger.Write("Pirate Combat Turn", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
-
                 try
                 {
                     // We fire our weapon twice
@@ -157,7 +156,7 @@ namespace CosmoMonger.Models.Npcs
                         // Fire weapon!
                         combat.FireWeapon();
 
-                        Logger.Write("Fired weapon", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
+                        Logger.Write("Fired weapon", "NPC", 50, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
                     }
                 }
                 catch (ArgumentOutOfRangeException ex)
@@ -168,10 +167,8 @@ namespace CosmoMonger.Models.Npcs
                     // Escape
                     combat.ChargeJumpDrive();
 
-                    Logger.Write("Charged JumpDrive", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
+                    Logger.Write("Charged JumpDrive", "NPC", 50, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
                 }
-
-                Logger.Write("Ended Combat Turn", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Combat Turn", props);
 
                 // Set a shorter delay before the next action
                 this.SetNextActionDelay(NpcPirate.DelayBeforeNextActionCombat);
@@ -206,7 +203,7 @@ namespace CosmoMonger.Models.Npcs
                 { "AttackableShips", attackableShips.Count() },
                 { "TargetableShips", targetableShips.Count() },
             };
-            Logger.Write("Looking for ships to attack", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Prowl", props);
+            Logger.Write("Looking for ships to attack", "NPC", 100, 0, TraceEventType.Verbose, "Pirate Prowl", props);
 
             Ship shipToAttack = this.rnd.SelectOne(targetableShips);
             if (shipToAttack != null)
@@ -223,7 +220,7 @@ namespace CosmoMonger.Models.Npcs
                     // Attack!
                     npcShip.Attack(shipToAttack);
                     this.npcRow.LastAttackedShip = shipToAttack;
-                    Logger.Write("Attacked Ship", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Attacked", props);
+                    Logger.Write("Attacked Ship", "NPC", 150, 0, TraceEventType.Verbose, "Pirate Attacked", props);
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -256,7 +253,7 @@ namespace CosmoMonger.Models.Npcs
                 { "TargetSystemId", targetSystem.SystemId },
                 { "TravelTime", travelTime },
             };
-            Logger.Write("Traveling to new System", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Travel", props);
+            Logger.Write("Traveling to new System", "NPC", 150, 0, TraceEventType.Verbose, "Pirate Travel", props);
         }
     }
 }

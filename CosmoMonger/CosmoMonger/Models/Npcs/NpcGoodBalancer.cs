@@ -42,6 +42,8 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         public override void DoAction()
         {
+            Logger.Write("Enter NpcGoodBalancer.DoAction", "NPC", 100, 0, TraceEventType.Verbose);
+
             // Comment out if you don't want to wait
             if (!this.SetNextActionDelay(new TimeSpan(0, NpcGoodBalancer.MinutesBetweenSystemGoodUpdates, 0)))
             {
@@ -186,7 +188,6 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         private void UpdateSystemGoodCount()
         {
-            Logger.Write("Enter NpcGoodBalancer.UpdateSystemGoodCount", "NPC", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             Dictionary<string, object> props;
 
@@ -224,7 +225,7 @@ namespace CosmoMonger.Models.Npcs
                         { "Quantity", selectedProducingSystemGood.Quantity },
                         { "AddedQuantity", lackingGoodCount }
                     };
-                    Logger.Write("Producing Goods", "NPC", 500, 0, TraceEventType.Verbose, "Producing Goods", props);
+                    Logger.Write("Producing Goods", "NPC", 400, 0, TraceEventType.Verbose, "Producing Goods", props);
 
                     // Update the total good count
                     totalSystemGoodCount += lackingGoodCount;
@@ -281,7 +282,7 @@ namespace CosmoMonger.Models.Npcs
                     { "Quantity", selectedConsumingSystemGood.Quantity },
                     { "RemovedQuantity", usageGoodCount }
                 };
-                Logger.Write("Consuming Goods", "NPC", 500, 0, TraceEventType.Verbose, "Consuming Goods", props);
+                Logger.Write("Consuming Goods", "NPC", 400, 0, TraceEventType.Verbose, "Consuming Goods", props);
 
                 try
                 {
@@ -310,7 +311,6 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         private void UpdateSystemGoodPrice()
         {
-            Logger.Write("Enter NpcGoodBalancer.UpdateSystemGoodPrice", "NPC", 100, 0, TraceEventType.Verbose);
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
             foreach (SystemGood good in db.SystemGoods)
@@ -340,7 +340,7 @@ namespace CosmoMonger.Models.Npcs
                     { "NewPriceMultipler", newPriceMultipler },
                     { "OldPriceMultipler", oldPriceMultipler }
                 };
-                Logger.Write("Adjusting Good Price", "NPC", 500, 0, TraceEventType.Verbose, "Adjusting Good Price", props);
+                Logger.Write("Adjusting Good Price", "NPC", 400, 0, TraceEventType.Verbose, "Adjusting Good Price", props);
 
                 try
                 {

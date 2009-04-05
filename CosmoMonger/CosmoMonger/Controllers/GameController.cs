@@ -66,7 +66,7 @@ namespace CosmoMonger.Controllers
                         {
                             // Check if the npc thread has been started
                             Thread npcThread = (Thread)this.ControllerContext.HttpContext.Application["NpcThread"];
-                            if (npcThread == null) 
+                            if (npcThread == null || npcThread.IsAlive) 
                             {
                                 // Startup the NPC thread
                                 npcThread = new Thread(new ThreadStart(CosmoManager.NpcThreadEntry));
@@ -75,6 +75,12 @@ namespace CosmoMonger.Controllers
 
                                 // Keep a reference so we can detect if it's been started or not
                                 this.ControllerContext.HttpContext.Application["NpcThread"] = npcThread;
+
+                                // Wait for the thread to startup
+                                while (!npcThread.IsAlive)
+                                {
+                                    Thread.Sleep(0);
+                                }
                             }
                             /*
                             object lastNpcUpdate = this.ControllerContext.HttpContext.Application["LastNpcUpdate"];
