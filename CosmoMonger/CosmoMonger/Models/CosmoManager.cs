@@ -108,6 +108,11 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Lock object used to prevent multiple npc threads
+        /// </summary>
+        static private object npcLock = new object();
+
+        /// <summary>
         /// Calls DoAction on all NPCs in the galaxy.
         /// This method will be called every 5 seconds to keep the NPCs
         /// busy in the galaxy.
@@ -115,22 +120,24 @@ namespace CosmoMonger.Models
         /// <param name="ignore">Ignore this parameter, added so that the method sig would match WaitCallback.</param>
         public static void DoPendingNPCActions(object ignore)
         {
-
-            CosmoMongerDbDataContext db = CosmoManager.GetDbContextNew();            
-
-            // Process the 10 oldest Npc actions at a time to keep load down
-            IQueryable<Npc> npcsNeedingAction = (from n in db.Npcs
-                                                 where n.NextActionTime < DateTime.UtcNow
-                                                 orderby n.NextActionTime
-                                                 select n);
-            Logger.Write(string.Format("Processing 10 out of {0} pending NPCs", npcsNeedingAction.Count()), "Model", 200, 0, TraceEventType.Start, "CosmoMonger.DoPendingNPCActions");
-
-            foreach (Npc npc in npcsNeedingAction.Take(10))
+            lock (npcLock)
             {
-                npc.DoAction();
-            }
+                CosmoMongerDbDataContext db = CosmoManager.GetDbContextNew();            
 
-            db.SaveChanges();
+                // Process the 10 oldest Npc actions at a time to keep load down
+                IQueryable<Npc> npcsNeedingAction = (from n in db.Npcs
+                                                     where n.NextActionTime < DateTime.UtcNow
+                                                     orderby n.NextActionTime
+                                                     select n);
+                Logger.Write(string.Format("Processing 10 out of {0} pending NPCs", npcsNeedingAction.Count()), "Model", 200, 0, TraceEventType.Start, "CosmoMonger.DoPendingNPCActions");
+
+                foreach (Npc npc in npcsNeedingAction.Take(10))
+                {
+                    npc.DoAction();
+                }
+
+                db.SaveChanges();
+			}
         }
     }
 }

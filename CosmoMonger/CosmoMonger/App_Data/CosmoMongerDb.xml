@@ -4296,6 +4296,25 @@
       <column name="Name" type="STRING" />
     </loadData>
   </changeSet>
+  <changeSet author="Jory Stone" id="95">
+    <comment>Creating CHECK constraint on Combat table to ensure every ship is in only one combat at a time</comment>
+    <createProcedure>
+      CREATE FUNCTION dbo.CombatsInProgress(@shipId int)
+      RETURNS int
+      AS
+      BEGIN
+        -- Get the number of in-progress combats this ship is in
+        DECLARE @retval int
+        SELECT @retval = COUNT(*) FROM Combat c 
+        WHERE c.Status = 0 AND (c.AttackerShipId = @shipId OR c.DefenderShipId = @shipId)
+        RETURN @retval
+      END
+    </createProcedure>
+    <sql>
+      ALTER TABLE Combat
+      ADD CONSTRAINT CombatInProgress CHECK (dbo.CombatsInProgress(AttackerShipId) &lt; 2 AND dbo.CombatsInProgress(DefenderShipId) &lt; 2)
+    </sql>
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

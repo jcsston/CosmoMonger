@@ -143,6 +143,47 @@ namespace CosmoMonger.Models.Npcs
             {
                 try
                 {
+                    // Has the other ship offered a surrender?
+                    if (combat.Surrendered)
+                    {
+                        // Do we accept?
+
+                        // Get the reputation of the opposing ship player
+                        int reputation = 0;
+                        Player otherPlayer = combat.ShipOther.Players.SingleOrDefault();
+                        if (otherPlayer != null)
+                        {
+                            reputation = otherPlayer.Reputation;
+                        }
+
+                        // Subtract the aggression from the reputation, if non-negative we accept surrender
+                        int netResult = reputation - this.npcRow.Aggression;
+                        if (netResult >= 0)
+                        {
+                            // Accept surrender
+                            combat.AcceptSurrender();
+                            return;
+                        }
+                    }
+                    else if (combat.CargoJettisoned)
+                    {
+                        // Do we pickup the jettisoned cargo?
+                        
+                        // We only even look at the cargo if there are more than 6-12 items
+                        int cargoCount = combat.CargoJettisonedCount;
+                        int minPickupAmount = this.rnd.Next(6, 12);
+                        if (cargoCount >= minPickupAmount)
+                        {
+                            // Check if we have space for at least 50% of the of the items
+                            if (npcShip.CargoSpaceFree >= cargoCount / 2)
+                            {
+                                // Pickup the cargo
+                                combat.PickupCargo();
+                                return;
+                            }
+                        }
+                    }
+
                     // We fire our weapon twice
                     for (int i = 0; i < 2; i++)
                     {
@@ -185,10 +226,12 @@ namespace CosmoMonger.Models.Npcs
             // Look for a ship to attack
             IEnumerable<Ship> attackableShips = npcShip.GetShipsToAttack();
 
-            // Exclude police ships
+            // Exclude ships that have more than 3 seconds left to jum,
+            // police ships, and the last ship we attacked
             IEnumerable<Ship> targetableShips = (from s in attackableShips
-                                                 where (s.Npcs.Any(n => n.NType != NpcType.Police)
-                                                 || s.Players.Any())
+                                                 where s.TargetSystemArrivalTime.Value.AddSeconds(3) > DateTime.UtcNow
+                                                 && (s.Npcs.Any(n => n.NType != NpcType.Police)
+                                                     || s.Players.Any())
                                                  && s != this.npcRow.LastAttackedShip
                                                  select s).AsEnumerable();
 

@@ -228,6 +228,7 @@ namespace CosmoMonger.Models
                     this.CosmoSystem = (from s in db.CosmoSystems 
                                         where s.SystemId == this.TargetSystemId.Value
                                         select s).Single();
+                    //this.SystemId = this.TargetSystemId.Value;
                     this.TargetSystemId = null;
                     this.TargetSystemArrivalTime = null;
 
