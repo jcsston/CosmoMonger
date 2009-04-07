@@ -185,5 +185,83 @@
             Assert.That(combat.TurnPointsLeft, Is.EqualTo(Combat.PointsPerTurn), "Player 2's turn points left should match points per turn");
             Assert.That(player1.Ship.CurrentJumpDriveCharge, Is.GreaterThan(0), "Player 1 Jumpdrive should be charged some");
         }
+
+        [Test]
+        public void StartSearch()
+        {
+            combat.StartSearch();
+
+            Assert.That(combat.ShipTurn, Is.EqualTo(player2.Ship), "Should now be player 2's turn");
+            Assert.That(combat.TurnPointsLeft, Is.EqualTo(Combat.PointsPerTurn), "Player 2's turn points left should match points per turn");
+            Assert.That(combat.Search, Is.True, "Player 1 should have requested a search");
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), MatchType = MessageMatch.Contains, ExpectedMessage = "Already searching")]
+        public void StartSearchOfSearchingShip()
+        {
+            // Player 1 starts searching player 2
+            combat.StartSearch();
+
+            // Now Player 2 tries to search also
+            // This is not allowed (does not make any sense to do so)
+            combat.StartSearch();
+        }
+
+        [Test]
+        public void AcceptSearchWithGoods()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            Good contrabandGood = (from g in db.Goods
+                                   where g.Contraband
+                                   select g).FirstOrDefault();
+            Good nonContrabandGood = (from g in db.Goods
+                                      where !g.Contraband
+                                      select g).FirstOrDefault();
+
+            // Add contraband and non-contraband good to player 2
+            player2.Ship.AddGood(contrabandGood.GoodId, 5);
+            player2.Ship.AddGood(nonContrabandGood.GoodId, 5);
+
+            // Player 1 starts search
+            combat.StartSearch();
+
+            // Player 2 accepts search
+            combat.AcceptSearch();
+
+            ShipGood good1 = player2.Ship.GetGood(contrabandGood.GoodId);
+            Assert.That(good1.Quantity, Is.EqualTo(0), "Player 2 should have 0 of the contraband good now");
+            ShipGood good2 = player2.Ship.GetGood(nonContrabandGood.GoodId);
+            Assert.That(good2.Quantity, Is.EqualTo(5), "Player 2 should still have 5 of the non-contraband good now");
+        }
+
+        [Test]
+        public void AcceptSearchNoGoods()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            Good nonContrabandGood = (from g in db.Goods
+                                      where !g.Contraband
+                                      select g).FirstOrDefault();
+
+            // Add non-contraband good to player 2
+            player2.Ship.AddGood(nonContrabandGood.GoodId, 5);
+
+            // Player 1 starts search
+            combat.StartSearch();
+
+            // Player 2 accepts search
+            combat.AcceptSearch();
+
+            ShipGood good2 = player2.Ship.GetGood(nonContrabandGood.GoodId);
+            Assert.That(good2.Quantity, Is.EqualTo(5), "Player 2 should still have 5 of the non-contraband good now");
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), MatchType = MessageMatch.Contains, ExpectedMessage = "No search")]
+        public void AcceptSearchWithNoSearch()
+        {
+            combat.AcceptSearch();
+        }
+
     }
 }

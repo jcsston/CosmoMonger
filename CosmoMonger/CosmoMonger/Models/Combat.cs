@@ -75,7 +75,12 @@ namespace CosmoMonger.Models
             /// <summary>
             /// Combat is over. Current Turn Ship has accepted the other ships surrender.
             /// </summary>
-            ShipSurrendered = 4
+            ShipSurrendered = 4,
+
+            /// <summary>
+            /// Combat is over. Current Turn Ship has constented to the search for contraband cargo.
+            /// </summary>
+            ShipSearched = 5
         }
 
         /// <summary>
@@ -548,6 +553,93 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Starts the search of the other ship
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when combat is over or there is already a search in-progress</exception>
+        public void StartSearch()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Check that the combat is still in-progress
+            if (this.Status != CombatStatus.Incomplete)
+            {
+                throw new InvalidOperationException("Combat is over");
+            }
+
+            // Check that we are not already searching one of the ships
+            if (this.Search)
+            {
+                throw new InvalidOperationException("Already searching other ship");
+            }
+
+            // Start search
+            this.Search = true;
+
+            // Other ship turn
+            this.SwapTurn();
+
+            db.SaveChanges();
+        }
+
+        /// <summary>
+        /// Accepts the search of the current turn ship by the other ship
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when combat is over or there is no search in-progress</exception>
+        public void AcceptSearch()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Check that the combat is still in-progress
+            if (this.Status != CombatStatus.Incomplete)
+            {
+                throw new InvalidOperationException("Combat is over");
+            }
+
+            if (!this.Search)
+            {
+                throw new InvalidOperationException("No search in progress");
+            }
+
+            // Look for contraband cargo
+            ShipGood[] goods = (from g in this.ShipTurn.GetGoods()
+                                where g.Good.Contraband
+                                select g).ToArray();
+            int contrabandCargoWorth = goods.Sum(g => g.Quantity * g.Good.BasePrice);
+            if (contrabandCargoWorth > 0)
+            {
+                // Ship has some contraband cargo
+
+                // The fine is twice the worth of the cargo
+                int contrabandFine = contrabandCargoWorth;
+
+                // Charge the fine
+                this.ShipTurn.Credits -= contrabandFine;
+                this.ShipOther.Credits += contrabandFine;
+                this.CreditsLooted += contrabandFine;
+
+                // Take the cargo away
+                foreach (ShipGood good in goods)
+                {
+                    // Add a CombatGood record
+                    CombatGood combatGood = new CombatGood();
+                    combatGood.Combat = this;
+                    combatGood.Good = good.Good;
+                    combatGood.Quantity = good.Quantity;
+
+                    db.CombatGoods.InsertOnSubmit(combatGood);
+
+                    // Take the cargo away
+                    good.Quantity = 0;
+                }
+            }
+
+            // Combat is now over
+            this.Status = CombatStatus.ShipSearched;
+
+            db.SaveChanges();
+        }
+
+        /// <summary>
         /// Ends the current ships turn. Giving control to the other ship.
         /// This does check the surrender and cargo flags, so do not call when offering surrender
         /// or jettisoning cargo.
@@ -577,6 +669,13 @@ namespace CosmoMonger.Models
 
                 // Reset flag
                 this.CargoJettisoned = false;
+            }
+
+            // Check for search flag
+            if (this.Search)
+            {
+                // Reset flag
+                this.Search = false;
             }
 
             // Save database changes

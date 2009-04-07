@@ -237,6 +237,18 @@
                             ViewData["CargoLost"] = combat.CombatGoods;
                         }
                         break;
+
+                    case Combat.CombatStatus.ShipSearched:
+                        if (combat.ShipTurn == playerShip)
+                        {
+                            ViewData["Message"] = "Your ship has been searched";
+                            ViewData["CargoSeized"] = combat.CombatGoods;
+                        }
+                        else
+                        {
+                            throw new NotImplementedException("Only police can search and they should never hit this action");
+                        }
+                        break;
                     case Combat.CombatStatus.Incomplete:
                         // Combat is incomplete
                         return RedirectToAction("CombatStart");
@@ -495,6 +507,36 @@
             return Json(false);
         }
 
+        public JsonResult AcceptSearch(int combatId)
+        {
+            Combat selectedCombat = this.ControllerGame.GetCombat(combatId);
+            if (selectedCombat != null)
+            {
+                string message = null;
+
+                // Check that it is the current players turn
+                if (selectedCombat.ShipTurn == this.ControllerGame.CurrentPlayer.Ship)
+                {
+                    try
+                    {
+                        selectedCombat.AcceptSearch();
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
+                        // No search offered?
+                        message = ex.Message;
+                    }
+                }
+
+                return Json(new { message = message, status = BuildCombatStatus(selectedCombat) });
+            }
+
+            return Json(false);
+        }
+
         /// <summary>
         /// Builds a combat status object for JSON
         /// </summary>
@@ -537,6 +579,7 @@
                 surrendered = combat.Surrendered,
                 cargoJettisoned = combat.CargoJettisonedCount,
                 jumpDriveCharge = playerShip.CurrentJumpDriveCharge,
+                beingSearched = combat.Search,
                 turnPoints = combat.TurnPointsLeft,
                 timeLeft = combat.TurnTimeLeft.TotalSeconds,
                 complete = (combat.Status != Combat.CombatStatus.Incomplete)

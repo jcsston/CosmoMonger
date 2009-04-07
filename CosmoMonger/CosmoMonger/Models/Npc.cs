@@ -23,6 +23,42 @@ namespace CosmoMonger.Models
     public partial class Npc
     {
         /// <summary>
+        /// Enumeration of the different Npc Types
+        /// </summary>
+        public enum NpcType
+        {
+            /// <summary>
+            /// Good Balancer NPC Type
+            /// </summary>
+            GoodBalancer = 1,
+
+            /// <summary>
+            /// NPC Balancer NPC Type
+            /// </summary>
+            NpcBalancer = 2,
+
+            /// <summary>
+            /// Cleaner NPC Type
+            /// </summary>
+            Cleaner = 3,
+
+            /// <summary>
+            /// Trader NPC Type
+            /// </summary>
+            Trader = 4,
+
+            /// <summary>
+            /// Pirate NPC Type
+            /// </summary>
+            Pirate = 5,
+
+            /// <summary>
+            /// Police NPC Type
+            /// </summary>
+            Police = 6
+        }
+
+        /// <summary>
         /// Does the action.
         /// </summary>
         public virtual void DoAction()

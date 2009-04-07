@@ -234,7 +234,7 @@ namespace CosmoMonger.Models.Npcs
             // police ships, and the last ship we attacked
             IEnumerable<Ship> targetableShips = (from s in attackableShips
                                                  where s.TargetSystemArrivalTime.Value.AddSeconds(3) > DateTime.UtcNow
-                                                 && (s.Npcs.Any(n => n.NType != NpcType.Police)
+                                                 && (s.Npcs.Any(n => n.NType != Npc.NpcType.Police)
                                                      || s.Players.Any())
                                                  && s != this.npcRow.LastAttackedShip
                                                  select s).AsEnumerable();

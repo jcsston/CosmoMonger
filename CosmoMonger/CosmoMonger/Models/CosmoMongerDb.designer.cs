@@ -1606,6 +1606,8 @@ namespace CosmoMonger.Models
 		
 		private int _CreditsLooted;
 		
+		private bool _Search;
+		
 		private EntitySet<CombatGood> _CombatGoods;
 		
 		private EntityRef<Ship> _Ship;
@@ -1636,6 +1638,8 @@ namespace CosmoMonger.Models
     partial void OnLastActionTimeChanged();
     partial void OnCreditsLootedChanging(int value);
     partial void OnCreditsLootedChanged();
+    partial void OnSearchChanging(bool value);
+    partial void OnSearchChanged();
     #endregion
 		
 		public Combat()
@@ -1850,6 +1854,26 @@ namespace CosmoMonger.Models
 					this._CreditsLooted = value;
 					this.SendPropertyChanged("CreditsLooted");
 					this.OnCreditsLootedChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Search", DbType="bit NOT NULL")]
+		public virtual bool Search
+		{
+			get
+			{
+				return this._Search;
+			}
+			set
+			{
+				if ((this._Search != value))
+				{
+					this.OnSearchChanging(value);
+					this.SendPropertyChanging();
+					this._Search = value;
+					this.SendPropertyChanged("Search");
+					this.OnSearchChanged();
 				}
 			}
 		}
@@ -2578,7 +2602,7 @@ namespace CosmoMonger.Models
 		
 		private int _NpcId;
 		
-		private CosmoMonger.Models.Npcs.NpcType _NpcTypeId;
+		private Npc.NpcType _NpcTypeId;
 		
 		private string _Name;
 		
@@ -2612,7 +2636,7 @@ namespace CosmoMonger.Models
     partial void OnCreated();
     partial void OnNpcIdChanging(int value);
     partial void OnNpcIdChanged();
-    partial void OnNTypeChanging(CosmoMonger.Models.Npcs.NpcType value);
+    partial void OnNTypeChanging(Npc.NpcType value);
     partial void OnNTypeChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
@@ -2664,7 +2688,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_NpcTypeId", DbType="Int NOT NULL", CanBeNull=false)]
-		public CosmoMonger.Models.Npcs.NpcType NType
+		public Npc.NpcType NType
 		{
 			get
 			{
@@ -8403,7 +8427,7 @@ namespace CosmoMonger.Models
 		
 		private int _NpcNameId;
 		
-		private CosmoMonger.Models.Npcs.NpcType _NpcTypeId;
+		private Npc.NpcType _NpcTypeId;
 		
 		private string _Name;
 		
@@ -8413,7 +8437,7 @@ namespace CosmoMonger.Models
     partial void OnCreated();
     partial void OnNpcNameIdChanging(int value);
     partial void OnNpcNameIdChanged();
-    partial void OnNTypeChanging(CosmoMonger.Models.Npcs.NpcType value);
+    partial void OnNTypeChanging(Npc.NpcType value);
     partial void OnNTypeChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
@@ -8445,7 +8469,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_NpcTypeId", DbType="Int NOT NULL", CanBeNull=false)]
-		public CosmoMonger.Models.Npcs.NpcType NType
+		public Npc.NpcType NType
 		{
 			get
 			{

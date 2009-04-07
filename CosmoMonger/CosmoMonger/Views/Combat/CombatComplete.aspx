@@ -35,6 +35,20 @@ else if (ViewData["CargoLost"] != null)
     );
     %><p class="center">Credits Lost: $<%=Html.Encode(ViewData["CreditsLooted"])%></p><%
 }
+else if (ViewData["CargoSeized"] != null)
+{
+    Html.Grid<CombatGood>(
+        "CargoSeized",
+        new Hash(empty => "No contraband cargo found", @class => "goods"),
+        column =>
+        {
+            column.For(g => g.Good.Name, "Good Type");
+            column.For(g => g.Quantity, "Quantity Seized");
+            column.For(g => "$" + (g.Quantity * g.Good.BasePrice), "Seized Cargo Worth");
+        }
+    );
+    %><p class="center">Fine: $<%=Html.Encode(ViewData["CreditsLooted"])%></p><%
+}
 
 if (ViewData["FinalImage"] != null)
 {

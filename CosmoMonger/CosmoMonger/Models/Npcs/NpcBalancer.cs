@@ -83,9 +83,9 @@ namespace CosmoMonger.Models.Npcs
 
             // Grab the active NPCs we currently have
             IQueryable<Npc> activeNpcs = (from n in db.Npcs
-                                          where n.NType == NpcType.Pirate
-                                          || n.NType == NpcType.Police
-                                          || n.NType == NpcType.Trader
+                                          where n.NType == Npc.NpcType.Pirate
+                                          || n.NType == Npc.NpcType.Police
+                                          || n.NType == Npc.NpcType.Trader
                                           select n);
             
             // Calculate how many NPCs we need to create/delete
@@ -102,23 +102,23 @@ namespace CosmoMonger.Models.Npcs
                     // Which type will we produce?
                     //NpcType[] npcTypes = { NpcType.Pirate, NpcType.Trader, NpcType.Police };
                     // Only Pirates for now
-                    NpcType[] npcTypes = { NpcType.Pirate, NpcType.Pirate, NpcType.Pirate };
+                    Npc.NpcType[] npcTypes = { Npc.NpcType.Pirate, Npc.NpcType.Police, Npc.NpcType.Police };
                     double[] npcProbablity = { NpcBalancer.PercentPirates, NpcBalancer.PercentTraders, NpcBalancer.PercentPolice };
                     newNpc.NType = this.rnd.SelectByProbablity(npcTypes, npcProbablity);
 
                     switch (newNpc.NType)
                     {
-                        case NpcType.Pirate:
+                        case Npc.NpcType.Pirate:
                             // Produce pirate
                             npc = new NpcPirate(newNpc);
                             break;
 
-                        case NpcType.Trader:
+                        case Npc.NpcType.Trader:
                             // Produce trader
                             npc = new NpcTrader(newNpc);
                             break;
 
-                        case NpcType.Police:
+                        case Npc.NpcType.Police:
                             // Produce Police
                             npc = new NpcPolice(newNpc);
                             break;

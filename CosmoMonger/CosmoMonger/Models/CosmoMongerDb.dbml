@@ -71,6 +71,7 @@
       <Column Name="Status" Storage="_Complete" Modifier="Virtual" Type="Combat.CombatStatus" DbType="int NOT NULL" CanBeNull="false" />
       <Column Name="LastActionTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" />
       <Column Name="CreditsLooted" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
+      <Column Name="Search" Modifier="Virtual" Type="System.Boolean" DbType="bit NOT NULL" CanBeNull="false" />
       <Association Name="Combat_CombatGood" Member="CombatGoods" ThisKey="CombatId" OtherKey="CombatId" Type="CombatGood" />
       <Association Name="Ship_Combat" Member="AttackerShip" Storage="_Ship" Modifier="Virtual" ThisKey="AttackerShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
       <Association Name="Ship_Combat1" Member="DefenderShip" Storage="_Ship1" Modifier="Virtual" ThisKey="DefenderShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
@@ -107,7 +108,7 @@
   <Table Name="Npc" Member="Npcs">
     <Type Name="Npc">
       <Column Name="NpcId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="NType" Storage="_NpcTypeId" Type="CosmoMonger.Models.Npcs.NpcType" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NType" Storage="_NpcTypeId" Type="Npc.NpcType" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="RaceId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ShipId" Type="System.Int32" DbType="Int" CanBeNull="true" />
@@ -359,7 +360,7 @@
   <Table Name="dbo.NpcName" Member="NpcNames">
     <Type Name="NpcName">
       <Column Name="NpcNameId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="NType" Storage="_NpcTypeId" Type="CosmoMonger.Models.Npcs.NpcType" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NType" Storage="_NpcTypeId" Type="Npc.NpcType" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>

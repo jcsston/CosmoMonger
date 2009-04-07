@@ -134,7 +134,6 @@
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Npc.cs" />
     <Compile Include="Models\Npcs\NpcShipBase.cs" />
-    <Compile Include="Models\Npcs\NpcType.cs" />
     <Compile Include="Models\Npcs\NpcBalancer.cs" />
     <Compile Include="Models\Npcs\NpcBase.cs" />
     <Compile Include="Models\Npcs\NpcGoodBalancer.cs" />

@@ -323,6 +323,7 @@ namespace CosmoMonger.Models
             combat.Surrendered = false;
             combat.Turn = 0;
             combat.CargoJettisoned = false;
+            combat.Search = false;
             combat.LastActionTime = DateTime.UtcNow;
 
             // Save changes to the database
@@ -505,15 +506,6 @@ namespace CosmoMonger.Models
             // Max damage is 100%
             this.DamageShield = (int)Math.Min(newDamageShield, 100);
             this.DamageHull = (int)Math.Min(newDamageHull, 100);
-        }
-
-        /// <summary>
-        /// Searches the specified ship to search.
-        /// </summary>
-        /// <param name="shipToSearch">The ship to search.</param>
-        public void Search(Ship shipToSearch)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

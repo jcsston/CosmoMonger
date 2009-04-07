@@ -4315,6 +4315,13 @@
       ADD CONSTRAINT CombatInProgress CHECK (dbo.CombatsInProgress(AttackerShipId) &lt; 2 AND dbo.CombatsInProgress(DefenderShipId) &lt; 2)
     </sql>
   </changeSet>
+  <changeSet author="Jory Stone" id="96">
+    <comment>Adding Search column to combat record to signal if this a police search</comment>
+    <addColumn tableName="Combat">
+      <column name="Search" type="bit" />
+    </addColumn>
+    <addNotNullConstraint tableName="Combat" columnName="Search" columnDataType="bit" defaultNullValue="0" />
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

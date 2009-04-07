@@ -91,19 +91,6 @@
                     $(this).dialog("close");
                 }
             });
-
-            /*
-            var acceptSurrender = confirm('Other player has offered surrender, accept?');
-            if (acceptSurrender) {
-            $(".turnAction").attr("disabled", "disabled");
-            $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {
-            updateCombatStatus(data.status, true);
-            if (data.message) {
-            alert(data.message);
-            }
-            });
-            }
-            */
         }
 
         function cargoToPickup(data) {
@@ -128,6 +115,34 @@
             });
         }
 
+        function beingSearch(data) {
+            playerNotified = true;
+            var content = 'You have been intercepted by the police. <br />'
+                        + 'Do you consent to a search of your cargo for contraband items? <br />'
+                        + 'If you have any aboard you will be fined.';
+
+            showPlayerDialog("Consent to Search?", content, {
+                "Consent": function() {
+                    $(".turnAction").attr("disabled", "disabled");
+                    $.getJSON('/Combat/AcceptSearch', { combatId: combatId }, function(data) {
+                        updateCombatStatus(data.status, true);
+                        if (data.message) {
+                            alert(data.message);
+                        }
+                    });
+                },
+                "Flee": function() {
+                    $.getJSON('/Combat/ChargeJumpDrive', { combatId: combatId }, function(data) {
+                        updateCombatStatus(data.status, true);
+                        if (data.message) {
+                            alert(data.message);
+                        }
+                    });
+                    $(this).dialog("close");
+                }
+            });
+        }
+        
         function processPlayerTurn(data) {
             // Enable turn buttons
             $(".turnAction").attr("disabled", "");
@@ -144,6 +159,10 @@
             } else if (data.cargoJettisoned && !playerNotified) {
                 // Other player has jettisoned cargo
                 cargoToPickup(data);
+                
+            } else if (data.beingSearched && !playerNotified) {
+                // Player is being searched
+                beingSearch(data);
             }
         }
 
