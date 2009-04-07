@@ -36,7 +36,7 @@ namespace CosmoMonger.Models.Npcs
         /// <summary>
         /// Standard delay to wait between actions
         /// </summary>
-        public static TimeSpan DelayBeforeNextAction = new TimeSpan(0, 0, 0, 5);
+        public static TimeSpan DelayBeforeNextAction = new TimeSpan(0, 0, 0, 4);
 
         /// <summary>
         /// Combat delay to wait between actions
@@ -61,6 +61,10 @@ namespace CosmoMonger.Models.Npcs
             // Call base class setup method
             // After this is where you would place more setup code
             base.Setup();
+
+            // Randomly select an aggression level between -10 and 10
+            // -10 is a nice pirate, 10 is a bloodthirsty pirate
+            this.npcRow.Aggression = this.rnd.Next(-10, 11);
         }
 
         /// <summary>
@@ -68,7 +72,7 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         public override void DoAction()
         {
-            if (!this.SetNextActionDelay(NpcPirate.DelayBeforeNextAction))
+            if (!this.SetNextActionDelay(DelayBeforeNextAction))
             {
                 return;
             }
@@ -88,7 +92,7 @@ namespace CosmoMonger.Models.Npcs
             else if (this.npcRow.NextTravelTime < DateTime.UtcNow)
             {
                 // Check if we need to give this pirate some credits
-                if (npcShip.Credits < NpcPirate.BaseCreditAmount)
+                if (npcShip.Credits < BaseCreditAmount)
                 {
                     // Poor pirate has no gold, give him some to start
                     npcShip.Credits = BaseCreditAmount;
@@ -105,7 +109,7 @@ namespace CosmoMonger.Models.Npcs
                 }
 
                 // Set next travel time
-                this.npcRow.NextTravelTime = DateTime.UtcNow.Add(NpcPirate.DelayBeforeNextTravel);
+                this.npcRow.NextTravelTime = DateTime.UtcNow.Add(DelayBeforeNextTravel);
             } 
             else 
             {
@@ -212,7 +216,7 @@ namespace CosmoMonger.Models.Npcs
                 }
 
                 // Set a shorter delay before the next action
-                this.SetNextActionDelay(NpcPirate.DelayBeforeNextActionCombat);
+                this.SetNextActionDelay(DelayBeforeNextActionCombat);
             }
         }
 

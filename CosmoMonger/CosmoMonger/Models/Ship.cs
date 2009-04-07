@@ -337,6 +337,9 @@ namespace CosmoMonger.Models
                 ExceptionPolicy.HandleException(ex, "SQL Policy");
 
                 // A combat must already be in-progress
+                // Remove this row
+                db.Combats.DeleteOnSubmit(combat);
+
                 throw new InvalidOperationException("Ship is already in combat");
             }
             catch (DuplicateKeyException ex)
@@ -502,6 +505,15 @@ namespace CosmoMonger.Models
             // Max damage is 100%
             this.DamageShield = (int)Math.Min(newDamageShield, 100);
             this.DamageHull = (int)Math.Min(newDamageHull, 100);
+        }
+
+        /// <summary>
+        /// Searches the specified ship to search.
+        /// </summary>
+        /// <param name="shipToSearch">The ship to search.</param>
+        public void Search(Ship shipToSearch)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

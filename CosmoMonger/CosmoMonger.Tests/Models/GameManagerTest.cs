@@ -48,6 +48,17 @@
         }
 
         [Test]
+        public void GetRace()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            Race race = manager.GetRace(1);
+            Assert.That(race, Is.Not.Null, "We should get a race");
+            Assert.That(race.RaceId, Is.EqualTo(1), "Race should have an id of 1");
+        }
+
+        [Test]
         public void GetRaces()
         {
             Player testPlayer = this.CreateTestPlayer();
@@ -63,6 +74,21 @@
         }
 
         [Test]
+        public void GetGoods()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            Good[] goods = manager.GetGoods();
+            Assert.That(goods.Length, Is.GreaterThanOrEqualTo(1), "We need at least one good");
+
+            Good waterGood = (from g in goods
+                              where g.Name == "Water"
+                              select g).SingleOrDefault();
+            Assert.That(waterGood, Is.Not.Null, "The water good should exist");
+        }
+
+        [Test]
         public void GetSystems()
         {
             Player testPlayer = this.CreateTestPlayer();
@@ -75,6 +101,17 @@
                                      where s.Name == "Sol"
                                      select s).SingleOrDefault();
             Assert.That(solSystem, Is.Not.Null, "Sol system should exist in the galaxy");
+        }
+
+        [Test]
+        public void GetShip()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            Ship playerShip = manager.GetShip(testPlayer.ShipId);
+            Assert.That(playerShip, Is.Not.Null, "We should get a ship");
+            Assert.That(playerShip.ShipId, Is.EqualTo(testPlayer.ShipId), "Ship should have the correct id");
         }
 
         [Test]
@@ -106,6 +143,16 @@
             KeyValuePair<Player, string> [] topPlayers = manager.GetTopPlayers(Player.RecordType.NetWorth, 10);
             Assert.That(topPlayers, Is.Not.Null, "GetTopPlayers should return an array of records");
             Assert.That(topPlayers.Length, Is.LessThanOrEqualTo(10), "Returned array should be 10 or less items");
+        }
+
+        [Test]
+        public void GetPlayerRecord()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            PlayerRecord[] records = manager.GetPlayerRecords(testPlayer.PlayerId);
+            Assert.That(records, Is.Not.Null, "SHould at least get an array reference for Player records");
         }
 
         [Test]

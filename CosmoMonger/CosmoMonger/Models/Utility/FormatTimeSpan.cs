@@ -56,7 +56,7 @@
             }
 
             // overflow for years
-            return Math.Round(seconds / 47304000) + " Years " + token;
+            return Math.Round(seconds / 47304000) + " Years" + token;
         }
     }
 }
