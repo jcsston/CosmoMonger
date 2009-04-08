@@ -1,6 +1,7 @@
 ﻿namespace CosmoMonger.Tests.Models
 {
     using System;
+    using System.Diagnostics;
     using System.Text;
     using System.Collections.Generic;
     using System.Linq;
@@ -24,8 +25,8 @@
             {
                 double priceMultipler1 = npc.CalculatePriceMultipler(100, 9, goodCount);
                 double priceMultipler2 = npc.CalculatePriceMultiplerOld(100, 9, goodCount);
-
-                Console.WriteLine("GoodCount: {0} New: {1} Old: {2}", goodCount, priceMultipler1, priceMultipler2);
+                
+                Debug.WriteLine(string.Format("GoodCount: {0} New: {1} Old: {2}", goodCount, priceMultipler1, priceMultipler2));
             }
         }
     }

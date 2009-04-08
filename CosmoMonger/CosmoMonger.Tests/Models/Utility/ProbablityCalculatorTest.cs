@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Text;
     using System.Threading;
@@ -33,7 +34,7 @@
                 }
             }
 
-            Console.WriteLine("True: {0} False: {1}", trueCount, falseCount);
+            Debug.WriteLine(string.Format("True: {0} False: {1}", trueCount, falseCount));
             Assert.That(Math.Abs(trueCount - falseCount), Is.LessThan(100), "1000 selections at 50/50 should give -/+10%");
         }
 
@@ -57,7 +58,7 @@
                 }
             }
 
-            Console.WriteLine("True: {0} False: {1}", trueCount, falseCount);
+            Debug.WriteLine(string.Format("True: {0} False: {1}", trueCount, falseCount));
             Assert.That(Math.Abs((trueCount * 3) - falseCount), Is.LessThan(200), "1000 selections at 25/75 should give -/+10%");
         }
 
@@ -81,7 +82,7 @@
                 }
             }
 
-            Console.WriteLine("True: {0} False: {1}", trueCount, falseCount);
+            Debug.WriteLine(string.Format("True: {0} False: {1}", trueCount, falseCount));
             Assert.That(Math.Abs(trueCount - (falseCount * 2)), Is.LessThan(200), "1000 selections at 66/33 should give -/+10%");
         }
 
@@ -105,7 +106,7 @@
                 }
             }
 
-            Console.WriteLine("True: {0} False: {1}", trueCount, falseCount);
+            Debug.WriteLine(string.Format("True: {0} False: {1}", trueCount, falseCount));
             Assert.That(Math.Abs(trueCount - (falseCount * 2)), Is.LessThan(200), "1000 selections at T/F/T 33/33/33 should give -/+10%");
         }
     }

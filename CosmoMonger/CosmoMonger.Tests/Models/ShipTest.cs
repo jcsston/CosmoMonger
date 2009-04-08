@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Text;
     using System.Threading;
@@ -156,7 +157,7 @@
             }
 
             t.Join();
-            Console.WriteLine("Attacked Player 1: {0} Player 2: {1}", player1AttackCount, player2AttackCount);
+            Debug.WriteLine(string.Format("Attacked Player 1: {0} Player 2: {1}", player1AttackCount, player2AttackCount));
         }
 
         [Test]
@@ -205,7 +206,7 @@
 
             while (combat.Status == Combat.CombatStatus.Incomplete)
             {
-                Console.WriteLine("Player 2 Shield {0} Hull: {1}", player2.Ship.DamageShield, player2.Ship.DamageHull);
+                Debug.WriteLine(string.Format("Player 2 Shield {0} Hull: {1}", player2.Ship.DamageShield, player2.Ship.DamageHull));
                 // Max out turn points for testing
                 player1.Ship.InProgressCombat.TurnPointsLeft = 999;
                 if (!player1.Ship.InProgressCombat.FireWeapon())
@@ -214,7 +215,7 @@
                 }
                 weaponFires++;
             }
-            Console.WriteLine("Weapon Fires: {0} Misses: {1} Perc: {2}", weaponFires, weaponMisses, (100.0 / weaponFires * weaponMisses));
+            Debug.WriteLine(string.Format("Weapon Fires: {0} Misses: {1} Perc: {2}", weaponFires, weaponMisses, (100.0 / weaponFires * weaponMisses)));
         }
 
         [Test]
@@ -289,7 +290,7 @@
 
             CosmoSystem bankSystem = testPlayer.Ship.GetNearestBankSystem();
             double bankDistance = testPlayer.Ship.GetSystemDistance(bankSystem);
-            Console.WriteLine("Bank is {0} sectors away", bankDistance);
+            Debug.WriteLine(string.Format("Bank is {0} sectors away", bankDistance));
 
             Assert.That(bankSystem.HasBank, Is.True, "System should have a bank");
         }
