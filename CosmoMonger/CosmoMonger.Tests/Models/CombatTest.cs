@@ -262,6 +262,5 @@
         {
             combat.AcceptSearch();
         }
-
     }
 }

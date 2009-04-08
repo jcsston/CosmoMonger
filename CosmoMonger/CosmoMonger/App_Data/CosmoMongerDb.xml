@@ -4322,6 +4322,65 @@
     </addColumn>
     <addNotNullConstraint tableName="Combat" columnName="Search" columnDataType="bit" defaultNullValue="0" />
   </changeSet>
+  <changeSet author="Jory Stone" id="97">
+    <comment>Adding new Shields, Wepaons, and updating Base Ship models with new equipment</comment>
+    <update tableName="Shield">
+      <column name="CargoCost" value="0" />
+      <column name="Name" value="Force Field I" />
+      <where>ShieldId=1</where>
+    </update>
+    <sql>SET IDENTITY_INSERT Shield ON</sql>
+    <insert tableName="Shield">
+      <column name="ShieldId" valueNumeric="2" />
+      <column name="Name" value="Force Field II" />
+      <column name="Strength" valueNumeric="15" />
+      <column name="CargoCost" valueNumeric="1" />
+      <column name="BasePrice" valueNumeric="4000" />
+    </insert>
+    <insert tableName="Shield">
+      <column name="ShieldId" valueNumeric="3" />
+      <column name="Name" value="Force Field III" />
+      <column name="Strength" valueNumeric="20" />
+      <column name="CargoCost" valueNumeric="2" />
+      <column name="BasePrice" valueNumeric="6000" />
+    </insert>
+    <insert tableName="Shield">
+      <column name="ShieldId" valueNumeric="4" />
+      <column name="Name" value="Deflector I" />
+      <column name="Strength" valueNumeric="25" />
+      <column name="CargoCost" valueNumeric="4" />
+      <column name="BasePrice" valueNumeric="8000" />
+    </insert>
+    <insert tableName="Shield">
+      <column name="ShieldId" valueNumeric="5" />
+      <column name="Name" value="Deflector II" />
+      <column name="Strength" valueNumeric="30" />
+      <column name="CargoCost" valueNumeric="5" />
+      <column name="BasePrice" valueNumeric="10000" />
+    </insert>
+    <sql>SET IDENTITY_INSERT Shield OFF</sql>
+    <update tableName="BaseShip">
+      <column name="InitialShieldId" value="2" />
+      <where>BaseShipId=2</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="InitialWeaponId" value="3" />
+      <column name="InitialShieldId" value="3" />
+      <column name="BasePrice" value="50000" />
+      <where>BaseShipId=3</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="InitialWeaponId" value="4" />
+      <column name="InitialShieldId" value="4" />
+      <column name="BasePrice" value="80000" />
+      <where>BaseShipId=4</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="InitialShieldId" value="5" />
+      <column name="BasePrice" value="125000" />
+      <where>BaseShipId=5</where>
+    </update>
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

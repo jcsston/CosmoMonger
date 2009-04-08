@@ -1,5 +1,9 @@
-﻿
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="ProbablityCalculator.cs" company="CosmoMonger">
+//     Copyright (c) 2009 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
 namespace CosmoMonger.Models.Utility
 {
     using System;

@@ -105,6 +105,7 @@
     <Compile Include="Controllers\ValidationRecord.cs" />
     <Compile Include="Controllers\XhtmlValidator.cs" />
     <Compile Include="Models\BasePlayerTest.cs" />
+    <Compile Include="Models\CombatBalancingTest.cs" />
     <Compile Include="Models\CosmoManagerTest.cs" />
     <Compile Include="Models\CosmoMongerMembershipProviderTest.cs" />
     <Compile Include="Models\CosmoSystemTest.cs" />

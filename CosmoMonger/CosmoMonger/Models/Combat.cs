@@ -487,10 +487,10 @@ namespace CosmoMonger.Models
             // Alloc turn points to the charge of the JumpDrive
             
             // Calculate how much the JumpDrive will charge
-            // Formula: x = 100 / (ChargeTime / 2)
-            // This means that if it takes 12 seconds to jump, it will take 6 turns to escape
-            // or if it takes 4 seconds to jump, it will take 2 turns to escape
-            double jumpDriveChargePerTurn = 100.0 / (this.ShipTurn.JumpDrive.ChargeTime / 2.0);
+            // Formula: x = 100 / (ChargeTime / 4)
+            // This means that if it takes 12 seconds to jump, it will take 3 turns to escape
+            // or if it takes 4 seconds to jump, it will take 1 turn to escape
+            double jumpDriveChargePerTurn = 100.0 / (this.ShipTurn.JumpDrive.ChargeTime / 4.0);
 
             Race turnRace = this.ShipTurn.Race;
             if (turnRace != null)
@@ -501,7 +501,7 @@ namespace CosmoMonger.Models
 
             // Based on many turn points left is how much the normal jumpdrive will charge
             // if you only have half your turn points left, you will only get half the normal charge amount
-            int jumpDriveChargeCurrentTurn = (int)(jumpDriveChargePerTurn * (1.0 * this.TurnPointsLeft / Combat.PointsPerTurn));
+            int jumpDriveChargeCurrentTurn = (int)Math.Ceiling(jumpDriveChargePerTurn * (1.0 * this.TurnPointsLeft / Combat.PointsPerTurn));
 
             Dictionary<string, object> props = new Dictionary<string, object>
             {
