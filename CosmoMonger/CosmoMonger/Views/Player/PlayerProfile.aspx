@@ -23,7 +23,7 @@
     <td class="vp-columnData"><%=player.Reputation%></td>
     <td class="vp-columnData"><%=player.ReputationLevel%></td>
     <td class="vp-columnData">Player's Race:</td>
-    <td class="vp-columnData"><%= player.Race.Name%></td>
+    <td class="vp-columnData"><span id="playerRace"><%=Html.Encode(player.Race.Name) %></span></td>
 </tr>
 <tr>
     <td class="vp-columnData">Credits:</td>

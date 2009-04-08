@@ -155,18 +155,27 @@
             if (currentCombat != null)
             {
                 ViewData["Combat"] = currentCombat;
-                ViewData["PlayerName"] = this.ControllerGame.CurrentPlayer.Name;
-                ViewData["PlayerShip"] = this.ControllerGame.CurrentPlayer.Ship;
+
+                Player currentPlayer = this.ControllerGame.CurrentPlayer;
+                ViewData["PlayerName"] = currentPlayer.Name;
+                ViewData["PlayerShip"] = currentPlayer.Ship;
+                ViewData["PlayerRaceName"] = currentPlayer.Race.Name;
+                ViewData["PlayerRaceModifiers"] = currentPlayer.Race.GetRacialModifiers();
+
+                Ship enemyShip = null;
                 if (this.ControllerGame.CurrentPlayer.Ship == currentCombat.AttackerShip)
                 {
-                    ViewData["EnemyName"] = currentCombat.DefenderShip.Name;
-                    ViewData["EnemyShip"] = currentCombat.DefenderShip;
+                    enemyShip = currentCombat.DefenderShip;
                 }
                 else
                 {
-                    ViewData["EnemyName"] = currentCombat.AttackerShip.Name;
-                    ViewData["EnemyShip"] = currentCombat.AttackerShip;
+                    enemyShip = currentCombat.AttackerShip;
                 }
+
+                ViewData["EnemyShip"] = enemyShip;
+                ViewData["EnemyName"] = enemyShip.Name;
+                ViewData["EnemyRaceName"] = enemyShip.Race.Name;
+                ViewData["EnemyRaceModifiers"] = enemyShip.Race.GetRacialModifiers();
 
                 return View();
             }

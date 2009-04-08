@@ -143,6 +143,7 @@
     <Compile Include="Models\Npcs\NpcCleaner.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\PriceTableEntry.cs" />
+    <Compile Include="Models\Race.cs" />
     <Compile Include="Models\Ship.cs" />
     <Compile Include="Models\ShipGood.cs" />
     <Compile Include="Models\SystemGood.cs" />
@@ -219,6 +220,8 @@
     <Content Include="Scripts\date.js" />
     <Content Include="Scripts\excanvas.js" />
     <Content Include="Scripts\excanvas.pack.js" />
+    <Content Include="Scripts\jquery-1.3.2.js" />
+    <Content Include="Scripts\jquery-1.3.2.min.js" />
     <Content Include="Scripts\jquery.bgiframe.js" />
     <Content Include="Scripts\jquery.dimensions.js" />
     <Content Include="Scripts\jquery.flot.js" />
@@ -228,7 +231,8 @@
     <Content Include="Scripts\jquery.spin-1.0.2.js" />
     <Content Include="Scripts\jquery.tooltip.js" />
     <Content Include="Scripts\jquery.tooltip.min.js" />
-    <Content Include="Scripts\jquery.ui.all-1.5.3.js" />
+    <Content Include="Scripts\jquery.ui-1.7.1.js" />
+    <Content Include="Scripts\jquery.ui-1.7.1.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Views\Account\ChangeEmail.aspx" />
@@ -281,8 +285,6 @@
     <Content Include="Views\Travel\TravelInProgress.aspx" />
     <Content Include="Web.config" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\jquery-1.2.6.js" />
-    <Content Include="Scripts\jquery-1.2.6.min.js" />
     <Content Include="Views\Account\ChangePassword.aspx" />
     <Content Include="Views\Account\ChangePasswordSuccess.aspx" />
     <Content Include="Views\Account\Login.aspx" />

@@ -151,7 +151,7 @@
       <Column Name="DistanceTraveled" Type="System.Double" DbType="float NOT NULL" CanBeNull="false" />
       <Column Name="GoodsTraded" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
       <Association Name="Player_PlayerRecord" Member="PlayerRecords" ThisKey="PlayerId" OtherKey="PlayerId" Type="PlayerRecord" />
-      <Association Name="Race_Player" Member="Race" ThisKey="RaceId" OtherKey="RaceId" Type="Race" IsForeignKey="true" />
+      <Association Name="Race_Player" Member="Race" Modifier="Virtual" ThisKey="RaceId" OtherKey="RaceId" Type="Race" IsForeignKey="true" />
       <Association Name="Ship_Player" Member="Ship" Modifier="Virtual" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
       <Association Name="User_Player" Member="User" ThisKey="UserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
     </Type>
@@ -159,7 +159,7 @@
   <Table Name="Race" Member="Races">
     <Type Name="Race">
       <Column Name="RaceId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Modifier="Virtual" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Weapons" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Shields" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Engine" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />

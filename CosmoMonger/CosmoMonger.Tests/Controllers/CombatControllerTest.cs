@@ -148,8 +148,24 @@
                 .Returns(Combat.CombatStatus.Incomplete);
             combatMock.Expect(c => c.AttackerShip.Name)
                 .Returns("Attacker");
+            combatMock.Expect(c => c.AttackerShip.Race.Name)
+                .Returns("Human");
+            combatMock.Expect(c => c.AttackerShip.Race.GetRacialModifiers())
+                .Returns(new Dictionary<string, List<string>>());
+
             combatMock.Expect(c => c.DefenderShip.Name)
                 .Returns("Defender");
+            combatMock.Expect(c => c.DefenderShip.Race.Name)
+                .Returns("Human");
+            combatMock.Expect(c => c.DefenderShip.Race.GetRacialModifiers())
+                .Returns(new Dictionary<string, List<string>>());
+
+            managerMock.Expect(m => m.CurrentPlayer.Race.Name)
+                .Returns("Human")
+                .Verifiable();
+            managerMock.Expect(m => m.CurrentPlayer.Race.GetRacialModifiers())
+                .Returns(new Dictionary<string, List<string>>())
+                .Verifiable();
             managerMock.Expect(m => m.CurrentPlayer.Ship.InProgressCombat)
                 .Returns(combatMock.Object)
                 .Verifiable();

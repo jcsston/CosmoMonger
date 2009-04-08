@@ -3691,7 +3691,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Race_Player", Storage="_Race", ThisKey="RaceId", OtherKey="RaceId", IsForeignKey=true)]
-		public Race Race
+		public virtual Race Race
 		{
 			get
 			{
@@ -3927,7 +3927,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Name", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
-		public string Name
+		public virtual string Name
 		{
 			get
 			{
