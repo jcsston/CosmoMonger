@@ -90,7 +90,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <value>The ship whose turn is currently is.</value>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the Turn field is an invalid value</exception>
-        public Ship ShipTurn
+        public virtual Ship ShipTurn
         {
             get
             {
@@ -114,7 +114,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <value>The ship whose turn it is not.</value>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the Turn field is an invalid value</exception>
-        public Ship ShipOther
+        public virtual Ship ShipOther
         {
             get
             {
@@ -184,7 +184,7 @@ namespace CosmoMonger.Models
         /// <returns>true if weapon hit, false otherwise</returns>
         /// <exception cref="InvalidOperationException">Thrown if combat is over</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if not enough turn points are left to fire weapon</exception>
-        public bool FireWeapon()
+        public virtual bool FireWeapon()
         {
             // Check that the combat is still in-progress
             if (this.Status != CombatStatus.Incomplete)
@@ -276,7 +276,7 @@ namespace CosmoMonger.Models
         /// Gives up the rest of the turn and signals that the current ship is surrendering to the opposing ship.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when combat is over or other ship has surrendered</exception>
-        public void OfferSurrender()
+        public virtual void OfferSurrender()
         {
             // Check that the combat is still in-progress
             if (this.Status != CombatStatus.Incomplete)
@@ -317,7 +317,7 @@ namespace CosmoMonger.Models
         /// This gives all the goods and credits aboard the opposing ship to the current ship and ends combat.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when combat is over or no surrender has been offered</exception>
-        public void AcceptSurrender()
+        public virtual void AcceptSurrender()
         {
             // Check that the combat is still in-progress
             if (this.Status != CombatStatus.Incomplete)
@@ -384,7 +384,7 @@ namespace CosmoMonger.Models
         /// This will allow the ship to escape if the opposing ship picks up the cargo.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when combat is over or there is no cargo to jettison or cargo has already need jettisoned</exception>
-        public void JettisonCargo()
+        public virtual void JettisonCargo()
         {
             // Check that the combat is still in-progress
             if (this.Status != CombatStatus.Incomplete)
@@ -434,7 +434,7 @@ namespace CosmoMonger.Models
         /// If the cargo is not picked up, it is deleted on the next turn.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when combat is over or there is no cargo to jettison</exception>
-        public void PickupCargo()
+        public virtual void PickupCargo()
         {
             // Check that the combat is still in-progress
             if (this.Status != CombatStatus.Incomplete)
@@ -474,7 +474,7 @@ namespace CosmoMonger.Models
         /// If the jump drive becomes completely charged, the ship escapes and combat is ended.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when combat is over</exception>
-        public void ChargeJumpDrive()
+        public virtual void ChargeJumpDrive()
         {
             // Check that the combat is still in-progress
             if (this.Status != CombatStatus.Incomplete)
@@ -556,7 +556,7 @@ namespace CosmoMonger.Models
         /// Starts the search of the other ship
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when combat is over or there is already a search in-progress</exception>
-        public void StartSearch()
+        public virtual void StartSearch()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
@@ -585,7 +585,7 @@ namespace CosmoMonger.Models
         /// Accepts the search of the current turn ship by the other ship
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when combat is over or there is no search in-progress</exception>
-        public void AcceptSearch()
+        public virtual void AcceptSearch()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 

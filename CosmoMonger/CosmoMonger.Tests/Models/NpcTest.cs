@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using CosmoMonger.Models;
+    using CosmoMonger.Models.Npcs;
     using NUnit.Framework;
 
     /// <summary>
@@ -17,7 +18,7 @@
         public void CalculatePriceMultipler()
         {
             Npc npcRow = new Npc();
-            CosmoMonger.Models.Npcs.NpcGoodBalancer npc = new CosmoMonger.Models.Npcs.NpcGoodBalancer(npcRow);
+            NpcGoodBalancer npc = new NpcGoodBalancer(npcRow);
 
             for (int goodCount = 0; goodCount < 20; goodCount++)
             {

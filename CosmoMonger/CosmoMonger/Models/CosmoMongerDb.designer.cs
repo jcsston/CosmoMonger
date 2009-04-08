@@ -1739,7 +1739,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_Surrender", DbType="Bit NOT NULL")]
-		public bool Surrendered
+		public virtual bool Surrendered
 		{
 			get
 			{
@@ -1759,7 +1759,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_JettisonCargo", DbType="Bit NOT NULL")]
-		public bool CargoJettisoned
+		public virtual bool CargoJettisoned
 		{
 			get
 			{
@@ -1779,7 +1779,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_CombatId", AutoSync=AutoSync.OnInsert, DbType="int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int CombatId
+		public virtual int CombatId
 		{
 			get
 			{
@@ -2836,7 +2836,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_LastVisitedSystemId", DbType="int")]
-		public System.Nullable<int> LastVisitedSystemId
+		public virtual System.Nullable<int> LastVisitedSystemId
 		{
 			get
 			{
@@ -2860,7 +2860,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_LastAttackedShipId", DbType="int")]
-		public System.Nullable<int> LastAttackedShipId
+		public virtual System.Nullable<int> LastAttackedShipId
 		{
 			get
 			{
@@ -2904,7 +2904,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Race_Npc", Storage="_Race", ThisKey="RaceId", OtherKey="RaceId", IsForeignKey=true)]
-		public Race Race
+		public virtual Race Race
 		{
 			get
 			{
@@ -2938,7 +2938,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Ship_Npc", Storage="_Ship", ThisKey="ShipId", OtherKey="ShipId", IsForeignKey=true)]
-		public Ship Ship
+		public virtual Ship Ship
 		{
 			get
 			{
@@ -2972,7 +2972,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Ship_Npc1", Storage="_LastAttackedShip", ThisKey="LastAttackedShipId", OtherKey="ShipId", IsForeignKey=true)]
-		public Ship LastAttackedShip
+		public virtual Ship LastAttackedShip
 		{
 			get
 			{
@@ -3006,7 +3006,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="CosmoSystem_Npc", Storage="_LastVisitedSystem", ThisKey="LastVisitedSystemId", OtherKey="SystemId", IsForeignKey=true)]
-		public CosmoSystem LastVisitedSystem
+		public virtual CosmoSystem LastVisitedSystem
 		{
 			get
 			{
@@ -4715,7 +4715,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Column(Storage="_ShipId", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ShipId
+		public virtual int ShipId
 		{
 			get
 			{

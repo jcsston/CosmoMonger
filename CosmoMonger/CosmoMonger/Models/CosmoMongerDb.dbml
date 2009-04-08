@@ -65,9 +65,9 @@
       <Column Name="DefenderShipId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Turn" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TurnPointsLeft" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Surrendered" Storage="_Surrender" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="CargoJettisoned" Storage="_JettisonCargo" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="CombatId" Type="System.Int32" DbType="int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Surrendered" Storage="_Surrender" Modifier="Virtual" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CargoJettisoned" Storage="_JettisonCargo" Modifier="Virtual" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CombatId" Modifier="Virtual" Type="System.Int32" DbType="int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Status" Storage="_Complete" Modifier="Virtual" Type="Combat.CombatStatus" DbType="int NOT NULL" CanBeNull="false" />
       <Column Name="LastActionTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" />
       <Column Name="CreditsLooted" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
@@ -115,13 +115,13 @@
       <Column Name="Aggression" Storage="_Badness" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Bounty" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="NextActionTime" Storage="_LastActionTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" />
-      <Column Name="LastVisitedSystemId" Type="System.Int32" DbType="int" CanBeNull="true" />
-      <Column Name="LastAttackedShipId" Type="System.Int32" DbType="int" CanBeNull="true" />
+      <Column Name="LastVisitedSystemId" Modifier="Virtual" Type="System.Int32" DbType="int" CanBeNull="true" />
+      <Column Name="LastAttackedShipId" Modifier="Virtual" Type="System.Int32" DbType="int" CanBeNull="true" />
       <Column Name="NextTravelTime" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
-      <Association Name="Race_Npc" Member="Race" ThisKey="RaceId" OtherKey="RaceId" Type="Race" IsForeignKey="true" />
-      <Association Name="Ship_Npc" Member="Ship" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
-      <Association Name="Ship_Npc1" Member="LastAttackedShip" ThisKey="LastAttackedShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
-      <Association Name="CosmoSystem_Npc" Member="LastVisitedSystem" ThisKey="LastVisitedSystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
+      <Association Name="Race_Npc" Member="Race" Modifier="Virtual" ThisKey="RaceId" OtherKey="RaceId" Type="Race" IsForeignKey="true" />
+      <Association Name="Ship_Npc" Member="Ship" Modifier="Virtual" ThisKey="ShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
+      <Association Name="Ship_Npc1" Member="LastAttackedShip" Modifier="Virtual" ThisKey="LastAttackedShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
+      <Association Name="CosmoSystem_Npc" Member="LastVisitedSystem" Modifier="Virtual" ThisKey="LastVisitedSystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Player" Member="Players">
@@ -192,7 +192,7 @@
   </Table>
   <Table Name="Ship" Member="Ships">
     <Type Name="Ship">
-      <Column Name="ShipId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ShipId" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="BaseShipId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="SystemId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="WeaponId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />

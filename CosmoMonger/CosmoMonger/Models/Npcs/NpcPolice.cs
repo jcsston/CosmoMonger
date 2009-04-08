@@ -113,7 +113,7 @@ namespace CosmoMonger.Models.Npcs
         /// <summary>
         /// Handles Police Combat
         /// </summary>
-        private void DoCombat()
+        public void DoCombat()
         {
             Ship npcShip = this.npcRow.Ship;
             Combat combat = npcShip.InProgressCombat;
@@ -180,7 +180,7 @@ namespace CosmoMonger.Models.Npcs
         /// <summary>
         /// Handles a Police selecting and searching a ship
         /// </summary>
-        private void DoSearch()
+        public void DoSearch()
         {
             Ship npcShip = this.npcRow.Ship;
 
@@ -190,11 +190,11 @@ namespace CosmoMonger.Models.Npcs
             // Only look at player ships, excluding the last ship we searched/attacked
             IEnumerable<Ship> targetableShips = (from s in searchableShips
                                                  where s.Players.Any()
-                                                 && s != this.npcRow.LastAttackedShip
+                                                 && s.ShipId != this.npcRow.LastAttackedShipId
                                                  select s).AsEnumerable();
 
             // Filter out ships that are already in combat
-            targetableShips = (from s in searchableShips
+            targetableShips = (from s in targetableShips
                                where s.InProgressCombat == null
                                select s).AsEnumerable();
 
@@ -241,7 +241,7 @@ namespace CosmoMonger.Models.Npcs
         /// <summary>
         /// Handles the police traveling to a new system
         /// </summary>
-        private void DoTravel()
+        public void DoTravel()
         {
             Ship npcShip = this.npcRow.Ship;
 
