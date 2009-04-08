@@ -95,7 +95,7 @@ namespace CosmoMonger.Models
         /// <param name="recordType">Type of the record.</param>
         /// <param name="limit">The number of top players to return</param>
         /// <returns>Array of Player / record value pairs</returns>
-        public virtual KeyValuePair<Player, string> [] GetTopPlayers(Player.RecordType recordType, int limit)
+        public virtual KeyValuePair<Player, string>[] GetTopPlayers(Player.RecordType recordType, int limit)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
@@ -386,7 +386,12 @@ namespace CosmoMonger.Models
                     select c).SingleOrDefault();
         }
 
-        public virtual PlayerRecord [] GetPlayerRecords(int playerId)
+        /// <summary>
+        /// Gets the records for a player
+        /// </summary>
+        /// <param name="playerId">The player id.</param>
+        /// <returns>An array of PlayerRecords for the requested player</returns>
+        public virtual PlayerRecord[] GetPlayerRecords(int playerId)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             return (from r in db.PlayerRecords

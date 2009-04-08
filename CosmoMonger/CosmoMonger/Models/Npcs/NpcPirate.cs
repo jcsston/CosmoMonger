@@ -113,6 +113,7 @@ namespace CosmoMonger.Models.Npcs
             } 
             else 
             {
+                /*
                 Dictionary<string, object> props = new Dictionary<string, object>
                 {
                     { "NpcId", this.npcRow.NpcId },
@@ -120,6 +121,7 @@ namespace CosmoMonger.Models.Npcs
                     { "UtcNow", DateTime.UtcNow }
                 };
                 Logger.Write("Waiting for NextTravelTime", "NPC", 200, 0, TraceEventType.Verbose, "Pirate Wait", props);
+                */
             }
 
             db.SaveChanges();
@@ -267,7 +269,6 @@ namespace CosmoMonger.Models.Npcs
                     // Attack!
                     npcShip.Attack(shipToAttack);
                     this.npcRow.LastAttackedShip = shipToAttack;
-                    Logger.Write("Attacked Ship", "NPC", 150, 0, TraceEventType.Verbose, "Pirate Attacked", props);
                 }
                 catch (InvalidOperationException ex)
                 {

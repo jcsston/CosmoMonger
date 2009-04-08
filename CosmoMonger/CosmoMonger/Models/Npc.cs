@@ -63,7 +63,7 @@ namespace CosmoMonger.Models
         /// </summary>
         public virtual void DoAction()
         {
-            Logger.Write("Enter Npc.DoAction", "NPC", 200, 0, TraceEventType.Start);
+            Logger.Write(string.Format("Processing NpcId: {0}", this.NpcId), "NPC", 20, 0, TraceEventType.Start, "Npc.DoAction");
             NpcBase npc = null;
             switch (this.NType)
             {

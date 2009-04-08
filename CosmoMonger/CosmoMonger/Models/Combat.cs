@@ -840,7 +840,6 @@ namespace CosmoMonger.Models
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
-
             Dictionary<string, object> props = new Dictionary<string, object>
             {
                 { "CombatId", this.CombatId },

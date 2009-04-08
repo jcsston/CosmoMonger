@@ -9,11 +9,11 @@ namespace CosmoMonger.Models.Npcs
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Web;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.EnterpriseLibrary.Logging;
-    using System.Diagnostics;
 
     /// <summary>
     /// Contains logic for NPC Police
@@ -95,16 +95,6 @@ namespace CosmoMonger.Models.Npcs
 
                 // Set next travel time
                 this.npcRow.NextTravelTime = DateTime.UtcNow.Add(DelayBeforeNextTravel);
-            }
-            else
-            {
-                Dictionary<string, object> props = new Dictionary<string, object>
-                {
-                    { "NpcId", this.npcRow.NpcId },
-                    { "NextTravelTime", this.npcRow.NextTravelTime },
-                    { "UtcNow", DateTime.UtcNow }
-                };
-                Logger.Write("Waiting for NextTravelTime", "NPC", 200, 0, TraceEventType.Verbose, "Police Wait", props);
             }
 
             db.SaveChanges();
@@ -225,7 +215,6 @@ namespace CosmoMonger.Models.Npcs
                     npcShip.InProgressCombat.StartSearch();
 
                     this.npcRow.LastAttackedShip = shipToSearch;
-                    Logger.Write("Attacked Ship", "NPC", 150, 0, TraceEventType.Verbose, "Police Searched", props);
                 }
                 catch (InvalidOperationException ex)
                 {

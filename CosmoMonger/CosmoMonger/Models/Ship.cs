@@ -190,7 +190,6 @@ namespace CosmoMonger.Models
             // Get the travel time
             int travelTime = this.JumpDrive.ChargeTime;
 
-
             // Update the player stats
             Player shipPlayer = this.Players.SingleOrDefault();
             if (shipPlayer != null)
@@ -228,7 +227,6 @@ namespace CosmoMonger.Models
                     this.CosmoSystem = (from s in db.CosmoSystems 
                                         where s.SystemId == this.TargetSystemId.Value
                                         select s).Single();
-                    //this.SystemId = this.TargetSystemId.Value;
                     this.TargetSystemId = null;
                     this.TargetSystemArrivalTime = null;
 

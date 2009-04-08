@@ -42,8 +42,6 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         public override void DoAction()
         {
-            Logger.Write("Enter NpcGoodBalancer.DoAction", "NPC", 100, 0, TraceEventType.Verbose);
-
             // Comment out if you don't want to wait
             if (!this.SetNextActionDelay(new TimeSpan(0, NpcGoodBalancer.MinutesBetweenSystemGoodUpdates, 0)))
             {

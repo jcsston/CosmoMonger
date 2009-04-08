@@ -11,10 +11,10 @@
 // *** information that has been provided with it .						 ***
 //
 
-using System;
-
 namespace FastDynamicPropertyAccessor
 {
+    using System;
+
 	/// <summary>
 	/// The IPropertyAccessor interface defines a property
 	/// accessor.

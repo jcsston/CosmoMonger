@@ -100,7 +100,7 @@ namespace CosmoMonger.Models.Npcs
                     NpcBase npc = null;
 
                     // Which type will we produce?
-                    //NpcType[] npcTypes = { NpcType.Pirate, NpcType.Trader, NpcType.Police };
+                    // NpcType[] npcTypes = { NpcType.Pirate, NpcType.Trader, NpcType.Police };
                     // Only Pirates for now
                     Npc.NpcType[] npcTypes = { Npc.NpcType.Pirate, Npc.NpcType.Police, Npc.NpcType.Police };
                     double[] npcProbablity = { NpcBalancer.PercentPirates, NpcBalancer.PercentTraders, NpcBalancer.PercentPolice };

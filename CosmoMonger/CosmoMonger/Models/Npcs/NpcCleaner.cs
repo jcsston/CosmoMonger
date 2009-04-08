@@ -39,9 +39,7 @@ namespace CosmoMonger.Models.Npcs
         /// Cleaner NPC. Looks for inactive users and makes sure that are not stuck in travel.
         /// </summary>
         public override void DoAction()
-        {
-            Logger.Write("Enter NpcCleaner.DoAction", "NPC", 100, 0, TraceEventType.Verbose);
-            
+        {   
             // Mark the next time traveling players will need cleaning
             if (!this.SetNextActionDelay(new TimeSpan(0, NpcCleaner.MinutesBetweenCleanerSweeps, 0)))
             {

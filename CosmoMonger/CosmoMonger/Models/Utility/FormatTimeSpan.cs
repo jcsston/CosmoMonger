@@ -5,20 +5,6 @@
 
     public class FormatTimeSpan
     {
-        private struct FormatSpec 
-        {
-            public string format;
-            public int startSeconds;
-            public int endSeconds;
-
-            public FormatSpec(int startSeconds, string format, int endSeconds)
-            {
-                this.format = format;
-                this.startSeconds =startSeconds;
-                this.endSeconds = endSeconds;
-            }
-        };
-
         static private FormatSpec [] TimeFormats = new FormatSpec[]
         {
             new FormatSpec(60, "Just Now", -1),
@@ -40,16 +26,22 @@
             string token = " Ago";
             double seconds = ts.TotalSeconds;
 
-            if (seconds < 0) {
+            if (seconds < 0) 
+            {
                 seconds = Math.Abs(seconds);
                 token = String.Empty;
             }
 
-            foreach (FormatSpec format in FormatTimeSpan.TimeFormats) {
-                if (seconds < format.startSeconds) {
-                    if (format.endSeconds == -1) {
+            foreach (FormatSpec format in FormatTimeSpan.TimeFormats) 
+            {
+                if (seconds < format.startSeconds) 
+                {
+                    if (format.endSeconds == -1) 
+                    {
                         return format.format + (format.startSeconds > 60 ? token : String.Empty);
-                    } else {
+                    }
+                    else 
+                    {
                         return Math.Round(seconds / format.endSeconds) + " " + format.format + (format.startSeconds > 60 ? token : String.Empty);
                     }
                 }
@@ -57,6 +49,20 @@
 
             // overflow for years
             return Math.Round(seconds / 47304000) + " Years" + token;
+        }
+
+        private struct FormatSpec
+        {
+            public string format;
+            public int startSeconds;
+            public int endSeconds;
+
+            public FormatSpec(int startSeconds, string format, int endSeconds)
+            {
+                this.format = format;
+                this.startSeconds = startSeconds;
+                this.endSeconds = endSeconds;
+            }
         }
     }
 }
