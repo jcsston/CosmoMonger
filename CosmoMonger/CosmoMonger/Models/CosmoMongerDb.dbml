@@ -72,6 +72,10 @@
       <Column Name="LastActionTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" />
       <Column Name="CreditsLooted" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
       <Column Name="Search" Modifier="Virtual" Type="System.Boolean" DbType="bit NOT NULL" CanBeNull="false" />
+      <Column Name="AttackerHits" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
+      <Column Name="AttackerMisses" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
+      <Column Name="DefenderHits" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
+      <Column Name="DefenderMisses" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
       <Association Name="Combat_CombatGood" Member="CombatGoods" ThisKey="CombatId" OtherKey="CombatId" Type="CombatGood" />
       <Association Name="Ship_Combat" Member="AttackerShip" Storage="_Ship" Modifier="Virtual" ThisKey="AttackerShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />
       <Association Name="Ship_Combat1" Member="DefenderShip" Storage="_Ship1" Modifier="Virtual" ThisKey="DefenderShipId" OtherKey="ShipId" Type="Ship" IsForeignKey="true" />

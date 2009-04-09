@@ -1608,6 +1608,14 @@ namespace CosmoMonger.Models
 		
 		private bool _Search;
 		
+		private int _AttackerHits;
+		
+		private int _AttackerMisses;
+		
+		private int _DefenderHits;
+		
+		private int _DefenderMisses;
+		
 		private EntitySet<CombatGood> _CombatGoods;
 		
 		private EntityRef<Ship> _Ship;
@@ -1640,6 +1648,14 @@ namespace CosmoMonger.Models
     partial void OnCreditsLootedChanged();
     partial void OnSearchChanging(bool value);
     partial void OnSearchChanged();
+    partial void OnAttackerHitsChanging(int value);
+    partial void OnAttackerHitsChanged();
+    partial void OnAttackerMissesChanging(int value);
+    partial void OnAttackerMissesChanged();
+    partial void OnDefenderHitsChanging(int value);
+    partial void OnDefenderHitsChanged();
+    partial void OnDefenderMissesChanging(int value);
+    partial void OnDefenderMissesChanged();
     #endregion
 		
 		public Combat()
@@ -1874,6 +1890,86 @@ namespace CosmoMonger.Models
 					this._Search = value;
 					this.SendPropertyChanged("Search");
 					this.OnSearchChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_AttackerHits", DbType="int NOT NULL")]
+		public int AttackerHits
+		{
+			get
+			{
+				return this._AttackerHits;
+			}
+			set
+			{
+				if ((this._AttackerHits != value))
+				{
+					this.OnAttackerHitsChanging(value);
+					this.SendPropertyChanging();
+					this._AttackerHits = value;
+					this.SendPropertyChanged("AttackerHits");
+					this.OnAttackerHitsChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_AttackerMisses", DbType="int NOT NULL")]
+		public int AttackerMisses
+		{
+			get
+			{
+				return this._AttackerMisses;
+			}
+			set
+			{
+				if ((this._AttackerMisses != value))
+				{
+					this.OnAttackerMissesChanging(value);
+					this.SendPropertyChanging();
+					this._AttackerMisses = value;
+					this.SendPropertyChanged("AttackerMisses");
+					this.OnAttackerMissesChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_DefenderHits", DbType="int NOT NULL")]
+		public int DefenderHits
+		{
+			get
+			{
+				return this._DefenderHits;
+			}
+			set
+			{
+				if ((this._DefenderHits != value))
+				{
+					this.OnDefenderHitsChanging(value);
+					this.SendPropertyChanging();
+					this._DefenderHits = value;
+					this.SendPropertyChanged("DefenderHits");
+					this.OnDefenderHitsChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_DefenderMisses", DbType="int NOT NULL")]
+		public int DefenderMisses
+		{
+			get
+			{
+				return this._DefenderMisses;
+			}
+			set
+			{
+				if ((this._DefenderMisses != value))
+				{
+					this.OnDefenderMissesChanging(value);
+					this.SendPropertyChanging();
+					this._DefenderMisses = value;
+					this.SendPropertyChanged("DefenderMisses");
+					this.OnDefenderMissesChanged();
 				}
 			}
 		}

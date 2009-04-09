@@ -230,11 +230,31 @@ namespace CosmoMonger.Models
             {
                 // Clear the weapon damage amount
                 weaponDamage = 0;
+
+                // Count miss
+                if (this.Turn == 0)
+                {
+                    this.AttackerMisses++;
+                }
+                else
+                {
+                    this.DefenderMisses++;
+                }
             }
             else
             {
                 // Apply damage to the other ship
                 this.ShipOther.ApplyDamage(weaponDamage);
+
+                // Count hit
+                if (this.Turn == 0)
+                {
+                    this.AttackerHits++;
+                }
+                else
+                {
+                    this.DefenderHits++;
+                }
             }
 
             // Deduct turn points
@@ -369,9 +389,6 @@ namespace CosmoMonger.Models
             // Update turn action time
             this.LastActionTime = DateTime.UtcNow;
 
-            // End combat turn
-            this.EndTurn();
-
             // Cleanup combat
             this.CleanupCombat();
 
@@ -461,9 +478,6 @@ namespace CosmoMonger.Models
 
             // Save database changes
             db.SaveChanges();
-
-            // End combat turn
-            this.EndTurn();
 
             // Cleanup combat
             this.CleanupCombat();

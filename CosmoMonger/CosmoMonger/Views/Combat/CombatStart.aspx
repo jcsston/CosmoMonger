@@ -59,6 +59,7 @@
                 enemyShield.animate({ height: data.enemyShield + '%' }, "normal");
             }
 
+            $("#jumpDriveChargeBar").progressbar('value', data.jumpDriveCharge);
             $("#jumpDriveCharge").text(data.jumpDriveCharge);
         }
 
@@ -144,11 +145,15 @@
         function processPlayerTurn(data) {
             // Enable turn buttons
             $(".turnAction").attr("disabled", "");
-            $("#turnActions caption").html("Current Turn: <b>Yours</b>");
+            $(".turnActions").show("slow");
+            $("#currentTurn").text("Yours");
+            
+            // Update stats
             $("#timeLeft").text(parseInt(data.timeLeft));
-            //$("#turnActions").show("slow");
             $("#turnPoints").text(data.turnPoints);
-
+            $("#playerWeaponHits").text(data.playerHits);
+            $("#playerWeaponMisses").text(data.playerMisses);
+            
             // Check if we need to prompt the player
             if (data.surrendered && !playerNotified) {
                 // Other player has offered surrender
@@ -166,12 +171,14 @@
 
         function processEnemyTurn(data) {
             // Hide turn actions
-            //$("#turnActions").slideUp("slow");
+            $(".turnActions").slideUp("slow");
             $(".turnAction").attr("disabled", "disabled");
             $("#turnPoints").text(0);
             $("#timeLeft").text(0);
             $("#dialog").dialog("close");
-            $("#turnActions caption").html("Current Turn: <b>Enemy</b>");
+            $("#currentTurn").text("Enemy");
+            $("#enemyWeaponHits").text(data.enemyHits);
+            $("#enemyWeaponMisses").text(data.enemyMisses);
 
             // Reset player notifications
             playerNotified = false;
@@ -244,21 +251,34 @@
                 });
             });
 
-            $('#playerRace').tooltip({
+            $('.turnActionDetails').hide();
+            /*
+            $('.turnAction').mouseover(function() {
+                var selectedId = '#' + $(this).attr('id') + 'Details';
+                $('.turnActionDetails:not(' + selectedId + ')').hide();
+                $(selectedId).show();
+            });
+            */
+/*
+            $('.turnAction').tooltip({
                 showURL: false,
                 extraClass: "ui-widget-content",
                 bodyHandler: function() {
-                    return $("#playerRaceDetails").html();
+                    var selectedId = '#' + $(this).attr('id') + 'Details';
+                    return $(selectedId).html();
+                }
+            });
+            */
+            $('.tooltipDetails').tooltip({
+                showURL: false,
+                extraClass: "ui-widget-content",
+                bodyHandler: function() {
+                    var content = $(this).children("div").html();
+                    return '<center>' + $(this).html() + '</center><hr />' + content;
                 }
             });
 
-            $('#enemyRace').tooltip({
-                showURL: false,
-                extraClass: "ui-widget-content",
-                bodyHandler: function() {
-                    return $("#enemyRaceDetails").html();
-                }
-            });
+            $("#jumpDriveChargeBar").progressbar({ range: true, width: 100, value: 0 });
 
             queueCombatStatus();
         });
@@ -298,62 +318,66 @@
                     title="<%=Html.AttributeEncode(playerShip.BaseShip.Name) %>" 
                     src="/Content/BaseShip/<%=Html.AttributeEncode(playerShip.BaseShip.Name) %>.png" />
                 <br />
-                Your <span id="playerRace"><%=Html.Encode(ViewData["PlayerRaceName"]) %></span> Ship
-                <div id="playerRaceDetails" style="display: none;">
-                    <table class="center">
-                        <tr>
-                            <td>
-                                <center>
-                                    <div class="ui-icon ui-icon-arrowthick-1-n"></div>
-                                </center>
-                            </td>
-                            <td></td>
-                            <td>
-                                <center>
-                                    <div class="ui-icon ui-icon-minusthick"></div>
-                                </center>
-                            </td>
-                            <td></td>
-                            <td>
-                                <center>
-                                    <div class="ui-icon ui-icon-arrowthick-1-s"></div>
-                                </center>
-                            </td>
-                        </tr>
-                        <%
-                            Dictionary<string, List<string>> playerRacialModifiers = (Dictionary<string, List<string>>)ViewData["PlayerRaceModifiers"];
-                            List<string> plusModifiers = playerRacialModifiers["Plus"];
-                            List<string> neturalModifiers = playerRacialModifiers["Netural"];
-                            List<string> minusModifiers = playerRacialModifiers["Minus"];
+                Your 
+                <span class="tooltipDetails">
+                    <%=Html.Encode(ViewData["PlayerRaceName"]) %>
+                    <div style="display: none;">
+                        <table class="center">
+                            <tr>
+                                <td>
+                                    <center>
+                                        <div class="ui-icon ui-icon-arrowthick-1-n"></div>
+                                    </center>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <center>
+                                        <div class="ui-icon ui-icon-minusthick"></div>
+                                    </center>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <center>
+                                        <div class="ui-icon ui-icon-arrowthick-1-s"></div>
+                                    </center>
+                                </td>
+                            </tr>
+                            <%
+                                Dictionary<string, List<string>> playerRacialModifiers = (Dictionary<string, List<string>>)ViewData["PlayerRaceModifiers"];
+                                List<string> plusModifiers = playerRacialModifiers["Plus"];
+                                List<string> neturalModifiers = playerRacialModifiers["Netural"];
+                                List<string> minusModifiers = playerRacialModifiers["Minus"];
 
-                            while (plusModifiers.Count > 0 || neturalModifiers.Count > 0 || minusModifiers.Count > 0)
-                            {
-                                string plus = plusModifiers.FirstOrDefault() ?? String.Empty;
-                                string netural = neturalModifiers.FirstOrDefault() ?? String.Empty;
-                                string minus = minusModifiers.FirstOrDefault() ?? String.Empty;
-                                if (plusModifiers.Count > 0)
+                                while (plusModifiers.Count > 0 || neturalModifiers.Count > 0 || minusModifiers.Count > 0)
                                 {
-                                    plusModifiers.RemoveAt(0);
+                                    string plus = plusModifiers.FirstOrDefault() ?? String.Empty;
+                                    string netural = neturalModifiers.FirstOrDefault() ?? String.Empty;
+                                    string minus = minusModifiers.FirstOrDefault() ?? String.Empty;
+                                    if (plusModifiers.Count > 0)
+                                    {
+                                        plusModifiers.RemoveAt(0);
+                                    }
+                                    if (neturalModifiers.Count > 0)
+                                    {
+                                        neturalModifiers.RemoveAt(0);
+                                    }
+                                    if (minusModifiers.Count > 0)
+                                    {
+                                        minusModifiers.RemoveAt(0);
+                                    }
+                                    %><tr>
+                                        <td><%=Html.Encode(plus) %></td>
+                                        <td></td>
+                                        <td><%=Html.Encode(netural) %></td>
+                                        <td></td>
+                                        <td><%=Html.Encode(minus) %></td>
+                                      </tr><%
                                 }
-                                if (neturalModifiers.Count > 0)
-                                {
-                                    neturalModifiers.RemoveAt(0);
-                                }
-                                if (minusModifiers.Count > 0)
-                                {
-                                    minusModifiers.RemoveAt(0);
-                                }
-                                %><tr>
-                                    <td><%=Html.Encode(plus) %></td>
-                                    <td></td>
-                                    <td><%=Html.Encode(netural) %></td>
-                                    <td></td>
-                                    <td><%=Html.Encode(minus) %></td>
-                                  </tr><%
-                            }
-                        %>
-                    </table>
-                </div>
+                            %>
+                        </table>
+                    </div>
+                </span>
+                Ship
             </td>
             <td>&nbsp;</td>
             <td>
@@ -363,62 +387,66 @@
                     title="<%=Html.AttributeEncode(enemyShip.BaseShip.Name) %>" 
                     src="/Content/BaseShip/<%=Html.AttributeEncode(enemyShip.BaseShip.Name) %>.png" />
                 <br />
-                Enemy <span id="enemyRace"><%=Html.Encode(ViewData["EnemyRaceName"]) %></span> Ship
-                <div id="enemyRaceDetails" style="display: none;">
-                    <table class="center">
-                        <tr>
-                            <td>
-                                <center>
-                                    <div class="ui-icon ui-icon-arrowthick-1-n"></div>
-                                </center>
-                            </td>
-                            <td></td>
-                            <td>
-                                <center>
-                                    <div class="ui-icon ui-icon-minusthick"></div>
-                                </center>
-                            </td>
-                            <td></td>
-                            <td>
-                                <center>
-                                    <div class="ui-icon ui-icon-arrowthick-1-s"></div>
-                                </center>
-                            </td>
-                        </tr>
-                        <%
-                            Dictionary<string, List<string>> enemyRacialModifiers = (Dictionary<string, List<string>>)ViewData["EnemyRaceModifiers"];
-                            plusModifiers = enemyRacialModifiers["Plus"];
-                            neturalModifiers = enemyRacialModifiers["Netural"];
-                            minusModifiers = enemyRacialModifiers["Minus"];
+                Enemy 
+                <span class="tooltipDetails">
+                    <%=Html.Encode(ViewData["EnemyRaceName"]) %>
+                    <div style="display: none;">
+                        <table class="center">
+                            <tr>
+                                <td>
+                                    <center>
+                                        <div class="ui-icon ui-icon-arrowthick-1-n"></div>
+                                    </center>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <center>
+                                        <div class="ui-icon ui-icon-minusthick"></div>
+                                    </center>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <center>
+                                        <div class="ui-icon ui-icon-arrowthick-1-s"></div>
+                                    </center>
+                                </td>
+                            </tr>
+                            <%
+                                Dictionary<string, List<string>> enemyRacialModifiers = (Dictionary<string, List<string>>)ViewData["EnemyRaceModifiers"];
+                                plusModifiers = enemyRacialModifiers["Plus"];
+                                neturalModifiers = enemyRacialModifiers["Netural"];
+                                minusModifiers = enemyRacialModifiers["Minus"];
 
-                            while (plusModifiers.Count > 0 || neturalModifiers.Count > 0 || minusModifiers.Count > 0)
-                            {
-                                string plus = plusModifiers.FirstOrDefault() ?? String.Empty;
-                                string netural = neturalModifiers.FirstOrDefault() ?? String.Empty;
-                                string minus = minusModifiers.FirstOrDefault() ?? String.Empty;
-                                if (plusModifiers.Count > 0)
+                                while (plusModifiers.Count > 0 || neturalModifiers.Count > 0 || minusModifiers.Count > 0)
                                 {
-                                    plusModifiers.RemoveAt(0);
+                                    string plus = plusModifiers.FirstOrDefault() ?? String.Empty;
+                                    string netural = neturalModifiers.FirstOrDefault() ?? String.Empty;
+                                    string minus = minusModifiers.FirstOrDefault() ?? String.Empty;
+                                    if (plusModifiers.Count > 0)
+                                    {
+                                        plusModifiers.RemoveAt(0);
+                                    }
+                                    if (neturalModifiers.Count > 0)
+                                    {
+                                        neturalModifiers.RemoveAt(0);
+                                    }
+                                    if (minusModifiers.Count > 0)
+                                    {
+                                        minusModifiers.RemoveAt(0);
+                                    }
+                                    %><tr>
+                                        <td><%=Html.Encode(plus) %></td>
+                                        <td></td>
+                                        <td><%=Html.Encode(netural) %></td>
+                                        <td></td>
+                                        <td><%=Html.Encode(minus) %></td>
+                                      </tr><%
                                 }
-                                if (neturalModifiers.Count > 0)
-                                {
-                                    neturalModifiers.RemoveAt(0);
-                                }
-                                if (minusModifiers.Count > 0)
-                                {
-                                    minusModifiers.RemoveAt(0);
-                                }
-                                %><tr>
-                                    <td><%=Html.Encode(plus) %></td>
-                                    <td></td>
-                                    <td><%=Html.Encode(netural) %></td>
-                                    <td></td>
-                                    <td><%=Html.Encode(minus) %></td>
-                                  </tr><%
-                            }
-                        %>
-                    </table>
-                </div>
+                            %>
+                        </table>
+                    </div>
+                </span>
+                Ship
             </td>
             <td rowspan="2">
                 Shield
@@ -435,79 +463,135 @@
         </tr>
         <tr>
             <td>
-                Weapon: <%=Html.Encode(playerShip.Weapon.Name) %>
+                Weapon: 
+                <span class="tooltipDetails">
+                    <%=Html.Encode(playerShip.Weapon.Name) %>
+                    <div style="display: none;">
+                        Turn Cost: <%=playerShip.Weapon.TurnCost %>
+                        <br />
+                        Power: <%=playerShip.Weapon.Power %>
+                        <br />
+                        Accuracy: <%=(int)(Weapon.BaseAccuracy*100.0) %>%
+                    </div>
+                </span>
                 <br />
-                Shield: <%=Html.Encode(playerShip.Shield.Name) %>
+                Shield: 
+                <span class="tooltipDetails">
+                    <%=Html.Encode(playerShip.Shield.Name) %>
+                    <div style="display: none;">
+                        Strength: <%=playerShip.Shield.Strength %>
+                    </div>
+                </span>
             </td>
             <td>&nbsp;</td>
             <td>
-                Weapon: <%=Html.Encode(enemyShip.Weapon.Name) %>
+                Weapon: 
+                <span class="tooltipDetails">
+                    <%=Html.Encode(enemyShip.Weapon.Name) %>
+                    <div style="display: none;">
+                        Turn Cost: <%=enemyShip.Weapon.TurnCost %>
+                        <br />
+                        Power: <%=enemyShip.Weapon.Power%>
+                        <br />
+                        Accuracy: <%=(int)(Weapon.BaseAccuracy*100.0) %>%
+                    </div>
+                </span>
                 <br />
-                Shield: <%=Html.Encode(enemyShip.Shield.Name) %>
+                Shield: 
+                <span class="tooltipDetails">
+                    <%=Html.Encode(enemyShip.Shield.Name) %>
+                    <div style="display: none;">
+                        Strength: <%=enemyShip.Shield.Strength %>
+                    </div>
+                </span>
             </td>
         </tr>
     </table>
     <hr />
-    <table id="turnActions" class="combat">
-    <caption>Current turn: Yours</caption>
+    <table class="combat">
     <tr>
-        <td colspan="2">
-            <p>Attack</p>
+        <td colspan="5">Current turn: <b><span id="currentTurn">Yours</span></b></td>
+    </tr>
+    <tr>
+        <td align="right">
+            <div class="turnActions">
+                <button id="fireWeapon" class="turnAction tooltipDetails" type="button">
+                    Fire Weapon
+                   <div style="display: none">
+                        Fires your primary weapon at the enemy ship.
+                    </div>
+                </button>
+                <br />
+                <button id="jettisonCargo" class="turnAction tooltipDetails" type="button">
+                    Jettison Cargo
+                    <div style="display: none">
+                        <p>
+                            Escape if enemy picks up cargo.
+                        </p>
+                        <p>
+                            Current Cargo: <%=Html.Encode(ViewData["CargoCount"]) %> items
+                        </p>
+                    </div>
+                </button>
+            </div>
         </td>
-        <td colspan="2">
-            <p>Flee</p>
+        <td>    
+        </td>
+        <td align="left">
+            <div class="turnActions">
+                <button id="offerSurrender" class="turnAction tooltipDetails" type="button">
+                        Offer Surrender
+                        <div style="display: none">
+                            <p>
+                                If enemy accepts you lose your cargo and credits on-board, but keep your ship intact.
+                            </p>
+                            <p>
+                                Cargo: <%=Html.Encode(ViewData["CargoCount"]) %> items
+                                <br />
+                                Credits: $<%=Html.Encode(ViewData["Credits"]) %>
+                            </p>
+                        </div>
+                </button>
+                <br />
+                <button id="chargeJumpDrive" class="turnAction tooltipDetails" type="button">
+                    Charge JumpDrive
+                    <div style="display: none">
+                        Use the rest of your turn points to charge your JumpDrive.
+                    </div>
+                </button>
+            </div>
+        </td>
+        <td rowspan="2"></td>
+        <td rowspan="2">
+            <p>
+                <b>Player Weapon</b>
+                <br />
+                <span id="playerWeaponHits">0</span> Hits
+                <br />
+                <span id="playerWeaponMisses">0</span> Misses
+            </p>
+            <p>
+                <b>Enemy Weapon</b>
+                <br />
+                <span id="enemyWeaponHits">0</span> Hits
+                <br />
+                <span id="enemyWeaponMisses">0</span> Misses
+            </p>
         </td>
     </tr>
     <tr>
-        <td>
-            Cost: <%=playerShip.Weapon.TurnCost %>
-            <br />
-            Power: <%=playerShip.Weapon.Power %>
-        </td>
-        <td>
-            <button id="fireWeapon" class="turnAction" type="button">Fire Weapon</button>
-        </td>
-        <td>
-            Cost: Rest of Turn
-            <br />
-            Charge: <span id="jumpDriveCharge">0</span>%
-            </td>
-        <td>
-            <button id="chargeJumpDrive" class="turnAction" type="button">Charge JumpDrive</button>
+        <td colspan="3">
+            JumpDrive Charge: <span id="jumpDriveCharge">0</span>%
+            <div id="jumpDriveChargeBar"></div>
         </td>
     </tr>
     <tr>
-        <td colspan="2">
-            <p>Jettison Cargo</p>
+        <td colspan="2"> 
+            Turn Points Left: <span id="turnPoints">0</span>
         </td>
-        <td colspan="2">
-            <p>Surrender</p></td>
-    </tr>
-    <tr>
-        <td>
-            Cost: Rest of Turn
-            <br />
-            Escape if enemy picks up cargo
+        <td colspan="3">
+            Turn Time Left: <span id="timeLeft">0</span> seconds
         </td>
-        <td>
-            <button id="jettisonCargo" class="turnAction" type="button">Jettison Cargo</button>
-        </td>
-        <td>
-            Cost: Rest of Turn
-            <br />
-            Lose Ship Cargo and Credits
-        </td>
-        <td>
-            <button id="offerSurrender" class="turnAction" type="button">Offer Surrender</button>
-        </td>
-    </tr>
-    <tr>
-    <td colspan="2">
-        Turn Points Left: <span id="turnPoints">0</span>
-    </td>
-    <td colspan="2">
-        Turn Time Left: <span id="timeLeft">0</span> seconds
-    </td>
     </tr>
     </table>
 </asp:Content>

@@ -4381,6 +4381,19 @@
       <where>BaseShipId=5</where>
     </update>
   </changeSet>
+  <changeSet author="Jory Stone" id="98">
+    <comment>Added AttackerHits, AttackerMisses, DefenderHits, DefenderMisses column to Combat table to track combat stats.</comment>
+    <addColumn tableName="Combat">
+      <column name="AttackerHits" type="int" />
+      <column name="AttackerMisses" type="int" />
+      <column name="DefenderHits" type="int" />
+      <column name="DefenderMisses" type="int" />
+    </addColumn>
+    <addNotNullConstraint tableName="Combat" columnName="AttackerHits" columnDataType="int" defaultNullValue="0" />
+    <addNotNullConstraint tableName="Combat" columnName="AttackerMisses" columnDataType="int" defaultNullValue="0" />
+    <addNotNullConstraint tableName="Combat" columnName="DefenderHits" columnDataType="int" defaultNullValue="0" />
+    <addNotNullConstraint tableName="Combat" columnName="DefenderMisses" columnDataType="int" defaultNullValue="0" />
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

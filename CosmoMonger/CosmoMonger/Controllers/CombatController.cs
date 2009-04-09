@@ -157,6 +157,8 @@
                 ViewData["Combat"] = currentCombat;
 
                 Player currentPlayer = this.ControllerGame.CurrentPlayer;
+                ViewData["CargoCount"] = currentPlayer.Ship.GetGoods().Sum(g => g.Quantity);
+                ViewData["Credits"] = currentPlayer.Ship.Credits;
                 ViewData["PlayerName"] = currentPlayer.Name;
                 ViewData["PlayerShip"] = currentPlayer.Ship;
                 ViewData["PlayerRaceName"] = currentPlayer.Race.Name;
@@ -314,7 +316,7 @@
                         bool weaponHit = selectedCombat.FireWeapon();
                         if (!weaponHit)
                         {
-                            message = "Your shot missed";
+                            //message = "Your shot missed";
                         }
                     }
                     catch (InvalidOperationException ex)
@@ -568,15 +570,26 @@
         private object BuildCombatStatus(Combat combat)
         {
             Ship playerShip, enemyShip;
+            int playerHits, playerMisses, enemyHits, enemyMisses;
             if (this.ControllerGame.CurrentPlayer.Ship == combat.AttackerShip)
             {
                 playerShip = combat.AttackerShip;
+                playerHits = combat.AttackerHits;
+                playerMisses = combat.AttackerMisses;
+
                 enemyShip = combat.DefenderShip;
+                enemyHits = combat.DefenderHits;
+                enemyMisses = combat.DefenderMisses;
             }
             else
             {
                 playerShip = combat.DefenderShip;
+                playerHits = combat.DefenderHits;
+                playerMisses = combat.DefenderMisses;
+
                 enemyShip = combat.AttackerShip;
+                enemyHits = combat.AttackerHits;
+                enemyMisses = combat.AttackerMisses;
             }
 
             return new { 
@@ -591,6 +604,7 @@
                 beingSearched = combat.Search,
                 turnPoints = combat.TurnPointsLeft,
                 timeLeft = combat.TurnTimeLeft.TotalSeconds,
+                playerHits, playerMisses, enemyHits, enemyMisses,
                 complete = (combat.Status != Combat.CombatStatus.Incomplete)
             };
         }
