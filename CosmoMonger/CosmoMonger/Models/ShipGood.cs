@@ -24,7 +24,7 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="currentShip">The Ship object to use for this transaction.</param>
         /// <param name="quantity">The quantity of goods to sell.</param>
-        /// <param name="price">The price of the goods to sell at.</param>
+        /// <param name="price">The price of the goods to sell at. If 0 current price is used.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown on quantity param when trying to sell more goods than avaiable on the ship.
         /// Thrown on price param when asking price is different than the actual current price.
@@ -45,7 +45,7 @@ namespace CosmoMonger.Models
                 throw new ArgumentOutOfRangeException("quantity", quantity, "Unable to sell more goods than aboard");
             }
 
-            if (sellingGood.Price != price)
+            if (price > 0 && sellingGood.Price != price)
             {
                 throw new ArgumentOutOfRangeException("price", price, "Asking price does not match current price");
             }
