@@ -107,22 +107,13 @@ first child of the left and right table columns */
 
 #header
 {
+    /*
     position: relative;
     margin-bottom: 0px;
     color: white;
     padding: 0;
     clear: both;
-}
-
-#header h1
-{
-    font-weight: bold;
-    padding: 5px 0;
-    margin: 0;
-    border: none;
-    line-height: 2em;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 32px !important;
+*/
 }
 
 #main
@@ -204,120 +195,129 @@ first child of the left and right table columns */
 
 #menuh-container
 {
+    position: absolute;
+/*
     margin: 0px;
     padding: 0px;
     position: relative;
     text-align: center;
     clear: both;
+*/
 }
 
 #menuh
 {
 	font-size: small;
+/*
 	width: 100%;
 	margin: 0em;
+*/
 }
 
 #menuha
 {
 	text-align: center;
-	display:block;
+	display: block;
 	border: 1px solid #555;
-	white-space:nowrap;
-	margin:0;
+	white-space: nowrap;
+	margin: 0;
 	padding: 0.3em;
-	color: black;/* white */
-	background-color: silver;/* royalblue */
-	text-decoration:none;
+	color: black;
+	background-color: silver;
+	text-decoration: none;
 }
 	
 #menuh a
-	{
+{
 	text-align: center;
-	display:block;
+	display: block;
 	border: 1px solid #555;
-	white-space:nowrap;
-	margin:0;
+	white-space: nowrap;
+	margin: 0;
 	padding: 0.3em;
-	}
+}
 	
 #menuh a:link, #menuh a:visited, #menuh a:active	/* menu at rest */
-	{
-	color: black;/* white */
-	background-color: silver;/* royalblue */
-	text-decoration:none;
-	}
+{
+	color: black;
+	background-color: silver;
+	text-decoration: none;
+}
 	
 #menuh a:hover	/* menu at mouse-over  */
-	{
+{
 	color: white;
 	background-color: blue;
-	text-decoration:none;
-	}	
+	text-decoration: none;
+}	
 	
 #menuh a.top_parent, #menuh a.top_parent:hover  /* attaches down-arrow to all top-parents */
-	{
+{
 	background-image: url(navdown_white.gif);
 	background-position: right center;
 	background-repeat: no-repeat;
-	}
+}
 	
 #menuh a.parent, #menuh a.parent:hover 	/* attaches side-arrow to all parents */
-	{
+{
 	background-image: url(nav_white.gif);
 	background-position: right center;
 	background-repeat: no-repeat;
-	}
+}
 
 #menuh ul
-	{
-	list-style:none;
+{
+	list-style: none;
 	margin: 0;
 	padding: 0;
-	float:left;
+	float: left;
 	width: 10em;	/* width of all menu boxes */
-	}
+}
 
 #menuh li
-	{
-	position:relative;
+{
+	position: relative;
     min-height: 1px; 			/* Sophie Dennis contribution for IE7 */
     vertical-align: bottom; /* Sophie Dennis contribution for IE7 */
-	}
+}
 
 #menuh ul ul
-	{
-	position:absolute;
-	z-index:500;
-	top:auto;
-	display:none;
+{
+	position: absolute;
+	z-index: 500;
+	top: auto;
+	display: none;
 	padding: 1em;
-	margin:-1em 0 0 -1em;
-	}
+	margin: -1em 0 0 -1em;
+}
 
 #menuh ul ul ul
-	{
-	top:0;
-	left:100%;
-	}
+{
+	top: 0;
+	left: 100%;
+}
 
 div#menuh li:hover
-	{
-	cursor:pointer;
-	z-index:100;
-	}
+{
+	cursor: pointer;
+	z-index: 100;
+}
 
 div#menuh li:hover ul ul,
 div#menuh li li:hover ul ul,
 div#menuh li li li:hover ul ul,
 div#menuh li li li li:hover ul ul
-{display:none;}
+{
+    display: none;
+}
 
 div#menuh li:hover ul,
 div#menuh li li:hover ul,
 div#menuh li li li:hover ul,
 div#menuh li li li li:hover ul
-{display:block;}
+{
+    display: block;
+}
 
 /* End CSS Drop Down Menu */
 
