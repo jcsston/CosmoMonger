@@ -68,7 +68,6 @@
             });
             
             $('.goodImages').tooltip({ 
-                delay: 0,
                 showURL: false,
                 extraClass: "good-tooltip",
                 bodyHandler: function() { 

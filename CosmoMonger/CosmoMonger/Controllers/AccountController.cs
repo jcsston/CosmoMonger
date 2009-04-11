@@ -501,7 +501,7 @@ namespace CosmoMonger.Controllers
         /// Forgots the password.
         /// </summary>
         /// <param name="email">The email.</param>
-        /// <returns></returns>
+        /// <returns>The ForgotPassword view on error, redirect to the ForgotPasswordSuccess action on success.</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ForgotPassword(string email)
         {
@@ -556,12 +556,18 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Returns the ForgotPasswordSuccess view
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The ForgotPasswordSuccess view</returns>
         public ActionResult ForgotPasswordSuccess()
         {
             return View();
         }
 
+        /// <summary>
+        /// Resets the password.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="resetPasswordCode">The reset password code.</param>
+        /// <returns>The ResetPassword view when username/resetPasswordCode are valid. ResetPasswordError view when either is invalid.</returns>
         public ActionResult ResetPassword(string username, string resetPasswordCode)
         {
             if (String.IsNullOrEmpty(username))
@@ -599,6 +605,13 @@ namespace CosmoMonger.Controllers
             return View("ResetPasswordError");
         }
 
+        /// <summary>
+        /// Resets the password.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="resetPasswordCode">The reset password code.</param>
+        /// <param name="newPassword">The new password.</param>
+        /// <returns>The ResetPasswordSuccess view when the password is successfully reset. ResetPasswordError view when either is invalid.</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ResetPassword(string username, string resetPasswordCode, string newPassword)
         {

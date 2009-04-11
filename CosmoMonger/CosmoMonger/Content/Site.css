@@ -834,11 +834,12 @@ div.jGrowl div.jGrowl-closer {
 	margin: 0; 
 }
 
-#good-tooltip
+#tooltip.good-tooltip
 {
 	border: none;
 	background-color: transparent;
 }
+
 
 /* jQuery UI Dialog CSS */
 /*

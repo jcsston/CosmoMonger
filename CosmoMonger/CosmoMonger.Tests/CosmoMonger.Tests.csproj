@@ -108,6 +108,7 @@
     <Compile Include="Models\CombatBalancingTest.cs" />
     <Compile Include="Models\CosmoManagerTest.cs" />
     <Compile Include="Models\CosmoMongerMembershipProviderTest.cs" />
+    <Compile Include="Models\CosmoMongerMembershipUserTest.cs" />
     <Compile Include="Models\CosmoSystemTest.cs" />
     <Compile Include="Models\GameManagerTest.cs" />
     <Compile Include="Models\CombatTest.cs" />

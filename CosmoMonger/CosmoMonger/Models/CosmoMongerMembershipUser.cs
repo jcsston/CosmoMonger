@@ -482,7 +482,7 @@ namespace CosmoMonger.Models
                 "password, please click on the following link:\n\n" +
                 baseResetPasswordUrl + this.user.PasswordResetCode + "\n\n" +
                 "Clicking on this link will take you to a web page that will let you\n" +
-                "choose a new password. Once you've submitted your new password, you'll\n" +
+                "reset your password. Once you've rest your password, you'll\n" +
                 "be able to log in to your CosmoMonger account.\n" +
                 "If you did not request a new password you can safely ignore this e-mail.\n" +
                 "\nThank you for playing CosmoMonger.";
