@@ -466,7 +466,7 @@ namespace CosmoMonger.Models
 
             // Generate new password reset code
             Random rnd = new Random();
-            byte[] passwordResetBytes = new byte[32];
+            byte[] passwordResetBytes = new byte[16];
             rnd.NextBytes(passwordResetBytes);
             this.user.PasswordResetCode = Convert.ToBase64String(passwordResetBytes, Base64FormattingOptions.None);
             this.user.PasswordResetExpiration = DateTime.UtcNow.AddHours(5);
@@ -475,7 +475,7 @@ namespace CosmoMonger.Models
             MailMessage msg = new MailMessage();
             msg.From = new MailAddress("admin@cosmomonger.com", "CosmoMonger");
             msg.To.Add(this.Email);
-            msg.Subject = "Reset Passowrd Link for CosmoMonger";
+            msg.Subject = "Reset Password Link for CosmoMonger";
             msg.Body =
                 "This email is a response to your request for a new password for your\n" +
                 "CosmoMonger account. To confirm that you really want to change your\n" +
