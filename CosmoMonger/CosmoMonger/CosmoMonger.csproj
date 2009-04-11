@@ -237,6 +237,11 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Views\Account\ChangeEmail.aspx" />
     <Content Include="Views\Account\ChangeEmailSuccess.aspx" />
+    <Content Include="Views\Account\ForgotPassword.aspx" />
+    <Content Include="Views\Account\ForgotPasswordSuccess.aspx" />
+    <Content Include="Views\Account\ResetPassword.aspx" />
+    <Content Include="Views\Account\ResetPasswordError.aspx" />
+    <Content Include="Views\Account\ResetPasswordSuccess.aspx" />
     <Content Include="Views\Account\SendVerificationCode.aspx" />
     <Content Include="Views\Account\SendVerificationCodeSuccess.aspx" />
     <Content Include="Views\Account\UserProfile.aspx" />

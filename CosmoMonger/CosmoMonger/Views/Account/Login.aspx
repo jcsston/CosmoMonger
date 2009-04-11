@@ -6,7 +6,8 @@
     <h2>Login</h2>
     <p>
         Please enter your username and password below. If you don't have an account,
-        please <%= Html.ActionLink("register", "Register") %>.
+        please <%= Html.ActionLink("register", "Register") %>. If you've forgotten your
+        password you can <%=Html.ActionLink("reset", "ForgotPassword") %> it.
     </p>
     <%= Html.ValidationSummary() %>
 

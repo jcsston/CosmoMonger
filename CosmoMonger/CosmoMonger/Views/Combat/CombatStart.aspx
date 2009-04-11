@@ -153,6 +153,8 @@
             $("#turnPoints").text(data.turnPoints);
             $("#playerWeaponHits").text(data.playerHits);
             $("#playerWeaponMisses").text(data.playerMisses);
+            $("#enemyWeaponHits").text(data.enemyHits);
+            $("#enemyWeaponMisses").text(data.enemyMisses);
             
             // Check if we need to prompt the player
             if (data.surrendered && !playerNotified) {
@@ -173,10 +175,14 @@
             // Hide turn actions
             $(".turnActions").slideUp("slow");
             $(".turnAction").attr("disabled", "disabled");
-            $("#turnPoints").text(0);
-            $("#timeLeft").text(0);
             $("#dialog").dialog("close");
             $("#currentTurn").text("Enemy");
+
+            // Update stats
+            $("#timeLeft").text(parseInt(data.timeLeft));
+            $("#turnPoints").text(data.turnPoints);
+            $("#playerWeaponHits").text(data.playerHits);
+            $("#playerWeaponMisses").text(data.playerMisses);
             $("#enemyWeaponHits").text(data.enemyHits);
             $("#enemyWeaponMisses").text(data.enemyMisses);
 

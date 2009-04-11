@@ -454,7 +454,6 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Not Implemented.
         /// Resets a user's password to a new, automatically generated password.
         /// </summary>
         /// <param name="username">The user to reset the password for.</param>
@@ -462,7 +461,17 @@ namespace CosmoMonger.Models
         /// <returns>The new password for the specified user.</returns>
         public override string ResetPassword(string username, string answer)
         {
-            throw new NotImplementedException();
+            CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.GetUser(username, false);
+            if (user != null && user.CheckResetPasswordCode(answer))
+            {
+                string newPassword = Membership.GeneratePassword(8, 0);
+                if (user.ChangePassword(newPassword))
+                {
+                    return newPassword;
+                }
+            }
+
+            return String.Empty;
         }
 
         /// <summary>

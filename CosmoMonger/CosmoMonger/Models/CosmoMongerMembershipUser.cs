@@ -246,6 +246,29 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
+        /// Change the password for a user
+        /// </summary>
+        /// <param name="newPassword">The new password for the specified user.</param>
+        /// <returns>
+        /// true if the password was updated successfully; otherwise, false.
+        /// </returns>
+        public bool ChangePassword(string newPassword)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            if (this.user != null)
+            {
+                // Update the users password
+                this.user.Password = Cryptographer.CreateHash("SHA512", newPassword);
+
+                // Save database changes
+                db.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Verifies that the specified password matches this users password.
         /// </summary>
         /// <param name="password">The password to check.</param>
@@ -378,7 +401,7 @@ namespace CosmoMonger.Models
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
 
-            // Check that is has been at least 5 minutes since the last
+            // Check that it has been at least 5 minutes since the last verification e-mail
             if (this.user.LastVerificationSent.HasValue)
             {
                 TimeSpan timeSinceLastVerificationEmail = DateTime.UtcNow - this.user.LastVerificationSent.Value;
@@ -403,8 +426,8 @@ namespace CosmoMonger.Models
                 "action to cancel the account. The account will not be activated, and\n" +
                 "you will not receive any further emails.\n\n" +
                 "If clicking the link above does not work, copy and paste the URL in a\n" +
-                "new browser window instead.\n\n" +
-                "Thank you for playing CosmoMonger.";
+                "new browser window instead.\n" +
+                "\nThank you for playing CosmoMonger.";
             try
             {
                 // Send e-mail
@@ -427,6 +450,97 @@ namespace CosmoMonger.Models
 
             // Update datetime of last verification e-mail sent
             this.user.LastVerificationSent = DateTime.UtcNow;
+
+            // Save database changes
+            db.SaveChanges();
+        }
+
+        /// <summary>
+        /// Sends the forgotten password link which allows the user to click it and have their password reset
+        /// to a new random password.
+        /// </summary>
+        /// <param name="baseResetPasswordUrl">The base reset password URL. Example: http://localhost:54084/Account/ResetPassword?username=jcsston&amp;resetPasswordCode=</param>
+        public virtual void SendForgotPasswordLink(string baseResetPasswordUrl)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Generate new password reset code
+            Random rnd = new Random();
+            byte[] passwordResetBytes = new byte[32];
+            rnd.NextBytes(passwordResetBytes);
+            this.user.PasswordResetCode = Convert.ToBase64String(passwordResetBytes, Base64FormattingOptions.None);
+            this.user.PasswordResetExpiration = DateTime.UtcNow.AddHours(5);
+
+            // Build e-mail message
+            MailMessage msg = new MailMessage();
+            msg.From = new MailAddress("admin@cosmomonger.com", "CosmoMonger");
+            msg.To.Add(this.Email);
+            msg.Subject = "Reset Passowrd Link for CosmoMonger";
+            msg.Body =
+                "This email is a response to your request for a new password for your\n" +
+                "CosmoMonger account. To confirm that you really want to change your\n" +
+                "password, please click on the following link:\n\n" +
+                baseResetPasswordUrl + this.user.PasswordResetCode + "\n\n" +
+                "Clicking on this link will take you to a web page that will let you\n" +
+                "choose a new password. Once you've submitted your new password, you'll\n" +
+                "be able to log in to your CosmoMonger account.\n" +
+                "If you did not request a new password you can safely ignore this e-mail.\n" +
+                "\nThank you for playing CosmoMonger.";
+            try
+            {
+                // Send e-mail
+                SmtpClient smtp = new SmtpClient();
+                smtp.Send(msg);
+            }
+            catch (SmtpException ex)
+            {
+                Dictionary<string, object> props = new Dictionary<string, object>
+                {
+                    { "Error", ex },
+                    { "UserId", this.user.UserId },
+                    { "Email", this.Email },
+                    { "Message", msg }
+                };
+                Logger.Write("Failed to send e-mail with password reset link", "Model", 700, 0, TraceEventType.Error, "SmtpException in CosmoMongerMemebershipUser.SendForgotPasswordLink", props);
+
+                throw new InvalidOperationException("Failed to send password reset e-mail. Please try again, if the problem persists, please contact admin@cosmomonger.com.", ex);
+            }
+
+            // Save database changes
+            db.SaveChanges();
+        }
+
+        /// <summary>
+        /// Checks the reset password code and returns if the code is valid or not.
+        /// </summary>
+        /// <param name="resetPasswordCode">The reset password code to check.</param>
+        /// <returns>
+        /// true if code is valid (code can only be used once), false if code is invalid/expired.
+        /// </returns>
+        public virtual bool CheckResetPasswordCode(string resetPasswordCode)
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Check if the passed in code matches the one in the database and code has not expired
+            if (resetPasswordCode == this.user.PasswordResetCode && this.user.PasswordResetExpiration > DateTime.UtcNow) 
+            {
+                // Code is good
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Clears the reset password code fields
+        /// </summary>
+        public virtual void ClearResetPasswordCode()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+
+            // Clear out code (it's been used)
+            this.user.PasswordResetCode = null;
+            this.user.PasswordResetExpiration = null;
 
             // Save database changes
             db.SaveChanges();

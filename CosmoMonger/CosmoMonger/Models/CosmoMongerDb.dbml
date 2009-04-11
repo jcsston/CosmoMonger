@@ -319,6 +319,8 @@
       <Column Name="LastVerificationSent" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
       <Column Name="Joined" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" />
       <Column Name="SessionID" Type="System.String" DbType="varchar(128)" CanBeNull="true" />
+      <Column Name="PasswordResetCode" Type="System.String" DbType="varchar(128)" CanBeNull="true" />
+      <Column Name="PasswordResetExpiration" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
       <Association Name="User_BuddyList" Member="BuddyLists" ThisKey="UserId" OtherKey="UserId" Type="BuddyList" />
       <Association Name="User_BuddyList1" Member="BuddyListsOn" ThisKey="UserId" OtherKey="FriendId" Type="BuddyList" />
       <Association Name="User_IgnoreList" Member="IgnoreLists" ThisKey="UserId" OtherKey="UserId" Type="IgnoreList" />

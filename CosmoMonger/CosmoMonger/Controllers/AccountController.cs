@@ -488,6 +488,169 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
+        /// The action returns the ForgotPassword view so that a user can enter their e-mail 
+        /// and start the forgotten password process.
+        /// </summary>
+        /// <returns>The ForgotPassword view</returns>
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Forgots the password.
+        /// </summary>
+        /// <param name="email">The email.</param>
+        /// <returns></returns>
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult ForgotPassword(string email)
+        {
+            string username = String.Empty;
+
+            // Basic parameter validation
+            if (String.IsNullOrEmpty(email))
+            {
+                ModelState.AddModelError("email", "You must specify an email address.", email);
+            }
+            else
+            {
+                username = this.Provider.GetUserNameByEmail(email);
+                if (String.IsNullOrEmpty(username))
+                {
+                    ModelState.AddModelError("email", "No user registered with that email address.", email);
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                // Attempt to sent password reset email
+                try
+                {
+                    CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.Provider.GetUser(username, false);
+                    string basePasswordResetUrl = this.Request.Url.GetLeftPart(UriPartial.Authority) + this.Url.Action("ResetPassword") + "?username=" + this.Url.Encode(username) + "&resetPasswordCode=";
+                    if (user != null)
+                    {
+                        user.SendForgotPasswordLink(basePasswordResetUrl);
+
+                        return RedirectToAction("ForgotPasswordSuccess");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("email", "Unable to lookup user with matching email address.", email);
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
+                    // Display error
+                    ModelState.AddModelError("email", ex.Message, email);
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View();
+        }
+
+        /// <summary>
+        /// Returns the ForgotPasswordSuccess view
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ForgotPasswordSuccess()
+        {
+            return View();
+        }
+
+        public ActionResult ResetPassword(string username, string resetPasswordCode)
+        {
+            if (String.IsNullOrEmpty(username))
+            {
+                ModelState.AddModelError("username", "Invalid username.", username);
+            }
+            if (String.IsNullOrEmpty(resetPasswordCode))
+            {
+                ModelState.AddModelError("resetPasswordCode", "Invalid Password Reset Code.", resetPasswordCode);
+            }
+
+            if (ModelState.IsValid)
+            {
+                CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.Provider.GetUser(username, false);
+                if (user != null)
+                {
+                    if (user.CheckResetPasswordCode(resetPasswordCode))
+                    {
+                        // Display the username
+                        ViewData["username"] = username;
+
+                        return View();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("resetPasswordCode", "Invalid/Expired Password Reset Code.", resetPasswordCode);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("username", "Invalid username.", username);
+                }
+            }
+
+            return View("ResetPasswordError");
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult ResetPassword(string username, string resetPasswordCode, string newPassword)
+        {
+            if (String.IsNullOrEmpty(username))
+            {
+                ModelState.AddModelError("username", "Invalid username.", username);
+            }
+            if (String.IsNullOrEmpty(resetPasswordCode))
+            {
+                ModelState.AddModelError("resetPasswordCode", "Invalid Password Reset Code.", resetPasswordCode);
+            }
+
+            if (ModelState.IsValid)
+            {
+                CosmoMongerMembershipUser user = (CosmoMongerMembershipUser)this.Provider.GetUser(username, false);
+                if (user != null)
+                {
+                    if (user.CheckResetPasswordCode(resetPasswordCode))
+                    {
+                        newPassword = user.ResetPassword(resetPasswordCode);
+                        if (!String.IsNullOrEmpty(newPassword))
+                        {
+                            // Clear out the reset password code so it cannot be used again
+                            user.ClearResetPasswordCode();
+
+                            // Display username
+                            ViewData["username"] = username;
+                            // Display new password
+                            ViewData["newPassword"] = newPassword;
+
+                            return View("ResetPasswordSuccess");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("resetPasswordCode", "Unable to reset password.", resetPasswordCode);
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("resetPasswordCode", "Invalid/Expired Password Reset Code.", resetPasswordCode);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("username", "Invalid username.", username);
+                }
+            }
+
+            return View("ResetPasswordError");
+        }
+
+        /// <summary>
         /// Converts an MembershipCreateStatus error code to a friendly string.
         /// </summary>
         /// <param name="createStatus">The create status error to convert.</param>

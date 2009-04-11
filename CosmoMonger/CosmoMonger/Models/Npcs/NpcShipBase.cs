@@ -23,6 +23,26 @@ namespace CosmoMonger.Models.Npcs
     public abstract class NpcShipBase : NpcBase
     {
         /// <summary>
+        /// Standard delay to wait between actions
+        /// </summary>
+        public static TimeSpan DelayBeforeNextAction = new TimeSpan(0, 0, 0, 4);
+
+        /// <summary>
+        /// Combat delay to wait between actions
+        /// </summary>
+        public static TimeSpan DelayBeforeNextActionCombat = new TimeSpan(0, 0, 0, 0, 750);
+
+        /// <summary>
+        /// Standard delay min to wait between traveling
+        /// </summary>
+        public const int DelayBeforeNextTravelMin = 45;
+
+        /// <summary>
+        /// Standard delay max to wait between traveling
+        /// </summary>
+        public const int DelayBeforeNextTravelMax = 90;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="NpcShipBase"/> class.
         /// </summary>
         /// <param name="npcRow">The NPC row reference.</param>
@@ -61,6 +81,16 @@ namespace CosmoMonger.Models.Npcs
 
             // Set the next travel time to now
             this.npcRow.NextTravelTime = DateTime.UtcNow;
+        }
+
+        /// <summary>
+        /// Sets the next travel time, random number of seconds between NpcShipBase.DelayBeforeNextTravelMin
+        /// and NpcShipBase.DelayBeforeNextTravelMax in the future.
+        /// </summary>
+        public void SetNextTravelTime()
+        {
+            int delayBeforeNextTravel = this.rnd.Next(NpcShipBase.DelayBeforeNextTravelMin, NpcShipBase.DelayBeforeNextTravelMax);
+            this.npcRow.NextTravelTime = DateTime.UtcNow.AddSeconds(delayBeforeNextTravel);
         }
     }
 }

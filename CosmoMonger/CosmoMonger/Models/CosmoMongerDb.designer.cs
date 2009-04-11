@@ -7274,6 +7274,10 @@ namespace CosmoMonger.Models
 		
 		private string _SessionID;
 		
+		private string _PasswordResetCode;
+		
+		private System.Nullable<System.DateTime> _PasswordResetExpiration;
+		
 		private EntitySet<BuddyList> _BuddyLists;
 		
 		private EntitySet<BuddyList> _BuddyListsOn;
@@ -7318,6 +7322,10 @@ namespace CosmoMonger.Models
     partial void OnJoinedChanged();
     partial void OnSessionIDChanging(string value);
     partial void OnSessionIDChanged();
+    partial void OnPasswordResetCodeChanging(string value);
+    partial void OnPasswordResetCodeChanged();
+    partial void OnPasswordResetExpirationChanging(System.Nullable<System.DateTime> value);
+    partial void OnPasswordResetExpirationChanged();
     #endregion
 		
 		public User()
@@ -7588,6 +7596,46 @@ namespace CosmoMonger.Models
 					this._SessionID = value;
 					this.SendPropertyChanged("SessionID");
 					this.OnSessionIDChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_PasswordResetCode", DbType="varchar(128)")]
+		public string PasswordResetCode
+		{
+			get
+			{
+				return this._PasswordResetCode;
+			}
+			set
+			{
+				if ((this._PasswordResetCode != value))
+				{
+					this.OnPasswordResetCodeChanging(value);
+					this.SendPropertyChanging();
+					this._PasswordResetCode = value;
+					this.SendPropertyChanged("PasswordResetCode");
+					this.OnPasswordResetCodeChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_PasswordResetExpiration", DbType="datetime")]
+		public System.Nullable<System.DateTime> PasswordResetExpiration
+		{
+			get
+			{
+				return this._PasswordResetExpiration;
+			}
+			set
+			{
+				if ((this._PasswordResetExpiration != value))
+				{
+					this.OnPasswordResetExpirationChanging(value);
+					this.SendPropertyChanging();
+					this._PasswordResetExpiration = value;
+					this.SendPropertyChanged("PasswordResetExpiration");
+					this.OnPasswordResetExpirationChanged();
 				}
 			}
 		}

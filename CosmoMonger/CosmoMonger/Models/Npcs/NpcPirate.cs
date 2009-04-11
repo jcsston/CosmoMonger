@@ -29,21 +29,6 @@ namespace CosmoMonger.Models.Npcs
         public const int BaseCreditAmount = 1000;
 
         /// <summary>
-        /// Standard delay to wait between traveling and attacking
-        /// </summary>
-        public static TimeSpan DelayBeforeNextTravel = new TimeSpan(0, 1, 0);
-
-        /// <summary>
-        /// Standard delay to wait between actions
-        /// </summary>
-        public static TimeSpan DelayBeforeNextAction = new TimeSpan(0, 0, 0, 4);
-
-        /// <summary>
-        /// Combat delay to wait between actions
-        /// </summary>
-        public static TimeSpan DelayBeforeNextActionCombat = new TimeSpan(0, 0, 0, 0, 750);
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="NpcPirate"/> class.
         /// </summary>
         /// <param name="npcRow">The NPC row reference.</param>
@@ -72,7 +57,7 @@ namespace CosmoMonger.Models.Npcs
         /// </summary>
         public override void DoAction()
         {
-            if (!this.SetNextActionDelay(DelayBeforeNextAction))
+            if (!this.SetNextActionDelay(NpcShipBase.DelayBeforeNextAction))
             {
                 return;
             }
@@ -108,8 +93,7 @@ namespace CosmoMonger.Models.Npcs
                     this.DoTravel();
                 }
 
-                // Set next travel time
-                this.npcRow.NextTravelTime = DateTime.UtcNow.Add(DelayBeforeNextTravel);
+                this.SetNextTravelTime();
             } 
             else 
             {
@@ -218,7 +202,7 @@ namespace CosmoMonger.Models.Npcs
                 }
 
                 // Set a shorter delay before the next action
-                this.SetNextActionDelay(DelayBeforeNextActionCombat);
+                this.SetNextActionDelay(NpcShipBase.DelayBeforeNextActionCombat);
             }
         }
 

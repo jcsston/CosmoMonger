@@ -4394,6 +4394,13 @@
     <addNotNullConstraint tableName="Combat" columnName="DefenderHits" columnDataType="int" defaultNullValue="0" />
     <addNotNullConstraint tableName="Combat" columnName="DefenderMisses" columnDataType="int" defaultNullValue="0" />
   </changeSet>
+  <changeSet author="Jory Stone" id="99">
+    <comment>Added PasswordResetCode and PasswordResetExpiration columns to User table to track password reset requests.</comment>
+    <addColumn tableName="User">
+      <column name="PasswordResetCode" type="varchar(128)" />
+      <column name="PasswordResetExpiration" type="datetime" />
+    </addColumn>
+  </changeSet>
   <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>
