@@ -69,6 +69,10 @@
             Ship ship = new Ship();
             ship.BaseShip = new BaseShip();
             ship.BaseShip.BasePrice = 1000;
+            // Blank upgrades
+            ship.JumpDrive = new JumpDrive();
+            ship.Weapon = new Weapon();
+            ship.Shield = new Shield();
             ship.CosmoSystem = new CosmoSystem();
 
             // Assert
@@ -82,6 +86,10 @@
             Ship ship = new Ship();
             ship.BaseShip = new BaseShip();
             ship.BaseShip.BasePrice = 1000;
+            // Blank upgrades
+            ship.JumpDrive = new JumpDrive();
+            ship.Weapon = new Weapon();
+            ship.Shield = new Shield();
             ship.CosmoSystem = new CosmoSystem();
             SystemShip systemShip = new SystemShip();
             systemShip.BaseShip = ship.BaseShip;

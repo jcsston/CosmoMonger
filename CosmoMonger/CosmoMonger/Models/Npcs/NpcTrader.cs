@@ -34,16 +34,6 @@ namespace CosmoMonger.Models.Npcs
         /// in systems and departing.
         /// </summary>
         public static TimeSpan DelayBeforeNextTravel = new TimeSpan(0, 2, 0);
-
-        /// <summary>
-        /// Typical delay between actions.
-        /// </summary>
-        public static TimeSpan DelayBeforeNextAction = new TimeSpan(0, 0, 0, 5);
-
-        /// <summary>
-        /// Delay between combat actions.
-        /// </summary>
-        public static TimeSpan DelayBeforeNextActionCombat = new TimeSpan(0, 0, 0, 0, 750);
         
         /// <summary>
         /// Initializes a new instance of the <see cref="NpcTrader"/> class.

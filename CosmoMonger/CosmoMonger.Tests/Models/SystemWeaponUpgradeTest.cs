@@ -187,8 +187,8 @@
 
             // Assert
             shipMock.Verify();
-            // Cost of the upgrade should be (750*2 - 80) credits
-            shipMock.VerifySet(s => s.Credits, 5000 - (750*2 - 80));
+            // Cost of the upgrade should be (750*2 - 80*2) credits
+            shipMock.VerifySet(s => s.Credits, 5000 - (750 * 2 - (80 * 2)));
             Assert.That(upgrade.Quantity, Is.EqualTo(0), "Should be no upgrades left in the system of this model");
         }
 
