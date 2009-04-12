@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Weapon.cs" company="CosmoMonger">
+// <copyright file="Shield.cs" company="CosmoMonger">
 //     Copyright (c) 2009 CosmoMonger. All rights reserved.
 // </copyright>
 // <author>Jory Stone</author>
@@ -7,22 +7,16 @@
 namespace CosmoMonger.Models
 {
     using System;
-    using System.Configuration;
-    using System.Data;
+    using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// Extension of the partial LINQ class Weapon
+    /// Extenstion of LINQ class Shield.
     /// </summary>
-    public partial class Weapon
+    public partial class Shield
     {
         /// <summary>
-        /// The base accuracy for weapons.
-        /// </summary>
-        public const double BaseAccuracy = 0.75;
-
-        /// <summary>
-        /// Gets the trade in value for this Weapon upgrade
+        /// Gets the trade in value for this Shield upgrade
         /// </summary>
         /// <param name="currentShip">The current ship to base the trade in value on.</param>
         /// <returns></returns>

@@ -115,6 +115,9 @@
     <Compile Include="Models\Npcs\NpcPoliceTest.cs" />
     <Compile Include="Models\NpcTest.cs" />
     <Compile Include="Models\PlayerTest.cs" />
+    <Compile Include="Models\SystemJumpDriveUpgradeTest.cs" />
+    <Compile Include="Models\SystemShieldUpgradeTest.cs" />
+    <Compile Include="Models\SystemWeaponUpgradeTest.cs" />
     <Compile Include="Models\Utility\FormatTimeSpanTest.cs" />
     <Compile Include="Models\Utility\ProbablityCalculatorTest.cs" />
     <Compile Include="Models\ShipGoodTest.cs" />

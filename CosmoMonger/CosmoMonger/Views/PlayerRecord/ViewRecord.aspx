@@ -18,7 +18,7 @@
     <td class="vr-highBounty">Goods Traded</td>
 </tr>
 <tr>
-    <td class="vr-highBounty">$&nbsp;<%= Html.Encode(player.Bounty) %></td>
+    <td class="vr-highBounty"><%= player.Bounty.ToString("C0")%></td>
     <td class="vr-highBounty"><%= Html.Encode(player.DistanceTraveled.ToString("N02"))%> sectors</td>
     <td class="vr-highBounty"><%= Html.Encode(player.GoodsTraded) %> sold</td>
 </tr>
@@ -68,9 +68,9 @@
     <td class="vr-columns">Value Of Cargo You Lost</td>
 </tr>
 <tr>
-    <td class="vr-columns">$&nbsp;<%= Html.Encode(player.CargoLootedWorth) %></td>
+    <td class="vr-columns"><%= player.CargoLootedWorth.ToString("C0") %></td>
     <td class="vr-columnMiddle">&nbsp;</td>
-    <td class="vr-columns">$&nbsp;<%= Html.Encode(player.CargoLostWorth) %></td>
+    <td class="vr-columns"><%= player.CargoLostWorth.ToString("C0") %></td>
 </tr>
 </table>
 </asp:Content>

@@ -349,6 +349,8 @@ namespace CosmoMonger.Models
 		
 		private int _HitFactor;
 		
+		private int _Level;
+		
 		private EntitySet<Ship> _Ships;
 		
 		private EntitySet<SystemShip> _SystemShips;
@@ -379,6 +381,8 @@ namespace CosmoMonger.Models
     partial void OnInitialShieldIdChanged();
     partial void OnHitFactorChanging(int value);
     partial void OnHitFactorChanged();
+    partial void OnLevelChanging(int value);
+    partial void OnLevelChanged();
     #endregion
 		
 		public BaseShip()
@@ -559,6 +563,26 @@ namespace CosmoMonger.Models
 					this._HitFactor = value;
 					this.SendPropertyChanged("HitFactor");
 					this.OnHitFactorChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Level", DbType="int NOT NULL")]
+		public virtual int Level
+		{
+			get
+			{
+				return this._Level;
+			}
+			set
+			{
+				if ((this._Level != value))
+				{
+					this.OnLevelChanging(value);
+					this.SendPropertyChanging();
+					this._Level = value;
+					this.SendPropertyChanged("Level");
+					this.OnLevelChanged();
 				}
 			}
 		}
@@ -5257,7 +5281,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Shield_Ship", Storage="_Shield", ThisKey="ShieldId", OtherKey="ShieldId", IsForeignKey=true)]
-		public Shield Shield
+		public virtual Shield Shield
 		{
 			get
 			{
@@ -5291,7 +5315,7 @@ namespace CosmoMonger.Models
 		}
 		
 		[Association(Name="Weapon_Ship", Storage="_Weapon", ThisKey="WeaponId", OtherKey="WeaponId", IsForeignKey=true)]
-		public Weapon Weapon
+		public virtual Weapon Weapon
 		{
 			get
 			{

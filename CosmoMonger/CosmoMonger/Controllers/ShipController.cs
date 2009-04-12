@@ -67,6 +67,8 @@ namespace CosmoMonger.Controllers
             Player currentPlayer = this.ControllerGame.CurrentPlayer;
 
             ViewData["CurrentShip"] = currentPlayer.Ship;
+            
+            ViewData["TradeInValue"] = currentPlayer.Ship.TradeInValue;
             ViewData["Ships"] = currentPlayer.Ship.CosmoSystem.GetBuyableShips();
             ViewData["CashCredits"] = currentPlayer.Ship.Credits;
             ViewData["BankCredits"] = currentPlayer.BankCredits;
@@ -84,12 +86,13 @@ namespace CosmoMonger.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult BuyShip(int shipId)
         {
-            SystemShip shipToBuy = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetBuyableShip(shipId);
+            Ship currentShip = this.ControllerGame.CurrentPlayer.Ship;
+            SystemShip shipToBuy = currentShip.CosmoSystem.GetBuyableShip(shipId);
             if (shipToBuy != null)
             {
                 try
                 {
-                    shipToBuy.Buy(this.ControllerGame.CurrentPlayer.Ship);
+                    shipToBuy.Buy(currentShip);
                     // Success, redirect to display the newly bought ship
                     return RedirectToAction("ViewShip");
                 }
@@ -111,16 +114,30 @@ namespace CosmoMonger.Controllers
             return this.ListShips();
         }
 
-        /* TODO: Implement following actions in RC4 */
-        
         /// <summary>
-        /// This action will fetch the available ship engine upgrades via the System.GetEngineUpgrades method
-        /// and pass the data to the BuyEngineUpgrade view.
+        /// This action will fetch the available ship upgrades via the 
+        /// CosmoSystem.GetWeaponUpgrades, CosmoSystem.GetJumpDriveUpgrades, and
+        /// CosmoSystem.GetShieldUpgrades methods and pass the data to the BuyShieldUpgrade view.
         /// </summary>
         /// <returns>Throws NotImplementedException</returns>
-        public ActionResult BuyEngineUpgrade()
+        public ActionResult ListUpgrades()
         {
-            throw new NotImplementedException();
+            Ship currentShip = this.ControllerGame.CurrentPlayer.Ship;
+
+            ViewData["Credits"] = currentShip.Credits;
+            ViewData["BankCredits"] = this.ControllerGame.CurrentPlayer.BankCredits;
+            ViewData["FreeCargoSpace"] = currentShip.CargoSpaceFree;
+
+            ViewData["CurrentShip"] = currentShip;
+            ViewData["CurrentWeapon"] = currentShip.Weapon;
+            ViewData["CurrentJumpDrive"] = currentShip.JumpDrive;
+            ViewData["CurrentShield"] = currentShip.Shield;
+            
+            ViewData["WeaponUpgrades"] = currentShip.CosmoSystem.GetWeaponUpgrades();
+            ViewData["JumpDriveUpgrades"] = currentShip.CosmoSystem.GetJumpDriveUpgrades();
+            ViewData["ShieldUpgrades"] = currentShip.CosmoSystem.GetShieldUpgrades();
+
+            return View();
         }
 
         /// <summary>
@@ -129,19 +146,35 @@ namespace CosmoMonger.Controllers
         /// </summary>
         /// <param name="upgradeId">The upgrade id.</param>
         /// <returns>Throws NotImplementedException</returns>
-        public ActionResult BuyEngineUpgrade(int upgradeId)
+        public ActionResult BuyJumpDriveUpgrade(int jumpDriveId)
         {
-            throw new NotImplementedException();
-        }
+            Ship currentShip = this.ControllerGame.CurrentPlayer.Ship;
+            
+            SystemJumpDriveUpgrade upgrade = currentShip.CosmoSystem.GetJumpDriveUpgrade(jumpDriveId);
+            if (upgrade != null)
+            {
+                try
+                {
+                    // Buy the upgrade
+                    upgrade.Buy(currentShip);
 
-        /// <summary>
-        /// This action will fetch the available ship shield upgrades via the System.GetShieldUpgrades method 
-        /// and pass the data to the BuyShieldUpgrade view.
-        /// </summary>
-        /// <returns>Throws NotImplementedException</returns>
-        public ActionResult BuyShieldUpgrade()
-        {
-            throw new NotImplementedException();
+                    // Success, redirect to display the newly upgrade on their ship
+                    return RedirectToAction("ViewShip");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
+                    ModelState.AddModelError("_FORM", ex.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("jumpDriveId", "Invalid JumpDrive Upgrade", jumpDriveId);
+            }
+
+            return View();
         }
 
         /// <summary>
@@ -150,19 +183,35 @@ namespace CosmoMonger.Controllers
         /// </summary>
         /// <param name="upgradeId">The upgrade id.</param>
         /// <returns>Throws NotImplementedException</returns>
-        public ActionResult BuyShieldUpgrade(int upgradeId)
+        public ActionResult BuyShieldUpgrade(int shieldId)
         {
-            throw new NotImplementedException();
-        }
+            Ship currentShip = this.ControllerGame.CurrentPlayer.Ship;
 
-        /// <summary>
-        /// This action will fetch the available ship weapon upgrades via the System.GetWeaponUpgrades method 
-        /// and pass the data to the BuyWeaponUpgrade view.
-        /// </summary>
-        /// <returns>Throws NotImplementedException</returns>
-        public ActionResult BuyWeaponUpgrade()
-        {
-            throw new NotImplementedException();
+            SystemShieldUpgrade upgrade = currentShip.CosmoSystem.GetShieldUpgrade(shieldId);
+            if (upgrade != null)
+            {
+                try
+                {
+                    // Buy the upgrade
+                    upgrade.Buy(currentShip);
+
+                    // Success, redirect to display the newly upgrade on their ship
+                    return RedirectToAction("ViewShip");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
+                    ModelState.AddModelError("_FORM", ex.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("shieldId", "Invalid Shield Upgrade", shieldId);
+            }
+
+            return View();
         }
 
         /// <summary>
@@ -171,9 +220,35 @@ namespace CosmoMonger.Controllers
         /// </summary>
         /// <param name="upgradeId">The upgrade id.</param>
         /// <returns>Throws NotImplementedException</returns>
-        public ActionResult BuyWeaponUpgrade(int upgradeId)
+        public ActionResult BuyWeaponUpgrade(int weaponId)
         {
-            throw new NotImplementedException();
+            Ship currentShip = this.ControllerGame.CurrentPlayer.Ship;
+
+            SystemWeaponUpgrade upgrade = currentShip.CosmoSystem.GetWeaponUpgrade(weaponId);
+            if (upgrade != null)
+            {
+                try
+                {
+                    // Buy the upgrade
+                    upgrade.Buy(currentShip);
+
+                    // Success, redirect to display the newly upgrade on their ship
+                    return RedirectToAction("ViewShip");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "Controller Policy");
+
+                    ModelState.AddModelError("_FORM", ex.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("weaponId", "Invalid Weapon Upgrade", weaponId);
+            }
+
+            return View();
         }
     }
 }

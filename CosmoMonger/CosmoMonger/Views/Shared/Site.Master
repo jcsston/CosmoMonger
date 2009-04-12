@@ -125,6 +125,7 @@
                         <li><%= Html.ActionLink("Good Price Table", "PriceTable", "Trade")%></li>
                         <li><%= Html.ActionLink("Visit Bank", "Bank", "Bank")%></li>
                         <li><%= Html.ActionLink("List Ships", "ListShips", "Ship")%></li>
+                        <li><%= Html.ActionLink("Ship Upgrades", "ListUpgrades", "Ship")%></li>
                     </ul>
                 </li>
             </ul>

@@ -16,7 +16,7 @@
         <td>*</td>
         <td><%=Html.Encode(ViewData["quantity"]) %></td>
         <td>=</td>
-        <td>$<%=(int)ViewData["quantity"] * (int)ViewData["oldPrice"]%></td>
+        <td><%=((int)ViewData["quantity"] * (int)ViewData["oldPrice"]).ToString("C0")%></td>
     </tr>
     <tr>
         <th>New Price:</th>
@@ -24,7 +24,7 @@
         <td>*</td>
         <td><%=Html.Encode(ViewData["quantity"]) %></td>
         <td>=</td>
-        <td>$<%=(int)ViewData["quantity"] * (int)ViewData["newPrice"]%></td>
+        <td><%=((int)ViewData["quantity"] * (int)ViewData["newPrice"]).ToString("C0")%></td>
     </tr>
     </table>
     <p>

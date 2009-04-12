@@ -108,7 +108,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("${0}", p.NetWorth)))
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:C0}", p.NetWorth)))
                             .ToArray();
 
                 case Player.RecordType.BountyCollected:
@@ -117,7 +117,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("${0}", p.BountyCollected)))
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:C0}", p.BountyCollected)))
                             .ToArray();
 
                 case Player.RecordType.Bounty:
@@ -126,7 +126,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("${0}", p.Bounty)))
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:C0}", p.Bounty)))
                             .ToArray();
 
                 case Player.RecordType.ShipsDestroyed:
@@ -162,7 +162,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("${0}", p.CargoLootedWorth)))
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:C0}", p.CargoLootedWorth)))
                             .ToArray();
 
                 case Player.RecordType.ShipsLost:
@@ -198,7 +198,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("${0}", p.CargoLostWorth)))
+                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:C0}", p.CargoLostWorth)))
                             .ToArray();
 
                 case Player.RecordType.DistanceTraveled:

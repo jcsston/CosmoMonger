@@ -4401,7 +4401,106 @@
       <column name="PasswordResetExpiration" type="datetime" />
     </addColumn>
   </changeSet>
-  <!--
+  <changeSet author="Jory Stone" id="100">
+    <comment>Balancing the BaseShip models to be more even</comment>
+    <update tableName="BaseShip">
+      <column name="CargoSpace" value="50" />
+      <where>BaseShipId=2</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="CargoSpace" value="75" />
+      <where>BaseShipId=3</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="CargoSpace" value="100" />
+      <where>BaseShipId=4</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="CargoSpace" value="150" />
+      <where>BaseShipId=5</where>
+    </update>
+  </changeSet>
+  <changeSet author="Jory Stone" id="101">
+    <comment>Added Level column to BaseShip table to mark the ship cost level.</comment>
+    <addColumn tableName="BaseShip">
+      <column name="Level" type="int" />
+    </addColumn>
+    <update tableName="BaseShip">
+      <column name="Level" value="1" />
+      <where>BaseShipId=1</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="Level" value="2" />
+      <where>BaseShipId=2</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="Level" value="3" />
+      <where>BaseShipId=3</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="Level" value="4" />
+      <where>BaseShipId=4</where>
+    </update>
+    <update tableName="BaseShip">
+      <column name="Level" value="5" />
+      <where>BaseShipId=5</where>
+    </update>
+    <addNotNullConstraint tableName="BaseShip" columnName="Level" columnDataType="int" defaultNullValue="1" />
+  </changeSet>
+  <changeSet author="Jory Stone" id="102">
+    <comment>Balancing the JumpDrive models based on ideas from Theory on Game Mechanics</comment>
+    <update tableName="JumpDrive">
+      <column name="Name" value="Fuel Cell" />
+      <column name="ChargeTime" value="12" />
+      <column name="Range" value="10" />
+      <column name="CargoCost" value="0" />
+      <column name="BasePrice" value="100" />
+      <where>JumpDriveId=1</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="Name" value="Fission" />
+      <column name="ChargeTime" value="6" />
+      <column name="Range" value="10" />
+      <column name="CargoCost" value="2" />
+      <column name="BasePrice" value="1000" />
+      <where>JumpDriveId=2</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="Name" value="Fusion" />
+      <column name="ChargeTime" value="8" />
+      <column name="Range" value="15" />
+      <column name="CargoCost" value="3" />
+      <column name="BasePrice" value="3600" />
+      <where>JumpDriveId=3</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="Name" value="Anti-Matter" />
+      <column name="ChargeTime" value="10" />
+      <column name="Range" value="20" />
+      <column name="CargoCost" value="4" />
+      <column name="BasePrice" value="6300" />
+      <where>JumpDriveId=4</where>
+    </update>
+    <sql>SET IDENTITY_INSERT JumpDrive ON</sql>
+    <insert tableName="JumpDrive">
+      <column name="JumpDriveId" valueNumeric="5" />
+      <column name="Name" value="Singularity" />
+      <column name="ChargeTime" value="7" />
+      <column name="Range" value="20" />
+      <column name="CargoCost" value="5" />
+      <column name="BasePrice" value="10800" />
+    </insert>
+    <sql>SET IDENTITY_INSERT JumpDrive OFF</sql>
+  </changeSet>
+  <changeSet author="Jory Stone" id="103">
+    <comment>Reset InitialShieldId, InitialWeaponId, and InitialJumpDriveId to 1 in BaseShip table so that all ships start with the same upgrades.</comment>
+    <update tableName="BaseShip">
+      <column name="InitialShieldId" value="1" />
+      <column name="InitialWeaponId" value="1" />
+      <column name="InitialJumpDriveId" value="1" />
+    </update>
+  </changeSet>
+    <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>
     <addColumn tableName="Player">

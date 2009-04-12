@@ -131,6 +131,7 @@
     <Compile Include="Models\GameManager.cs" />
     <Compile Include="Controllers\Attributes\LogRequestAttribute.cs" />
     <Compile Include="Models\Combat.cs" />
+    <Compile Include="Models\JumpDrive.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Npc.cs" />
     <Compile Include="Models\Npcs\NpcShipBase.cs" />
@@ -144,10 +145,14 @@
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\PriceTableEntry.cs" />
     <Compile Include="Models\Race.cs" />
+    <Compile Include="Models\Shield.cs" />
     <Compile Include="Models\Ship.cs" />
     <Compile Include="Models\ShipGood.cs" />
     <Compile Include="Models\SystemGood.cs" />
+    <Compile Include="Models\SystemJumpDriveUpgrade.cs" />
+    <Compile Include="Models\SystemShieldUpgrade.cs" />
     <Compile Include="Models\SystemShip.cs" />
+    <Compile Include="Models\SystemWeaponUpgrade.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Utility\DataContextFactory.cs" />
     <Compile Include="Models\Utility\FormatTimeSpan.cs" />
@@ -276,8 +281,12 @@
     <Content Include="Views\Player\CreatePlayer.aspx" />
     <Content Include="Views\Player\Dead.aspx" />
     <Content Include="Views\Player\PlayerProfile.aspx" />
+    <Content Include="Views\Ship\BuyJumpDriveUpgrade.aspx" />
+    <Content Include="Views\Ship\BuyShieldUpgrade.aspx" />
     <Content Include="Views\Ship\BuyShip.aspx" />
+    <Content Include="Views\Ship\BuyWeaponUpgrade.aspx" />
     <Content Include="Views\Ship\ListShips.aspx" />
+    <Content Include="Views\Ship\ListUpgrades.aspx" />
     <Content Include="Views\Ship\ViewShip.aspx" />
     <Content Include="Views\Trade\BuyGoods.aspx" />
     <Content Include="Views\Trade\BuyGoodsPriceChange.aspx" />

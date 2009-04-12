@@ -19,7 +19,7 @@
 </tr>
 <tr>
     <td class="vp-columnData"><u>Net Worth:</u></td>
-    <td class="vp-columnData"><u>$<%= player.NetWorth%></u></td>
+    <td class="vp-columnData"><u><%= player.NetWorth.ToString("C0")%></u></td>
     <td class="vp-columnData"><%=player.Reputation%></td>
     <td class="vp-columnData"><%=player.ReputationLevel%></td>
     <td class="vp-columnData">Player's Race:</td>
@@ -27,7 +27,7 @@
 </tr>
 <tr>
     <td class="vp-columnData">Credits:</td>
-    <td class="vp-columnData">$<%= player.Ship.Credits %></td>
+    <td class="vp-columnData"><%= player.Ship.Credits.ToString("C0")%></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
         <td class="vp-columnData">Racial Preference:</td>
@@ -46,7 +46,7 @@
 </tr>
 <tr>
     <td class="vp-columnData">Bank Credits:</td>
-    <td class="vp-columnData">$<%= player.BankCredits%></td>
+    <td class="vp-columnData"><%= player.BankCredits.ToString("C0") %></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td class="vp-columnData">Racial Enemy:</td>
@@ -65,11 +65,11 @@
 </tr>
 <tr>
     <td class="vp-columnData">Ship Trade-In Value:</td>
-    <td class="vp-columnData">$<%= player.Ship.TradeInValue%></td>
+    <td class="vp-columnData"><%= player.Ship.TradeInValue.ToString("C0") %></td>
 </tr>
 <tr>
     <td class="vp-columnData">Cargo Value:</td>
-    <td class="vp-columnData">$<%= player.Ship.CargoWorth%></td>
+    <td class="vp-columnData"><%= player.Ship.CargoWorth.ToString("C0") %></td>
 </tr>
 <tr>
     <td>&nbsp;</td>

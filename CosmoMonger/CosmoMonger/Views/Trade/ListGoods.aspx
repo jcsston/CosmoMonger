@@ -85,7 +85,7 @@
     SystemGood[] systemGoods = (SystemGood[])ViewData["SystemGoods"];
     ShipGood[] shipGoods = (ShipGood[])ViewData["ShipGoods"];
 %>
-<h1 class="goods">Buying &amp; Selling in the <%=Html.Encode(currentSystem.Name) %> System</h1>
+<h1>Buying &amp; Selling in the <%=Html.Encode(currentSystem.Name) %> System</h1>
 <hr />
 <table class="goods">
 <tr><td rowspan="14"><img class="systemImg" alt="System Image" src="/Content/System/<%=Html.Encode(currentSystem.Name) %>.png" /></td><th>Name</th><th>Base Price</th><th>Price</th><th># in System</th><th>Buy</th><th># in Ship</th><th>Sell</th></tr>
@@ -142,8 +142,12 @@
 </table>
 <hr />
 <table class="goods goodsCenter">
-    <tr><th>Cash Credits</th><th>Bank Credits</th><th>Cargo Space Free</th></tr>
-    <tr><td>$<%= ViewData["CashCredits"] %></td><td>$<%= ViewData["BankCredits"]%></td><td id="FreeCargoSpace"><%= ViewData["FreeCargoSpace"] %></td></tr>
+    <tr><th>Credits</th><th>Bank Credits</th><th>Cargo Space Free</th></tr>
+    <tr>
+        <td><%= ((int)ViewData["CashCredits"]).ToString("C0") %></td>
+        <td><%= ((int)ViewData["BankCredits"]).ToString("C0") %></td>
+        <td id="FreeCargoSpace"><%= ViewData["FreeCargoSpace"] %></td>
+    </tr>
 </table>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FooterContent" runat="server">

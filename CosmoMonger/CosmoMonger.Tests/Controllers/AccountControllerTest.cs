@@ -449,6 +449,7 @@ namespace CosmoMonger.Tests.Controllers
             Assert.AreEqual("You must specify a username.", result.ViewData.ModelState["username"].Errors[0].ErrorMessage);
         }
 
+        #region Mocking Code
         private static AccountController GetAccountController()
         {
             MembershipProvider membershipProvider = new MockMembershipProvider();
@@ -762,6 +763,7 @@ namespace CosmoMonger.Tests.Controllers
             {
                 return password.Equals("goodPass");
             }
-        }
+        } 
+        #endregion
     }
 }

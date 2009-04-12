@@ -70,21 +70,21 @@ namespace CosmoMonger.Models
         }
 
         /// <summary>
-        /// Fetches the SystemEngineUpgrades objects for the System.
+        /// Fetches the SystemJumpDriveUpgrade objects for the System.
         /// </summary>
         /// <returns>Array of JumpDrive upgrades in the system</returns>
-        public virtual SystemJumpDriveUpgrade[] GetEngineUpgrades()
+        public virtual SystemJumpDriveUpgrade[] GetJumpDriveUpgrades()
         {
             return this.SystemJumpDriveUpgrades.ToArray();
         }
 
         /// <summary>
-        /// Fetches the SystemEngineUpgrade object for the passed upgrade id. 
-        /// Returns null if the SystemEngineUpgrade does not exist.
+        /// Fetches the SystemJumpDriveUpgrade object for the passed upgrade id. 
+        /// Returns null if the SystemJumpDriveUpgrade does not exist.
         /// </summary>
         /// <param name="upgradeId">The upgrade id.</param>
         /// <returns>The matching Engine/JumpDrive upgrade for the system</returns>
-        public virtual SystemJumpDriveUpgrade GetEngineUpgrade(int upgradeId)
+        public virtual SystemJumpDriveUpgrade GetJumpDriveUpgrade(int upgradeId)
         {
             return (from su in this.SystemJumpDriveUpgrades
                     where su.JumpDriveId == upgradeId

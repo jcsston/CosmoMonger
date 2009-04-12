@@ -86,24 +86,31 @@ namespace CosmoMonger.Models
         {
             try
             {
-                while (true)
+                try
                 {
-                    Thread.Sleep(1000);
-                    CosmoManager.DoPendingNPCActions(null);
-
-                    // Check if any players has played in the last 5 minutes
-                    CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-                    DateTime lastPlaytime = db.Players.Max(p => p.LastPlayed);
-                    if (lastPlaytime.AddMinutes(5) < DateTime.UtcNow)
+                    while (true)
                     {
-                        // No players in the system, exit the loop
-                        break;
+                        Thread.Sleep(1000);
+                        CosmoManager.DoPendingNPCActions(null);
+
+                        // Check if any players has played in the last 5 minutes
+                        CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+                        DateTime lastPlaytime = db.Players.Max(p => p.LastPlayed);
+                        if (lastPlaytime.AddMinutes(5) < DateTime.UtcNow)
+                        {
+                            // No players in the system, exit the loop
+                            break;
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    ExceptionPolicy.HandleException(ex, "NPC Policy");
+                }
             }
-            catch (Exception ex)
+            catch (ExceptionHandlingException)
             {
-                ExceptionPolicy.HandleException(ex, "NPC Policy");
+                // Ignore
             }
         }
 

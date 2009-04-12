@@ -11,6 +11,7 @@
       <Column Name="InitialWeaponId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="InitialShieldId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="HitFactor" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Level" Modifier="Virtual" Type="System.Int32" DbType="int NOT NULL" CanBeNull="false" />
       <Association Name="BaseShip_Ship" Member="Ships" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="Ship" />
       <Association Name="BaseShip_SystemShip" Member="SystemShips" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="SystemShip" />
       <Association Name="Weapon_BaseShip" Member="InitialWeapon" Storage="_Weapon" ThisKey="InitialWeaponId" OtherKey="WeaponId" Type="Weapon" IsForeignKey="true" />
@@ -218,8 +219,8 @@
       <Association Name="Ship_ShipGood" Member="ShipGoods" ThisKey="ShipId" OtherKey="ShipId" Type="ShipGood" />
       <Association Name="BaseShip_Ship" Member="BaseShip" Modifier="Virtual" ThisKey="BaseShipId" OtherKey="BaseShipId" Type="BaseShip" IsForeignKey="true" />
       <Association Name="JumpDrive_Ship" Member="JumpDrive" Modifier="Virtual" ThisKey="JumpDriveId" OtherKey="JumpDriveId" Type="JumpDrive" IsForeignKey="true" />
-      <Association Name="Shield_Ship" Member="Shield" ThisKey="ShieldId" OtherKey="ShieldId" Type="Shield" IsForeignKey="true" />
-      <Association Name="Weapon_Ship" Member="Weapon" ThisKey="WeaponId" OtherKey="WeaponId" Type="Weapon" IsForeignKey="true" />
+      <Association Name="Shield_Ship" Member="Shield" Modifier="Virtual" ThisKey="ShieldId" OtherKey="ShieldId" Type="Shield" IsForeignKey="true" />
+      <Association Name="Weapon_Ship" Member="Weapon" Modifier="Virtual" ThisKey="WeaponId" OtherKey="WeaponId" Type="Weapon" IsForeignKey="true" />
       <Association Name="CosmoSystem_Ship" Member="CosmoSystem" Modifier="Virtual" ThisKey="SystemId" OtherKey="SystemId" Type="CosmoSystem" IsForeignKey="true" />
     </Type>
   </Table>

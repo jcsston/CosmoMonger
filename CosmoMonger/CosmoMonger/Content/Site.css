@@ -65,7 +65,9 @@ h1
     font-size: 2em;
     padding-bottom: 0;
     margin-bottom: 0;
+    text-align: center;
 }
+
 h2
 {
     padding: 0 0 10px 0;
@@ -223,7 +225,7 @@ first child of the left and right table columns */
 	margin: 0;
 	padding: 0.3em;
 	color: black;
-	background-color: silver;
+	background-color: #aaaaaa; /*<-- Trying to match jQuery UI vader theme silver;*/
 	text-decoration: none;
 }
 	
@@ -240,7 +242,7 @@ first child of the left and right table columns */
 #menuh a:link, #menuh a:visited, #menuh a:active	/* menu at rest */
 {
 	color: black;
-	background-color: silver;
+	background-color: #aaaaaa; /*<-- Trying to match jQuery UI vader theme silver;*/
 	text-decoration: none;
 }
 	
@@ -656,6 +658,11 @@ table.equipment caption
 {
     font-weight: bold;
     border-bottom: solid thin;
+}
+
+.shipImage
+{
+    vertical-align: middle;
 }
 
 /* BuddyList CSS */

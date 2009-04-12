@@ -71,6 +71,9 @@ namespace CosmoMonger.Models
                     shipValue = matchingShip.Price;
                 }
 
+                // Add the trade-in-value of the upgrades
+                shipValue += this.JumpDrive.GetTradeInValue(this) + this.Weapon.GetTradeInValue(this) + this.Shield.GetTradeInValue(this);
+
                 // Take 20% off the face value of the ship to account for wear and tear
                 return (int)(shipValue * 0.80);
             }
