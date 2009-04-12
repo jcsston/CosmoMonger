@@ -4500,6 +4500,19 @@
       <column name="InitialJumpDriveId" value="1" />
     </update>
   </changeSet>
+  <changeSet author="Jory Stone" id="104">
+    <comment>Adding upgrades to all the systems</comment>
+    <sql>
+      INSERT INTO SystemJumpDriveUpgrade (SystemId, JumpDriveId, Quantity, PriceMultiplier)
+      SELECT SystemId, JumpDriveId, 5 AS 'Quantity', 1.0 AS 'PriceMultiplier' FROM JumpDrive, System;
+
+      INSERT INTO SystemWeaponUpgrade (SystemId, WeaponId, Quantity, PriceMultiplier)
+      SELECT SystemId, WeaponId, 5 AS 'Quantity', 1.0 AS 'PriceMultiplier' FROM Weapon, System;
+
+      INSERT INTO SystemShieldUpgrade (SystemId, ShieldId, Quantity, PriceMultiplier)
+      SELECT SystemId, ShieldId, 5 AS 'Quantity', 1.0 AS 'PriceMultiplier' FROM Shield, System;
+    </sql>
+  </changeSet>
     <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>
