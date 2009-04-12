@@ -63,7 +63,7 @@
         }
     );
 %>
-    <p>Current Jump Drive Trade-In Value: $<%=Html.Encode(currentJumpDrive.GetTradeInValue(currentShip))%></p>
+    <p>Current Jump Drive Trade-In Value: <%=currentJumpDrive.GetTradeInValue(currentShip).ToString("C0") %></p>
     </div>
     <div id="tabs-2">
 <%
@@ -105,7 +105,7 @@
         }
     );
 %>
-    <p>Current Shield Trade-In Value: $<%=Html.Encode(currentShield.GetTradeInValue(currentShip))%></p>
+    <p>Current Shield Trade-In Value: <%=currentShield.GetTradeInValue(currentShip).ToString("C0") %></p>
     </div>
     <div id="tabs-3">
 <%
@@ -148,7 +148,7 @@
         }
     );
 %>
-    <p>Current Weapon Trade-In Value: $<%=Html.Encode(currentWeapon.GetTradeInValue(currentShip).ToString("C"))%></p>
+    <p>Current Weapon Trade-In Value: <%=currentWeapon.GetTradeInValue(currentShip).ToString("C0") %></p>
     </div>
 </div>
 <table class="goods goodsCenter">
