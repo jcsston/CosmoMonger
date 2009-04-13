@@ -23,16 +23,6 @@ namespace CosmoMonger.Models.Npcs
     public abstract class NpcShipBase : NpcBase
     {
         /// <summary>
-        /// Standard delay to wait between actions
-        /// </summary>
-        public static TimeSpan DelayBeforeNextAction = new TimeSpan(0, 0, 0, 4);
-
-        /// <summary>
-        /// Combat delay to wait between actions
-        /// </summary>
-        public static TimeSpan DelayBeforeNextActionCombat = new TimeSpan(0, 0, 0, 0, 750);
-
-        /// <summary>
         /// Standard delay min to wait between traveling
         /// </summary>
         public const int DelayBeforeNextTravelMin = 45;
@@ -41,6 +31,16 @@ namespace CosmoMonger.Models.Npcs
         /// Standard delay max to wait between traveling
         /// </summary>
         public const int DelayBeforeNextTravelMax = 90;
+
+        /// <summary>
+        /// Standard delay to wait between actions
+        /// </summary>
+        public static TimeSpan DelayBeforeNextAction = new TimeSpan(0, 0, 0, 4);
+
+        /// <summary>
+        /// Combat delay to wait between actions
+        /// </summary>
+        public static TimeSpan DelayBeforeNextActionCombat = new TimeSpan(0, 0, 0, 0, 750);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NpcShipBase"/> class.

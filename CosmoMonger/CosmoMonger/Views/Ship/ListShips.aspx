@@ -44,7 +44,7 @@
                 if (ship.Price > (currentShip.Credits + currentShip.TradeInValue)) 
                 {
                     // Not enough to buy
-                    disabled = "disabled=\"\"";
+                    disabled = "disabled=\"disabled\"";
                 }
                 using (Html.BeginForm("BuyShip", "Ship"))
                 {

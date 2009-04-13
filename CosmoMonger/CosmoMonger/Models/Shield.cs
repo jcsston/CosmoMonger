@@ -19,8 +19,7 @@ namespace CosmoMonger.Models
         /// Gets the trade in value for this Shield upgrade
         /// </summary>
         /// <param name="currentShip">The current ship to base the trade in value on.</param>
-        /// <returns></returns>
-        /// <value>The trade in value.</value>
+        /// <returns>The trade in value.</returns>
         public virtual int GetTradeInValue(Ship currentShip)
         {
             return (int)(this.BasePrice * currentShip.BaseShip.Level * 0.80);

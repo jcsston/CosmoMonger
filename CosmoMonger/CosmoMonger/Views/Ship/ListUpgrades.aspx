@@ -49,7 +49,7 @@
                     if (u.GetPrice(currentShip) > (currentShip.Credits + currentJumpDrive.GetTradeInValue(currentShip))) 
                     {
                         // Not enough to buy
-                        disabled = "disabled=\"\"";
+                        disabled = "disabled=\"disabled\"";
                     }
                     %><div>
                         <input type="hidden" name="jumpDriveId" value="<%=u.JumpDriveId %>" /> 
@@ -91,7 +91,7 @@
                     if (u.GetPrice(currentShip) > (currentShip.Credits + currentShield.GetTradeInValue(currentShip))) 
                     {
                         // Not enough to buy
-                        disabled = "disabled=\"\"";
+                        disabled = "disabled=\"disabled\"";
                     }
                     %><div>
                         <input type="hidden" name="shieldId" value="<%=u.ShieldId %>" /> 
@@ -134,7 +134,7 @@
                     if (u.GetPrice(currentShip) > (currentShip.Credits + currentWeapon.GetTradeInValue(currentShip))) 
                     {
                         // Not enough to buy
-                        disabled = "disabled=\"\"";
+                        disabled = "disabled=\"disabled\"";
                     }
                     %><div>
                         <input type="hidden" name="weaponId" value="<%=u.WeaponId %>" /> 

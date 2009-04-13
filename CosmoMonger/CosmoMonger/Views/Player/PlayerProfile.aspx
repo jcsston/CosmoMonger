@@ -1,6 +1,12 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>View Player Profile</title>
+    <script type="text/javascript" src="/Scripts/jquery.confirm-1.2.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(":submit").confirm();
+        });
+    </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 <h1>Player Profile</h1>
@@ -95,7 +101,7 @@ using (Html.BeginForm("KillPlayer", "Player", FormMethod.Post))
 %>
     <div>
         <input type="hidden" name="playerId" value="<%=player.PlayerId %>" /> 
-        <input type="submit" value="Kill Current Player" onclick="return confirm('Are you sure you want to kill your player?');" />
+        <input type="submit" value="Kill Current Player" />
     </div>
 <% 
 }

@@ -1,9 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Messaging - Sent</title>
+    <script type="text/javascript" src="/Scripts/jquery.confirm-1.2.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("tr.gridrow td:first-child").datetimeUTCtoLocal();
+            $("a.delete").click(function() { document.location = this.href; });
+            $("a.delete").confirm();
         });
     </script>
 </asp:Content>
@@ -18,8 +21,7 @@ Html.Grid<Message>(
         column.For(m => m.Time);
         column.For(m => m.RecipientUser.UserName, "To");
         column.For(m => Html.ActionLink(m.Subject, "ViewMessage", new { messageId = m.MessageId, sent = true }), "Subject").DoNotEncode();
-        column.For("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-        column.For(m => Html.ActionLink("Delete", "DeleteMessage", "Communication", new { messageId = m.MessageId, sent=true }, new { @class = "ui-icon ui-icon-trash" }), "Delete?").DoNotEncode();
+        column.For(m => Html.ActionLink("Delete", "DeleteMessage", "Communication", new { messageId = m.MessageId, sent=true }, new { @class = "delete ui-icon ui-icon-trash" }), "Delete?").DoNotEncode();
 	}
 );
 %>

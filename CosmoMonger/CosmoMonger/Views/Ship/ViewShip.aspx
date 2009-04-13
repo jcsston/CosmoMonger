@@ -39,7 +39,7 @@
     <tr><th>Cargo Cost</th><td><%=currentShip.Weapon.CargoCost %></td></tr>
 </table>
 </td></tr></table>
-<p>Trade-In Value: $<%=currentShip.TradeInValue %></p>
+<p>Trade-In Value: <%=currentShip.TradeInValue.ToString("C0") %></p>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>
