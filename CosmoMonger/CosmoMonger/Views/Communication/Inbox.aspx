@@ -17,12 +17,19 @@ Html.Grid<Message>(
 	column => {
         column.For(m => m.Time);
         column.For(m => m.SenderUser.UserName, "From");
-        column.For(m => m.Received, "Read");
         column.For(m => Html.ActionLink(m.Subject, "ViewMessage", new { messageId = m.MessageId }), "Subject").DoNotEncode();
-        column.For(m => Html.ActionLink("Delete", "DeleteMessage", new { messageId = m.MessageId })).DoNotEncode();
+        column.For(m => m.Received, "Read");
+        column.For("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+        column.For(m => Html.ActionLink("Delete", "DeleteMessage", "Communication", new { messageId = m.MessageId, sent=false }, new { @class = "ui-icon ui-icon-trash" }),"Delete?").DoNotEncode();
+        
+        
 	}
 );
 %>
+
+
+
+
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>

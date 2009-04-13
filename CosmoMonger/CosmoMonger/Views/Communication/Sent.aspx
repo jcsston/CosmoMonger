@@ -18,7 +18,8 @@ Html.Grid<Message>(
         column.For(m => m.Time);
         column.For(m => m.RecipientUser.UserName, "To");
         column.For(m => Html.ActionLink(m.Subject, "ViewMessage", new { messageId = m.MessageId, sent = true }), "Subject").DoNotEncode();
-        column.For(m => Html.ActionLink("Delete", "DeleteMessage", new { messageId = m.MessageId, sent = true })).DoNotEncode();
+        column.For("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+        column.For(m => Html.ActionLink("Delete", "DeleteMessage", "Communication", new { messageId = m.MessageId, sent=true }, new { @class = "ui-icon ui-icon-trash" }), "Delete?").DoNotEncode();
 	}
 );
 %>
