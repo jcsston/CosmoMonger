@@ -173,6 +173,11 @@
     <Content Include="App_Data\CosmoMongerDb.xml" />
     <Content Include="Content\2153.jpg" />
     <Content Include="Content\BaseShip\Dagger.png" />
+    <Content Include="Content\BaseShip\Flipped\Dagger.png" />
+    <Content Include="Content\BaseShip\Flipped\Glorified Trash Can.png" />
+    <Content Include="Content\BaseShip\Flipped\Rover.png" />
+    <Content Include="Content\BaseShip\Flipped\Weed Wacker.png" />
+    <Content Include="Content\BaseShip\Flipped\Widow Maker.png" />
     <Content Include="Content\BaseShip\Glorified Trash Can.png" />
     <Content Include="Content\BaseShip\Rover.png" />
     <Content Include="Content\BaseShip\Weed Wacker.png" />
