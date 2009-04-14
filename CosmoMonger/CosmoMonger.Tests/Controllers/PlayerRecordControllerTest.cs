@@ -38,9 +38,9 @@
         public void ListRecords()
         {
             // Arrange
-            KeyValuePair<Player, string>[] topPlayers = { new KeyValuePair<Player, string>(new Player(), "0"), new KeyValuePair<Player, string>(new Player(), "1") };
-            topPlayers[0].Key.Name = "Player 1";
-            topPlayers[1].Key.Name = "Player 2";
+            PlayerTopRecord[] topPlayers = { new PlayerTopRecord(new Player(), Player.RecordType.NetWorth, 0), new PlayerTopRecord(new Player(), Player.RecordType.NetWorth, 1) };
+            topPlayers[0].Player.Name = "Player 1";
+            topPlayers[1].Player.Name = "Player 2";
             Mock<User> userMock = new Mock<User>();
             Mock<GameManager> managerMock = new Mock<GameManager>(userMock.Object);
             managerMock.Expect(m => m.GetTopPlayers(Player.RecordType.NetWorth, 10))

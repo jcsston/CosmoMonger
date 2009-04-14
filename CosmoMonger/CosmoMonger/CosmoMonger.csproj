@@ -147,6 +147,7 @@
     <Compile Include="Models\Npcs\NpcTrader.cs" />
     <Compile Include="Models\Npcs\NpcCleaner.cs" />
     <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\PlayerTopRecord.cs" />
     <Compile Include="Models\PriceTableEntry.cs" />
     <Compile Include="Models\Race.cs" />
     <Compile Include="Models\Shield.cs" />

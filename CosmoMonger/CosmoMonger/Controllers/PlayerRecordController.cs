@@ -68,11 +68,11 @@ namespace CosmoMonger.Controllers
         {
             // Build the record type selection list
             var recordTypes = from Player.RecordType s in Enum.GetValues(typeof(Player.RecordType))
-                              select new { ID = s, Name = Regex.Replace(s.ToString(), "([A-Z])", " $1", RegexOptions.Compiled).Trim() };
+                              select new { ID = s, Name = PlayerTopRecord.ConvertRecordTypeToString(s) };
             ViewData["recordType"] = new SelectList(recordTypes, "ID", "Name", recordType);
             
             // Format the current record type nicely
-            ViewData["SelectedRecordType"] = Regex.Replace(recordType.ToString(), "([A-Z])", " $1", RegexOptions.Compiled).Trim();
+            ViewData["SelectedRecordType"] = PlayerTopRecord.ConvertRecordTypeToString(recordType);
 
             // Fetch the records
             ViewData["TopRecords"] = this.ControllerGame.GetTopPlayers(recordType, 10);

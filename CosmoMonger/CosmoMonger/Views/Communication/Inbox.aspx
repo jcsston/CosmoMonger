@@ -28,10 +28,6 @@ Html.Grid<Message>(
 	}
 );
 %>
-
-
-
-
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>

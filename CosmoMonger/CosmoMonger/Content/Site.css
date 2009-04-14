@@ -589,33 +589,22 @@ table.goodsCenter td
 }
 
 /* ListRecords View */
-.lr-columnEmpty
+table.topRecords
 {
-	width: 20%;
-	
-}
-.lr-columnHeaders
-{
-	font-size: 1.5em;
-	padding: 1.0em;
-	width: 30%;
-	text-decoration: underline;
-	text-align: center;
-	font-family: Arial, Helvetica, sans-serif;
-}
-.lr-columnLeft
-{
+    margin-left: auto;
+    margin-right: auto;
 	font-size: 1em;
 	text-align: center;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-.lr-columnRight
+table.topRecords thead
 {
-	font-size: 1em;
-	text-align: center;
-	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1.4em;
+	padding: 1.0em;
+	text-decoration: underline;
 }
+
 
 /* Bank View */
 .bank-columnEmpty

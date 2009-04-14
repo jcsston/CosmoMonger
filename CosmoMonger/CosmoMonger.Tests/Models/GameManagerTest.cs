@@ -129,7 +129,7 @@
             Player testPlayer = this.CreateTestPlayer();
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
-            KeyValuePair<Player, string>[] topPlayers = null;
+            PlayerTopRecord[] topPlayers = null;
             topPlayers = manager.GetTopPlayers(Player.RecordType.Bounty, 20);
             Assert.That(topPlayers.Length, Is.LessThanOrEqualTo(20), "Returned array should be 20 or less items");
         }
@@ -140,7 +140,7 @@
             Player testPlayer = this.CreateTestPlayer();
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
-            KeyValuePair<Player, string> [] topPlayers = manager.GetTopPlayers(Player.RecordType.NetWorth, 10);
+            PlayerTopRecord[] topPlayers = manager.GetTopPlayers(Player.RecordType.NetWorth, 10);
             Assert.That(topPlayers, Is.Not.Null, "GetTopPlayers should return an array of records");
             Assert.That(topPlayers.Length, Is.LessThanOrEqualTo(10), "Returned array should be 10 or less items");
         }

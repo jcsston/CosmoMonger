@@ -94,8 +94,8 @@ namespace CosmoMonger.Models
         /// </summary>
         /// <param name="recordType">Type of the record.</param>
         /// <param name="limit">The number of top players to return</param>
-        /// <returns>Array of Player / record value pairs</returns>
-        public virtual KeyValuePair<Player, string>[] GetTopPlayers(Player.RecordType recordType, int limit)
+        /// <returns>Array of PlayerTopRecord objects</returns>
+        public virtual PlayerTopRecord[] GetTopPlayers(Player.RecordType recordType, int limit)
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
             
@@ -108,7 +108,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:C0}", p.NetWorth)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.NetWorth))
                             .ToArray();
 
                 case Player.RecordType.BountyCollected:
@@ -117,7 +117,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:C0}", p.BountyCollected)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.BountyCollected))
                             .ToArray();
 
                 case Player.RecordType.Bounty:
@@ -126,7 +126,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:C0}", p.Bounty)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.Bounty))
                             .ToArray();
 
                 case Player.RecordType.ShipsDestroyed:
@@ -135,7 +135,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.ShipsDestroyed)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.ShipsDestroyed))
                             .ToArray();
 
                 case Player.RecordType.ForcedSurrenders:
@@ -144,7 +144,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.ForcedSurrenders)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.ForcedSurrenders))
                             .ToArray();
 
                 case Player.RecordType.ForcedFlees:
@@ -153,7 +153,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.ForcedFlees)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.ForcedFlees))
                             .ToArray();
 
                 case Player.RecordType.CargoLootedWorth:
@@ -162,7 +162,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:C0}", p.CargoLootedWorth)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.CargoLootedWorth))
                             .ToArray();
 
                 case Player.RecordType.ShipsLost:
@@ -171,7 +171,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.ShipsLost)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.ShipsLost))
                             .ToArray();
 
                 case Player.RecordType.SurrenderCount:
@@ -180,7 +180,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.SurrenderCount)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.SurrenderCount))
                             .ToArray();
 
                 case Player.RecordType.FleeCount:
@@ -189,7 +189,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.FleeCount)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.FleeCount))
                             .ToArray();
 
                 case Player.RecordType.CargoLostWorth:
@@ -198,7 +198,7 @@ namespace CosmoMonger.Models
                             p.Name 
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:C0}", p.CargoLostWorth)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.CargoLostWorth))
                             .ToArray();
 
                 case Player.RecordType.DistanceTraveled:
@@ -207,7 +207,7 @@ namespace CosmoMonger.Models
                             p.Name
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0:N02}", p.DistanceTraveled)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.DistanceTraveled))
                             .ToArray();
 
                 case Player.RecordType.GoodsTraded:
@@ -216,11 +216,11 @@ namespace CosmoMonger.Models
                             p.Name
                             select p)
                             .Take(limit)
-                            .Select(p => new KeyValuePair<Player, string>(p, string.Format("{0}", p.GoodsTraded)))
+                            .Select(p => new PlayerTopRecord(p, recordType, p.GoodsTraded))
                             .ToArray();
 
                 default:
-                    throw new ArgumentException("Invalid recordType in GetTopPlayers", "recordType");
+                    throw new ArgumentException("Unhandled recordType in GetTopPlayers", "recordType");
             }
         }
 
