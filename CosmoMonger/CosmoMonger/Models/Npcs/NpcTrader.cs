@@ -27,7 +27,7 @@ namespace CosmoMonger.Models.Npcs
         /// This is the number we multiply times the new trader's ship's number of cargo spaces
         /// to provide the new trader with some credits to buy cargo.
         /// </summary>
-        public const int BaseCreditMultiplier = 100;
+        public const int BaseCreditMultiplier = 400;
 
         /// <summary>
         /// Used to slow down NPC traders.  This is the delay between ariving
