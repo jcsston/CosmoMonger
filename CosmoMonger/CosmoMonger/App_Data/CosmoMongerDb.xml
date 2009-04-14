@@ -4528,6 +4528,61 @@
       <where>SystemId=9</where>
     </update>
   </changeSet>
+  <changeSet author="Roger Boykin" id="106">
+    <comment>
+      Tweaking BasePrice and TargetCount for Goods.
+    </comment>
+    <update tableName="Good">
+      <column name="BasePrice" value="125"/>
+      <column name="TargetCount" value="900"/>
+      <where>GoodId=1</where>
+    </update>
+    <update tableName="Good">
+      <column name="BasePrice" value="50"/>
+      <column name="TargetCount" value="1000"/>
+      <where>GoodId=2</where>
+    </update>
+    <update tableName="Good">
+      <column name="BasePrice" value="500"/>
+      <column name="TargetCount" value="65"/>
+      <where>GoodId=3</where>
+    </update>
+    <update tableName="Good">
+      <column name="BasePrice" value="900"/>
+      <column name="TargetCount" value="325"/>
+      <where>GoodId=4</where>
+    </update>
+    <update tableName="Good">
+      <column name="BasePrice" value="800"/>
+      <column name="TargetCount" value="350"/>
+      <where>GoodId=5</where>
+    </update>
+    <update tableName="Good">
+      <column name="BasePrice" value="300"/>
+      <column name="TargetCount" value="800"/>
+      <where>GoodId=6</where>
+    </update>
+    <update tableName="Good">
+      <column name="BasePrice" value="950"/>
+      <column name="TargetCount" value="300"/>
+      <where>GoodId=7</where>
+    </update>
+    <update tableName="Good">
+      <column name="BasePrice" value="450"/>
+      <column name="TargetCount" value="600"/>
+      <where>GoodId=8</where>
+    </update>
+    <update tableName="Good">
+      <column name="BasePrice" value="1150"/>
+      <column name="TargetCount" value="200"/>
+      <where>GoodId=9</where>
+    </update>
+    <update tableName="Good">
+      <column name="BasePrice" value="700"/>
+      <column name="TargetCount" value="400"/>
+      <where>GoodId=10</where>
+    </update>
+  </changeSet>
     <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>
