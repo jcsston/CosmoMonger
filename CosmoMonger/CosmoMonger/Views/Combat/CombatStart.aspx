@@ -391,7 +391,7 @@
                 <br />
                 <img id="enemyShip" alt="Enemy Ship" 
                     title="<%=Html.AttributeEncode(enemyShip.BaseShip.Name) %>" 
-                    src="/Content/BaseShip/<%=Html.AttributeEncode(enemyShip.BaseShip.Name) %>.png" />
+                    src="/Content/BaseShip/Flipped/<%=Html.AttributeEncode(enemyShip.BaseShip.Name) %>.png" />
                 <br />
                 Enemy 
                 <span class="tooltipDetails">

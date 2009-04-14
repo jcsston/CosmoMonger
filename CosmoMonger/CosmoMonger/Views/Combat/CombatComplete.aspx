@@ -16,10 +16,10 @@ if (ViewData["CargoLooted"] != null)
             column.For(g => g.Good.Name, "Good Type");
             column.For(g => g.Quantity, "Quantity Found");
             column.For(g => g.QuantityPickedUp, "Quantity Picked Up");
-            column.For(g => "$" + (g.QuantityPickedUp * g.Good.BasePrice), "Picked Up Cargo Worth");
+            column.For(g => (g.QuantityPickedUp * g.Good.BasePrice).ToString("C0"), "Picked Up Cargo Worth");
         }
     );
-    %><p class="center">Credits Looted: $<%=Html.Encode(ViewData["CreditsLooted"])%></p><%
+    %><p class="center">Credits Looted: <%=((int)ViewData["CreditsLooted"]).ToString("C0")%></p><%
 }
 else if (ViewData["CargoLost"] != null)
 {
@@ -30,10 +30,10 @@ else if (ViewData["CargoLost"] != null)
         {
             column.For(g => g.Good.Name, "Good Type");
             column.For(g => g.Quantity, "Quantity Lost");
-            column.For(g => "$" + (g.Quantity * g.Good.BasePrice), "Lost Cargo Worth");
+            column.For(g => (g.Quantity * g.Good.BasePrice).ToString("C0"), "Lost Cargo Worth");
         }
     );
-    %><p class="center">Credits Lost: $<%=Html.Encode(ViewData["CreditsLooted"])%></p><%
+    %><p class="center">Credits Lost: <%=((int)ViewData["CreditsLooted"]).ToString("C0")%></p><%
 }
 else if (ViewData["CargoSeized"] != null)
 {
@@ -44,10 +44,10 @@ else if (ViewData["CargoSeized"] != null)
         {
             column.For(g => g.Good.Name, "Good Type");
             column.For(g => g.Quantity, "Quantity Seized");
-            column.For(g => "$" + (g.Quantity * g.Good.BasePrice), "Seized Cargo Worth");
+            column.For(g => (g.Quantity * g.Good.BasePrice).ToString("C0"), "Seized Cargo Worth");
         }
     );
-    %><p class="center">Fine: $<%=Html.Encode(ViewData["CreditsLooted"])%></p><%
+    %><p class="center">Fine: <%=((int)ViewData["CreditsLooted"]).ToString("C0")%></p><%
 }
 
 if (ViewData["FinalImage"] != null)
