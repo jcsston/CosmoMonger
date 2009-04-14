@@ -4513,6 +4513,21 @@
       SELECT SystemId, ShieldId, 5 AS 'Quantity', 1.0 AS 'PriceMultiplier' FROM Shield, System;
     </sql>
   </changeSet>
+  <changeSet author="Roger Boykin" id="105">
+    <comment>Re-Distributing the five banks so that each race gets 1 bank</comment>
+    <update tableName="System">
+      <column name="HasBank" value="True" />
+      <where>SystemId=8</where>
+    </update>
+    <update tableName="System">
+      <column name="HasBank" value="False" />
+      <where>SystemId=4</where>
+    </update>
+    <update tableName="System">
+      <column name="HasBank" value="False" />
+      <where>SystemId=9</where>
+    </update>
+  </changeSet>
     <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>
