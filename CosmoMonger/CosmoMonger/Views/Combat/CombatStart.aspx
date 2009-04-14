@@ -14,7 +14,7 @@
             var playerHull = $('#playerHull');
             if (playerHull.css('height') != data.playerHull + '%') {
                 if (data.playerHull > 8) {
-                    playerHull.text(data.playerHull + '%');
+                    playerHull.text(100 - data.playerHull + '%');
                 } else {
                     playerHull.text('');
                 }
@@ -28,7 +28,7 @@
             var playerShield = $('#playerShield');
             if (playerShield.css('height') != data.playerShield + '%') {
                 if (data.playerShield > 8) {
-                    playerShield.text(data.playerShield + '%');
+                    playerShield.text(100 - data.playerShield + '%');
                 } else {
                     playerShield.text('');
                 }
@@ -38,7 +38,7 @@
             var enemyHull = $('#enemyHull');
             if (enemyHull.css('height') != data.enemyHull + '%') {
                 if (data.enemyHull > 8) {
-                    enemyHull.text(data.enemyHull + '%');
+                    enemyHull.text(100 - data.enemyHull + '%');
                 } else {
                     enemyHull.text('');
                 }
@@ -52,7 +52,7 @@
             var enemyShield = $('#enemyShield');
             if (enemyShield.css('height') != data.enemyShield + '%') {
                 if (data.enemyShield > 8) {
-                    enemyShield.text(data.enemyShield + '%');
+                    enemyShield.text(100 - data.enemyShield + '%');
                 } else {
                     enemyShield.text('');
                 }

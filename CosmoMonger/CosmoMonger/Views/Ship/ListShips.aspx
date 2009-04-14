@@ -12,7 +12,6 @@
                 showURL: false,
                 extraClass: "good-tooltip",
                 bodyHandler: function() {
-                    //var imgSrc = '/Content/BaseShip/' + $(this).text() + '.png';
                     return $("<img/>").attr("src", this.src);
                 }
             });

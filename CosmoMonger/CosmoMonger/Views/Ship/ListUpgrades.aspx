@@ -4,7 +4,7 @@
     <script type="text/javascript">
     <!--
         $(document).ready(function() {
-            $("#tabs").tabs();
+            //$("#tabs").tabs();
         });
     -->
     </script>
@@ -17,12 +17,15 @@
     Ship currentShip = (Ship)ViewData["CurrentShip"];    
 %>
 <div id="tabs">
+<!--
 	<ul>
 		<li><a href="#tabs-1">Jump Drives</a></li>
 		<li><a href="#tabs-2">Shields</a></li>
 		<li><a href="#tabs-3">Weapons</a></li>
 	</ul>
+-->
 	<div id="tabs-1">
+	<h2>Jump Drives</h2>
 <%
     JumpDrive currentJumpDrive = (JumpDrive)ViewData["CurrentJumpDrive"];
     Html.Grid<SystemJumpDriveUpgrade>(
@@ -63,9 +66,10 @@
         }
     );
 %>
-    <p>Current Jump Drive Trade-In Value: <%=currentJumpDrive.GetTradeInValue(currentShip).ToString("C0") %></p>
+    <p class="center">Current Jump Drive Trade-In Value: <%=currentJumpDrive.GetTradeInValue(currentShip).ToString("C0") %></p>
     </div>
     <div id="tabs-2">
+	<h2>Shields</h2>
 <%
     Shield currentShield = (Shield)ViewData["CurrentShield"];
     Html.Grid<SystemShieldUpgrade>(
@@ -105,9 +109,10 @@
         }
     );
 %>
-    <p>Current Shield Trade-In Value: <%=currentShield.GetTradeInValue(currentShip).ToString("C0") %></p>
+    <p class="center">Current Shield Trade-In Value: <%=currentShield.GetTradeInValue(currentShip).ToString("C0") %></p>
     </div>
     <div id="tabs-3">
+    <h2>Weapons</h2>
 <%
     Weapon currentWeapon = (Weapon)ViewData["CurrentWeapon"];
     Html.Grid<SystemWeaponUpgrade>(
@@ -148,7 +153,7 @@
         }
     );
 %>
-    <p>Current Weapon Trade-In Value: <%=currentWeapon.GetTradeInValue(currentShip).ToString("C0") %></p>
+    <p class="center">Current Weapon Trade-In Value: <%=currentWeapon.GetTradeInValue(currentShip).ToString("C0") %></p>
     </div>
 </div>
 <table class="goods goodsCenter">

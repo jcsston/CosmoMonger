@@ -133,12 +133,6 @@
                 <li><%= Html.ActionLink("Travel", "Index", "Travel")%>
                     <ul>
                         <li><%= Html.ActionLink("Travel", "Travel", "Travel")%></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul>	
-                <li><%= Html.ActionLink("Combat", "Index", "Combat")%>
-                    <ul>
                         <li><%= Html.ActionLink("Attack", "Attack", "Combat")%></li>
                     </ul>
                 </li>
