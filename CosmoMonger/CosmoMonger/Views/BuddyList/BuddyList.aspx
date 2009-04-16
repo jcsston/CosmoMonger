@@ -3,10 +3,12 @@
     <title>Buddy List</title>
     <script type="text/javascript" src="/Scripts/jquery.confirm-1.2.js"></script>
     <script type="text/javascript">
+    //<![CDATA[
         $(document).ready(function() {
             $("a.delete").click(function() { document.location = this.href; });
             $("a.delete").confirm();
         });
+    //]]>
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">

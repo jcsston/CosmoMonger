@@ -5,7 +5,7 @@
     <script type="text/javascript" src="/Scripts/jquery.bgiframe.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.dimensions.js"></script>
     <script type="text/javascript">
-    <!--
+    //<![CDATA[
         var combatId = null;
         var playerNotified = false;
 
@@ -73,25 +73,37 @@
                 buttons: buttons
             });
         }
+
+        function acceptSurrender() {
+            $(".turnAction").attr("disabled", "disabled");
+            $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {
+                updateCombatStatus(data.status, true);
+                if (data.message) {
+                    alert(data.message);
+                }
+            });
+        }
         
         function surrenderOffered(data) {
             playerNotified = true;
             showPlayerDialog("Accept Surrender?", "Other player has offered surrender, accept?", {
-                "Accept": function() {
-                    $(".turnAction").attr("disabled", "disabled");
-                    $.getJSON('/Combat/AcceptSurrender', { combatId: combatId }, function(data) {
-                        updateCombatStatus(data.status, true);
-                        if (data.message) {
-                            alert(data.message);
-                        }
-                    });
-                },
+                "Accept": acceptSurrender,
                 "Ignore": function() {
                     $(this).dialog("close");
                 }
             });
         }
 
+        function pickupCargo() {
+            $(".turnAction").attr("disabled", "disabled");
+            $.getJSON('/Combat/PickupCargo', { combatId: combatId }, function(data) {
+                updateCombatStatus(data.status, true);
+                if (data.message) {
+                    alert(data.message);
+                }
+            });
+        }
+        
         function cargoToPickup(data) {
             playerNotified = true;
             var content = 'Other player has jettisoned ' + data.cargoJettisoned 
@@ -99,46 +111,32 @@
                        + ' If we pickup the cargo the other player will escape, if not the cargo will be lost.';
 
             showPlayerDialog("Pickup Cargo?", content, {
-                "Pickup": function() {
-                    $(".turnAction").attr("disabled", "disabled");
-                    $.getJSON('/Combat/PickupCargo', { combatId: combatId }, function(data) {
-                        updateCombatStatus(data.status, true);
-                        if (data.message) {
-                            alert(data.message);
-                        }
-                    });
-                },
+                "Pickup": pickupCargo,
                 "Ignore": function() {
                     $(this).dialog("close");
                 }
             });
         }
 
-        function beingSearch(data) {
+        function consentToSearch() {
+            $(".turnAction").attr("disabled", "disabled");
+            $.getJSON('/Combat/AcceptSearch', { combatId: combatId }, function(data) {
+                updateCombatStatus(data.status, true);
+                if (data.message) {
+                    showPlayerDialog("Problem with search", data.message, { "Flee": chargeJumpDrive });
+                }
+            });
+        }
+        
+        function beingSearched(data) {
             playerNotified = true;
             var content = 'You have been intercepted by the police. <br />'
                         + 'Do you consent to a search of your cargo for contraband items? <br />'
                         + 'If you have any aboard you will be fined.';
 
             showPlayerDialog("Consent to Search?", content, {
-                "Consent": function() {
-                    $(".turnAction").attr("disabled", "disabled");
-                    $.getJSON('/Combat/AcceptSearch', { combatId: combatId }, function(data) {
-                        updateCombatStatus(data.status, true);
-                        if (data.message) {
-                            alert(data.message);
-                        }
-                    });
-                },
-                "Flee": function() {
-                    $.getJSON('/Combat/ChargeJumpDrive', { combatId: combatId }, function(data) {
-                        updateCombatStatus(data.status, true);
-                        if (data.message) {
-                            alert(data.message);
-                        }
-                    });
-                    $(this).dialog("close");
-                }
+                "Consent": consentToSearch,
+                "Flee": chargeJumpDrive
             });
         }
         
@@ -167,7 +165,7 @@
                 
             } else if (data.beingSearched && !playerNotified) {
                 // Player is being searched
-                beingSearch(data);
+                beingSearched(data);
             }
         }
 
@@ -175,7 +173,7 @@
             // Hide turn actions
             $(".turnActions").slideUp("slow");
             $(".turnAction").attr("disabled", "disabled");
-            $("#dialog").dialog("close");
+            $(".dialog").dialog("close");
             $("#currentTurn").text("Enemy");
 
             // Update stats
@@ -216,65 +214,54 @@
             $.getJSON('/Combat/CombatStatus', {combatId: combatId}, updateCombatStatus);
         }
 
-        $(document).ready(function() {
-            $('#fireWeapon').click(function(eventObject) {
-                $(".turnAction").attr("disabled", "disabled");
-                $.getJSON('/Combat/FireWeapon', { combatId: combatId }, function(data) {
-                    updateCombatStatus(data.status, true);
-                    if (data.message) {
-                        alert(data.message);
-                    }
-                });
-            });
-
-            $('#chargeJumpDrive').click(function(eventObject) {
-                $(".turnAction").attr("disabled", "disabled");
-                $.getJSON('/Combat/ChargeJumpDrive', { combatId: combatId }, function(data) {
-                    updateCombatStatus(data.status, true);
-                    if (data.message) {
-                        alert(data.message);
-                    }
-                });
-            });
-
-            $('#jettisonCargo').click(function(eventObject) {
-                $(".turnAction").attr("disabled", "disabled");
-                $.getJSON('/Combat/JettisonCargo', { combatId: combatId }, function(data) {
-                    updateCombatStatus(data.status, true);
-                    if (data.message) {
-                        alert(data.message);
-                    }
-                });
-            });
-
-            $('#offerSurrender').click(function(eventObject) {
-                $(".turnAction").attr("disabled", "disabled");
-                $.getJSON('/Combat/OfferSurrender', { combatId: combatId }, function(data) {
-                    updateCombatStatus(data.status, true);
-                    if (data.message) {
-                        alert(data.message);
-                    }
-                });
-            });
-
-            $('.turnActionDetails').hide();
-            /*
-            $('.turnAction').mouseover(function() {
-                var selectedId = '#' + $(this).attr('id') + 'Details';
-                $('.turnActionDetails:not(' + selectedId + ')').hide();
-                $(selectedId).show();
-            });
-            */
-/*
-            $('.turnAction').tooltip({
-                showURL: false,
-                extraClass: "ui-widget-content",
-                bodyHandler: function() {
-                    var selectedId = '#' + $(this).attr('id') + 'Details';
-                    return $(selectedId).html();
+        function fireWeapon() {
+            $(".turnAction").attr("disabled", "disabled");
+            $.getJSON('/Combat/FireWeapon', { combatId: combatId }, function(data) {
+                updateCombatStatus(data.status, true);
+                if (data.message) {
+                    alert(data.message);
                 }
             });
-            */
+        }
+
+        function chargeJumpDrive() {
+            $(".turnAction").attr("disabled", "disabled");
+            $.getJSON('/Combat/ChargeJumpDrive', { combatId: combatId }, function(data) {
+                updateCombatStatus(data.status, true);
+                if (data.message) {
+                    alert(data.message);
+                }
+            });
+        }
+
+        function jettisonCargo() {
+            $(".turnAction").attr("disabled", "disabled");
+            $.getJSON('/Combat/JettisonCargo', { combatId: combatId }, function(data) {
+                updateCombatStatus(data.status, true);
+                if (data.message) {
+                    alert(data.message);
+                }
+            });
+        }
+
+        function offerSurrender() {
+            $(".turnAction").attr("disabled", "disabled");
+            $.getJSON('/Combat/OfferSurrender', { combatId: combatId }, function(data) {
+                updateCombatStatus(data.status, true);
+                if (data.message) {
+                    alert(data.message);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            // Link action buttons
+            $('#fireWeapon').click(fireWeapon);
+            $('#chargeJumpDrive').click(chargeJumpDrive);
+            $('#jettisonCargo').click(jettisonCargo);
+            $('#offerSurrender').click(offerSurrender);
+
+            // Enable tooltips
             $('.tooltipDetails').tooltip({
                 showURL: false,
                 extraClass: "ui-widget-content",
@@ -284,11 +271,13 @@
                 }
             });
 
+            // Setup JumpDrive charge status bar
             $("#jumpDriveChargeBar").progressbar({ range: true, width: 100, value: 0 });
 
+            // Start combat updates!
             queueCombatStatus();
         });
-    //-->
+    //]]>
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -298,9 +287,9 @@
     Ship enemyShip = (Ship)ViewData["EnemyShip"];
 %>
     <script type="text/javascript">
-    <!--
+    //<![CDATA[
         combatId = <%=activeCombat.CombatId %>;
-    //-->
+    //]]>
     </script>
     <h1>Combat</h1>
     <table class="combat">

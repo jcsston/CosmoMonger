@@ -6,9 +6,9 @@
     <script type="text/javascript" src="/Scripts/jquery.tooltip.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.bgiframe.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.dimensions.js"></script>
-     <script type="text/javascript">
-      <!--
-         $(document).ready(function() {
+    <script type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function() {
             $('input[name=quantity]').map(function(index, domElement) {
                 var buyGood = false;
                 var goodId = null;
@@ -76,7 +76,7 @@
             });
 
         });
-    -->
+    //]]>
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">

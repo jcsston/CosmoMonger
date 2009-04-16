@@ -2,11 +2,11 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Ship Upgrades</title>
     <script type="text/javascript">
-    <!--
+    //<![CDATA[
         $(document).ready(function() {
             //$("#tabs").tabs();
         });
-    -->
+    //]]>
     </script>
 </asp:Content>
 

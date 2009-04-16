@@ -2,9 +2,11 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>User Profile</title>
     <script type="text/javascript">
+    //<![CDATA[
         $(document).ready(function() {
             $("#joinDate").datetimeUTCtoLocal();
         });
+    //]]>
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">

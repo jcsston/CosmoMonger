@@ -2,7 +2,7 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Create Player</title>
     <script type="text/javascript">
-    <!--
+    //<![CDATA[
         function UpdateRaceImage() {
             var raceSelect = document.getElementById('raceId');
             var raceOption = raceSelect.options[raceSelect.selectedIndex];
@@ -112,7 +112,7 @@
 
         }
         window.onload = UpdateRaceImage;
-     -->
+     //]]>
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">

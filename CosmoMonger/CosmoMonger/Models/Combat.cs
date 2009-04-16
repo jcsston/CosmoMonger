@@ -599,6 +599,7 @@ namespace CosmoMonger.Models
         /// Accepts the search of the current turn ship by the other ship
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when combat is over or there is no search in-progress</exception>
+        /// <exception cref="ArgumentException">Thrown when there is not enough credits to pay the fine. Combat continues.</exception>
         public virtual void AcceptSearch()
         {
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
@@ -624,12 +625,21 @@ namespace CosmoMonger.Models
                 // Ship has some contraband cargo
 
                 // The fine is twice the worth of the cargo
-                int contrabandFine = contrabandCargoWorth;
+                int contrabandFine = contrabandCargoWorth * 2;
 
-                // Charge the fine
-                this.ShipTurn.Credits -= contrabandFine;
-                this.ShipOther.Credits += contrabandFine;
-                this.CreditsLooted += contrabandFine;
+                // Check if the ship has enough to pay the fine
+                if (this.ShipTurn.Credits < contrabandFine)
+                {
+                    // Not enough credits to pay the fine, search is rejected
+                    throw new ArgumentException("Not enough credits to pay the fine!");
+                } 
+                else 
+                {
+                    // Charge the fine
+                    this.ShipTurn.Credits -= contrabandFine;
+                    this.ShipOther.Credits += contrabandFine;
+                    this.CreditsLooted += contrabandFine;
+                }
 
                 // Take the cargo away
                 foreach (ShipGood good in goods)
@@ -639,8 +649,10 @@ namespace CosmoMonger.Models
                     combatGood.Combat = this;
                     combatGood.Good = good.Good;
                     combatGood.Quantity = good.Quantity;
-
                     db.CombatGoods.InsertOnSubmit(combatGood);
+
+                    // Load it up on the police ship
+                    this.ShipOther.AddGood(good.GoodId, good.Quantity);
 
                     // Take the cargo away
                     good.Quantity = 0;

@@ -223,6 +223,9 @@
             player2.Ship.AddGood(contrabandGood.GoodId, 5);
             player2.Ship.AddGood(nonContrabandGood.GoodId, 5);
 
+            // Give player 2 enough money to pay fine (2x base value)
+            player2.Ship.Credits += contrabandGood.BasePrice * 5 * 2;
+
             // Player 1 starts search
             combat.StartSearch();
 
@@ -252,6 +255,37 @@
             // Player 2 accepts search
             combat.AcceptSearch();
 
+            ShipGood good2 = player2.Ship.GetGood(nonContrabandGood.GoodId);
+            Assert.That(good2.Quantity, Is.EqualTo(5), "Player 2 should still have 5 of the non-contraband good now");
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException), MatchType = MessageMatch.Contains, ExpectedMessage = "Not enough credits")]
+        public void AcceptSearchNotEnoughCredits()
+        {
+            CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
+            Good contrabandGood = (from g in db.Goods
+                                   where g.Contraband
+                                   select g).FirstOrDefault();
+            Good nonContrabandGood = (from g in db.Goods
+                                      where !g.Contraband
+                                      select g).FirstOrDefault();
+
+            // Add contraband and non-contraband good to player 2
+            player2.Ship.AddGood(contrabandGood.GoodId, 5);
+            player2.Ship.AddGood(nonContrabandGood.GoodId, 5);
+
+            // Give player 2 no money to pay fine
+            player2.Ship.Credits = 0;
+
+            // Player 1 starts search
+            combat.StartSearch();
+
+            // Player 2 accepts search
+            combat.AcceptSearch();
+
+            ShipGood good1 = player2.Ship.GetGood(contrabandGood.GoodId);
+            Assert.That(good1.Quantity, Is.EqualTo(0), "Player 2 should have 0 of the contraband good now");
             ShipGood good2 = player2.Ship.GetGood(nonContrabandGood.GoodId);
             Assert.That(good2.Quantity, Is.EqualTo(5), "Player 2 should still have 5 of the non-contraband good now");
         }

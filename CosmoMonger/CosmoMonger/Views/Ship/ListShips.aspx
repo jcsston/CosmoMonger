@@ -5,7 +5,7 @@
     <script type="text/javascript" src="/Scripts/jquery.bgiframe.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.dimensions.js"></script>
     <script type="text/javascript">
-    <!--
+    //<![CDATA[
         $(document).ready(function() {
             // Show image of ship
             $('.shipImage').tooltip({
@@ -16,7 +16,7 @@
                 }
             });
         });
-    -->
+    //]]>
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">

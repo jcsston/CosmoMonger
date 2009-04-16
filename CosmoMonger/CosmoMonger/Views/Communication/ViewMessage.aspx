@@ -2,9 +2,11 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>View Message</title>
     <script type="text/javascript">
+    //<![CDATA[
         $(document).ready(function() {
             $("#messageTime").datetimeUTCtoLocal();
         });
+    //]]>
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">

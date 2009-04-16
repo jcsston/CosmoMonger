@@ -532,6 +532,14 @@
                     {
                         selectedCombat.AcceptSearch();
                     }
+                    catch (ArgumentException ex)
+                    {
+                        // Log this exception
+                        ExceptionPolicy.HandleException(ex, "Controller Policy");
+
+                        // Not enough credits to pay fine.
+                        message = ex.Message;
+                    }
                     catch (InvalidOperationException ex)
                     {
                         // Log this exception

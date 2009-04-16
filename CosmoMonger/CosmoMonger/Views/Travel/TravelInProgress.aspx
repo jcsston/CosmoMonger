@@ -1,34 +1,14 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
 <asp:Content ID="Content3" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Travel in Progress...</title>
-    <style type="text/css">
-        #starField
-        {
-            margin-left: auto;
-            margin-right: auto;
-            background: black;
-            width: 600px; 
-            height: 400px;
-            border: solid thin blue; 
-            position: relative;
-        }
-        .star 
-        {
-            padding: 0px;
-            margin: 0px;
-            color: white;
-            font: bold 13px Arial,sans-serif;
-            position: absolute;
-        }
-    </style>
     <script type="text/javascript">
-    <!--
+    //<![CDATA[
         function checkIfTraveling() {
             $.getJSON('/Combat/CombatPending', function(data) {
                 if (data.combat) {
                     document.location = '/Combat/CombatStart';
                 } else {
-                    setTimeout(checkIfTraveling, 1000);
+                    setTimeout(checkIfTraveling, 1500);
                 }
             });
         }
@@ -75,14 +55,12 @@
         }
 
         $(document).ready(function() {
-            //var totalTime = parseFloat($('#TimeLeft').text());
-            //$('#ShipBlock').animate({ width: '350px' }, totalTime * 1000);
             checkIfTraveling();
             buildStars();
 
             setTimeout(updateTravelTime, 1000);
         });
-    -->
+    //]]>
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">

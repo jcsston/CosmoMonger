@@ -3,9 +3,11 @@
     <title>View Player Profile</title>
     <script type="text/javascript" src="/Scripts/jquery.confirm-1.2.js"></script>
     <script type="text/javascript">
+    //<![CDATA[
         $(document).ready(function() {
             $(":submit").confirm();
         });
+    //]]>
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">

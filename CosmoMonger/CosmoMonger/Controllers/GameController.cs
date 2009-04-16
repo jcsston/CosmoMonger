@@ -71,6 +71,7 @@ namespace CosmoMonger.Controllers
                                 // Startup the NPC thread
                                 npcThread = new Thread(new ThreadStart(CosmoManager.NpcThreadEntry));
                                 npcThread.IsBackground = true;
+                                npcThread.Name = "NPC Thread";
                                 npcThread.Start();
 
                                 // Keep a reference so we can detect if it's been started or not
@@ -82,17 +83,6 @@ namespace CosmoMonger.Controllers
                                     Thread.Sleep(0);
                                 }
                             }
-                            /*
-                            object lastNpcUpdate = this.ControllerContext.HttpContext.Application["LastNpcUpdate"];
-                            if (lastNpcUpdate == null || (DateTime.UtcNow - (DateTime)lastNpcUpdate).TotalSeconds > 5)
-                            {
-                                // Queue thread to do NPC actions
-                                ThreadPool.QueueUserWorkItem(new WaitCallback(CosmoManager.DoPendingNPCActions));
-                                
-                                // Update NPC Counter
-                                this.ControllerContext.HttpContext.Application["LastNpcUpdate"] = DateTime.UtcNow;
-                            }
-                            */
                         }
                     }
                     else

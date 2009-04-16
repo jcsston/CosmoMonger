@@ -4,6 +4,7 @@
     <!--[if IE]><script type="text/javascript" src="/Scripts/excanvas.pack.js"></script><![endif]-->
     <script type="text/javascript" src="/Scripts/jquery.flot.pack.js"></script>
     <script type="text/javascript">
+    //<![CDATA[
         var dataSetCache = {};
         function plotAccordingToSelection() {
             $("#recordType").find("option:selected").each(function() {
@@ -39,6 +40,7 @@
             // Trigger inital selection
             plotAccordingToSelection();
         });
+    //]]>
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">

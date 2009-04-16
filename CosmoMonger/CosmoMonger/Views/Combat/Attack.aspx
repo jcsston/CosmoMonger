@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Attack Ship</title>
     <script type="text/javascript">
-    <!--
+    //<![CDATA[
         function updateShipList(data) {
             var shipList = $("#shipList");
 
@@ -54,7 +54,7 @@
         $(document).ready(function() {
             queueShipList();
         });
-    -->
+    //]]>
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
