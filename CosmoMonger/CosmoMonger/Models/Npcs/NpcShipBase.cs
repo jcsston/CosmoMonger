@@ -79,6 +79,11 @@ namespace CosmoMonger.Models.Npcs
             Ship npcShip = startingSystem.CreateShip(startingShipModel.Name);
             this.npcRow.Ship = npcShip;
 
+            // Randomly assign upgrades
+            npcShip.JumpDrive = this.rnd.SelectOne(db.JumpDrives);
+            npcShip.Shield = this.rnd.SelectOne(db.Shields);
+            npcShip.Weapon = this.rnd.SelectOne(db.Weapons);
+
             // Set the next travel time to now
             this.npcRow.NextTravelTime = DateTime.UtcNow;
         }
