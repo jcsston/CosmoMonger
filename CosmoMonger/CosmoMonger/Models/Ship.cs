@@ -490,8 +490,12 @@ namespace CosmoMonger.Models
             double newDamageShield = this.DamageShield + (weaponDamage / 0.5);
             newDamageShield = Math.Ceiling(newDamageShield);
 
-            double newDamageHull = this.DamageHull + ((weaponDamage / 1.5) * (this.DamageShield / 100.0));
-            newDamageHull = Math.Ceiling(newDamageHull);
+            // Hull strength is dependant on the ship level
+            // Level 1 is base, level 2 +25% strength, level 3 +50%, level 4 +75%, level 5 +100%
+            double hullStrength = 1.0 + (this.BaseShip.Level - 1) / 4.0;
+
+            double damageToHull = ((weaponDamage / 1.5) * (this.DamageShield / 100.0)) / hullStrength;
+            double newDamageHull = Math.Ceiling(this.DamageHull + damageToHull);
 
             Dictionary<string, object> props = new Dictionary<string, object>
             {
@@ -499,6 +503,7 @@ namespace CosmoMonger.Models
                 { "WeaponDamage", weaponDamage },
                 { "DamageShield", this.DamageShield },
                 { "DamageHull", this.DamageHull },
+                { "HullStrength", hullStrength },
                 { "NewDamageShield", newDamageShield },
                 { "NewDamageHull", newDamageHull }
             };
