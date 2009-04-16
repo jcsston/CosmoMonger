@@ -28,7 +28,7 @@
     </script>
 </asp:Content>
 <asp:Content ID="changePasswordContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Change Password</h2>
+    <h1>Change Password</h1>
     <p>
         Use the form below to change your password. 
     </p>

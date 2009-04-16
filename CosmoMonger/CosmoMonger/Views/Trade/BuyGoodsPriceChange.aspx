@@ -5,7 +5,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Price Change on Buying Good</h2>
+    <h1>Price Change on Buying Good</h1>
     <p>
     The price has changed on the <%=Html.Encode(ViewData["goodName"]) %> good you were buying.
     </p>

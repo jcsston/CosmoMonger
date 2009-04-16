@@ -4,7 +4,7 @@
 </asp:Content>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Reset Password Email Sent</h2>
+    <h1>Reset Password Email Sent</h1>
     <p>
         An email message has been sent to your email address that includes a link 
         and details on how to reset your password.

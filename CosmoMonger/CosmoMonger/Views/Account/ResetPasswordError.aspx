@@ -4,7 +4,7 @@
 </asp:Content>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Reset Password Error</h2>
+    <h1>Reset Password Error</h1>
 
     <%= Html.ValidationSummary() %>
     

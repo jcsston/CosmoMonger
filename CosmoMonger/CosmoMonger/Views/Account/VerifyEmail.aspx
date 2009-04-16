@@ -3,7 +3,7 @@
     <title>Verify Email</title>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Verify Email</h2>
+    <h1>Verify Email</h1>
     
     <%= Html.ValidationSummary() %>
 

@@ -3,7 +3,7 @@
     <title>Send Verification Code</title>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Send Verification Code Email</h2>
+    <h1>Send Verification Code Email</h1>
     <%= Html.ValidationSummary() %>
 
     <% using (Html.BeginForm()) { %>

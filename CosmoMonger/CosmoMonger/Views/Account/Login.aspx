@@ -3,7 +3,7 @@
     <title>Login</title> 
 </asp:Content>
 <asp:Content ID="loginContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Login</h2>
+    <h1>Login</h1>
     <p>
         Please enter your username and password below. If you don't have an account,
         please <%= Html.ActionLink("register", "Register") %>. If you've forgotten your

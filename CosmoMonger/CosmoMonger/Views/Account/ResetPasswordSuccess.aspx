@@ -3,7 +3,7 @@
     <title>Password Successfully Reset</title>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Password Successfully Reset</h2>
+    <h1>Password Successfully Reset</h1>
     <p>
         Welcome <b><%=Html.Encode(ViewData["username"]) %></b>.
     </p>

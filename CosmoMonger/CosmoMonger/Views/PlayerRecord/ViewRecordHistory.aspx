@@ -44,7 +44,7 @@
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>View Player Record History</h2>
+    <h1>View Player Record History</h1>
     <p id="records">Record Type:
     <%=Html.DropDownList("recordType", (SelectList)ViewData["recordType"]) %>
     <span id="loading">Loading...</span>

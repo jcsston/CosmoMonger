@@ -12,7 +12,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <h1>View Message</h1>
 <br />
-<table width="100%" border="1" cellpadding="2">
+<table class="message">
     <tr>
         <td>From:</td>
         <td><%=Html.Encode(ViewData["From"]) %></td>
@@ -25,7 +25,7 @@
         <td id="messageTime"><%=Html.Encode(ViewData["Time"]) %></td>
     </tr>
     <tr>
-        <td colspan="4"><pre style="font-size: 1.5em;"><%=Html.Encode(ViewData["Content"]) %></pre></td>
+        <td colspan="4"><pre class="messageBody"><%=Html.Encode(ViewData["Content"]) %></pre></td>
     </tr>
 </table>
 <p>

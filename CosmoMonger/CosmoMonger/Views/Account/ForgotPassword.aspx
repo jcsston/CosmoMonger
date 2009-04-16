@@ -5,7 +5,7 @@
 </asp:Content>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Forgot Password?</h2>
+    <h1>Forgot Password?</h1>
     <p>
         Please enter your email below and click Send. An email message will be sent 
         to your email address with a link to reset your password.

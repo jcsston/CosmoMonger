@@ -3,7 +3,7 @@
     <title>Changed Password</title>
 </asp:Content>
 <asp:Content ID="changePasswordSuccessContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Changed Password</h2>
+    <h1>Changed Password</h1>
     <p>
         Your password has been changed successfully.
     </p>

@@ -3,7 +3,7 @@
     <title>Changed E-Mail</title>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Changed Email</h2>
+    <h1>Changed Email</h1>
     <p>
         Your email has been changed successfully.
     </p>

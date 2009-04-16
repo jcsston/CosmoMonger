@@ -24,7 +24,7 @@
     </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Change Email</h2>
+    <h1>Change Email</h1>
     
     <%= Html.ValidationSummary() %>
 

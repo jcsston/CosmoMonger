@@ -3,7 +3,7 @@
     <title>Sent Verification Code</title>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Sent Verification Code</h2>
+    <h1>Sent Verification Code</h1>
     
     <p>Check your e-mail for a e-mail from cosmomonger.com and click the link in the e-mail</p>
     <p>You can also go <%= Html.ActionLink("here", "VerifyEmail")%> to enter in your verification code from the e-mail.</p>

@@ -199,22 +199,11 @@ first child of the left and right table columns */
 #menuh-container
 {
     position: absolute;
-/*
-    margin: 0px;
-    padding: 0px;
-    position: relative;
-    text-align: center;
-    clear: both;
-*/
 }
 
 #menuh
 {
 	font-size: small;
-/*
-	width: 100%;
-	margin: 0em;
-*/
 }
 
 #menuha
@@ -334,7 +323,6 @@ div#menuh li li li li:hover ul
     overflow: hidden; 
     padding: 15px;
     z-index: 0;
-    /*background-image: url('/Content/TravelBackground.jpg');*/
 }
 
 table.travel td
@@ -401,15 +389,6 @@ table.travel td
     display: inline;
     float: left;
     padding: 10px;
-/*
-    z-index: -5;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    opacity: .25;
-    width: 75%;
-    height: 75%;
-*/
 }
 
 /* PlayerProfile CSS */
@@ -456,7 +435,6 @@ div.race
 	width: 20%;
 	text-align: center;
 	font-family: Arial, Helvetica, sans-serif;
-	
 }
 
 .cp-rightHeaders
@@ -876,3 +854,23 @@ ul.newsticker span
 {
     margin: 0 10px 0 0;
 } 
+
+/* Dead Player CSS */
+.deadPlayer
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Communcation CSS */
+.message
+{
+    border-width: 1px;
+    padding: 2px;
+    width: 100%;
+}
+
+.messageBody
+{
+    font-size: 1.5em;
+}

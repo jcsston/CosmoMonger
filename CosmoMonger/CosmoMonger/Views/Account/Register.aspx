@@ -39,7 +39,7 @@
     </script>
 </asp:Content>
 <asp:Content ID="registerContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Account Creation</h2>
+    <h1>Account Creation</h1>
     <p>
         Use the form below to create a new account. 
     </p>
