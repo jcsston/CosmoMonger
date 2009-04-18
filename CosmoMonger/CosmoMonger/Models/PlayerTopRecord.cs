@@ -89,12 +89,6 @@ namespace CosmoMonger.Models
                     case Player.RecordType.NetWorth:
                         return string.Format("{0:C0}", this.recordValue);
 
-                    case Player.RecordType.BountyCollected:
-                        return string.Format("{0:C0}", this.recordValue);
-
-                    case Player.RecordType.Bounty:
-                        return string.Format("{0:C0}", this.recordValue);
-
                     case Player.RecordType.ShipsDestroyed:
                         return string.Format("{0}", this.recordValue);
 
@@ -140,8 +134,6 @@ namespace CosmoMonger.Models
         {
             switch (recordType)
             {
-                case Player.RecordType.Bounty:
-                    return "Player Bounty";
                 case Player.RecordType.ShipsDestroyed:
                     return "Opponent's Destroyed";
                 case Player.RecordType.ForcedSurrenders:

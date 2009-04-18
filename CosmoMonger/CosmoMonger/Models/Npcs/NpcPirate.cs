@@ -138,16 +138,8 @@ namespace CosmoMonger.Models.Npcs
                     {
                         // Do we accept?
 
-                        // Get the reputation of the opposing ship player
-                        int reputation = 0;
-                        Player otherPlayer = combat.ShipOther.Players.SingleOrDefault();
-                        if (otherPlayer != null)
-                        {
-                            reputation = otherPlayer.Reputation;
-                        }
-
-                        // Subtract the aggression from the reputation, if non-negative we accept surrender
-                        int netResult = reputation - this.npcRow.Aggression;
+                        // Add the aggression to a random number, if non-negative we accept surrender
+                        int netResult = this.rnd.Next(-5, 10) + this.npcRow.Aggression;
                         if (netResult >= 0)
                         {
                             // Accept surrender

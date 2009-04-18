@@ -5,7 +5,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 <h1>View Record</h1>
 <% Player player = (Player)ViewData["Player"]; %>
-<table style="width: 100%">
+<table class="bigTable">
 <tr>
     <td class="vr-playerName" colspan="3"><%= Html.Encode(player.Name) %></td>
 </tr>
@@ -13,13 +13,13 @@
     <td>&nbsp;</td>
 </tr>
 <tr>
-    <td class="vr-highBounty">Bounty</td>
     <td class="vr-highBounty">Distance Traveled</td>
+    <td>&nbsp;</td>
     <td class="vr-highBounty">Goods Traded</td>
 </tr>
 <tr>
-    <td class="vr-highBounty"><%= player.Bounty.ToString("C0")%></td>
     <td class="vr-highBounty"><%= Html.Encode(player.DistanceTraveled.ToString("N02"))%> sectors</td>
+    <td>&nbsp;</td>
     <td class="vr-highBounty"><%= Html.Encode(player.GoodsTraded) %> sold</td>
 </tr>
 <tr>

@@ -4583,6 +4583,18 @@
       <where>GoodId=10</where>
     </update>
   </changeSet>
+  <changeSet author="Jory Stone" id="107">
+    <comment>Removing Reputation and Bounty</comment>
+    <dropUniqueConstraint tableName="Player" constraintName="DF_Player_BountyTotal" />
+    <dropUniqueConstraint tableName="Player" constraintName="DF_Player_HighestBounty" />
+    <dropColumn tableName="Player" columnName="Reputation" />
+    <dropColumn tableName="Player" columnName="BountyCollected" />
+    <dropColumn tableName="Player" columnName="Bounty" />
+    <dropColumn tableName="PlayerRecord" columnName="Reputation" />
+    <dropColumn tableName="PlayerRecord" columnName="BountyCollected" />
+    <dropColumn tableName="PlayerRecord" columnName="Bounty" />
+    <dropColumn tableName="Npc" columnName="Bounty" />
+  </changeSet>
     <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

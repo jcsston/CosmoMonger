@@ -124,13 +124,13 @@
         }
 
         [Test]
-        public void GetTopPlayersBounty()
+        public void GetTopPlayersFleeCount()
         {
             Player testPlayer = this.CreateTestPlayer();
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
             PlayerTopRecord[] topPlayers = null;
-            topPlayers = manager.GetTopPlayers(Player.RecordType.Bounty, 20);
+            topPlayers = manager.GetTopPlayers(Player.RecordType.FleeCount, 20);
             Assert.That(topPlayers.Length, Is.LessThanOrEqualTo(20), "Returned array should be 20 or less items");
         }
 

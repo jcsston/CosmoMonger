@@ -111,24 +111,6 @@ namespace CosmoMonger.Models
                             .Select(p => new PlayerTopRecord(p, recordType, p.NetWorth))
                             .ToArray();
 
-                case Player.RecordType.BountyCollected:
-                    return (from p in db.Players 
-                            orderby p.BountyCollected descending, 
-                            p.Name 
-                            select p)
-                            .Take(limit)
-                            .Select(p => new PlayerTopRecord(p, recordType, p.BountyCollected))
-                            .ToArray();
-
-                case Player.RecordType.Bounty:
-                    return (from p in db.Players 
-                            orderby p.Bounty descending, 
-                            p.Name 
-                            select p)
-                            .Take(limit)
-                            .Select(p => new PlayerTopRecord(p, recordType, p.Bounty))
-                            .ToArray();
-
                 case Player.RecordType.ShipsDestroyed:
                     return (from p in db.Players 
                             orderby p.ShipsDestroyed descending, 

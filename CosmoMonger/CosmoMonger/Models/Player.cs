@@ -27,34 +27,10 @@ namespace CosmoMonger.Models
         public enum RecordType
         {
             NetWorth, 
-            BountyCollected, Bounty, 
             ShipsDestroyed, ForcedSurrenders, ForcedFlees,
             CargoLootedWorth, ShipsLost, SurrenderCount, 
             FleeCount, CargoLostWorth, 
             DistanceTraveled, GoodsTraded
-        }
-
-        /// <summary>
-        /// Gets the reputation level.
-        /// </summary>
-        /// <value>The reputation level.</value>
-        public string ReputationLevel
-        {
-            get
-            {
-                if (this.Reputation > 5)
-                {
-                    return "Good";
-                }
-                else if (this.Reputation < -5)
-                {
-                    return "Evil";
-                }
-                else
-                {
-                    return "Neutral";
-                }
-            }
         }
 
         /// <summary>
@@ -211,15 +187,12 @@ namespace CosmoMonger.Models
                 record.TimePlayed = this.TimePlayed;
 
                 // Copy record values
-                record.Bounty = this.Bounty;
-                record.BountyCollected = this.BountyCollected;
                 record.CargoLootedWorth = this.CargoLootedWorth;
                 record.CargoLostWorth = this.CargoLostWorth;
                 record.FleeCount = this.FleeCount;
                 record.ForcedFlees = this.ForcedFlees;
                 record.ForcedSurrenders = this.ForcedSurrenders;
                 record.NetWorth = this.NetWorth;
-                record.Reputation = this.Reputation;
                 record.ShipsDestroyed = this.ShipsDestroyed;
                 record.ShipsLost = this.ShipsLost;
                 record.SurrenderCount = this.SurrenderCount;

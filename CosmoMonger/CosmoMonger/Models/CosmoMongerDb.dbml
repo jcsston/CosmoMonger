@@ -118,7 +118,6 @@
       <Column Name="RaceId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ShipId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Aggression" Storage="_Badness" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Bounty" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="NextActionTime" Storage="_LastActionTime" Type="System.DateTime" DbType="datetime NOT NULL" CanBeNull="false" />
       <Column Name="LastVisitedSystemId" Modifier="Virtual" Type="System.Int32" DbType="int" CanBeNull="true" />
       <Column Name="LastAttackedShipId" Modifier="Virtual" Type="System.Int32" DbType="int" CanBeNull="true" />
@@ -135,14 +134,11 @@
       <Column Name="UserId" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Name" Modifier="Virtual" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="RaceId" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Reputation" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ShipId" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="BankCredits" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="TimePlayed" Modifier="Virtual" Type="System.Double" DbType="float NOT NULL" CanBeNull="false" />
       <Column Name="LastPlayed" Modifier="Virtual" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="NetWorth" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="BountyCollected" Storage="_BountyTotal" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Bounty" Storage="_HighestBounty" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ShipsDestroyed" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ForcedSurrenders" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ForcedFlees" Modifier="Virtual" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -347,10 +343,7 @@
       <Column Name="PlayerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="RecordTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="TimePlayed" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="Reputation" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="NetWorth" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Bounty" Storage="_PlayerBounty" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="BountyCollected" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ShipsDestroyed" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ForcedSurrenders" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ForcedFlees" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />

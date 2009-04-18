@@ -15,30 +15,25 @@
 <table style="width: 100%">
 <% CosmoMonger.Models.Player player = (CosmoMonger.Models.Player)ViewData["Player"]; %>
 <tr>
-    <td class="vp-playerName" colspan="6"><%= Html.Encode(player.Name)%></td>
+    <td class="vp-playerName" colspan="4"><%= Html.Encode(player.Name)%></td>
 </tr>
 <tr>
-    <td>&nbsp;</td>
+    <td colspan="4">&nbsp;</td>
 </tr>
 <tr>
     <td class="vp-headers" colspan="2">Financial Data</td>
-    <td class="vp-headers" colspan="2">Reputation</td>
     <td class="vp-headers" colspan="2">Racial Data</td>
 </tr>
 <tr>
     <td class="vp-columnData"><u>Net Worth:</u></td>
     <td class="vp-columnData"><u><%= player.NetWorth.ToString("C0")%></u></td>
-    <td class="vp-columnData"><%=player.Reputation%></td>
-    <td class="vp-columnData"><%=player.ReputationLevel%></td>
     <td class="vp-columnData">Player's Race:</td>
     <td class="vp-columnData"><span id="playerRace"><%=Html.Encode(player.Race.Name) %></span></td>
 </tr>
 <tr>
     <td class="vp-columnData">Credits:</td>
     <td class="vp-columnData"><%= player.Ship.Credits.ToString("C0")%></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-        <td class="vp-columnData">Racial Preference:</td>
+    <td class="vp-columnData">Racial Preference:</td>
     <% string racePref;
        if (player.Race.RacialPreference == null)
        {
@@ -55,8 +50,6 @@
 <tr>
     <td class="vp-columnData">Bank Credits:</td>
     <td class="vp-columnData"><%= player.BankCredits.ToString("C0") %></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
     <td class="vp-columnData">Racial Enemy:</td>
     <% string raceEnemy;
            if (player.Race.RacialEnemy == null)
@@ -80,22 +73,17 @@
     <td class="vp-columnData"><%= player.Ship.CargoWorth.ToString("C0") %></td>
 </tr>
 <tr>
-    <td>&nbsp;</td>
+    <td colspan="4">&nbsp;</td>
 </tr>
 <tr>
-    <td class="vp-headers" colspan="2">Bounty</td>
     <td class="vp-headers" colspan="2">Want A New Player?</td>
     <td class="vp-headers" colspan="2">Time Played</td>
 </tr>
 <tr>
-    <td class="vp-columnData">$<%=player.Bounty%></td>
-    <td class="vp-columnData">Credits</td>
     <td align="center" colspan="2">Warning! This is irrevisible!</td>
     <td align="center" colspan="2">Time Limit = 168 hours</td>
 </tr>
 <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
     <td align="center" colspan="2">
 <%
 using (Html.BeginForm("KillPlayer", "Player", FormMethod.Post))

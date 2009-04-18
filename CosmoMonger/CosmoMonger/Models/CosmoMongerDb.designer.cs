@@ -2732,8 +2732,6 @@ namespace CosmoMonger.Models
 		
 		private int _Badness;
 		
-		private int _Bounty;
-		
 		private System.DateTime _LastActionTime;
 		
 		private System.Nullable<int> _LastVisitedSystemId;
@@ -2766,8 +2764,6 @@ namespace CosmoMonger.Models
     partial void OnShipIdChanged();
     partial void OnAggressionChanging(int value);
     partial void OnAggressionChanged();
-    partial void OnBountyChanging(int value);
-    partial void OnBountyChanged();
     partial void OnNextActionTimeChanging(System.DateTime value);
     partial void OnNextActionTimeChanged();
     partial void OnLastVisitedSystemIdChanging(System.Nullable<int> value);
@@ -2911,26 +2907,6 @@ namespace CosmoMonger.Models
 					this._Badness = value;
 					this.SendPropertyChanged("Aggression");
 					this.OnAggressionChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_Bounty", DbType="Int NOT NULL")]
-		public int Bounty
-		{
-			get
-			{
-				return this._Bounty;
-			}
-			set
-			{
-				if ((this._Bounty != value))
-				{
-					this.OnBountyChanging(value);
-					this.SendPropertyChanging();
-					this._Bounty = value;
-					this.SendPropertyChanged("Bounty");
-					this.OnBountyChanged();
 				}
 			}
 		}
@@ -3194,8 +3170,6 @@ namespace CosmoMonger.Models
 		
 		private int _RaceId;
 		
-		private int _Reputation;
-		
 		private int _ShipId;
 		
 		private int _BankCredits;
@@ -3205,10 +3179,6 @@ namespace CosmoMonger.Models
 		private System.DateTime _LastPlayed;
 		
 		private int _NetWorth;
-		
-		private int _BountyTotal;
-		
-		private int _HighestBounty;
 		
 		private int _ShipsDestroyed;
 		
@@ -3254,8 +3224,6 @@ namespace CosmoMonger.Models
     partial void OnNameChanged();
     partial void OnRaceIdChanging(int value);
     partial void OnRaceIdChanged();
-    partial void OnReputationChanging(int value);
-    partial void OnReputationChanged();
     partial void OnShipIdChanging(int value);
     partial void OnShipIdChanged();
     partial void OnBankCreditsChanging(int value);
@@ -3266,10 +3234,6 @@ namespace CosmoMonger.Models
     partial void OnLastPlayedChanged();
     partial void OnNetWorthChanging(int value);
     partial void OnNetWorthChanged();
-    partial void OnBountyCollectedChanging(int value);
-    partial void OnBountyCollectedChanged();
-    partial void OnBountyChanging(int value);
-    partial void OnBountyChanged();
     partial void OnShipsDestroyedChanging(int value);
     partial void OnShipsDestroyedChanged();
     partial void OnForcedSurrendersChanging(int value);
@@ -3393,26 +3357,6 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_Reputation", DbType="Int NOT NULL")]
-		public virtual int Reputation
-		{
-			get
-			{
-				return this._Reputation;
-			}
-			set
-			{
-				if ((this._Reputation != value))
-				{
-					this.OnReputationChanging(value);
-					this.SendPropertyChanging();
-					this._Reputation = value;
-					this.SendPropertyChanged("Reputation");
-					this.OnReputationChanged();
-				}
-			}
-		}
-		
 		[Column(Storage="_ShipId", DbType="Int NOT NULL")]
 		public virtual int ShipId
 		{
@@ -3513,46 +3457,6 @@ namespace CosmoMonger.Models
 					this._NetWorth = value;
 					this.SendPropertyChanged("NetWorth");
 					this.OnNetWorthChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_BountyTotal", DbType="Int NOT NULL")]
-		public virtual int BountyCollected
-		{
-			get
-			{
-				return this._BountyTotal;
-			}
-			set
-			{
-				if ((this._BountyTotal != value))
-				{
-					this.OnBountyCollectedChanging(value);
-					this.SendPropertyChanging();
-					this._BountyTotal = value;
-					this.SendPropertyChanged("BountyCollected");
-					this.OnBountyCollectedChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_HighestBounty", DbType="Int NOT NULL")]
-		public virtual int Bounty
-		{
-			get
-			{
-				return this._HighestBounty;
-			}
-			set
-			{
-				if ((this._HighestBounty != value))
-				{
-					this.OnBountyChanging(value);
-					this.SendPropertyChanging();
-					this._HighestBounty = value;
-					this.SendPropertyChanged("Bounty");
-					this.OnBountyChanged();
 				}
 			}
 		}
@@ -8090,13 +7994,7 @@ namespace CosmoMonger.Models
 		
 		private double _TimePlayed;
 		
-		private int _Reputation;
-		
 		private int _NetWorth;
-		
-		private int _PlayerBounty;
-		
-		private int _BountyCollected;
 		
 		private int _ShipsDestroyed;
 		
@@ -8132,14 +8030,8 @@ namespace CosmoMonger.Models
     partial void OnRecordTimeChanged();
     partial void OnTimePlayedChanging(double value);
     partial void OnTimePlayedChanged();
-    partial void OnReputationChanging(int value);
-    partial void OnReputationChanged();
     partial void OnNetWorthChanging(int value);
     partial void OnNetWorthChanged();
-    partial void OnBountyChanging(int value);
-    partial void OnBountyChanged();
-    partial void OnBountyCollectedChanging(int value);
-    partial void OnBountyCollectedChanged();
     partial void OnShipsDestroyedChanging(int value);
     partial void OnShipsDestroyedChanged();
     partial void OnForcedSurrendersChanging(int value);
@@ -8252,26 +8144,6 @@ namespace CosmoMonger.Models
 			}
 		}
 		
-		[Column(Storage="_Reputation", DbType="Int NOT NULL")]
-		public int Reputation
-		{
-			get
-			{
-				return this._Reputation;
-			}
-			set
-			{
-				if ((this._Reputation != value))
-				{
-					this.OnReputationChanging(value);
-					this.SendPropertyChanging();
-					this._Reputation = value;
-					this.SendPropertyChanged("Reputation");
-					this.OnReputationChanged();
-				}
-			}
-		}
-		
 		[Column(Storage="_NetWorth", DbType="Int NOT NULL")]
 		public int NetWorth
 		{
@@ -8288,46 +8160,6 @@ namespace CosmoMonger.Models
 					this._NetWorth = value;
 					this.SendPropertyChanged("NetWorth");
 					this.OnNetWorthChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_PlayerBounty", DbType="Int NOT NULL")]
-		public int Bounty
-		{
-			get
-			{
-				return this._PlayerBounty;
-			}
-			set
-			{
-				if ((this._PlayerBounty != value))
-				{
-					this.OnBountyChanging(value);
-					this.SendPropertyChanging();
-					this._PlayerBounty = value;
-					this.SendPropertyChanged("Bounty");
-					this.OnBountyChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_BountyCollected", DbType="Int NOT NULL")]
-		public int BountyCollected
-		{
-			get
-			{
-				return this._BountyCollected;
-			}
-			set
-			{
-				if ((this._BountyCollected != value))
-				{
-					this.OnBountyCollectedChanging(value);
-					this.SendPropertyChanging();
-					this._BountyCollected = value;
-					this.SendPropertyChanged("BountyCollected");
-					this.OnBountyCollectedChanged();
 				}
 			}
 		}
