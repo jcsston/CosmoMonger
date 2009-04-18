@@ -695,6 +695,11 @@ div.combatBar div
     background-color: black;
 }
 
+p.legend
+{
+    text-decoration: underline;
+}
+
 /* jGrowl CSS */
 
 div.jGrowl {

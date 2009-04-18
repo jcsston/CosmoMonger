@@ -376,6 +376,9 @@
             </td>
             <td>&nbsp;</td>
             <td>
+                <% if (ViewData["NpcType"] != null) { %>
+                <img class="shipImage" src="/Content/Npc/<%=Html.AttributeEncode(ViewData["NpcType"]) %>.png" alt="<%=Html.AttributeEncode(ViewData["NpcType"]) %>" title="<%=Html.AttributeEncode(ViewData["NpcType"]) %>" />
+                <% } %>
                 <%=Html.Encode(ViewData["EnemyName"]) %>
                 <br />
                 <img id="enemyShip" alt="Enemy Ship" 

@@ -182,6 +182,7 @@
                 ViewData["EnemyName"] = enemyShip.Name;
                 ViewData["EnemyRaceName"] = enemyShip.Race.Name;
                 ViewData["EnemyRaceModifiers"] = enemyShip.Race.GetRacialModifiers();
+                ViewData["NpcType"] = enemyShip.Npcs.Select(n => n.NType.ToString()).SingleOrDefault();
 
                 return View();
             }
