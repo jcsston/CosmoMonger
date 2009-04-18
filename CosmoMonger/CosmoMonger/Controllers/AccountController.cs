@@ -705,5 +705,14 @@ namespace CosmoMonger.Controllers
                     return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
         }
+
+        /// <summary>
+        /// Used to create a blank page to be used in creating Help wiki pages.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult HelpShell()
+        {
+            return View();
+        }
     }
 }

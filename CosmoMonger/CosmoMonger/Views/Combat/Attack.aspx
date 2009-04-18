@@ -14,12 +14,17 @@
                 var listTable = '<table class="grid">';
 
                 // Add header row
-                listTable += "<tr><th>Name</th><th>Ship Type</th><th>Last Activity</th><th>Attack</th></tr>";
+                listTable += "<tr><th>Type & Name</th><th>Ship Type</th><th>Last Activity</th><th>Attack</th></tr>";
 
                 // Build attack rows
                 for (var i = 0; i < data.length; i++) {
                     var ship = data[i];
-                    listTable += "<tr><td>" + ship.shipName + "</td><td>" 
+                    var npcImage = '';
+                    if (ship.npcType) {
+                        npcImage = '<img src="/Content/' + ship.npcType + '.png" alt="' + ship.npcType + '" width="15px"/>';
+                    }
+                    
+                    listTable += "<tr><td>" + npcImage + ship.shipName + "</td><td>"
                             + ship.shipType + "</td><td>"
                             + ship.lastActivity + "</td><td>";
                     if (ship.inCombat) {
@@ -56,6 +61,8 @@
         });
     //]]>
     </script>
+    
+    
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 <h1>Attack Ship</h1>
@@ -66,6 +73,11 @@
 Loading...
 </p>
 <p>Refreshed every 2 seconds</p>
+<p></p>
+<p><u>Legend</u></p>
+<p><img src="/Content/Pirate.png" alt"Pirate" />= Pirate </p>
+<p><img src="/Content/Trader.png" alt"Trader" />= Trader </p>
+<p><img src="/Content/Police.png" alt"Police" />= Police </p>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="FooterContent" runat="server">
 </asp:Content>

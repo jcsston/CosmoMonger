@@ -116,6 +116,7 @@
             foreach (Ship ship in shipsInSystem)
             {
                 string shipName = "";
+                string npcType = "";
                 string timeSinceLastActivity = "";
                 Player shipPlayer = ship.Players.SingleOrDefault();
                 if (shipPlayer != null)
@@ -131,6 +132,7 @@
                     if (shipNpc != null)
                     {
                         shipName = shipNpc.Name;
+                        npcType = shipNpc.NType.ToString();
                     }
                 }
 
@@ -140,9 +142,11 @@
                     shipId = ship.ShipId,
                     shipName = HttpUtility.HtmlEncode(shipName),
                     shipType = HttpUtility.HtmlEncode(ship.BaseShip.Name),
+                    npcType = HttpUtility.HtmlEncode(npcType),
                     inCombat = inCombat,
                     attackable = attackableShips.Contains(ship),
                     lastActivity = timeSinceLastActivity
+                    
                 });
             }
 
