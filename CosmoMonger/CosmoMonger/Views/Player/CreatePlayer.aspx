@@ -125,7 +125,8 @@
         </p>
         <p>
             <span class="cp-topLines">
-            You may wish to glance at the rules before selecting your character's race.
+            We strongly suggest that you click on "Help" before you click the "Create Player" button at the bottom of this page.  
+            The "Help" page contains important information that you need to know before you create your player profile.
             </span>
         </p>
         <%= Html.ValidationSummary()%>

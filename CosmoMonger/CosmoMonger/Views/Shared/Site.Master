@@ -171,6 +171,8 @@
 </div>
 <div id="footer">
     <asp:ContentPlaceHolder ID="FooterContent" runat="server" />
+ *If you need assistance, please click the "Help" link at the top of the screen.   
+  <br />  
 <% if (!this.Request.IsLocal) { %>
     <script type="text/javascript"><!--
         google_ad_client = "pub-7722569317874144";
