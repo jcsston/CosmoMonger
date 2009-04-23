@@ -4595,6 +4595,56 @@
     <dropColumn tableName="PlayerRecord" columnName="Bounty" />
     <dropColumn tableName="Npc" columnName="Bounty" />
   </changeSet>
+  <changeSet author="Jory Stone" id="108">
+    <comment>Increasing cost for JumpDrive and Shield upgrades</comment>
+    <update tableName="JumpDrive">
+      <column name="BasePrice" value="4800" />
+      <where>JumpDriveId=2</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="BasePrice" value="7200" />
+      <where>JumpDriveId=3</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="BasePrice" value="13600" />
+      <where>JumpDriveId=4</where>
+    </update>
+    <update tableName="JumpDrive">
+      <column name="BasePrice" value="19200" />
+      <where>JumpDriveId=5</where>
+    </update>
+    <update tableName="Shield">
+      <column name="BasePrice" value="4800" />
+      <where>ShieldId=2</where>
+    </update>
+    <update tableName="Shield">
+      <column name="BasePrice" value="11200" />
+      <where>ShieldId=3</where>
+    </update>
+    <update tableName="Shield">
+      <column name="BasePrice" value="16800" />
+      <where>ShieldId=4</where>
+    </update>
+    <update tableName="Shield">
+      <column name="BasePrice" value="25600" />
+      <where>ShieldId=5</where>
+    </update>
+  </changeSet>
+  <changeSet author="Jory Stone" id="109">
+    <comment>Update number of ships and upgrades in galaxy to ensure there are plenty at each system.</comment>
+    <update tableName="SystemShip">
+      <column name="Quantity" value="1000" />
+    </update>
+    <update tableName="SystemShieldUpgrade">
+      <column name="Quantity" value="1000" />
+    </update>
+    <update tableName="SystemWeaponUpgrade">
+      <column name="Quantity" value="1000" />
+    </update>
+    <update tableName="SystemJumpDriveUpgrade">
+      <column name="Quantity" value="1000" />
+    </update>
+  </changeSet>
     <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>

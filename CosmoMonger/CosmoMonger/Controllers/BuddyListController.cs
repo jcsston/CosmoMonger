@@ -1,4 +1,10 @@
-﻿namespace CosmoMonger.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="BuddyListController.cs" company="CosmoMonger">
+//     Copyright (c) 2009 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -35,6 +41,7 @@
         /// <summary>
         /// Redirects to the BuddyList action.
         /// </summary>
+        /// <returns>A redirect to the BuddyList action</returns>
         public ActionResult Index()
         {
             return RedirectToAction("BuddyList");
@@ -43,6 +50,7 @@
         /// <summary>
         /// Fetch the buddy list for the current player via the User.GetBuddyList method and returns the BuddyList view.
         /// </summary>
+        /// <returns>The BuddyList view filled in with the current users buddies</returns>
         public ActionResult BuddyList()
         {
             ViewData["BuddyList"] = this.ControllerGame.CurrentUser.GetBuddyList();
@@ -67,10 +75,11 @@
         }
 
         /// <summary>
-        /// Adds the passed in player to the current players buddy list via the User.AddBuddy method, 
+        /// Adds the passed in player to the current players buddy list via the User.AddBuddy method,
         /// this action is called from the BuddyList view and redirects back to the BuddyList action.
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="userId">The user id.</param>
+        /// <returns>A redirect to the BuddyList action if successful, The AddBuddy View is returned on error.</returns>
         public ActionResult AddBuddy(int userId)
         {
             User newBuddy = this.ControllerGame.GetUser(userId);
@@ -98,10 +107,13 @@
         }
 
         /// <summary>
-        /// Removes the passed in player to the current players buddy list via the User.RemoveBuddy method, 
+        /// Removes the passed in player to the current players buddy list via the User.RemoveBuddy method,
         /// this action is called from the BuddyList view and redirects back to the BuddyList action.
         /// </summary>
-        /// <param name="buddyId"></param>
+        /// <param name="buddyId">The buddy id.</param>
+        /// <returns>
+        /// A redirect to the BuddyList action if successful, The RemoveBuddy View is returned on error.
+        /// </returns>
         public ActionResult RemoveBuddy(int buddyId)
         {
             User buddy = this.ControllerGame.GetUser(buddyId);
@@ -131,6 +143,7 @@
         /// <summary>
         /// Fetch the ignore list for the current player via the User.GetIgnoreList method and returns the IgnoreList view.
         /// </summary>
+        /// <returns>The IgnoreList view filled in with the current users Ignore List</returns>
         public ActionResult IgnoreList()
         {
             ViewData["IgnoreList"] = this.ControllerGame.CurrentUser.GetIgnoreList();
@@ -139,10 +152,11 @@
         }
 
         /// <summary>
-        /// Adds the passed in player to the current players ignore list via the User.AddIgnore method, 
+        /// Adds the passed in player to the current players ignore list via the User.AddIgnore method,
         /// this action is called from the IgnoreList view and redirects back to the IgnoreList action.
         /// </summary>
-        /// <param name="antiBuddyId"></param>
+        /// <param name="userId">The user id.</param>
+        /// <returns>A redirect to the IgnoreList action if successful, The AddIgnore View is returned on error.</returns>
         public ActionResult AddIgnore(int userId)
         {
             User player = this.ControllerGame.GetUser(userId);
@@ -170,10 +184,11 @@
         }
 
         /// <summary>
-        /// Removes the passed in player to the current players ignore list via the User.RemoveIgnore method, 
+        /// Removes the passed in player to the current players ignore list via the User.RemoveIgnore method,
         /// this action is called from the IgnoreList view and redirects back to the IgnoreList action.
         /// </summary>
-        /// <param name="antiBuddyId"></param>
+        /// <param name="antiBuddyId">The anti buddy id.</param>
+        /// <returns>A redirect to the IgnoreList action if successful, The RemoveIgnore View is returned on error.</returns>
         public ActionResult RemoveIgnore(int antiBuddyId)
         {
             User antiBuddy = this.ControllerGame.GetUser(antiBuddyId);

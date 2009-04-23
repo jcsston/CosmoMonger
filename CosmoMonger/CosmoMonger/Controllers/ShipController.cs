@@ -93,6 +93,7 @@ namespace CosmoMonger.Controllers
                 try
                 {
                     shipToBuy.Buy(currentShip);
+                    
                     // Success, redirect to display the newly bought ship
                     return RedirectToAction("ViewShip");
                 }
@@ -141,11 +142,11 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
-        /// This action takes in the passed upgrade id,  buys the ship upgrade via the SystemEngineUpgrade.Buy method 
+        /// This action takes in the passed upgrade id,  buys the ship upgrade via the SystemEngineUpgrade.Buy method
         /// and then redirects to the Index action.
         /// </summary>
-        /// <param name="upgradeId">The upgrade id.</param>
-        /// <returns>Throws NotImplementedException</returns>
+        /// <param name="jumpDriveId">The jump drive id.</param>
+        /// <returns>A redirect to the ViewShip action on success, the BuyJumpDriveUpgrade view on error</returns>
         public ActionResult BuyJumpDriveUpgrade(int jumpDriveId)
         {
             Ship currentShip = this.ControllerGame.CurrentPlayer.Ship;
@@ -178,11 +179,11 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
-        /// This action takes in the passed upgrade id,  buys the ship upgrade via the SystemShieldUpgrade.Buy method, 
+        /// This action takes in the passed upgrade id,  buys the ship upgrade via the SystemShieldUpgrade.Buy method,
         /// and then redirects to the Index action.
         /// </summary>
-        /// <param name="upgradeId">The upgrade id.</param>
-        /// <returns>Throws NotImplementedException</returns>
+        /// <param name="shieldId">The shield id.</param>
+        /// <returns>A redirect to the ViewShip action on success, the BuyShieldUpgrade view on error</returns>
         public ActionResult BuyShieldUpgrade(int shieldId)
         {
             Ship currentShip = this.ControllerGame.CurrentPlayer.Ship;
@@ -215,11 +216,13 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
-        /// This action takes in the passed upgrade id,  buys the ship upgrade via the SystemWeaponUpgrade.Buy method, 
+        /// This action takes in the passed upgrade id,  buys the ship upgrade via the SystemWeaponUpgrade.Buy method,
         /// and then redirects to the Index action.
         /// </summary>
-        /// <param name="upgradeId">The upgrade id.</param>
-        /// <returns>Throws NotImplementedException</returns>
+        /// <param name="weaponId">The weapon id.</param>
+        /// <returns>
+        /// A redirect to the ViewShip action on success, the BuyWeaponUpgrade view on error
+        /// </returns>
         public ActionResult BuyWeaponUpgrade(int weaponId)
         {
             Ship currentShip = this.ControllerGame.CurrentPlayer.Ship;

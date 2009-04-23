@@ -1,4 +1,10 @@
-﻿namespace CosmoMonger.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="CommunicationController.cs" company="CosmoMonger">
+//     Copyright (c) 2009 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Controllers
 {
     using System;
     using System.Collections;
@@ -48,6 +54,7 @@
         /// <summary>
         /// This action displays the users messages
         /// </summary>
+        /// <param name="page">The index of the results page to display.</param>
         /// <returns>The Inbox view</returns>
         public ActionResult Inbox(int? page)
         {
@@ -59,6 +66,7 @@
         /// <summary>
         /// This action views all sent messages
         /// </summary>
+        /// <param name="page">The index of the results page to display.</param>
         /// <returns>The Sent view</returns>
         public ActionResult Sent(int? page)
         {
@@ -114,7 +122,8 @@
                 {
                     message.MarkAsReceived();
                 }
-                ViewData["SenderId"] = message.SenderUserId;//new 3-9-09
+
+                ViewData["SenderId"] = message.SenderUserId;
                 ViewData["From"] = message.SenderUser.UserName;
                 ViewData["To"] = message.RecipientUser.UserName;
                 ViewData["Subject"] = message.Subject;
@@ -161,14 +170,16 @@
             else
             {
                 return RedirectToAction("Inbox");
-                
             }
         }
 
         /// <summary>
         /// Checks if there are any unread messages.
         /// </summary>
-        /// <returns>A JSON result containing the number of unread messages.</returns>
+        /// <param name="lastMessageCount">The last message count.</param>
+        /// <returns>
+        /// A JSON result containing the number of unread messages.
+        /// </returns>
         public JsonResult UnreadMessages(int lastMessageCount)
         {
             IEnumerable<Message> messages = this.ControllerGame.CurrentUser.GetUnreadMessages();

@@ -195,8 +195,6 @@
     <Content Include="Content\IGBank.png" />
     <Content Include="Content\Logo.png" />
     <Content Include="Content\LogoSmall.png" />
-    <Content Include="Content\Pirate.png" />
-    <Content Include="Content\Police.png" />
     <Content Include="Content\Races\Binarite.jpg" />
     <Content Include="Content\Races\Decapodian.jpg" />
     <Content Include="Content\Races\Human.jpg" />
@@ -231,7 +229,6 @@
     <Content Include="Content\System\Sol.png" />
     <Content Include="Content\System\Vance%27s Folly.png" />
     <Content Include="Content\tombstone1.png" />
-    <Content Include="Content\Trader.png" />
     <Content Include="Content\TravelBackground.jpg" />
     <Content Include="DatabaseSize.aspx" />
     <Content Include="Default.aspx" />
@@ -291,6 +288,7 @@
     <Content Include="Views\Communication\Compose.aspx" />
     <Content Include="Views\Communication\Inbox.aspx" />
     <Content Include="Views\Communication\Sent.aspx" />
+    <Content Include="Views\Home\Blank.aspx" />
     <Content Include="Views\PlayerRecord\ListRecords.aspx" />
     <Content Include="Views\PlayerRecord\ViewRecord.aspx" />
     <Content Include="Views\PlayerRecord\ViewRecordHistory.aspx" />

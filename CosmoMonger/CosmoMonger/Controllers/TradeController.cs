@@ -39,7 +39,7 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Redirects to ListGoods action.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A redirect to the ListGoods action</returns>
         public ActionResult Index()
         {
             return RedirectToAction("ListGoods");
@@ -49,7 +49,7 @@ namespace CosmoMonger.Controllers
         /// The system to list the goods from will be the current players system.
         /// Fetches the list of goods via the System.GetGoods method and passes the data to the ListGoods view.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The ListGoods view</returns>
         public ActionResult ListGoods()
         {
             ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
@@ -156,6 +156,7 @@ namespace CosmoMonger.Controllers
                         ViewData["quantity"] = quantity;
                         ViewData["oldPrice"] = price;
                         ViewData["goodName"] = shipGood.Good.Name;
+
                         // Try to get the current price
                         SystemGood systemGood = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem.GetGood(goodId);
                         if (systemGood != null)
@@ -201,17 +202,18 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// This action gets a graph of system good prices
         /// </summary>
-        /// <returns>The Index action result</returns>
+        /// <param name="systemId">The system id.</param>
+        /// <returns>The GraphGoodPrice view on success, a redirect to the Index action on error.</returns>
         public ActionResult GraphGoodPrice(int systemId)
         {
             CosmoSystem system = this.ControllerGame.GetSystem(systemId);
             if (system != null)
             {
-                SystemGood [] goods = system.GetGoods();
+                SystemGood[] goods = system.GetGoods();
 
-                //ViewData["goodId"] = new SelectList(this.ControllerGame.GetGoods(), "GoodId", "Name", goodId);
                 ViewData["systemId"] = new SelectList(this.ControllerGame.GetSystems(), "SystemId", "Name", systemId);
                 ViewData["Goods"] = goods;
+
                 // Get the price history for each system good
                 ViewData["PriceHistory"] = goods.Select(g => g.GetPriceHistory());
                 

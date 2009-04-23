@@ -37,17 +37,12 @@ namespace CosmoMonger.Controllers
         }
 
         /// <summary>
-        /// This action processes pending background events that need processing.
-        /// Such as NPC actions or good production/consumption.
+        /// Used to create a blank page to be used in creating Help wiki pages.
         /// </summary>
-        /// <returns>The Index action result</returns>
-        public ActionResult ProcessEvents()
+        /// <returns>A blank page</returns>
+        public ActionResult Blank()
         {
-            // Do NPC work
-            ThreadPool.QueueUserWorkItem(new WaitCallback(CosmoManager.DoPendingNPCActions));
-
-            // Show the normal home page
-            return View("Index");
+            return View();
         }
     }
 }

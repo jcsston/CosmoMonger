@@ -1,4 +1,10 @@
-﻿namespace CosmoMonger.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="AdminController.cs" company="CosmoMonger">
+//     Copyright (c) 2009 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -31,6 +37,11 @@
         {
         }
 
+        /// <summary>
+        /// Action for the list of admin actions, if the user is not an admin. 
+        /// A redirect to the home page is returned.
+        /// </summary>
+        /// <returns>Index view if user has admin access, redirect to home page if user lacks admin access.</returns>
         public ActionResult Index()
         {
             // Check for non-admin users
@@ -42,6 +53,12 @@
             return View();
         }
 
+        /// <summary>
+        /// Finds a user by name
+        /// </summary>
+        /// <param name="name">The name to search for.</param>
+        /// <param name="page">The index of the results page to display.</param>
+        /// <returns>The FindUser View with the search results.</returns>
         public ActionResult FindUser(string name, int? page)
         {
             // Check for non-admin users
@@ -50,12 +67,17 @@
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewData["Matches"] = this.ControllerGame.FindUser(name ?? "").AsPagination(page ?? 1);
+            ViewData["Matches"] = this.ControllerGame.FindUser(name ?? String.Empty).AsPagination(page ?? 1);
             ViewData["name"] = name;
 
             return View();
         }
 
+        /// <summary>
+        /// Bans the user.
+        /// </summary>
+        /// <param name="userId">The user id to ban.</param>
+        /// <returns>The BanUser View, detailing if the user was banned or not.</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult BanUser(int userId)
         {
@@ -79,6 +101,11 @@
             return View();
         }
 
+        /// <summary>
+        /// Unbans the user.
+        /// </summary>
+        /// <param name="userId">The user id to unban.</param>
+        /// <returns>The UnbanUser View, detailing if the user was unbanned or not.</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult UnbanUser(int userId)
         {

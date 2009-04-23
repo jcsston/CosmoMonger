@@ -108,6 +108,7 @@ namespace CosmoMonger.Controllers
 
                             user.UpdateSession(this.Session.SessionID);
                         }
+
                         return new FormsLoginResult(username);
                     }
                     else if (!user.IsApproved)
@@ -234,18 +235,8 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Sends the verification code to the users email.
         /// </summary>
-        /// <returns>The SendVerificationCode view on error, redirects to SendVerificationCodeSuccess on success.</returns>
-        /*public ActionResult SendVerificationCode()
-        {
-            return View();
-        }*/
-
-        /// <summary>
-        /// Sends the verification code to the users email.
-        /// </summary>
         /// <param name="username">The username to send the verification code for.</param>
         /// <returns>The SendVerificationCode view on error, redirects to SendVerificationCodeSuccess on success.</returns>
-        //[AcceptVerbs(HttpVerbs.Post)]
         public ActionResult SendVerificationCode(string username)
         {
             if (!String.IsNullOrEmpty(username))
@@ -574,6 +565,7 @@ namespace CosmoMonger.Controllers
             {
                 ModelState.AddModelError("username", "Invalid username.", username);
             }
+
             if (String.IsNullOrEmpty(resetPasswordCode))
             {
                 ModelState.AddModelError("resetPasswordCode", "Invalid Password Reset Code.", resetPasswordCode);
@@ -619,6 +611,7 @@ namespace CosmoMonger.Controllers
             {
                 ModelState.AddModelError("username", "Invalid username.", username);
             }
+
             if (String.IsNullOrEmpty(resetPasswordCode))
             {
                 ModelState.AddModelError("resetPasswordCode", "Invalid Password Reset Code.", resetPasswordCode);
@@ -639,6 +632,7 @@ namespace CosmoMonger.Controllers
 
                             // Display username
                             ViewData["username"] = username;
+
                             // Display new password
                             ViewData["newPassword"] = newPassword;
 
@@ -704,15 +698,6 @@ namespace CosmoMonger.Controllers
                 default:
                     return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
-        }
-
-        /// <summary>
-        /// Used to create a blank page to be used in creating Help wiki pages.
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult HelpShell()
-        {
-            return View();
         }
     }
 }

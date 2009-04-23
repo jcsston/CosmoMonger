@@ -155,7 +155,7 @@ namespace CosmoMonger.Controllers
             FastDynamicPropertyAccessor.PropertyAccessor prop = new FastDynamicPropertyAccessor.PropertyAccessor(typeof(PlayerRecord), recordType.ToString());
             foreach (PlayerRecord record in recordHistory)
             {
-                dataSet.Add(new object[] { record.TimePlayed, prop.Get(record) });
+                dataSet.Add(new object[] { record.TimePlayed / 60, prop.Get(record) });
             }
 
             return Json(dataSet);

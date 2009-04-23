@@ -38,7 +38,7 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Redirect to the Travel action.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A redirect to the Travel action</returns>
         public ActionResult Index()
         {
             return RedirectToAction("Travel");
@@ -47,7 +47,7 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Show a view of systems within range via the Ship.GetInRangeSystems method and the Travel view.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The Travel view</returns>
         public ActionResult Travel()
         {
             // Check if the player is still traveling
@@ -69,7 +69,7 @@ namespace CosmoMonger.Controllers
         /// Travel to the selected targetSystem via the Ship.Travel method, returns the TravelInProgress view.
         /// </summary>
         /// <param name="targetSystem">The target system.</param>
-        /// <returns></returns>
+        /// <returns>The TravelInProgress view if successful, the Travel view is returned on error.</returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Travel(int targetSystem)
         {

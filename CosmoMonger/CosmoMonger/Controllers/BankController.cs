@@ -1,4 +1,10 @@
-﻿namespace CosmoMonger.Controllers
+﻿//-----------------------------------------------------------------------
+// <copyright file="BankController.cs" company="CosmoMonger">
+//     Copyright (c) 2009 CosmoMonger. All rights reserved.
+// </copyright>
+// <author>Jory Stone</author>
+//-----------------------------------------------------------------------
+namespace CosmoMonger.Controllers
 {
     using System;
     using System.Web.Mvc;
@@ -66,7 +72,7 @@
             try
             {
                 this.ControllerGame.CurrentPlayer.BankDeposit(depositCredits);
-                return RedirectToAction("Bank");//added by roger
+                return RedirectToAction("Bank");
             }
             catch (InvalidOperationException ex)
             {
@@ -83,7 +89,6 @@
                 ModelState.AddModelError("depositCredits", ex.Message, depositCredits);
             }
 
-            //return RedirectToAction("Bank");
             return View();
         }
 
@@ -98,7 +103,7 @@
             try
             {
                 this.ControllerGame.CurrentPlayer.BankWithdraw(withdrawCredits);
-                return RedirectToAction("Bank");//added by roger
+                return RedirectToAction("Bank");
             }
             catch (InvalidOperationException ex)
             {
@@ -115,7 +120,6 @@
                 ModelState.AddModelError("withdrawCredits", ex.Message, withdrawCredits);
             }
 
-            //return RedirectToAction("Bank");
             return View();
         }
     }
