@@ -11,7 +11,7 @@
     </p>
     <p>
         From this page you can reset your forgotten password to a new generated password.
-        If you wish to proced click the confirm button to reset your password.
+        If you wish to proceed click the confirm button to reset your password.
         <br />
         If you do not wish to reset your password you can <%=Html.ActionLink("login", "Login") %> here.
     </p>

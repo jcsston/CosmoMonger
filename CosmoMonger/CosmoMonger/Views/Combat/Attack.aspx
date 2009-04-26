@@ -74,10 +74,10 @@ Loading...
 </p>
 <p>Refreshed every 2 seconds</p>
 <p class="legend">Legend</p>
-<p>
+<p>No Icon = Player
 <img class="shipImage" src="/Content/Npc/Pirate.png" alt="Pirate" title="Pirate" />= Pirate 
 <img class="shipImage" src="/Content/Npc/Trader.png" alt="Trader" title="Trader" />= Trader 
-<img class="shipImage" src="/Content/Npc/Police.png" alt="Police" title="Police" />= Police 
+<img class="shipImage" src="/Content/Npc/Police.png" alt="Police" title="Police" />= Police
 </p>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="FooterContent" runat="server">
