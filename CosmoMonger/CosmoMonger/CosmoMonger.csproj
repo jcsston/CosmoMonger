@@ -256,7 +256,6 @@
     <Content Include="Views\Account\ChangeEmailSuccess.aspx" />
     <Content Include="Views\Account\ForgotPassword.aspx" />
     <Content Include="Views\Account\ForgotPasswordSuccess.aspx" />
-    <Content Include="Views\Account\HelpShell.aspx" />
     <Content Include="Views\Account\ResetPassword.aspx" />
     <Content Include="Views\Account\ResetPasswordError.aspx" />
     <Content Include="Views\Account\ResetPasswordSuccess.aspx" />

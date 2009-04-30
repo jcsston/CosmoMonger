@@ -81,123 +81,116 @@ namespace CosmoMonger.Models.Npcs
                 // Create an array of goods that are on the Trader has onboard
                 ShipGood[] goods = npcShip.GetGoods().Where(g => g.Quantity > 0).ToArray();
 
-                int goodCount = goods.Sum(g => g.Quantity);
-
-                if (goodCount == 0)
+                // goodCount != 0, sell all the trader's goods 
+                foreach (ShipGood good in goods)
                 {
-                    // This is the minimum amount of money a trader should have before buying goods
-                    int baseCreditsSizeAdjusted = BaseCreditMultiplier * npcShip.CargoSpaceTotal;
+                    // Get the number of this good type onboard the Trader's ship
+                    int shipGoodQuantity = good.Quantity;
 
-                    // Check if we need to give this trader some credits
-                    if (npcShip.Credits < baseCreditsSizeAdjusted)
-                    {
-                        // Poor trader has no credits, give him some to start
-                        npcShip.Credits = baseCreditsSizeAdjusted;
-                    }
+                    // Find the price of the good
+                    int shipGoodPrice = 0;
 
-                    // Trader buys first good
-                    SystemGood good1 = (from g in npcShip.CosmoSystem.SystemGoods
-                                        orderby (g.PriceMultiplier) ascending
-                                        select g).FirstOrDefault(); 
-
-                    // This is the maximum number a Trader can purchase
-                    double numberCanBuy = Math.Floor((double)npcShip.Credits / good1.Price);
-
-                    // This is the maximum number we want the Trader to purchase
-                    double numberToBuy = Math.Ceiling((double)npcShip.CargoSpaceFree / 2);
-
-                    // Make sure that the Trader buys as many of good1 as credits allow
-                    int numberBuying = (int)Math.Min(numberCanBuy, numberToBuy);
-                    
-                    // Insures that Traders attempt to buy the proper number of good1 
-                    int properNumber = (int)Math.Min(numberBuying, good1.Quantity);
-                    
                     try
                     {
-                        good1.Buy(npcShip, properNumber, good1.Price);
+                        good.Sell(npcShip, shipGoodQuantity, shipGoodPrice);
                     }
                     catch (InvalidOperationException ex)
                     {
                         // Log this exception
                         ExceptionPolicy.HandleException(ex, "NPC Policy");
                     }
-                   
-                    // Find all the systems within range
-                    CosmoSystem[] inRangeSystems = npcShip.GetInRangeSystems();
-
-                    // Finds the system with the highest PriceMultiplier 
-                    CosmoSystem targetSystem = (from g in db.SystemGoods 
-                                                where inRangeSystems.Contains(g.CosmoSystem)
-                                                orderby (g.PriceMultiplier) descending
-                                                select g.CosmoSystem).FirstOrDefault(); 
-
-                    // Get references to the Good entities for all the SystemGoods sold in the target system
-                    IEnumerable<Good> goodsInTargetSystem = targetSystem.SystemGoods.Select(g => g.Good);
-
-                    // Get referencnes to the Good entites for the all the SystemGoods sold in the current system
-                    IEnumerable<Good> goodsInCurrentSystem = npcShip.CosmoSystem.SystemGoods.Select(g => g.Good);
-                    
-                    // Do an intersetion of both, getting a list of goods sold in both systems
-                    IEnumerable<Good> goodsInBoth = goodsInTargetSystem.Intersect(goodsInCurrentSystem);
-                    
-                    // Look in the current system for goods sold in both, sorting by PriceMultiplier (lowest at top)
-                    // and taking the top good in the results
-                    SystemGood good2 = (from g in npcShip.CosmoSystem.SystemGoods
-                                        where goodsInBoth.Contains(g.Good)
-                                        && g != good1
-                                        orderby g.PriceMultiplier ascending
-                                        select g).FirstOrDefault();
-
-                    // This is the maximum number a Trader can purchase
-                    numberCanBuy = Math.Floor((double)npcShip.Credits / good2.Price);
-
-                    // This is the maximum number we want the Trader to purchase
-                    numberToBuy = Math.Ceiling((double)npcShip.CargoSpaceFree);
-
-                    // Make sure that the Trader buys as many of good1 as credits allow
-                    numberBuying = (int)Math.Min(numberCanBuy, numberToBuy);
-
-                    // Insures that Traders attempt to buy the proper number of good1 
-                    properNumber = (int)Math.Min(numberBuying, good2.Quantity);
-
-                    try
-                    {
-                        good2.Buy(npcShip, properNumber, good2.Price);
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        // Log this exception
-                        ExceptionPolicy.HandleException(ex, "NPC Policy");
-                    }
-
-                    this.DoTravel(targetSystem);
                 }
-                else
+
+                // This is the minimum amount of money a trader should have before buying goods
+                int baseCreditsSizeAdjusted = BaseCreditMultiplier * npcShip.CargoSpaceTotal;
+
+                // Check if we need to give this trader some credits
+                if (npcShip.Credits < baseCreditsSizeAdjusted)
                 {
-                    // goodCount != 0, sell all the trader's goods 
-                    foreach (ShipGood good in goods)
-                    {
-                        // Get the number of this good type onboard the Trader's ship
-                        int shipGoodQuantity = good.Quantity;
-
-                        // Find the price of the good
-                        int shipGoodPrice = 0;
-
-                        try
-                        {
-                            good.Sell(npcShip, shipGoodQuantity, shipGoodPrice);
-                        }
-                        catch (InvalidOperationException ex)
-                        {
-                            // Log this exception
-                            ExceptionPolicy.HandleException(ex, "NPC Policy");
-                        }
-                    }
-                    
-                    // Set next travel time
-                    // was NpcTrader.DelayBeforeNextTravel
-                    this.npcRow.NextTravelTime = DateTime.UtcNow.AddSeconds(this.rnd.Next(60, 120));
+                    // Poor trader has no credits, give him some to start
+                    npcShip.Credits = baseCreditsSizeAdjusted;
                 }
+
+                // Trader buys first good
+                SystemGood good1 = (from g in npcShip.CosmoSystem.SystemGoods
+                                    orderby (g.PriceMultiplier) ascending
+                                    select g).FirstOrDefault(); 
+
+                // This is the maximum number a Trader can purchase
+                double numberCanBuy = Math.Floor((double)npcShip.Credits / good1.Price);
+
+                // This is the maximum number we want the Trader to purchase
+                double numberToBuy = Math.Ceiling((double)npcShip.CargoSpaceFree / 2);
+
+                // Make sure that the Trader buys as many of good1 as credits allow
+                int numberBuying = (int)Math.Min(numberCanBuy, numberToBuy);
+                
+                // Insures that Traders attempt to buy the proper number of good1 
+                int properNumber = (int)Math.Min(numberBuying, good1.Quantity);
+                
+                try
+                {
+                    good1.Buy(npcShip, properNumber, good1.Price);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "NPC Policy");
+                }
+               
+                // Find all the systems within range
+                CosmoSystem[] inRangeSystems = npcShip.GetInRangeSystems();
+
+                // Finds the system with the highest PriceMultiplier 
+                CosmoSystem targetSystem = (from g in db.SystemGoods 
+                                            where inRangeSystems.Contains(g.CosmoSystem)
+                                            && g.Good == good1.Good
+                                            orderby (g.PriceMultiplier) descending
+                                            select g.CosmoSystem).FirstOrDefault(); 
+
+                // Get references to the Good entities for all the SystemGoods sold in the target system
+                IEnumerable<Good> goodsInTargetSystem = targetSystem.SystemGoods.Select(g => g.Good);
+
+                // Get references to the Good entites for the all the SystemGoods sold in the current system
+                IEnumerable<Good> goodsInCurrentSystem = npcShip.CosmoSystem.SystemGoods.Select(g => g.Good);
+                
+                // Do an intersetion of both, getting a list of goods sold in both systems
+                IEnumerable<Good> goodsInBoth = goodsInTargetSystem.Intersect(goodsInCurrentSystem);
+                
+                // Look in the current system for goods sold in both, sorting by PriceMultiplier (lowest at top)
+                // and taking the top good in the results
+                SystemGood good2 = (from g in npcShip.CosmoSystem.SystemGoods
+                                    where goodsInBoth.Contains(g.Good)
+                                    && g != good1
+                                    orderby g.PriceMultiplier ascending
+                                    select g).FirstOrDefault();
+
+                // This is the maximum number a Trader can purchase
+                numberCanBuy = Math.Floor((double)npcShip.Credits / good2.Price);
+
+                // This is the maximum number we want the Trader to purchase
+                numberToBuy = Math.Ceiling((double)npcShip.CargoSpaceFree);
+
+                // Make sure that the Trader buys as many of good1 as credits allow
+                numberBuying = (int)Math.Min(numberCanBuy, numberToBuy);
+
+                // Insures that Traders attempt to buy the proper number of good1 
+                properNumber = (int)Math.Min(numberBuying, good2.Quantity);
+
+                try
+                {
+                    good2.Buy(npcShip, properNumber, good2.Price);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Log this exception
+                    ExceptionPolicy.HandleException(ex, "NPC Policy");
+                }
+
+                this.DoTravel(targetSystem);
+                    
+                // Set next travel time
+                this.npcRow.NextTravelTime = DateTime.UtcNow.AddSeconds(this.rnd.Next(60, 120));
             }
             else
             {

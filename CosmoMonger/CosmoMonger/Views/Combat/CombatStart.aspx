@@ -310,6 +310,7 @@
                 <%=Html.Encode(ViewData["PlayerName"]) %>
                 <br />
                 <img id="playerShip" alt="Your Ship" 
+                    width="300"
                     title="<%=Html.AttributeEncode(playerShip.BaseShip.Name) %>" 
                     src="/Content/BaseShip/<%=Html.AttributeEncode(playerShip.BaseShip.Name) %>.png" />
                 <br />
@@ -382,6 +383,7 @@
                 <%=Html.Encode(ViewData["EnemyName"]) %>
                 <br />
                 <img id="enemyShip" alt="Enemy Ship" 
+                    width="300"
                     title="<%=Html.AttributeEncode(enemyShip.BaseShip.Name) %>" 
                     src="/Content/BaseShip/Flipped/<%=Html.AttributeEncode(enemyShip.BaseShip.Name) %>.png" />
                 <br />
