@@ -3,6 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="CosmoMonger is an on-line space-based trading game featuring real-time multi-player interaction." />
+    <meta name="keywords" content="CosmoMonger, space, trader, game, free, combat, police, pirates, traders, goods" />
     <link href="/Content/vader/ui.all.css" rel="stylesheet" type="text/css" />
     <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/Scripts/jquery-1.3.2.min.js"></script>
