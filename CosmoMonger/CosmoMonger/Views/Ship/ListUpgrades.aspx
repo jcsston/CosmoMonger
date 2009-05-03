@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" CompilerOptions="/nowarn:0618" %>
 <asp:Content ID="Content2" ContentPlaceHolderID="HeaderContent" runat="server">
     <title>Ship Upgrades</title>
     <script type="text/javascript">
