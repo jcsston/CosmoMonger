@@ -26,8 +26,9 @@ namespace CosmoMonger.Models.Npcs
         /// <summary>
         /// This is the number we multiply times the new trader's ship's number of cargo spaces
         /// to provide the new trader with some credits to buy cargo.
+        /// 5-3-09 was 400
         /// </summary>
-        public const int BaseCreditMultiplier = 400;
+        public const int BaseCreditMultiplier = 600;
 
         /// <summary>
         /// Used to slow down NPC traders.  This is the delay between ariving
@@ -78,7 +79,7 @@ namespace CosmoMonger.Models.Npcs
             }
             else if (this.npcRow.NextTravelTime < DateTime.UtcNow)
             {
-                // Create an array of goods that are on the Trader has onboard
+                // Create an array of goods that the Trader has onboard
                 ShipGood[] goods = npcShip.GetGoods().Where(g => g.Quantity > 0).ToArray();
 
                 // goodCount != 0, sell all the trader's goods 
