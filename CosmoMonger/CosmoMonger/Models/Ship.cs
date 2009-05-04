@@ -62,7 +62,7 @@ namespace CosmoMonger.Models
                 // Starting value is the base price
                 int shipValue = this.BaseShip.BasePrice;
 
-                // If the same ship is for sell in the current system, that price replaces shipValue
+                // If the same ship is for sale in the current system, that price replaces shipValue
                 SystemShip matchingShip = (from ss in this.CosmoSystem.SystemShips
                                            where ss.BaseShip == this.BaseShip
                                            select ss).SingleOrDefault();

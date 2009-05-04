@@ -44,7 +44,7 @@ namespace CosmoMonger.Controllers
         /// <summary>
         /// Index action, redirects to Attack action.
         /// </summary>
-        /// <returns>Redirect to the Atack action</returns>
+        /// <returns>Redirect to the Attack action</returns>
         public ActionResult Index()
         {
             return RedirectToAction("Attack");
