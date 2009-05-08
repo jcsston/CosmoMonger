@@ -273,13 +273,22 @@ namespace CosmoMonger.Models
         /// <summary>
         /// Gets the price table for the whole galaxy
         /// </summary>
+        /// <param name="orderByDistance">if set to <c>true</c> order systems by distance from current players ship.</param>
         /// <returns>A List of PriceTablEntry objects</returns>
-        public virtual List<PriceTableEntry> GetPriceTable()
+        public virtual PriceTableEntry [] GetPriceTable(bool orderByDistance)
         {
             List<PriceTableEntry> priceTable = new List<PriceTableEntry>();
 
             CosmoMongerDbDataContext db = CosmoManager.GetDbContext();
-            foreach (CosmoSystem system in db.CosmoSystems)
+            CosmoSystem [] systems = db.CosmoSystems.ToArray();
+
+            // Check if we need to order the systems by distance, closest first
+            if (orderByDistance)
+            {
+                systems = systems.OrderBy(s => this.CurrentPlayer.Ship.GetSystemDistance(s)).ToArray();
+            }
+
+            foreach (CosmoSystem system in systems)
             {
                 PriceTableEntry prices = new PriceTableEntry();
                 prices.SystemName = system.Name;
@@ -293,7 +302,7 @@ namespace CosmoMonger.Models
                 priceTable.Add(prices);
             }
 
-            return priceTable;
+            return priceTable.ToArray();
         }
 
         /// <summary>

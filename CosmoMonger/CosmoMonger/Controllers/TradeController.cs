@@ -194,7 +194,7 @@ namespace CosmoMonger.Controllers
         public ActionResult PriceTable()
         {
             ViewData["CurrentSystem"] = this.ControllerGame.CurrentPlayer.Ship.CosmoSystem;
-            ViewData["PriceTable"] = this.ControllerGame.GetPriceTable();
+            ViewData["PriceTable"] = this.ControllerGame.GetPriceTable(true);
 
             return View();
         }

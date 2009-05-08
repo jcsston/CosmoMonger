@@ -183,13 +183,24 @@
         }
 
         [Test]
-        public void GetPriceTable()
+        public void GetPriceTableDefault()
         {
             Player testPlayer = this.CreateTestPlayer();
             GameManager manager = new GameManager(testPlayer.User.UserName);
 
-            List<PriceTableEntry> priceTable = manager.GetPriceTable();
+            PriceTableEntry [] priceTable = manager.GetPriceTable(false);
             Assert.That(priceTable, Is.Not.Empty, "GetPriceTable() should return the price table for the galaxy");
+        }
+
+        [Test]
+        public void GetPriceTableOrdered()
+        {
+            Player testPlayer = this.CreateTestPlayer();
+            GameManager manager = new GameManager(testPlayer.User.UserName);
+
+            PriceTableEntry[] priceTable = manager.GetPriceTable(true);
+            Assert.That(priceTable, Is.Not.Empty, "GetPriceTable() should return the price table for the galaxy");
+            Assert.That(priceTable[0].SystemName, Is.EqualTo(testPlayer.Ship.CosmoSystem.Name), "First system should be the current players ship");
         }
 
         [Test]

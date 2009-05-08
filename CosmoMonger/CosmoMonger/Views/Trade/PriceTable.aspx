@@ -9,7 +9,7 @@
         <th>System</th>
 <% 
     CosmoSystem currentSystem = (CosmoSystem)ViewData["CurrentSystem"];
-    List<PriceTableEntry> priceTable = (List<PriceTableEntry>)ViewData["PriceTable"];
+    PriceTableEntry[] priceTable = (PriceTableEntry[])ViewData["PriceTable"];
 
     // Build the table header
     foreach (KeyValuePair<string, int> goodPrice in priceTable[0].GoodPrices)
