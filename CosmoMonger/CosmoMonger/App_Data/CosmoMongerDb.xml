@@ -4777,6 +4777,69 @@
       <column name="Quantity" value="1000" />
     </update>
   </changeSet>
+	<changeSet author="Jory Stone" id="110" dbms="mysql">
+		<comment>Convert bit columns to boolean type columns for MySQL</comment>
+		<modifyColumn tableName="Combat">
+			<column name="Surrendered" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="CargoJettisoned" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="Search" type="boolean">
+				<constraints nullable="false" />
+			</column>
+		</modifyColumn>
+		<modifyColumn tableName="Good">
+			<column name="Contraband" type="boolean">
+				<constraints nullable="false" />
+			</column>
+		</modifyColumn>
+		<modifyColumn tableName="Message">
+			<column name="Received" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="VisibleToRecipient" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="VisibleToSender" type="boolean">
+				<constraints nullable="false" />
+			</column>
+		</modifyColumn>
+		<modifyColumn tableName="Player">
+			<column name="Alive" type="boolean">
+				<constraints nullable="false" />
+			</column>
+		</modifyColumn>
+		<modifyColumn tableName="System">
+			<column name="HasBank" type="boolean">
+				<constraints nullable="false" />
+			</column>
+		</modifyColumn>
+		<modifyColumn tableName="User">
+			<column name="Validated" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="Active" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="Admin" type="boolean">
+				<constraints nullable="false" />
+			</column>
+		</modifyColumn>	
+		<addNotNullConstraint tableName="Combat" columnName="Surrendered" defaultNullValue="false" columnDataType="boolean" />
+		<addNotNullConstraint tableName="Combat" columnName="CargoJettisoned" defaultNullValue="false" columnDataType="boolean" />
+		<addNotNullConstraint tableName="Combat" columnName="Search" defaultNullValue="false" columnDataType="boolean" />
+		<addNotNullConstraint tableName="Good" columnName="Contraband" defaultNullValue="false" columnDataType="boolean" />
+		<addNotNullConstraint tableName="Message" columnName="Received" defaultNullValue="false" columnDataType="boolean" />
+		<addNotNullConstraint tableName="Message" columnName="VisibleToRecipient" defaultNullValue="false" columnDataType="boolean" />
+		<addNotNullConstraint tableName="Message" columnName="VisibleToSender" defaultNullValue="false" columnDataType="boolean" />
+		<addNotNullConstraint tableName="Player" columnName="Alive" defaultNullValue="false" columnDataType="boolean" />
+		<addNotNullConstraint tableName="System" columnName="HasBank" defaultNullValue="false" columnDataType="boolean" />
+		<addNotNullConstraint tableName="User" columnName="Validated" defaultNullValue="false" columnDataType="boolean" />
+		<addNotNullConstraint tableName="User" columnName="Active" defaultNullValue="false" columnDataType="boolean" />
+		<addNotNullConstraint tableName="User" columnName="Admin" defaultNullValue="false" columnDataType="boolean" />
+	</changeSet>
     <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>
