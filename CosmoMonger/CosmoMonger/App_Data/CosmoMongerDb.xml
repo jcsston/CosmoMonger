@@ -1,9 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
-	<changeSet author="Jory Stone" id="0" dbms="mysql">
-		<comment>Ensure that created tables are in InnoDB format for MySQL</comment>
-		<sql>SET storage_engine=InnoDB;</sql>
-	</changeSet>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.8 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.8.xsd">
   <changeSet author="Jory Stone" id="1">
     <comment>Create Inital Tables</comment>
     <createTable tableName="BaseShip">
@@ -498,7 +494,7 @@
   </changeSet>
   <changeSet author="Jory Stone" id="7">
     <comment>Renamed Recieved column on the Message table to Received.</comment>
-    <renameColumn tableName="Message" oldColumnName="Recieved" newColumnName="Received" columnDataType="bit" />
+    <renameColumn tableName="Message" oldColumnName="Recieved" newColumnName="Received" />
   </changeSet>
   <changeSet author="Jory Stone" id="8">
     <comment>Adding VerificationCode, LastLogin, and LoginAttemptCount columns to the User table</comment>
@@ -522,7 +518,7 @@
   </changeSet>
   <changeSet author="Jory Stone" id="11">
     <comment>Renamed Model column on the BaseShip table to Name to keep in line with other tables.</comment>
-    <renameColumn tableName="BaseShip" oldColumnName="Model" newColumnName="Name" columnDataType="varchar(255)" />
+    <renameColumn tableName="BaseShip" oldColumnName="Model" newColumnName="Name" />
   </changeSet>
   <changeSet author="Jory Stone" id="12">
     <comment>Added unique constraints to the table</comment>
@@ -593,26 +589,18 @@
       <column name="LastActivity" type="datetime" />
     </addColumn>
   </changeSet>
-  <changeSet author="Jory Stone" id="18.1" dbms="mysql">
-	<comment>Remove FKs so that we can rename the columns</comment>
-	<dropForeignKeyConstraint baseTableName="Race" constraintName="FK_SystemId_Race" />
-   </changeSet>
   <changeSet author="Roger Boykin" id="19">
     <comment>Changing HomeSystem, RacialPreference, RacialEnemy in Race Table to have Id on end.
     Changing Accuracy, HomeSystemId, RacialEnemyId, and Description in Race Table to not null.
     Providing a default null value to Accuracy, HomeSystemId, RacialEnemyId and Description in Race Table.</comment>
-    <renameColumn tableName="Race" oldColumnName="HomeSystem" newColumnName="HomeSystemId" columnDataType="int" />
-    <renameColumn tableName="Race" oldColumnName="RacialPreference" newColumnName="RacialPreferenceId" columnDataType="int" />
-    <renameColumn tableName="Race" oldColumnName="RacialEnemy" newColumnName="RacialEnemyId" columnDataType="int" />
+    <renameColumn tableName="Race" oldColumnName="HomeSystem" newColumnName="HomeSystemId" />
+    <renameColumn tableName="Race" oldColumnName="RacialPreference" newColumnName="RacialPreferenceId" />
+    <renameColumn tableName="Race" oldColumnName="RacialEnemy" newColumnName="RacialEnemyId" />
     <addNotNullConstraint tableName="Race" columnName="Accuracy" defaultNullValue="0" columnDataType="int" />
     <addNotNullConstraint tableName="Race" columnName="HomeSystemId" defaultNullValue="1" columnDataType="int" />
     <addNotNullConstraint tableName="Race" columnName="RacialEnemyId" defaultNullValue="1" columnDataType="int" />
     <addNotNullConstraint tableName="Race" columnName="Description" defaultNullValue="Needs a Description" columnDataType="varchar(1000)"/>
   </changeSet>
-  <changeSet author="Jory Stone" id="19.1" dbms="mysql">
-	<comment>Add back the FKs removed in changeset 18.9</comment>
-	<addForeignKeyConstraint baseColumnNames="HomeSystemId" baseTableName="Race" constraintName="FK_SystemId_Race" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="SystemId" referencedTableName="System"/>
-   </changeSet>
   <changeSet author="Jory Stone" id="20">
     <comment>Providing a default null value to Accuracy, HomeSystemId, RacialEnemyId and Description in Race Table.</comment>
     <modifyColumn tableName="Race">
@@ -647,11 +635,9 @@
       DELETE FROM JumpDrive;
     </sql>
   </changeSet>
- <changeSet author="Jory Stone" id="21.9" dbms="mssql">
-    <sql>SET IDENTITY_INSERT JumpDrive ON</sql>
- </changeSet>
   <changeSet author="Jory Stone" id="22">
     <comment>Adding JumpDrive data</comment>
+    <sql>SET IDENTITY_INSERT JumpDrive ON</sql>
     <insert tableName="JumpDrive">
       <column name="JumpDriveId" valueNumeric="1" />
       <column name="Name" value="Rocket" />
@@ -684,15 +670,11 @@
       <column name="CargoCost" valueNumeric="10" />
       <column name="BasePrice" valueNumeric="10000" />
     </insert>
-  </changeSet>
- <changeSet author="Jory Stone" id="22.1" dbms="mssql">
     <sql>SET IDENTITY_INSERT JumpDrive OFF</sql>
- </changeSet>
- <changeSet author="Jory Stone" id="22.9" dbms="mssql">
-    <sql>SET IDENTITY_INSERT Shield ON</sql>
- </changeSet>
+  </changeSet>
   <changeSet author="Jory Stone" id="23">
     <comment>Adding Shield data</comment>
+    <sql>SET IDENTITY_INSERT Shield ON</sql>
     <insert tableName="Shield">
       <column name="ShieldId" valueNumeric="1" />
       <column name="Name" value="Force Field" />
@@ -700,15 +682,11 @@
       <column name="CargoCost" valueNumeric="1" />
       <column name="BasePrice" valueNumeric="100" />
     </insert>
-  </changeSet>
- <changeSet author="Jory Stone" id="23.1" dbms="mssql">
     <sql>SET IDENTITY_INSERT Shield OFF</sql>
- </changeSet>
- <changeSet author="Jory Stone" id="23.9" dbms="mssql">
-    <sql>SET IDENTITY_INSERT Weapon ON</sql>
- </changeSet>
+  </changeSet>
   <changeSet author="Jory Stone" id="24">
     <comment>Adding Weapon data</comment>
+    <sql>SET IDENTITY_INSERT Weapon ON</sql>
     <insert tableName="Weapon">
       <column name="WeaponId" valueNumeric="1" />
       <column name="Name" value="Railgun" />
@@ -741,15 +719,11 @@
       <column name="CargoCost" valueNumeric="10" />
       <column name="BasePrice" valueNumeric="1000000" />
     </insert>
-  </changeSet>
- <changeSet author="Jory Stone" id="24.1" dbms="mssql">
     <sql>SET IDENTITY_INSERT Weapon OFF</sql>
- </changeSet>
- <changeSet author="Jory Stone" id="24.9" dbms="mssql">
-    <sql>SET IDENTITY_INSERT BaseShip ON</sql>
- </changeSet>
+  </changeSet>
   <changeSet author="Jory Stone" id="25">
     <comment>Adding BaseShip data</comment>
+    <sql>SET IDENTITY_INSERT BaseShip ON</sql>
     <insert tableName="BaseShip">
       <column name="BaseShipId" valueNumeric="1" />
       <column name="Name" value="Glorified Trash Can" />
@@ -795,10 +769,8 @@
       <column name="InitialWeaponId" valueNumeric="4" />
       <column name="InitialShieldId" valueNumeric="1" />
     </insert>
-  </changeSet>
- <changeSet author="Jory Stone" id="25.1" dbms="mssql">
     <sql>SET IDENTITY_INSERT BaseShip OFF</sql>
- </changeSet>
+  </changeSet>
   <changeSet author="Jory Stone" id="26">
     <comment>Update BaseShip models with updated cargo space amounts</comment>
     <update tableName="BaseShip">
@@ -810,12 +782,9 @@
       <where>BaseShipId=5</where>
     </update>
   </changeSet>
-  <changeSet author="Jory Stone, Roger Boykin" id="26.9" dbms="mssql">
-    <comment>Insert Good data</comment>
-    <sql>SET IDENTITY_INSERT Good ON</sql>
-  </changeSet>
   <changeSet author="Jory Stone, Roger Boykin" id="27">
     <comment>Insert Good data</comment>
+    <sql>SET IDENTITY_INSERT Good ON</sql>
     <insert tableName="Good">
       <column name="GoodId" valueNumeric="1" />
       <column name="Name" value="FoodCubes" />
@@ -876,17 +845,11 @@
       <column name="BasePrice" valueNumeric="200" />
       <column name="Contraband" valueBoolean="false" />
     </insert>
-  </changeSet>
-  <changeSet author="Jory Stone, Roger Boykin" id="27.1" dbms="mssql">
-    <comment>Insert Good data</comment>
     <sql>SET IDENTITY_INSERT Good OFF</sql>
-  </changeSet>
-  <changeSet author="Jory Stone, Roger Boykin" id="27.9" dbms="mssql">
-    <comment>Insert System data</comment>
-    <sql>SET IDENTITY_INSERT System ON</sql>
   </changeSet>
   <changeSet author="Jory Stone, Roger Boykin" id="28">
     <comment>Insert System data</comment>
+    <sql>SET IDENTITY_INSERT System ON</sql>
     <insert tableName="System">
       <column name="SystemId" valueNumeric="1" />
       <column name="Name" value="Sol" />
@@ -957,17 +920,11 @@
       <column name="PositionY" valueNumeric="15" />
       <column name="HasBank" valueBoolean="true" />
     </insert>
-  </changeSet>
-  <changeSet author="Jory Stone, Roger Boykin" id="28.1" dbms="mssql">
-    <comment>Insert System data</comment>
     <sql>SET IDENTITY_INSERT System OFF</sql>
-  </changeSet>
-  <changeSet author="Jory Stone, Roger Boykin" id="28.9" dbms="mssql">
-    <comment>Add Race data</comment>
-    <sql>SET IDENTITY_INSERT Race ON</sql>
   </changeSet>
   <changeSet author="Jory Stone, Roger Boykin" id="29">
     <comment>Add Race data</comment>
+    <sql>SET IDENTITY_INSERT Race ON</sql>
     <insert tableName="Race">
       <column name="RaceId" valueNumeric="1" />
       <column name="Name" value="Skumm" />
@@ -1019,9 +976,6 @@
       <!-- Sol is the home system of the Humans -->
       <column name="HomeSystemId" valueNumeric="1" />
     </insert>
-  </changeSet>
-  <changeSet author="Jory Stone, Roger Boykin" id="29.1" dbms="mssql">
-    <comment>Add Race data</comment>
     <sql>SET IDENTITY_INSERT Race OFF</sql>
   </changeSet>
   <changeSet author="Jory Stone" id="30">
@@ -1157,24 +1111,13 @@
       <column name="LastVerificationSent" type="datetime" />
     </addColumn>
   </changeSet>
-  <changeSet author="Jory Stone" id="40" dbms="mssql">
+  <changeSet author="Jory Stone" id="40">
     <comment>Adding Joined column on the User table to keep track of when users joined.</comment>
     <addColumn tableName="User">
       <column name="Joined" type="datetime" />
     </addColumn>
     <update tableName="User">
       <column name="Joined" valueDate="GETDATE()" />
-      <where>Joined IS NULL</where>
-    </update>
-    <addNotNullConstraint tableName="User" columnName="Joined" columnDataType="datetime" />
-  </changeSet>
-  <changeSet author="Jory Stone" id="40.1" dbms="mysql">
-    <comment>Adding Joined column on the User table to keep track of when users joined.</comment>
-    <addColumn tableName="User">
-      <column name="Joined" type="datetime" />
-    </addColumn>
-    <update tableName="User">
-      <column name="Joined" valueDate="now()" />
       <where>Joined IS NULL</where>
     </update>
     <addNotNullConstraint tableName="User" columnName="Joined" columnDataType="datetime" />
@@ -1200,7 +1143,7 @@
     <addNotNullConstraint tableName="Npc" columnName="Bounty" defaultNullValue="0" columnDataType="int" />
     <addNotNullConstraint tableName="Npc" columnName="Badness" defaultNullValue="0" columnDataType="int" />
   </changeSet>
-  <changeSet author="Jory Stone" id="43" dbms="mssql">
+  <changeSet author="Jory Stone" id="43">
     <comment>Adding the special GoodCount and GoodPrice NPCs to mantain a galaxy economy.</comment>
     <sql>SET IDENTITY_INSERT NpcType ON</sql>
     <insert tableName="NpcType">
@@ -1232,35 +1175,6 @@
       <column name="LastActionTime" value="1/1/2009" />
     </insert>
     <sql>SET IDENTITY_INSERT Npc  OFF</sql>
-  </changeSet>
-  <changeSet author="Jory Stone" id="43.1" dbms="mysql">
-    <comment>Adding the special GoodCount and GoodPrice NPCs to mantain a galaxy economy.</comment>
-    <insert tableName="NpcType">
-      <column name="NpcTypeId" valueNumeric="1" />
-      <column name="Name" value="GoodCount" />
-    </insert>
-    <insert tableName="NpcType">
-      <column name="NpcTypeId" valueNumeric="2" />
-      <column name="Name" value="GoodPrice" />
-    </insert>
-    <insert tableName="Npc">
-      <column name="NpcId" valueNumeric="1" />
-      <column name="NpcTypeId" valueNumeric="1" />
-      <column name="Name" value="GoodCount NPC" />
-      <column name="Credits" valueNumeric="0" />
-      <column name="Bounty" valueNumeric="0" />
-      <column name="Badness" valueNumeric="0" />
-      <column name="LastActionTime" value="2009-01-01 12:00" />
-    </insert>
-    <insert tableName="Npc">
-      <column name="NpcId" valueNumeric="2" />
-      <column name="NpcTypeId" valueNumeric="2" />
-      <column name="Name" value="GoodPrice NPC" />
-      <column name="Credits" valueNumeric="0" />
-      <column name="Bounty" valueNumeric="0" />
-      <column name="Badness" valueNumeric="0" />
-      <column name="LastActionTime" value="2009-01-01 12:00" />
-    </insert>
   </changeSet>
   <changeSet author="Jory Stone" id="44">
     <comment>Adding Intial System Good Production/Consumption Factors</comment>
@@ -2265,9 +2179,9 @@
   </changeSet>
   <changeSet author="Jory Stone" id="47">
     <comment>Renamed LastActionTime column to NextActionTime on the Npc table. This changes the meaning from an passive to an active.</comment>
-    <renameColumn tableName="Npc" oldColumnName="LastActionTime" newColumnName="NextActionTime" columnDataType="datetime" />
+    <renameColumn tableName="Npc" oldColumnName="LastActionTime" newColumnName="NextActionTime" />
   </changeSet>
-  <changeSet author="Jory Stone" id="48" dbms="mssql">
+  <changeSet author="Jory Stone" id="48">
     <comment>Adding Description properties to table columns</comment>
     <sql>
       IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo', N'TABLE',N'User', N'COLUMN',N'Email'))
@@ -2599,6 +2513,16 @@
       </column>
     </addColumn>
     <addNotNullConstraint tableName="SystemGood" columnName="Demand" defaultNullValue="1" columnDataType="int" />
+    <sql>
+      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo',
+
+      N'TABLE',N'SystemGood', N'COLUMN',N'Demand'))
+      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'0=prohibited, 1=average, 2=increased,
+
+      3=decreased' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemGood',
+
+      @level2type=N'COLUMN',@level2name=N'Demand'
+    </sql>
     <update tableName="SystemGood">
       <column name="ProductionFactor" value="0.5"/>
       <column name="ConsumptionFactor" value="0.5"/>
@@ -3300,21 +3224,6 @@
       <where>SystemId=10 AND GoodId=10</where>
     </update>
   </changeSet>
-  <changeSet author="Roger Boykin" id="60.1" dbms="mssql">
-    <comment>
-      Adding description to Demand column in SystemGood table.
-    </comment>
-    <sql>
-      IF NOT EXISTS (SELECT * FROM ::fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'dbo',
-
-      N'TABLE',N'SystemGood', N'COLUMN',N'Demand'))
-      EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'0=prohibited, 1=average, 2=increased,
-
-      3=decreased' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'SystemGood',
-
-      @level2type=N'COLUMN',@level2name=N'Demand'
-    </sql>
-	</changeSet>
   <changeSet author="Roger Boykin" id="61">
     <comment>Setting the good quantities</comment>
     <update tableName="SystemGood">
@@ -3867,7 +3776,7 @@
   </changeSet>
   <changeSet author="Jory Stone" id="63">
     <comment>Renamed Speed column to ChargeTime on the JumpDrive table. This changes the meaning from a power factor to the number of seconds it takes to jump.</comment>
-    <renameColumn tableName="JumpDrive" oldColumnName="Speed" newColumnName="ChargeTime" columnDataType="int" />
+    <renameColumn tableName="JumpDrive" oldColumnName="Speed" newColumnName="ChargeTime" />
     <update tableName="JumpDrive">
       <column name="ChargeTime" value="12"/>
       <where>JumpDriveId=1</where>
@@ -3938,15 +3847,15 @@
   </changeSet>
   <changeSet author="Jory Stone" id="69">
     <comment>Renamed LootedCredits column on the Combat table to CreditsLooted.</comment>
-    <renameColumn tableName="Combat" oldColumnName="LootedCredits" newColumnName="CreditsLooted" columnDataType="int" />
+    <renameColumn tableName="Combat" oldColumnName="LootedCredits" newColumnName="CreditsLooted" />
   </changeSet>
   <changeSet author="Jory Stone" id="70">
     <comment>Renamed JettisonCargo column on the Combat table to CargoJettisoned.</comment>
-    <renameColumn tableName="Combat" oldColumnName="JettisonCargo" newColumnName="CargoJettisoned" columnDataType="bit" />
+    <renameColumn tableName="Combat" oldColumnName="JettisonCargo" newColumnName="CargoJettisoned" />
   </changeSet>
   <changeSet author="Jory Stone" id="71">
     <comment>Renamed Surrender column on the Combat table to Surrendered.</comment>
-    <renameColumn tableName="Combat" oldColumnName="Surrender" newColumnName="Surrendered" columnDataType="bit" />
+    <renameColumn tableName="Combat" oldColumnName="Surrender" newColumnName="Surrendered" />
   </changeSet>
   <changeSet author="Roger Boykin" id="72">
     <comment>Adding spaces to good names. Removing human bonus and penalties.  Making RacialEnemyId nullable.</comment>
@@ -3992,7 +3901,7 @@
       <where>RaceId=5</where>
     </update>
   </changeSet>
-  <changeSet author="Jory Stone" id="73" dbms="mssql">
+  <changeSet author="Jory Stone" id="73">
     <comment>Adding a special Cleaner NPCs to cleanup after inactive users.</comment>
     <sql>SET IDENTITY_INSERT NpcType ON</sql>
     <insert tableName="NpcType">
@@ -4011,22 +3920,6 @@
       <column name="NextActionTime" value="1/1/2009" />
     </insert>
     <sql>SET IDENTITY_INSERT Npc OFF</sql>
-  </changeSet>
-  <changeSet author="Jory Stone" id="73.1" dbms="mysql">
-    <comment>Adding a special Cleaner NPCs to cleanup after inactive users.</comment>
-    <insert tableName="NpcType">
-      <column name="NpcTypeId" valueNumeric="3" />
-      <column name="Name" value="Cleaner" />
-    </insert>
-    <insert tableName="Npc">
-      <column name="NpcId" valueNumeric="3" />
-      <column name="NpcTypeId" valueNumeric="3" />
-      <column name="Name" value="Cleaner NPC" />
-      <column name="Credits" valueNumeric="0" />
-      <column name="Bounty" valueNumeric="0" />
-      <column name="Badness" valueNumeric="0" />
-      <column name="NextActionTime" value="2009-01-01 12:00" />
-    </insert>
   </changeSet>
   <changeSet author="Jory Stone" id="74">
     <comment>Adding PlayerRecord table to track player stats, new record rows will be created hourly</comment>
@@ -4087,9 +3980,9 @@
   </changeSet>
   <changeSet author="Jory Stone" id="75">
     <comment>Renamed BountyTotal and HighestBounty columns on the Player table to BountyCollected and Bounty.</comment>
-    <renameColumn tableName="Player" oldColumnName="BountyTotal" newColumnName="BountyCollected" columnDataType="int" />
-    <renameColumn tableName="Player" oldColumnName="HighestBounty" newColumnName="Bounty" columnDataType="int" />
-    <renameColumn tableName="PlayerRecord" oldColumnName="PlayerBounty" newColumnName="Bounty" columnDataType="int" />
+    <renameColumn tableName="Player" oldColumnName="BountyTotal" newColumnName="BountyCollected" />
+    <renameColumn tableName="Player" oldColumnName="HighestBounty" newColumnName="Bounty" />
+    <renameColumn tableName="PlayerRecord" oldColumnName="PlayerBounty" newColumnName="Bounty" />
   </changeSet>
   <changeSet author="Jory Stone" id="76">
     <comment>Added LastRecordSnapshotAge column to Player table to track age of player when last player record snapshot was taken</comment>
@@ -4294,12 +4187,8 @@
       <where>NpcTypeId=2</where>
     </update>
   </changeSet>
-  <changeSet author="Jory Stone" id="85.9" dbms="mssql">
-	<comment>Adding new Npc Types</comment>
-    <sql>SET IDENTITY_INSERT NpcType ON</sql>
-  </changeSet>
   <changeSet author="Jory Stone" id="86">
-	<comment>Adding new Npc Types</comment>
+    <sql>SET IDENTITY_INSERT NpcType ON</sql>
     <insert tableName="NpcType">
       <column name="NpcTypeId" valueNumeric="4" />
       <column name="Name" value="Trader" />
@@ -4312,9 +4201,6 @@
       <column name="NpcTypeId" valueNumeric="6" />
       <column name="Name" value="Police" />
     </insert>
-  </changeSet>
-  <changeSet author="Jory Stone" id="86.1" dbms="mssql">
-	<comment>Adding new Npc Types</comment>
     <sql>SET IDENTITY_INSERT NpcType OFF</sql>
   </changeSet>
   <changeSet author="Jory Stone" id="87">
@@ -4410,7 +4296,7 @@
       <column name="Name" type="STRING" />
     </loadData>
   </changeSet>
-  <changeSet author="Jory Stone" id="95" dbms="mssql">
+  <changeSet author="Jory Stone" id="95">
     <comment>Creating CHECK constraint on Combat table to ensure every ship is in only one combat at a time</comment>
     <createProcedure>
       CREATE FUNCTION dbo.CombatsInProgress(@shipId int)
@@ -4436,9 +4322,6 @@
     </addColumn>
     <addNotNullConstraint tableName="Combat" columnName="Search" columnDataType="bit" defaultNullValue="0" />
   </changeSet>
-  <changeSet author="Jory Stone" id="96.9" dbms="mssql">
-	<sql>SET IDENTITY_INSERT Shield ON</sql>
-  </changeSet>
   <changeSet author="Jory Stone" id="97">
     <comment>Adding new Shields, Wepaons, and updating Base Ship models with new equipment</comment>
     <update tableName="Shield">
@@ -4446,6 +4329,7 @@
       <column name="Name" value="Force Field I" />
       <where>ShieldId=1</where>
     </update>
+    <sql>SET IDENTITY_INSERT Shield ON</sql>
     <insert tableName="Shield">
       <column name="ShieldId" valueNumeric="2" />
       <column name="Name" value="Force Field II" />
@@ -4474,6 +4358,7 @@
       <column name="CargoCost" valueNumeric="5" />
       <column name="BasePrice" valueNumeric="10000" />
     </insert>
+    <sql>SET IDENTITY_INSERT Shield OFF</sql>
     <update tableName="BaseShip">
       <column name="InitialShieldId" value="2" />
       <where>BaseShipId=2</where>
@@ -4495,9 +4380,6 @@
       <column name="BasePrice" value="125000" />
       <where>BaseShipId=5</where>
     </update>
-  </changeSet>
-  <changeSet author="Jory Stone" id="97.1" dbms="mssql">
-	<sql>SET IDENTITY_INSERT Shield OFF</sql>
   </changeSet>
   <changeSet author="Jory Stone" id="98">
     <comment>Added AttackerHits, AttackerMisses, DefenderHits, DefenderMisses column to Combat table to track combat stats.</comment>
@@ -4565,9 +4447,6 @@
     </update>
     <addNotNullConstraint tableName="BaseShip" columnName="Level" columnDataType="int" defaultNullValue="1" />
   </changeSet>
-  <changeSet author="Jory Stone" id="101.9" dbms="mssql">
-    <sql>SET IDENTITY_INSERT JumpDrive ON</sql>
-  </changeSet>
   <changeSet author="Jory Stone" id="102">
     <comment>Balancing the JumpDrive models based on ideas from Theory on Game Mechanics</comment>
     <update tableName="JumpDrive">
@@ -4602,6 +4481,7 @@
       <column name="BasePrice" value="6300" />
       <where>JumpDriveId=4</where>
     </update>
+    <sql>SET IDENTITY_INSERT JumpDrive ON</sql>
     <insert tableName="JumpDrive">
       <column name="JumpDriveId" valueNumeric="5" />
       <column name="Name" value="Singularity" />
@@ -4610,8 +4490,6 @@
       <column name="CargoCost" value="5" />
       <column name="BasePrice" value="10800" />
     </insert>
-  </changeSet>
-  <changeSet author="Jory Stone" id="102.1" dbms="mssql">
     <sql>SET IDENTITY_INSERT JumpDrive OFF</sql>
   </changeSet>
   <changeSet author="Jory Stone" id="103">
@@ -4638,15 +4516,15 @@
   <changeSet author="Roger Boykin" id="105">
     <comment>Re-Distributing the five banks so that each race gets 1 bank</comment>
     <update tableName="System">
-      <column name="HasBank" valueNumeric="1" />
+      <column name="HasBank" value="True" />
       <where>SystemId=8</where>
     </update>
     <update tableName="System">
-      <column name="HasBank" valueNumeric="0" />
+      <column name="HasBank" value="False" />
       <where>SystemId=4</where>
     </update>
     <update tableName="System">
-      <column name="HasBank" valueNumeric="0" />
+      <column name="HasBank" value="False" />
       <where>SystemId=9</where>
     </update>
   </changeSet>
@@ -4705,20 +4583,10 @@
       <where>GoodId=10</where>
     </update>
   </changeSet>
-  <changeSet author="Jory Stone" id="107" dbms="mssql">
+  <changeSet author="Jory Stone" id="107">
     <comment>Removing Reputation and Bounty</comment>
     <dropUniqueConstraint tableName="Player" constraintName="DF_Player_BountyTotal" />
     <dropUniqueConstraint tableName="Player" constraintName="DF_Player_HighestBounty" />
-    <dropColumn tableName="Player" columnName="Reputation" />
-    <dropColumn tableName="Player" columnName="BountyCollected" />
-    <dropColumn tableName="Player" columnName="Bounty" />
-    <dropColumn tableName="PlayerRecord" columnName="Reputation" />
-    <dropColumn tableName="PlayerRecord" columnName="BountyCollected" />
-    <dropColumn tableName="PlayerRecord" columnName="Bounty" />
-    <dropColumn tableName="Npc" columnName="Bounty" />
-  </changeSet>
-  <changeSet author="Jory Stone" id="107.1" dbms="mysql">
-    <comment>Removing Reputation and Bounty</comment>
     <dropColumn tableName="Player" columnName="Reputation" />
     <dropColumn tableName="Player" columnName="BountyCollected" />
     <dropColumn tableName="Player" columnName="Bounty" />
@@ -4777,69 +4645,6 @@
       <column name="Quantity" value="1000" />
     </update>
   </changeSet>
-	<changeSet author="Jory Stone" id="110" dbms="mysql">
-		<comment>Convert bit columns to boolean type columns for MySQL</comment>
-		<modifyColumn tableName="Combat">
-			<column name="Surrendered" type="boolean">
-				<constraints nullable="false" />
-			</column>
-			<column name="CargoJettisoned" type="boolean">
-				<constraints nullable="false" />
-			</column>
-			<column name="Search" type="boolean">
-				<constraints nullable="false" />
-			</column>
-		</modifyColumn>
-		<modifyColumn tableName="Good">
-			<column name="Contraband" type="boolean">
-				<constraints nullable="false" />
-			</column>
-		</modifyColumn>
-		<modifyColumn tableName="Message">
-			<column name="Received" type="boolean">
-				<constraints nullable="false" />
-			</column>
-			<column name="VisibleToRecipient" type="boolean">
-				<constraints nullable="false" />
-			</column>
-			<column name="VisibleToSender" type="boolean">
-				<constraints nullable="false" />
-			</column>
-		</modifyColumn>
-		<modifyColumn tableName="Player">
-			<column name="Alive" type="boolean">
-				<constraints nullable="false" />
-			</column>
-		</modifyColumn>
-		<modifyColumn tableName="System">
-			<column name="HasBank" type="boolean">
-				<constraints nullable="false" />
-			</column>
-		</modifyColumn>
-		<modifyColumn tableName="User">
-			<column name="Validated" type="boolean">
-				<constraints nullable="false" />
-			</column>
-			<column name="Active" type="boolean">
-				<constraints nullable="false" />
-			</column>
-			<column name="Admin" type="boolean">
-				<constraints nullable="false" />
-			</column>
-		</modifyColumn>	
-		<addNotNullConstraint tableName="Combat" columnName="Surrendered" defaultNullValue="false" columnDataType="boolean" />
-		<addNotNullConstraint tableName="Combat" columnName="CargoJettisoned" defaultNullValue="false" columnDataType="boolean" />
-		<addNotNullConstraint tableName="Combat" columnName="Search" defaultNullValue="false" columnDataType="boolean" />
-		<addNotNullConstraint tableName="Good" columnName="Contraband" defaultNullValue="false" columnDataType="boolean" />
-		<addNotNullConstraint tableName="Message" columnName="Received" defaultNullValue="false" columnDataType="boolean" />
-		<addNotNullConstraint tableName="Message" columnName="VisibleToRecipient" defaultNullValue="false" columnDataType="boolean" />
-		<addNotNullConstraint tableName="Message" columnName="VisibleToSender" defaultNullValue="false" columnDataType="boolean" />
-		<addNotNullConstraint tableName="Player" columnName="Alive" defaultNullValue="false" columnDataType="boolean" />
-		<addNotNullConstraint tableName="System" columnName="HasBank" defaultNullValue="false" columnDataType="boolean" />
-		<addNotNullConstraint tableName="User" columnName="Validated" defaultNullValue="false" columnDataType="boolean" />
-		<addNotNullConstraint tableName="User" columnName="Active" defaultNullValue="false" columnDataType="boolean" />
-		<addNotNullConstraint tableName="User" columnName="Admin" defaultNullValue="false" columnDataType="boolean" />
-	</changeSet>
     <!--
   <changeSet author="Jory Stone" id="81">
     <comment>Added CurrentPlayerRecordId column to Player table to track current player record</comment>
